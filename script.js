@@ -1484,7 +1484,7 @@ function openModuleModal(module) {
                         <div class="code-section">
                             <div class="code-header">
                                 <span>💻 Code Example</span>
-                                <button class="copy-btn" onclick="copyCode(${index})">📋 Copy</button>
+                                <button class="copy-btn" onclick="copyCode(${index}, event)">📋 Copy</button>
                             </div>
                             <pre><code id="code-${index}">${escapeHtml(section.code)}</code></pre>
                         </div>
@@ -1693,7 +1693,7 @@ function toggleContent(index) {
 }
 
 // Copy code to clipboard
-function copyCode(index) {
+function copyCode(index, event) {
     const codeElement = document.getElementById(`code-${index}`);
     const text = codeElement.textContent;
     
