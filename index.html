@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Crash Course - Simplified</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo"><i class="fas fa-brain"></i></span>
+                <span class="brand-name">ML Course</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#prerequisites" class="nav-link">Prerequisites</a></li>
+                <li><a href="#courses" class="nav-link">Courses</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Master Machine Learning</h1>
+            <p class="hero-subtitle">Google's fast-paced, practical introduction to machine learning</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary" onclick="scrollToSection('courses')">Explore Courses</button>
+                <button class="btn btn-secondary" disabled style="cursor: not-allowed; opacity: 0.6;">Coming Soon on YouTube</button>
+            </div>
+        </div>
+        <div class="hero-animation">
+            <div class="floating-card">
+                <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                <p>Interactive Learning</p>
+            </div>
+            <div class="floating-card delay-1">
+                <div class="card-icon"><i class="fas fa-bullseye"></i></div>
+                <p>Hands-on Practice</p>
+            </div>
+            <div class="floating-card delay-2">
+                <div class="card-icon"><i class="fas fa-rocket"></i></div>
+                <p>Real Projects</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">Course Categories</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Core Modules</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Free Content</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Learning Potential</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prerequisites Section -->
+    <section id="prerequisites" class="prerequisites-section">
+        <div class="container">
+            <h2 class="section-title">Prerequisites & Prework</h2>
+            <p class="section-subtitle">Prepare yourself for success in this course</p>
+            
+            <div class="prereq-intro">
+            <div class="category-section">
+                    <h3>Is this course right for you?</h3>
+                <p>Machine Learning Crash Course does not presume or require any prior knowledge in machine learning. However, to understand the concepts presented and complete the exercises, we recommend meeting the following prerequisites:</p>
+            </div>
+
+            <div class="prereq-grid">
+                <!-- Prework Card -->
+                <div class="prereq-card accordion-item">
+                    <div class="prereq-header accordion-header" onclick="toggleAccordion(this)">
+                        <div class="header-left">
+                            <span class="prereq-icon"><i class="fas fa-book-reader"></i></span>
+                            <h3>Prework</h3>
+                        </div>
+                        <span class="accordion-toggle">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="prereq-content">
+                            <p class="prereq-intro-text">Before beginning, complete the following:</p>
+                            <ol class="prereq-list">
+                            <li>
+                                <strong>Introduction to Machine Learning</strong>
+                                <p>If you're new to ML, take the intro course to learn fundamental concepts</p>
+                                <a href="https://developers.google.com/machine-learning/intro-to-ml" target="_blank" class="prereq-link">
+                                    <i class="fas fa-external-link-alt"></i> Visit Course
+                                </a>
+                            </li>
+                            <li>
+                                <strong>NumPy Tutorial</strong>
+                                <p>Complete the NumPy Ultraquick Tutorial for essential array operations</p>
+                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+                                    <a href="https://numpy.org/" target="_blank" class="prereq-link">
+                                        <i class="fas fa-external-link-alt"></i> NumPy Website
+                                    </a>
+                                    <a href="https://colab.research.google.com/github/google/eng-edu/blob/main/ml/cc/exercises/numpy_ultraquick_tutorial.ipynb?utm_source=mlcc&utm_campaign=colab-external&utm_medium=referral&utm_content=mlcc-prework&hl=en" target="_blank" class="prereq-link">
+                                        <i class="fas fa-code"></i> Ultraquick Tutorial
+                                    </a>
+                                </div>
+                            </li>
+                            <li>
+                                <strong>pandas Tutorial</strong>
+                                <p>Complete the pandas UltraQuick Tutorial for data manipulation skills</p>
+                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+                                    <a href="https://pandas.pydata.org/" target="_blank" class="prereq-link">
+                                        <i class="fas fa-external-link-alt"></i> pandas Website
+                                    </a>
+                                    <a href="https://colab.research.google.com/github/google/eng-edu/blob/main/ml/cc/exercises/pandas_dataframe_ultraquick_tutorial.ipynb?utm_source=mlcc&utm_campaign=colab-external&utm_medium=referral&utm_content=mlcc-prework&hl=en" target="_blank" class="prereq-link">
+                                        <i class="fas fa-code"></i> Ultraquick Tutorial
+                                    </a>
+                                </div>
+                            </li>
+                        </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Math Prerequisites -->
+                <div class="prereq-card accordion-item">
+                    <div class="prereq-header accordion-header" onclick="toggleAccordion(this)">
+                        <div class="header-left">
+                            <span class="prereq-icon"><i class="fas fa-calculator"></i></span>
+                            <h3>Mathematics</h3>
+                        </div>
+                        <span class="accordion-toggle">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="prereq-content">
+                            <div class="math-section">
+                                <h4>Algebra</h4>
+                            <ul>
+                                <li>Variables, coefficients, and functions</li>
+                                <li>Linear equations (e.g., y = b + w₁x₁ + w₂x₂)</li>
+                                <li>Logarithms and logarithmic equations</li>
+                                <li>Sigmoid function</li>
+                            </ul>
+                        </div>
+                        <div class="math-section">
+                            <h4>Linear Algebra</h4>
+                            <ul>
+                                <li>Tensor and tensor rank</li>
+                                <li>Matrix multiplication</li>
+                            </ul>
+                        </div>
+                        <div class="math-section">
+                            <h4>Statistics</h4>
+                            <ul>
+                                <li>Mean, median, outliers, standard deviation</li>
+                                <li>Ability to read histograms</li>
+                            </ul>
+                        </div>
+                        <div class="math-section">
+                            <h4>Calculus (Optional)</h4>
+                            <ul>
+                                <li>Concept of derivatives</li>
+                                <li>Gradient or slope</li>
+                                <li>Partial derivatives and chain rule</li>
+                            </ul>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Programming Prerequisites -->
+                <div class="prereq-card accordion-item">
+                    <div class="prereq-header accordion-header" onclick="toggleAccordion(this)">
+                        <div class="header-left">
+                            <span class="prereq-icon"><i class="fas fa-code"></i></span>
+                            <h3>Programming</h3>
+                        </div>
+                        <span class="accordion-toggle">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="prereq-content">
+                            <div class="math-section">
+                                <h4>Python Basics</h4>
+                            <ul>
+                                <li>Defining and calling functions</li>
+                                <li>Dictionaries, lists, and sets</li>
+                                <li>For loops and if/else blocks</li>
+                                <li>String formatting</li>
+                                <li>Basic data types (int, float, bool, str)</li>
+                                <li>List comprehensions</li>
+                            </ul>
+                        </div>
+                        <div class="math-section">
+                            <h4>Command Line (Optional)</h4>
+                            <ul>
+                                <li>Basic Bash terminal commands</li>
+                                <li>Working with cloud consoles</li>
+                            </ul>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience Level -->
+                <div class="prereq-card accordion-item">
+                    <div class="prereq-header accordion-header" onclick="toggleAccordion(this)">
+                        <div class="header-left">
+                            <span class="prereq-icon"><i class="fas fa-user-graduate"></i></span>
+                            <h3>Experience Level</h3>
+                        </div>
+                        <span class="accordion-toggle">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="prereq-content">
+                            <div class="experience-item">
+                                <h4>✅ Perfect if you:</h4>
+                                <ul>
+                                <li>Have little or no ML background</li>
+                                <li>Want a current understanding of ML</li>
+                                <li>Are comfortable with algebra and Python</li>
+                                <li>Want to build practical ML skills</li>
+                            </ul>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prereq-cta">
+                <p>Ready to begin your machine learning journey?</p>
+                <button class="btn btn-primary" onclick="scrollToSection('courses')">Start Learning</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Course Categories -->
+    <section id="courses" class="courses-section">
+        <div class="container">
+            <h2 class="section-title">Course Modules</h2>
+            <p class="section-subtitle">Learn machine learning through structured, self-contained modules</p>
+
+            <!-- ML Models Category -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><i class="fas fa-brain"></i></span>
+                        ML Models
+                    </h3>
+                    <p class="category-description">Fundamentals of building regression and classification models</p>
+                </div>
+                <div class="modules-grid" id="ml-models-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- Data Category -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><i class="fas fa-database"></i></span>
+                        Data
+                    </h3>
+                    <p class="category-description">Fundamental techniques for working with machine learning data</p>
+                </div>
+                <div class="modules-grid" id="data-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- Advanced ML Category -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><i class="fas fa-rocket"></i></span>
+                        Advanced ML Models
+                    </h3>
+                    <p class="category-description">Advanced ML model architectures and techniques</p>
+                </div>
+                <div class="modules-grid" id="advanced-ml-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- Real-world ML Category -->
+            <div class="category-section">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><i class="fas fa-globe"></i></span>
+                        Real-world ML
+                    </h3>
+                    <p class="category-description">Production systems, automation, and responsible engineering</p>
+                </div>
+                <div class="modules-grid" id="realworld-ml-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <h2 class="section-title">About This Course</h2>
+                <p class="about-text">
+                    This is a simplified version of Google's Machine Learning Crash Course. 
+                    Since 2018, millions of people worldwide have relied on this course to learn how machine 
+                    learning works and how it can work for them.
+                </p>
+                <p class="about-text">
+                    Each module is self-contained, so if you have prior experience in machine learning, 
+                    you can skip directly to the topics you want to learn. If you're new to machine learning, 
+                    we recommend completing modules in the order presented.
+                </p>
+                <div class="features-grid">
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-video"></i></div>
+                        <h4>Video Content</h4>
+                        <p>Animated videos explaining complex concepts</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-laptop-code"></i></div>
+                        <h4>Interactive</h4>
+                        <p>Hands-on practice exercises</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                        <h4>Progressive</h4>
+                        <p>Learn at your own pace</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon"><i class="fas fa-check-circle"></i></div>
+                        <h4>Practical</h4>
+                        <p>Real-world applications</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>ML Course</h4>
+                    <p>Simplified machine learning education for everyone</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="https://developers.google.com/machine-learning/crash-course" target="_blank">Original Course</a></li>
+                        <li><span style="color: rgba(255,255,255,0.5);">YouTube Channel (Coming Soon)</span></li>
+                        <li><a href="https://github.com/pavansydney">GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i> Twitter</a>
+                        <span class="social-link" style="cursor: not-allowed; opacity: 0.5;"><i class="fab fa-youtube"></i> YouTube (Coming Soon)</span>
+                        <a href="https://www.linkedin.com/in/chilakalapalli-pavan-kalyan-141267119/" class="social-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ML Course - Educational Content. Based on Google's ML Course.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Module Modal -->
+    <div id="moduleModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="modal-body">
+                <!-- Module details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
