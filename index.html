@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Machine Learning Crash Course - Simplified</title>
+    <title>Cloudvana - Machine Learning & Cloud AI Certifications (Azure, AWS, GCP, Salesforce)</title>
+    <meta name="description" content="Cloudvana is a free learning platform for machine learning fundamentals and AI certification prep across Microsoft Azure, AWS, Google Cloud, and Salesforce Agentforce, with a guided path to help you pick the right certification.">
+    <meta name="author" content="Chilakalapalli Pavan Kalyan">
+    <meta name="theme-color" content="#4285f4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -13,13 +16,24 @@
         <div class="container">
             <div class="nav-brand">
                 <span class="logo"><i class="fas fa-brain"></i></span>
-                <span class="brand-name">ML Course</span>
+                <span class="brand-name">Cloudvana</span>
             </div>
             <ul class="nav-menu">
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#prerequisites" class="nav-link">Prerequisites</a></li>
+                <li><a href="#find-your-path" class="nav-link">Find Your Path</a></li>
                 <li><a href="#courses" class="nav-link">Courses</a></li>
+                <li class="nav-dropdown">
+                    <a href="#certifications" class="nav-dropdown-toggle">Certifications <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="#certifications" class="nav-link">Azure AI</a></li>
+                        <li><a href="#aws-certifications" class="nav-link">AWS AI</a></li>
+                        <li><a href="#gcp-certifications" class="nav-link">GCP AI</a></li>
+                        <li><a href="#salesforce-certifications" class="nav-link">Salesforce AI</a></li>
+                    </ul>
+                </li>
                 <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#founder" class="nav-link">Creator</a></li>
             </ul>
         </div>
     </nav>
@@ -27,11 +41,11 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Master Machine Learning</h1>
-            <p class="hero-subtitle">Google's fast-paced, practical introduction to machine learning</p>
+            <h1 class="hero-title">Master Machine Learning & Cloud AI</h1>
+            <p class="hero-subtitle">Practical machine learning fundamentals plus Azure, AWS, Google Cloud, and Salesforce AI certification prep</p>
             <div class="hero-buttons">
                 <button class="btn btn-primary" onclick="scrollToSection('courses')">Explore Courses</button>
-                <button class="btn btn-secondary" disabled style="cursor: not-allowed; opacity: 0.6;">Coming Soon on YouTube</button>
+                <button class="btn btn-secondary" onclick="scrollToSection('certifications')">View Certifications</button>
             </div>
         </div>
         <div class="hero-animation">
@@ -45,7 +59,7 @@
             </div>
             <div class="floating-card delay-2">
                 <div class="card-icon"><i class="fas fa-rocket"></i></div>
-                <p>Real Projects</p>
+                <p>Code Samples</p>
             </div>
         </div>
     </section>
@@ -55,11 +69,11 @@
         <div class="container">
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-number">1</div>
-                    <div class="stat-label">Course Categories</div>
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Cloud AI Certifications</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">13</div>
+                    <div class="stat-number">72</div>
                     <div class="stat-label">Core Modules</div>
                 </div>
                 <div class="stat-card">
@@ -74,16 +88,57 @@
         </div>
     </section>
 
+    <!-- Cloud Providers -->
+    <section class="providers-section">
+        <div class="container">
+            <p class="providers-heading">Prepare for AI certifications from the industry's leading platforms</p>
+            <div class="providers-marquee">
+                <div class="providers-track" id="providersTrack">
+                <div class="provider provider-microsoft">
+                    <svg class="provider-svg" viewBox="0 0 23 23" role="img" aria-label="Microsoft">
+                        <rect x="1" y="1" width="10" height="10" fill="#F25022"/>
+                        <rect x="12" y="1" width="10" height="10" fill="#7FBA00"/>
+                        <rect x="1" y="12" width="10" height="10" fill="#00A4EF"/>
+                        <rect x="12" y="12" width="10" height="10" fill="#FFB900"/>
+                    </svg>
+                    <span>Microsoft Azure</span>
+                </div>
+                <div class="provider provider-aws">
+                    <svg class="provider-svg provider-svg-aws" viewBox="0 0 256 153" role="img" aria-label="Amazon Web Services">
+                        <path fill="#252F3E" d="M72.392 55.438c0 3.137.34 5.68.933 7.545a45.373 45.373 0 0 0 2.712 6.104c.424.678.593 1.356.593 1.949 0 .848-.508 1.696-1.61 2.544l-5.34 3.563c-.763.508-1.526.762-2.204.762-.848 0-1.696-.424-2.544-1.187a26.253 26.253 0 0 1-3.054-3.987c-.847-1.442-1.695-3.06-2.628-5.001-6.612 7.798-14.92 11.699-24.922 11.699-7.12 0-12.8-2.035-16.955-6.104-4.156-4.07-6.28-9.5-6.28-16.276 0-7.205 2.544-13.054 7.714-17.462 5.17-4.41 12.037-6.615 20.769-6.615 2.882 0 5.848.254 8.985.678 3.14.424 6.362 1.102 9.755 1.865v-6.19c0-6.443-1.357-10.938-3.986-13.567-2.712-2.628-7.29-3.9-13.817-3.9-2.968 0-6.02.34-9.157 1.103-3.14.762-6.19 1.695-9.157 2.882-1.357.593-2.373.933-2.966 1.102-.593.17-1.017.254-1.357.254-1.187 0-1.78-.848-1.78-2.628v-4.155c0-1.357.17-2.374.593-2.967.424-.593 1.187-1.187 2.374-1.78 2.967-1.526 6.53-2.798 10.688-3.816C41.933.593 46.343 0 51.005 0c10.089 0 17.463 2.289 22.21 6.868 4.665 4.579 7.036 11.529 7.036 20.854v27.716h.141zM37.918 68.363c2.798 0 5.68-.508 8.732-1.526 3.054-1.017 5.766-2.882 8.055-5.425 1.357-1.61 2.374-3.394 2.882-5.425.509-2.035.848-4.494.848-7.375v-3.563a70.789 70.789 0 0 0-7.799-1.441 63.874 63.874 0 0 0-7.968-.509c-5.68 0-9.836 1.102-12.63 3.394-2.799 2.29-4.156 5.51-4.156 9.751 0 3.986 1.017 6.953 3.14 8.986 2.036 2.119 5.002 3.158 8.99 3.158zm68.211 9.157c-1.526 0-2.543-.254-3.221-.848-.678-.508-1.272-1.695-1.78-3.306L69.256 5.171c-.508-1.696-.762-2.798-.762-3.39 0-1.357.678-2.12 2.035-2.12h8.308c1.61 0 2.712.255 3.306.848.678.509 1.187 1.696 1.695 3.307l14.242 56.117 13.224-56.117c.424-1.695.932-2.798 1.61-3.306.678-.509 1.865-.848 3.39-.848h6.784c1.61 0 2.712.254 3.39.848.678.508 1.272 1.695 1.61 3.306l13.394 56.795L156.043 3.9c.508-1.696 1.102-2.798 1.695-3.307.678-.508 1.78-.848 3.306-.848h7.883c1.356 0 2.119.678 2.119 2.12 0 .424-.085.847-.17 1.356-.084.508-.254 1.187-.593 2.119l-18.652 60.001c-.509 1.696-1.102 2.798-1.78 3.306-.678.509-1.78.848-3.221.848h-7.29c-1.61 0-2.712-.254-3.39-.848-.678-.593-1.272-1.695-1.61-3.39L131.036 15.94l-13.14 54.594c-.424 1.696-.933 2.798-1.61 3.39-.679.594-1.866.848-3.392.848h-7.29zm109.24 2.288c-4.41 0-8.82-.508-13.055-1.526-4.24-1.017-7.545-2.119-9.75-3.39-1.357-.763-2.29-1.611-2.628-2.374a5.984 5.984 0 0 1-.509-2.374v-4.325c0-1.78.678-2.628 1.95-2.628.508 0 1.017.085 1.525.254.51.17 1.272.51 2.12.848a46.108 46.108 0 0 0 9.326 2.967c3.394.678 6.7 1.017 10.09 1.017 5.34 0 9.496-.933 12.376-2.798 2.882-1.865 4.41-4.579 4.41-8.056 0-2.374-.764-4.325-2.29-5.94-1.526-1.611-4.41-3.052-8.565-4.409l-12.29-3.816c-6.19-1.95-10.769-4.833-13.564-8.65-2.798-3.73-4.24-7.884-4.24-12.293 0-3.56.764-6.7 2.29-9.412 1.525-2.713 3.56-5.086 6.106-6.953 2.543-1.95 5.425-3.39 8.82-4.41 3.39-1.016 6.953-1.44 10.686-1.44 1.865 0 3.815.084 5.68.339 1.95.254 3.73.593 5.51.932 1.696.424 3.306.848 4.833 1.357 1.526.508 2.712 1.017 3.56 1.526.848.508 1.526 1.017 1.865 1.61.34.508.509 1.187.509 2.035v3.9c0 1.78-.678 2.713-1.95 2.713-.678 0-1.78-.34-3.22-1.017-4.834-2.204-10.26-3.306-16.28-3.306-4.833 0-8.65.762-11.276 2.373-2.628 1.611-3.986 4.07-3.986 7.545 0 2.374.848 4.41 2.544 6.02 1.695 1.611 4.833 3.222 9.326 4.664l12.037 3.815c6.105 1.95 10.514 4.664 13.14 8.14 2.628 3.478 3.9 7.46 3.9 11.87 0 3.646-.764 6.953-2.205 9.836-1.525 2.882-3.56 5.425-6.19 7.46-2.628 2.12-5.764 3.646-9.41 4.748-3.815 1.187-7.8 1.78-12.122 1.78z"/>
+                        <path fill="#F90" d="M230.993 120.964c-27.97 20.687-68.593 31.674-103.492 31.674-48.897 0-92.968-18.062-126.257-48.126-2.628-2.373-.254-5.594 2.882-3.73 35.999 20.94 80.409 33.572 126.343 33.572 30.996 0 65.045-6.444 96.379-19.68 4.664-2.12 8.65 3.052 4.145 6.29z"/>
+                        <path fill="#F90" d="M242.606 107.727c-3.56-4.579-23.6-2.204-32.673-1.102-2.713.339-3.137-2.035-.678-3.815 15.96-11.19 42.156-7.97 45.208-4.24 3.052 3.815-.848 30.064-15.789 42.611-2.289 1.95-4.494.932-3.475-1.61 3.39-8.395 10.938-27.293 7.407-31.844z"/>
+                    </svg>
+                    <span>Amazon Web Services</span>
+                </div>
+                <div class="provider provider-google">
+                    <svg class="provider-svg" viewBox="0 0 48 48" role="img" aria-label="Google">
+                        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                    </svg>
+                    <span>Google Cloud</span>
+                </div>
+                <div class="provider provider-salesforce">
+                    <i class="fab fa-salesforce provider-fa" style="color:#00A1E0;"></i>
+                    <span>Salesforce</span>
+                </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Prerequisites Section -->
     <section id="prerequisites" class="prerequisites-section">
         <div class="container">
             <h2 class="section-title">Prerequisites & Prework</h2>
-            <p class="section-subtitle">Prepare yourself for success in this course</p>
+            <p class="section-subtitle">Prepare yourself for success across the machine learning and cloud AI certification tracks</p>
             
             <div class="prereq-intro">
             <div class="category-section">
-                    <h3>Is this course right for you?</h3>
-                <p>Machine Learning Crash Course does not presume or require any prior knowledge in machine learning. However, to understand the concepts presented and complete the exercises, we recommend meeting the following prerequisites:</p>
+                    <h3>Are these courses right for you?</h3>
+                <p>Neither the Machine Learning Crash Course nor the cloud AI certification tracks (Azure, AWS, Google Cloud, and Salesforce) assume prior AI experience. To get the most from the lessons and exercises, we recommend meeting the prerequisites below. Not every item applies to every track &mdash; treat it as a checklist for the path you choose.</p>
             </div>
 
             <div class="prereq-grid">
@@ -98,7 +153,7 @@
                     </div>
                     <div class="accordion-content">
                         <div class="prereq-content">
-                            <p class="prereq-intro-text">Before beginning, complete the following:</p>
+                            <p class="prereq-intro-text">Recommended before the machine learning &amp; data tracks:</p>
                             <ol class="prereq-list">
                             <li>
                                 <strong>Introduction to Machine Learning</strong>
@@ -147,6 +202,7 @@
                     </div>
                     <div class="accordion-content">
                         <div class="prereq-content">
+                            <p class="prereq-intro-text">Most relevant for the machine learning &amp; data science tracks:</p>
                             <div class="math-section">
                                 <h4>Algebra</h4>
                             <ul>
@@ -193,6 +249,7 @@
                     </div>
                     <div class="accordion-content">
                         <div class="prereq-content">
+                            <p class="prereq-intro-text">Used across every track &mdash; ML exercises and Azure AI SDKs:</p>
                             <div class="math-section">
                                 <h4>Python Basics</h4>
                             <ul>
@@ -215,6 +272,46 @@
                     </div>
                 </div>
 
+                <!-- Cloud Essentials -->
+                <div class="prereq-card accordion-item">
+                    <div class="prereq-header accordion-header" onclick="toggleAccordion(this)">
+                        <div class="header-left">
+                            <span class="prereq-icon"><i class="fas fa-cloud"></i></span>
+                            <h3>Cloud Essentials</h3>
+                        </div>
+                        <span class="accordion-toggle">+</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="prereq-content">
+                            <p class="prereq-intro-text">Recommended before the cloud AI certification tracks:</p>
+                            <ol class="prereq-list">
+                                <li>
+                                    <strong>Create a Free Cloud Account</strong>
+                                    <p>Spin up a free account on your chosen cloud to try AI services hands-on</p>
+                                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+                                        <a href="https://azure.microsoft.com/free/" target="_blank" class="prereq-link"><i class="fas fa-external-link-alt"></i> Azure</a>
+                                        <a href="https://aws.amazon.com/free/" target="_blank" class="prereq-link"><i class="fas fa-external-link-alt"></i> AWS</a>
+                                        <a href="https://cloud.google.com/free" target="_blank" class="prereq-link"><i class="fas fa-external-link-alt"></i> Google Cloud</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <strong>Set Up a Learning Profile</strong>
+                                    <p>Track progress and take practice assessments on the official learning platforms</p>
+                                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
+                                        <a href="https://learn.microsoft.com/training/" target="_blank" class="prereq-link"><i class="fas fa-external-link-alt"></i> Microsoft Learn</a>
+                                        <a href="https://skillbuilder.aws/" target="_blank" class="prereq-link"><i class="fas fa-external-link-alt"></i> AWS Skill Builder</a>
+                                        <a href="https://www.skills.google/" target="_blank" class="prereq-link"><i class="fas fa-external-link-alt"></i> Google Skills</a>
+                                    </div>
+                                </li>
+                                <li>
+                                    <strong>Learn the Cloud Console</strong>
+                                    <p>Get comfortable creating resources and navigating your cloud provider's portal or console</p>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Experience Level -->
                 <div class="prereq-card accordion-item">
                     <div class="prereq-header accordion-header" onclick="toggleAccordion(this)">
@@ -229,10 +326,10 @@
                             <div class="experience-item">
                                 <h4>✅ Perfect if you:</h4>
                                 <ul>
-                                <li>Have little or no ML background</li>
-                                <li>Want a current understanding of ML</li>
-                                <li>Are comfortable with algebra and Python</li>
-                                <li>Want to build practical ML skills</li>
+                                <li>Have little or no AI / ML background</li>
+                                <li>Want a current understanding of ML and Azure AI</li>
+                                <li>Are comfortable with basic Python</li>
+                                <li>Want practical skills or to earn an Azure AI certification</li>
                             </ul>
                         </div>
                         </div>
@@ -241,8 +338,103 @@
             </div>
 
             <div class="prereq-cta">
-                <p>Ready to begin your machine learning journey?</p>
+                <p>Ready to begin your AI &amp; ML learning journey?</p>
                 <button class="btn btn-primary" onclick="scrollToSection('courses')">Start Learning</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Find Your Path -->
+    <section id="find-your-path" class="path-section">
+        <div class="container">
+            <h2 class="section-title">Find Your Path</h2>
+            <p class="section-subtitle">Not sure where to start? Answer two quick questions and we'll point you to the right certification &mdash; in the right order.</p>
+
+            <!-- Interactive recommender -->
+            <div class="path-recommender">
+                <div class="path-step">
+                    <p class="path-q"><span class="path-num">1</span> Which ecosystem do you work in (or want to)?</p>
+                    <div class="path-options" id="path-eco">
+                        <button type="button" class="path-opt" data-eco="azure">Microsoft Azure</button>
+                        <button type="button" class="path-opt" data-eco="aws">AWS</button>
+                        <button type="button" class="path-opt" data-eco="gcp">Google Cloud</button>
+                        <button type="button" class="path-opt" data-eco="salesforce">Salesforce</button>
+                        <button type="button" class="path-opt" data-eco="unsure">Not sure yet</button>
+                    </div>
+                </div>
+                <div class="path-step">
+                    <p class="path-q"><span class="path-num">2</span> What best describes you?</p>
+                    <div class="path-options" id="path-level">
+                        <button type="button" class="path-opt" data-level="beginner">New to AI</button>
+                        <button type="button" class="path-opt" data-level="developer">Developer / Engineer</button>
+                        <button type="button" class="path-opt" data-level="datascientist">Data Scientist</button>
+                    </div>
+                </div>
+                <div class="path-result" id="path-result" hidden></div>
+            </div>
+
+            <!-- Provider guidance -->
+            <h3 class="path-subheading">Which provider is right for you?</h3>
+            <div class="provider-guide-grid">
+                <div class="provider-guide-card">
+                    <h4><i class="fab fa-microsoft" style="color:#00A4EF;"></i> Microsoft Azure</h4>
+                    <p>Best if your team already uses Microsoft 365, Azure, or Copilot, and you want AI that plugs into that stack.</p>
+                    <button type="button" class="btn btn-secondary" onclick="goToCert('certifications','panel-ai-901','azure')">Explore Azure &rarr;</button>
+                </div>
+                <div class="provider-guide-card">
+                    <h4><i class="fab fa-aws" style="color:#FF9900;"></i> AWS</h4>
+                    <p>Best for the broadest job market and the widest catalog of AI/ML services, from Bedrock to SageMaker.</p>
+                    <button type="button" class="btn btn-secondary" onclick="goToCert('aws-certifications','panel-aif','aws')">Explore AWS &rarr;</button>
+                </div>
+                <div class="provider-guide-card">
+                    <h4><i class="fab fa-google" style="color:#4285F4;"></i> Google Cloud</h4>
+                    <p>Best for data-heavy and ML-focused roles built around Vertex AI, BigQuery, and Gemini.</p>
+                    <button type="button" class="btn btn-secondary" onclick="goToCert('gcp-certifications','panel-genai-leader','gcp')">Explore Google Cloud &rarr;</button>
+                </div>
+                <div class="provider-guide-card">
+                    <h4><i class="fab fa-salesforce" style="color:#00A1E0;"></i> Salesforce</h4>
+                    <p>Best if you work in CRM, Service, or Sales and want to build and deploy Agentforce AI agents.</p>
+                    <button type="button" class="btn btn-secondary" onclick="goToCert('salesforce-certifications','panel-agentforce','salesforce')">Explore Salesforce &rarr;</button>
+                </div>
+            </div>
+
+            <!-- Learning ladders -->
+            <h3 class="path-subheading">Follow the right order</h3>
+            <p class="path-note">Heads up: codes like <strong>AI-901</strong>, <strong>AI-103</strong>, or <strong>DP-100</strong> are just exam IDs &mdash; a lower number does <em>not</em> mean it comes first. Follow the level order:
+                <span class="lvl lvl-foundation">Foundational</span> &rarr; <span class="lvl lvl-associate">Associate</span> &rarr; <span class="lvl lvl-pro">Professional</span>.</p>
+
+            <div class="ladder-grid">
+                <div class="ladder-card" data-provider="azure">
+                    <h4 class="ladder-title"><i class="fab fa-microsoft" style="color:#00A4EF;"></i> Azure</h4>
+                    <ol class="ladder">
+                        <li><button type="button" class="ladder-step" onclick="goToCert('certifications','panel-ai-901','azure')"><span class="lvl lvl-foundation">Foundational</span><span class="ladder-name">AI-901 &middot; AI Fundamentals</span><span class="ladder-start">Start here</span></button></li>
+                        <li><button type="button" class="ladder-step" onclick="goToCert('certifications','panel-ai-103','azure')"><span class="lvl lvl-associate">Associate</span><span class="ladder-name">AI-103 &middot; AI Engineer</span></button></li>
+                        <li><button type="button" class="ladder-step" onclick="goToCert('certifications','panel-dp-100','azure')"><span class="lvl lvl-associate">Associate</span><span class="ladder-name">DP-100 &middot; Data Scientist</span></button></li>
+                        <li><button type="button" class="ladder-step" onclick="goToCert('certifications','panel-ai-300','azure')"><span class="lvl lvl-associate">Associate</span><span class="ladder-name">AI-300 &middot; ML Ops Engineer</span></button></li>
+                        <li><button type="button" class="ladder-step" onclick="goToCert('certifications','panel-ai-200','azure')"><span class="lvl lvl-associate">Associate</span><span class="ladder-name">AI-200 &middot; AI Cloud Developer</span></button></li>
+                    </ol>
+                </div>
+                <div class="ladder-card" data-provider="aws">
+                    <h4 class="ladder-title"><i class="fab fa-aws" style="color:#FF9900;"></i> AWS</h4>
+                    <ol class="ladder">
+                        <li><button type="button" class="ladder-step" onclick="goToCert('aws-certifications','panel-aif','aws')"><span class="lvl lvl-foundation">Foundational</span><span class="ladder-name">AIF-C01 &middot; AI Practitioner</span><span class="ladder-start">Start here</span></button></li>
+                        <li><button type="button" class="ladder-step" onclick="goToCert('aws-certifications','panel-mla','aws')"><span class="lvl lvl-associate">Associate</span><span class="ladder-name">MLA-C01 &middot; ML Engineer</span></button></li>
+                        <li><button type="button" class="ladder-step" onclick="goToCert('aws-certifications','panel-genai-dev','aws')"><span class="lvl lvl-pro">Professional</span><span class="ladder-name">Generative AI Developer</span></button></li>
+                    </ol>
+                </div>
+                <div class="ladder-card" data-provider="gcp">
+                    <h4 class="ladder-title"><i class="fab fa-google" style="color:#4285F4;"></i> Google Cloud</h4>
+                    <ol class="ladder">
+                        <li><button type="button" class="ladder-step" onclick="goToCert('gcp-certifications','panel-genai-leader','gcp')"><span class="lvl lvl-foundation">Foundational</span><span class="ladder-name">Generative AI Leader</span><span class="ladder-start">Start here</span></button></li>
+                        <li><button type="button" class="ladder-step" onclick="goToCert('gcp-certifications','panel-gcp-mle','gcp')"><span class="lvl lvl-pro">Professional</span><span class="ladder-name">Professional ML Engineer</span></button></li>
+                    </ol>
+                </div>
+                <div class="ladder-card" data-provider="salesforce">
+                    <h4 class="ladder-title"><i class="fab fa-salesforce" style="color:#00A1E0;"></i> Salesforce</h4>
+                    <ol class="ladder">
+                        <li><button type="button" class="ladder-step" onclick="goToCert('salesforce-certifications','panel-agentforce','salesforce')"><span class="lvl lvl-specialist">Specialist</span><span class="ladder-name">Agentforce Specialist</span><span class="ladder-start">Start here</span></button></li>
+                    </ol>
+                </div>
             </div>
         </div>
     </section>
@@ -250,11 +442,18 @@
     <!-- Course Categories -->
     <section id="courses" class="courses-section">
         <div class="container">
-            <h2 class="section-title">Course Modules</h2>
+            <h2 class="section-title">Machine Learning Modules</h2>
             <p class="section-subtitle">Learn machine learning through structured, self-contained modules</p>
 
+            <div class="section-tabs">
+                <button class="section-tab active" data-target="panel-ml-models">ML Models</button>
+                <button class="section-tab" data-target="panel-data">Data</button>
+                <button class="section-tab" data-target="panel-advanced-ml">Advanced ML</button>
+                <button class="section-tab" data-target="panel-realworld-ml">Real-world ML</button>
+            </div>
+
             <!-- ML Models Category -->
-            <div class="category-section">
+            <div class="category-section tab-panel active" id="panel-ml-models">
                 <div class="category-header">
                     <h3 class="category-title">
                         <span class="category-icon"><i class="fas fa-brain"></i></span>
@@ -268,7 +467,7 @@
             </div>
 
             <!-- Data Category -->
-            <div class="category-section">
+            <div class="category-section tab-panel" id="panel-data">
                 <div class="category-header">
                     <h3 class="category-title">
                         <span class="category-icon"><i class="fas fa-database"></i></span>
@@ -282,7 +481,7 @@
             </div>
 
             <!-- Advanced ML Category -->
-            <div class="category-section">
+            <div class="category-section tab-panel" id="panel-advanced-ml">
                 <div class="category-header">
                     <h3 class="category-title">
                         <span class="category-icon"><i class="fas fa-rocket"></i></span>
@@ -296,7 +495,7 @@
             </div>
 
             <!-- Real-world ML Category -->
-            <div class="category-section">
+            <div class="category-section tab-panel" id="panel-realworld-ml">
                 <div class="category-header">
                     <h3 class="category-title">
                         <span class="category-icon"><i class="fas fa-globe"></i></span>
@@ -311,31 +510,275 @@
         </div>
     </section>
 
+    <!-- Cloud AI Certifications provider filter -->
+    <div class="cert-filter">
+        <span class="cert-filter-label">Filter certifications by provider</span>
+        <div class="provider-filter">
+            <button class="filter-btn active" data-provider="all">All</button>
+            <button class="filter-btn" data-provider="azure">Azure</button>
+            <button class="filter-btn" data-provider="aws">AWS</button>
+            <button class="filter-btn" data-provider="gcp">GCP</button>
+            <button class="filter-btn" data-provider="salesforce">Salesforce</button>
+        </div>
+    </div>
+
+    <!-- Azure AI Certifications -->
+    <section id="certifications" class="courses-section" data-provider="azure">
+        <div class="container">
+            <h2 class="section-title">Azure AI Certifications</h2>
+            <p class="section-subtitle">Prepare for Microsoft Azure AI certifications through structured, module-based learning</p>
+
+            <div class="section-tabs">
+                <button class="section-tab active" data-target="panel-ai-901">AI-901 Fundamentals</button>
+                <button class="section-tab" data-target="panel-ai-103">AI-103 Apps & Agents</button>
+                <button class="section-tab" data-target="panel-dp-100">DP-100 Data Scientist</button>
+                <button class="section-tab" data-target="panel-ai-300">AI-300 MLOps Engineer</button>
+                <button class="section-tab" data-target="panel-ai-200">AI-200 Cloud Developer</button>
+            </div>
+
+            <!-- AI-901: Azure AI Fundamentals -->
+            <div class="category-section tab-panel active" id="panel-ai-901">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><img class="cert-badge" src="https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-fundamentals-badge.svg" alt="Microsoft Certified Fundamentals badge" loading="lazy"></span>
+                        AI-901: Azure AI Fundamentals
+                    </h3>
+                    <p class="category-description">Foundational AI concepts and Azure AI services with Microsoft Foundry</p>
+                </div>
+                <div class="modules-grid" id="ai-fundamentals-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- AI-103: Azure AI Apps and Agents Developer Associate -->
+            <div class="category-section tab-panel" id="panel-ai-103">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><img class="cert-badge" src="https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-associate-badge.svg" alt="Microsoft Certified Associate badge" loading="lazy"></span>
+                        AI-103: Azure AI Apps and Agents Developer
+                    </h3>
+                    <p class="category-description">Build, manage, and deploy AI apps and agents with Python and Microsoft Foundry</p>
+                </div>
+                <div class="modules-grid" id="ai-apps-agents-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- DP-100: Azure Data Scientist Associate -->
+            <div class="category-section tab-panel" id="panel-dp-100">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><img class="cert-badge" src="https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-associate-badge.svg" alt="Microsoft Certified Associate badge" loading="lazy"></span>
+                        DP-100: Azure Data Scientist Associate
+                        <span class="retiring-badge" title="Retired June 1, 2026">Retired</span>
+                    </h3>
+                    <p class="category-description">Run machine learning workloads on Azure with Azure Machine Learning and MLflow</p>
+                </div>
+                <div class="modules-grid" id="azure-data-scientist-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- AI-300: Machine Learning Operations Engineer Associate -->
+            <div class="category-section tab-panel" id="panel-ai-300">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><img class="cert-badge" src="https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-associate-badge.svg" alt="Microsoft Certified Associate badge" loading="lazy"></span>
+                        AI-300: ML Operations Engineer Associate
+                        <span class="new-badge">New</span>
+                    </h3>
+                    <p class="category-description">MLOps &amp; GenAIOps on Azure with Azure Machine Learning, Microsoft Foundry, and GitHub Actions &mdash; the successor to DP-100</p>
+                </div>
+                <div class="modules-grid" id="azure-mlops-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- AI-200: Azure AI Cloud Developer Associate -->
+            <div class="category-section tab-panel" id="panel-ai-200">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><img class="cert-badge" src="https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-associate-badge.svg" alt="Microsoft Certified Associate badge" loading="lazy"></span>
+                        AI-200: Azure AI Cloud Developer Associate
+                        <span class="new-badge">New</span>
+                    </h3>
+                    <p class="category-description">Build, host, and operate AI cloud apps with Azure Container Apps, AKS, Cosmos DB, PostgreSQL, and event-driven services</p>
+                </div>
+                <div class="modules-grid" id="azure-ai-clouddev-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AWS AI Certifications -->
+    <section id="aws-certifications" class="courses-section" data-provider="aws">
+        <div class="container">
+            <h2 class="section-title">AWS AI Certifications</h2>
+            <p class="section-subtitle">Prepare for AWS AI and machine learning certifications through structured, module-based learning</p>
+
+            <div class="section-tabs">
+                <button class="section-tab active" data-target="panel-aif">AIF-C01 AI Practitioner</button>
+                <button class="section-tab" data-target="panel-mla">MLA-C01 ML Engineer</button>
+                <button class="section-tab" data-target="panel-genai-dev">GenAI Developer &ndash; Pro</button>
+                <button class="section-tab" data-target="panel-mls">MLS-C01 ML Specialty</button>
+            </div>
+
+            <!-- AIF-C01: AWS Certified AI Practitioner -->
+            <div class="category-section tab-panel active" id="panel-aif">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><img class="cert-badge" src="assets/AWS%20Certified%20AI%20Practitioner.png" alt="AWS Certified AI Practitioner badge" loading="lazy"></span>
+                        AIF-C01: AWS Certified AI Practitioner
+                    </h3>
+                    <p class="category-description">Foundational AI, ML, and generative AI concepts on AWS with Amazon Bedrock</p>
+                </div>
+                <div class="modules-grid" id="aws-ai-practitioner-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- MLA-C01: AWS Certified Machine Learning Engineer - Associate -->
+            <div class="category-section tab-panel" id="panel-mla">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><img class="cert-badge" src="assets/AWS%20ML%20Engineer%20Associate.png" alt="AWS Certified Machine Learning Engineer Associate badge" loading="lazy"></span>
+                        MLA-C01: AWS ML Engineer &ndash; Associate
+                    </h3>
+                    <p class="category-description">Build, deploy, and operationalize ML workloads in production with Amazon SageMaker</p>
+                </div>
+                <div class="modules-grid" id="aws-ml-engineer-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- Generative AI Developer - Professional -->
+            <div class="category-section tab-panel" id="panel-genai-dev">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><img class="cert-badge" src="assets/AWS%20Certified%20Generative%20AI%20Developer%20%E2%80%93%20Professional.png" alt="AWS Certified Generative AI Developer Professional badge" loading="lazy"></span>
+                        AWS Certified Generative AI Developer &ndash; Professional
+                        <span class="new-badge" title="Registration now open">New</span>
+                    </h3>
+                    <p class="category-description">Build production-ready generative AI apps on AWS with Amazon Bedrock, RAG, and agentic workflows</p>
+                </div>
+                <div class="modules-grid" id="aws-genai-developer-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- MLS-C01: AWS Certified Machine Learning - Specialty -->
+            <div class="category-section tab-panel" id="panel-mls">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><img class="cert-badge" src="assets/AWS%20ML%20%E2%80%93%20Specialty.png" alt="AWS Certified Machine Learning Specialty badge" loading="lazy"></span>
+                        MLS-C01: AWS ML &ndash; Specialty
+                        <span class="retiring-badge" title="Retired March 31, 2026">Retired</span>
+                    </h3>
+                    <p class="category-description">Architect, train, tune, and deploy ML and deep learning models on AWS</p>
+                </div>
+                <div class="modules-grid" id="aws-ml-specialty-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GCP AI Certifications -->
+    <section id="gcp-certifications" class="courses-section" data-provider="gcp">
+        <div class="container">
+            <h2 class="section-title">Google Cloud AI Certifications</h2>
+            <p class="section-subtitle">Prepare for Google Cloud AI certifications through structured, module-based learning</p>
+
+            <div class="section-tabs">
+                <button class="section-tab active" data-target="panel-genai-leader">Generative AI Leader</button>
+                <button class="section-tab" data-target="panel-gcp-mle">Professional ML Engineer</button>
+            </div>
+
+            <!-- Generative AI Leader -->
+            <div class="category-section tab-panel active" id="panel-genai-leader">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><img class="cert-badge" src="assets/gcp-generative-ai-leader.png" alt="Google Cloud Generative AI Leader badge" loading="lazy"></span>
+                        Generative AI Leader
+                    </h3>
+                    <p class="category-description">Foundational generative AI concepts and Google Cloud's AI offerings with Gemini and Vertex AI</p>
+                </div>
+                <div class="modules-grid" id="gcp-genai-leader-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- Professional Machine Learning Engineer -->
+            <div class="category-section tab-panel" id="panel-gcp-mle">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><img class="cert-badge" src="assets/machinelearning-engineer.png" alt="Google Cloud Professional Machine Learning Engineer badge" loading="lazy"></span>
+                        Professional Machine Learning Engineer
+                    </h3>
+                    <p class="category-description">Design, build, and productionize ML models on Google Cloud with Vertex AI</p>
+                </div>
+                <div class="modules-grid" id="gcp-mle-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Salesforce AI Certifications -->
+    <section id="salesforce-certifications" class="courses-section" data-provider="salesforce">
+        <div class="container">
+            <h2 class="section-title">Salesforce AI Certifications</h2>
+            <p class="section-subtitle">Prepare for Salesforce's Agentforce AI certification through structured, module-based learning</p>
+
+            <div class="section-tabs">
+                <button class="section-tab active" data-target="panel-agentforce">AI-201 Agentforce Specialist</button>
+            </div>
+
+            <div class="category-section tab-panel active" id="panel-agentforce">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><i class="fab fa-salesforce" style="color:#00A1E0;"></i></span>
+                        Salesforce Certified Agentforce Specialist
+                        <span class="new-badge" title="Formerly AI Specialist">New</span>
+                    </h3>
+                    <p class="category-description">Build, customize, and deploy Agentforce AI agents with prompt engineering and Data Cloud grounding</p>
+                </div>
+                <div class="modules-grid" id="salesforce-agentforce-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- About Section -->
     <section id="about" class="about-section">
         <div class="container">
             <div class="about-content">
-                <h2 class="section-title">About This Course</h2>
+                <h2 class="section-title">About This Platform</h2>
                 <p class="about-text">
-                    This is a simplified version of Google's Machine Learning Crash Course. 
-                    Since 2018, millions of people worldwide have relied on this course to learn how machine 
-                    learning works and how it can work for them.
+                    Cloudvana brings together machine learning fundamentals and multi-cloud AI
+                    certification prep in one place. Start with a simplified Machine Learning Crash Course
+                    based on Google's popular curriculum, then prepare for AI certifications across
+                    Microsoft Azure, AWS, Google Cloud, and Salesforce.
                 </p>
                 <p class="about-text">
-                    Each module is self-contained, so if you have prior experience in machine learning, 
-                    you can skip directly to the topics you want to learn. If you're new to machine learning, 
-                    we recommend completing modules in the order presented.
+                    Covered certifications include Azure (AI-901, AI-103, DP-100), AWS (AIF-C01, MLA-C01,
+                    Generative AI Developer &ndash; Professional, MLS-C01), Google Cloud (Generative AI Leader,
+                    Professional ML Engineer), and Salesforce (Agentforce Specialist). Every
+                    module is self-contained, so you can start with fundamentals or jump straight to the
+                    certification track you're targeting.
                 </p>
                 <div class="features-grid">
                     <div class="feature">
-                        <div class="feature-icon"><i class="fas fa-video"></i></div>
-                        <h4>Video Content</h4>
-                        <p>Animated videos explaining complex concepts</p>
+                        <div class="feature-icon"><i class="fas fa-book-open"></i></div>
+                        <h4>In-Depth Lessons</h4>
+                        <p>Clear written explanations of complex concepts</p>
                     </div>
                     <div class="feature">
                         <div class="feature-icon"><i class="fas fa-laptop-code"></i></div>
-                        <h4>Interactive</h4>
-                        <p>Hands-on practice exercises</p>
+                        <h4>Code Examples</h4>
+                        <p>Runnable code snippets in every module</p>
                     </div>
                     <div class="feature">
                         <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
@@ -352,33 +795,58 @@
         </div>
     </section>
 
+    <!-- Meet the Creator Section -->
+    <section id="founder" class="founder-section">
+        <div class="founder-bg" aria-hidden="true">
+            <span class="founder-blob founder-blob-1"></span>
+            <span class="founder-blob founder-blob-2"></span>
+            <span class="founder-blob founder-blob-3"></span>
+        </div>
+        <div class="container">
+            <h2 class="section-title">Meet the Creator</h2>
+            <p class="founder-intro">
+                Cloudvana is created by
+                <a href="https://www.linkedin.com/in/chilakalapalli-p-141267119/" target="_blank" rel="noopener">Chilakalapalli Pavan Kalyan</a>,
+                a Full Stack Engineer and AI enthusiast passionate about building intelligent, scalable solutions and sharing knowledge.
+            </p>
+            <div class="founder-card">
+                <div class="founder-frame">
+                    <img class="founder-image" src="assets/Founder.png" alt="Chilakalapalli Pavan Kalyan - Creator profile infographic" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h4>ML Course</h4>
-                    <p>Simplified machine learning education for everyone</p>
+                    <h4>Cloudvana</h4>
+                    <p>Machine learning fundamentals and Azure, AWS, Google Cloud &amp; Salesforce AI certification prep for everyone</p>
                 </div>
                 <div class="footer-section">
                     <h4>Links</h4>
                     <ul>
-                        <li><a href="https://developers.google.com/machine-learning/crash-course" target="_blank">Original Course</a></li>
-                        <li><span style="color: rgba(255,255,255,0.5);">YouTube Channel (Coming Soon)</span></li>
+                        <li><a href="https://developers.google.com/machine-learning/crash-course" target="_blank">Original ML Course</a></li>
+                        <li><a href="https://learn.microsoft.com/credentials/certifications/browse/?products=azure&subjects=artificial-intelligence" target="_blank">Azure AI Certifications</a></li>
+                        <li><a href="https://aws.amazon.com/certification/" target="_blank">AWS Certifications</a></li>
+                        <li><a href="https://cloud.google.com/learn/certification" target="_blank">Google Cloud Certifications</a></li>
+                        <li><a href="https://trailhead.salesforce.com/credentials/agentforcespecialist" target="_blank">Salesforce Agentforce Certification</a></li>
                         <li><a href="https://github.com/pavansydney">GitHub</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>Follow</h4>
                     <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i> Twitter</a>
-                        <span class="social-link" style="cursor: not-allowed; opacity: 0.5;"><i class="fab fa-youtube"></i> YouTube (Coming Soon)</span>
-                        <a href="https://www.linkedin.com/in/chilakalapalli-pavan-kalyan-141267119/" class="social-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                        <a href="https://www.linkedin.com/in/chilakalapalli-p-141267119/" target="_blank" class="social-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                        <a href="https://github.com/pavansydney" target="_blank" class="social-link"><i class="fab fa-github"></i> GitHub</a>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 ML Course - Educational Content. Based on Google's ML Course.</p>
+                <p>Founded by <a href="https://www.linkedin.com/in/chilakalapalli-p-141267119/" target="_blank">Chilakalapalli Pavan Kalyan</a></p>
+                <p>&copy; 2026 Cloudvana - Educational Content. Based on Google's ML Course, Microsoft Learn, AWS, Google Cloud &amp; Salesforce Trailhead.</p>
             </div>
         </div>
     </footer>
