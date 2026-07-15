@@ -58,7 +58,7 @@
                 '</div>' +
                 '<div class="footer-bottom">' +
                     '<p>Founded by <a href="https://www.linkedin.com/in/chilakalapalli-p-141267119/" target="_blank">Chilakalapalli Pavan Kalyan</a></p>' +
-                    '<p>&copy; 2026 Cloudvana - Educational Content. Based on Google\'s ML Course, Microsoft Learn, AWS, Google Cloud &amp; Salesforce Trailhead.</p>' +
+                    '<p>&copy; 2024–2026 Cloudvana - Educational Content. Based on Google\'s ML Course, Microsoft Learn, AWS, Google Cloud &amp; Salesforce Trailhead.</p>' +
                 '</div>' +
             '</div>' +
         '</footer>';
