@@ -12146,6 +12146,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupDropdown();
     setupProviderMarquee();
     setupPathFinder();
+    setupNavToggle();
 });
 
 // Duplicate provider logos so the marquee scrolls in a seamless, gapless loop
@@ -12249,7 +12250,7 @@ function setupDropdown() {
 
     toggle.addEventListener('click', function(e) {
         e.preventDefault();
-        if (window.innerWidth <= 768) {
+        if (window.innerWidth <= 900) {
             dropdown.classList.toggle('open');
         } else {
             scrollToSection('certifications');
@@ -12496,6 +12497,37 @@ function scrollToSection(sectionId) {
             behavior: 'smooth'
         });
     }
+}
+
+// Mobile hamburger menu toggle
+function setupNavToggle() {
+    const toggle = document.getElementById('navToggle');
+    const menu = document.getElementById('navMenu');
+    if (!toggle || !menu) return;
+
+    const closeMenu = () => {
+        menu.classList.remove('open');
+        toggle.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+    };
+
+    toggle.addEventListener('click', function () {
+        const isOpen = menu.classList.toggle('open');
+        toggle.classList.toggle('open', isOpen);
+        toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    // Close the menu after tapping a real navigation link
+    menu.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    // Close when clicking outside the navbar
+    document.addEventListener('click', function (e) {
+        if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+            closeMenu();
+        }
+    });
 }
 
 // Navigate to a specific certification: show its provider, open its tab, and scroll to it
