@@ -85,6 +85,53 @@
         </div>
     </section>
 
+    <!-- AI Engineering: Zero to Hero -->
+    <section class="courses-section">
+        <div class="container">
+            <h2 class="section-title">AI Engineering: Zero to Hero</h2>
+            <p class="section-subtitle">A modern path from neural networks to production AI agents &mdash; deep learning, generative AI, and agentic systems</p>
+
+            <div class="section-tabs">
+                <button class="section-tab active" data-target="panel-deep-learning">Deep Learning</button>
+                <button class="section-tab" data-target="panel-generative-ai">Generative AI</button>
+                <button class="section-tab" data-target="panel-ai-agents">AI Agents</button>
+                <button class="section-tab" data-target="panel-agent-frameworks">Agent Frameworks</button>
+            </div>
+
+            <div class="category-section tab-panel active" id="panel-deep-learning">
+                <div class="category-header">
+                    <h3 class="category-title"><span class="category-icon"><i class="fas fa-network-wired"></i></span> Deep Learning</h3>
+                    <p class="category-description">Neural networks, training, and the transformer architecture behind modern AI</p>
+                </div>
+                <div class="modules-grid" id="deep-learning-grid"></div>
+            </div>
+
+            <div class="category-section tab-panel" id="panel-generative-ai">
+                <div class="category-header">
+                    <h3 class="category-title"><span class="category-icon"><i class="fas fa-wand-magic-sparkles"></i></span> Generative AI</h3>
+                    <p class="category-description">LLMs, prompt engineering, embeddings, RAG, and fine-tuning</p>
+                </div>
+                <div class="modules-grid" id="generative-ai-grid"></div>
+            </div>
+
+            <div class="category-section tab-panel" id="panel-ai-agents">
+                <div class="category-header">
+                    <h3 class="category-title"><span class="category-icon"><i class="fas fa-robot"></i></span> AI Agents</h3>
+                    <p class="category-description">Agentic AI, tool calling, memory, and building agents from scratch</p>
+                </div>
+                <div class="modules-grid" id="ai-agents-grid"></div>
+            </div>
+
+            <div class="category-section tab-panel" id="panel-agent-frameworks">
+                <div class="category-header">
+                    <h3 class="category-title"><span class="category-icon"><i class="fas fa-diagram-project"></i></span> Agent Frameworks &amp; Systems</h3>
+                    <p class="category-description">LangChain, LangGraph, MCP servers, multi-agent orchestration, and deployment</p>
+                </div>
+                <div class="modules-grid" id="agent-frameworks-grid"></div>
+            </div>
+        </div>
+    </section>
+
     <div id="site-footer"></div>
 
     <!-- Module Modal -->
@@ -99,5 +146,6 @@
 
     <script src="js/layout.js"></script>
     <script src="script.js"></script>
+    <script src="js/ai-courses.js"></script>
 </body>
 </html>
