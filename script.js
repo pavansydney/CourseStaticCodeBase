@@ -12325,7 +12325,7 @@ function setQuizBest(panelId, value) {
 document.addEventListener('DOMContentLoaded', function() {
     loadModules();
     loadQuizzes();
-    setupNavigation();
+    applyCertQuery();
     setupScrollAnimations();
     setupTabs();
     setupCertFilter();
@@ -12409,23 +12409,25 @@ function setupCertFilter() {
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => applyProviderFilter(btn.dataset.provider));
     });
+}
 
-    // Keep provider nav links in sync with the filter
-    const navProviderMap = {
-        'certifications': 'azure',
-        'aws-certifications': 'aws',
-        'gcp-certifications': 'gcp',
-    };
-    document.querySelectorAll('.nav-dropdown-menu .nav-link').forEach(link => {
-        const targetId = link.getAttribute('href').substring(1);
-        if (navProviderMap[targetId]) {
-            link.addEventListener('click', () => applyProviderFilter(navProviderMap[targetId]));
-        }
-    });
-
-    // The "Certifications" toggle shows all providers
-    const toggle = document.querySelector('.nav-dropdown-toggle');
-    if (toggle) toggle.addEventListener('click', () => applyProviderFilter('all'));
+// On the certifications page, honor ?provider=&panel=&section= passed from
+// links on other pages (e.g. the Find Your Path roadmap and nav dropdown).
+function applyCertQuery() {
+    if (!document.getElementById('certifications')) return; // only the certifications page
+    const params = new URLSearchParams(window.location.search);
+    const provider = params.get('provider');
+    const panel = params.get('panel');
+    const section = params.get('section');
+    if (!provider && !panel && !section) return;
+    if (provider) applyProviderFilter(provider);
+    if (panel) {
+        const tab = document.querySelector('.section-tab[data-target="' + panel + '"]');
+        if (tab) tab.click();
+    }
+    if (section) {
+        setTimeout(function () { scrollToSection(section); }, 90);
+    }
 }
 
 // Certifications nav dropdown (hover on desktop, tap on mobile)
@@ -12435,13 +12437,12 @@ function setupDropdown() {
     const toggle = dropdown.querySelector('.nav-dropdown-toggle');
 
     toggle.addEventListener('click', function(e) {
-        e.preventDefault();
         if (window.innerWidth <= 900) {
+            // Mobile: expand the submenu instead of navigating
+            e.preventDefault();
             dropdown.classList.toggle('open');
-        } else {
-            scrollToSection('certifications');
-            dropdown.classList.remove('open');
         }
+        // Desktop: follow the link to certifications.html
     });
 
     // Close the menu after picking a provider
@@ -12507,6 +12508,7 @@ function loadModules() {
 // Load modules into a specific grid
 function loadModulesIntoGrid(gridId, modules) {
     const grid = document.getElementById(gridId);
+    if (!grid) return; // this grid isn't on the current page
 
     modules.forEach(module => {
         const card = createModuleCard(module, gridId);
@@ -12776,6 +12778,16 @@ function setupNavToggle() {
 
 // Navigate to a specific certification: show its provider, open its tab, and scroll to it
 function goToCert(sectionId, tabTarget, provider) {
+    // If this certification section isn't on the current page, jump to the
+    // certifications page and pass the selection along in the URL.
+    if (!document.getElementById(sectionId)) {
+        const params = new URLSearchParams();
+        if (provider) params.set('provider', provider);
+        if (tabTarget) params.set('panel', tabTarget);
+        if (sectionId) params.set('section', sectionId);
+        window.location.href = 'certifications.html?' + params.toString();
+        return;
+    }
     if (provider) applyProviderFilter(provider);
     if (tabTarget) {
         const tab = document.querySelector('.section-tab[data-target="' + tabTarget + '"]');
