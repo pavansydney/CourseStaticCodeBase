@@ -12503,12 +12503,17 @@ function loadModules() {
     loadModulesIntoGrid('gcp-genai-leader-grid', courseData.gcpGenAiLeader);
     loadModulesIntoGrid('gcp-mle-grid', courseData.gcpMlEngineer);
     loadModulesIntoGrid('salesforce-agentforce-grid', courseData.salesforceAgentforce);
+    // AI Engineering: Zero to Hero (defined in js/ai-courses.js, Courses page only)
+    loadModulesIntoGrid('deep-learning-grid', courseData.deepLearning);
+    loadModulesIntoGrid('generative-ai-grid', courseData.generativeAI);
+    loadModulesIntoGrid('ai-agents-grid', courseData.aiAgents);
+    loadModulesIntoGrid('agent-frameworks-grid', courseData.agentFrameworks);
 }
 
 // Load modules into a specific grid
 function loadModulesIntoGrid(gridId, modules) {
     const grid = document.getElementById(gridId);
-    if (!grid) return; // this grid isn't on the current page
+    if (!grid || !modules) return; // grid or data not present on this page
 
     modules.forEach(module => {
         const card = createModuleCard(module, gridId);
@@ -12559,6 +12564,18 @@ function toggleModuleRead(id, btn) {
     }
 }
 
+// AI Engineering track grids: show the real lesson count (number of content
+// sections) so the card label always matches what opens in the modal.
+const AI_COURSE_GRIDS = ['deep-learning-grid', 'generative-ai-grid', 'ai-agents-grid', 'agent-frameworks-grid'];
+
+function moduleLessonsLabel(module, gridId) {
+    if (AI_COURSE_GRIDS.indexOf(gridId) !== -1 && Array.isArray(module.detailedContent) && module.detailedContent.length) {
+        const n = module.detailedContent.length;
+        return n + (n === 1 ? ' lesson' : ' lessons');
+    }
+    return module.lessons;
+}
+
 // Create a module card element
 function createModuleCard(module, gridId) {
     const card = document.createElement('div');
@@ -12584,7 +12601,7 @@ function createModuleCard(module, gridId) {
         <h4 class="module-title">${module.title}</h4>
         <p class="module-description">${module.description}</p>
         <div class="module-meta">
-            <span class="meta-item"><i class="fas fa-book-open"></i> ${module.lessons}</span>
+            <span class="meta-item"><i class="fas fa-book-open"></i> ${moduleLessonsLabel(module, gridId)}</span>
             ${durationMeta}
             ${codeMeta}
         </div>
@@ -12656,7 +12673,7 @@ function openModuleModal(module, moduleId) {
                 <h2 class="modal-title">${module.title}</h2>
                 <p class="modal-description">${module.detailedDescription}</p>
                 <div class="module-meta" style="justify-content: center; margin-top: 1rem;">
-                    <span class="meta-item"><i class="fas fa-book-open"></i> ${module.lessons}</span>
+                    <span class="meta-item"><i class="fas fa-book-open"></i> ${moduleLessonsLabel(module, moduleId ? moduleId.split('#')[0] : '')}</span>
                 </div>
             </div>
             <div class="detailed-content">
@@ -12677,7 +12694,7 @@ function openModuleModal(module, moduleId) {
             </div>
             <div class="modal-stats">
                 <div class="module-meta">
-                    <span class="meta-item"><i class="fas fa-book-open"></i> ${module.lessons}</span>
+                    <span class="meta-item"><i class="fas fa-book-open"></i> ${moduleLessonsLabel(module, moduleId ? moduleId.split('#')[0] : '')}</span>
                 </div>
             </div>
             <div class="topics-section">
