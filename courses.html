@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Modules — Cloudvana</title>
+    <meta name="description" content="Learn machine learning through structured, self-contained modules covering ML models, data, advanced ML, and real-world machine learning.">
+    <meta name="author" content="Chilakalapalli Pavan Kalyan">
+    <meta name="theme-color" content="#4285f4">
+    <link rel="icon" type="image/jpeg" href="assets/Cloudvana%20logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="courses">
+    <div id="site-nav"></div>
+
+    <!-- Course Categories -->
+    <section id="courses" class="courses-section page-section">
+        <div class="container">
+            <h2 class="section-title">Machine Learning Modules</h2>
+            <p class="section-subtitle">Learn machine learning through structured, self-contained modules</p>
+
+            <div class="section-tabs">
+                <button class="section-tab active" data-target="panel-ml-models">ML Models</button>
+                <button class="section-tab" data-target="panel-data">Data</button>
+                <button class="section-tab" data-target="panel-advanced-ml">Advanced ML</button>
+                <button class="section-tab" data-target="panel-realworld-ml">Real-world ML</button>
+            </div>
+
+            <!-- ML Models Category -->
+            <div class="category-section tab-panel active" id="panel-ml-models">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><i class="fas fa-brain"></i></span>
+                        ML Models
+                    </h3>
+                    <p class="category-description">Fundamentals of building regression and classification models</p>
+                </div>
+                <div class="modules-grid" id="ml-models-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- Data Category -->
+            <div class="category-section tab-panel" id="panel-data">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><i class="fas fa-database"></i></span>
+                        Data
+                    </h3>
+                    <p class="category-description">Fundamental techniques for working with machine learning data</p>
+                </div>
+                <div class="modules-grid" id="data-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- Advanced ML Category -->
+            <div class="category-section tab-panel" id="panel-advanced-ml">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><i class="fas fa-rocket"></i></span>
+                        Advanced ML Models
+                    </h3>
+                    <p class="category-description">Advanced ML model architectures and techniques</p>
+                </div>
+                <div class="modules-grid" id="advanced-ml-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+
+            <!-- Real-world ML Category -->
+            <div class="category-section tab-panel" id="panel-realworld-ml">
+                <div class="category-header">
+                    <h3 class="category-title">
+                        <span class="category-icon"><i class="fas fa-globe"></i></span>
+                        Real-world ML
+                    </h3>
+                    <p class="category-description">Production systems, automation, and responsible engineering</p>
+                </div>
+                <div class="modules-grid" id="realworld-ml-grid">
+                    <!-- Modules will be dynamically loaded -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="site-footer"></div>
+
+    <!-- Module Modal -->
+    <div id="moduleModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div id="modal-body">
+                <!-- Module details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/layout.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
