@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloudvana - Machine Learning & Cloud AI Certifications (Azure, AWS, GCP, Salesforce)</title>
+    <title>Cloudvana</title>
     <meta name="description" content="Cloudvana is a free learning platform for machine learning fundamentals and AI certification prep across Microsoft Azure, AWS, Google Cloud, and Salesforce Agentforce, with a guided path to help you pick the right certification.">
     <meta name="author" content="Chilakalapalli Pavan Kalyan">
     <meta name="theme-color" content="#4285f4">
+    <link rel="icon" type="image/jpeg" href="assets/Cloudvana%20logo.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -14,10 +15,9 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
-            <div class="nav-brand">
-                <span class="logo"><i class="fas fa-brain"></i></span>
-                <span class="brand-name">Cloudvana</span>
-            </div>
+            <a href="#home" class="nav-brand" aria-label="Cloudvana home">
+                <img class="nav-logo" src="assets/Cloudvana%20logo.jpg" alt="Cloudvana">
+            </a>
             <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navMenu">
                 <span></span>
                 <span></span>
@@ -38,7 +38,6 @@
                     </ul>
                 </li>
                 <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#founder" class="nav-link">Creator</a></li>
             </ul>
         </div>
     </nav>
@@ -55,16 +54,16 @@
         </div>
         <div class="hero-animation">
             <div class="floating-card">
-                <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-                <p>Interactive Learning</p>
+                <div class="card-icon"><i class="fas fa-book-open"></i></div>
+                <p>Guided Lessons</p>
             </div>
             <div class="floating-card delay-1">
-                <div class="card-icon"><i class="fas fa-bullseye"></i></div>
-                <p>Hands-on Practice</p>
+                <div class="card-icon"><i class="fas fa-code"></i></div>
+                <p>Code Examples</p>
             </div>
             <div class="floating-card delay-2">
-                <div class="card-icon"><i class="fas fa-rocket"></i></div>
-                <p>Code Samples</p>
+                <div class="card-icon"><i class="fas fa-certificate"></i></div>
+                <p>Cert-Aligned</p>
             </div>
         </div>
     </section>
@@ -86,8 +85,8 @@
                     <div class="stat-label">Free Content</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">∞</div>
-                    <div class="stat-label">Learning Potential</div>
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Cloud Providers</div>
                 </div>
             </div>
         </div>
@@ -315,9 +314,9 @@
                                 <h4>✅ Perfect if you:</h4>
                                 <ul>
                                 <li>Have little or no AI / ML background</li>
-                                <li>Want a current understanding of ML and Azure AI</li>
+                                <li>Want a current understanding of ML and cloud AI services</li>
                                 <li>Are comfortable with basic Python</li>
-                                <li>Want practical skills or to earn an Azure AI certification</li>
+                                <li>Want practical skills or an AI certification on Azure, AWS, Google Cloud, or Salesforce</li>
                             </ul>
                         </div>
                         </div>
@@ -336,33 +335,10 @@
     <section id="find-your-path" class="path-section">
         <div class="container">
             <h2 class="section-title">Find Your Path</h2>
-            <p class="section-subtitle">Not sure where to start? Answer two quick questions and we'll point you to the right certification &mdash; in the right order.</p>
+            <p class="section-subtitle">Compare the four providers, answer two quick questions, then follow the certifications in the right order.</p>
 
-            <!-- Interactive recommender -->
-            <div class="path-recommender">
-                <div class="path-step">
-                    <p class="path-q"><span class="path-num">1</span> Which ecosystem do you work in (or want to)?</p>
-                    <div class="path-options" id="path-eco">
-                        <button type="button" class="path-opt" data-eco="azure">Microsoft Azure</button>
-                        <button type="button" class="path-opt" data-eco="aws">AWS</button>
-                        <button type="button" class="path-opt" data-eco="gcp">Google Cloud</button>
-                        <button type="button" class="path-opt" data-eco="salesforce">Salesforce</button>
-                        <button type="button" class="path-opt" data-eco="unsure">Not sure yet</button>
-                    </div>
-                </div>
-                <div class="path-step">
-                    <p class="path-q"><span class="path-num">2</span> What best describes you?</p>
-                    <div class="path-options" id="path-level">
-                        <button type="button" class="path-opt" data-level="beginner">New to AI</button>
-                        <button type="button" class="path-opt" data-level="developer">Developer / Engineer</button>
-                        <button type="button" class="path-opt" data-level="datascientist">Data Scientist</button>
-                    </div>
-                </div>
-                <div class="path-result" id="path-result" hidden></div>
-            </div>
-
-            <!-- Provider guidance -->
-            <h3 class="path-subheading">Which provider is right for you?</h3>
+            <!-- Provider guidance (start here) -->
+            <h3 class="path-subheading">1. Which provider is right for you?</h3>
             <div class="provider-guide-grid">
                 <div class="provider-guide-card">
                     <h4><i class="fab fa-microsoft" style="color:#00A4EF;"></i> Microsoft Azure</h4>
@@ -386,42 +362,106 @@
                 </div>
             </div>
 
-            <!-- Learning ladders -->
-            <h3 class="path-subheading">Follow the right order</h3>
-            <p class="path-note">Heads up: codes like <strong>AI-901</strong>, <strong>AI-103</strong>, or <strong>DP-100</strong> are just exam IDs &mdash; a lower number does <em>not</em> mean it comes first. Follow the level order:
-                <span class="lvl lvl-foundation">Foundational</span> &rarr; <span class="lvl lvl-associate">Associate</span> &rarr; <span class="lvl lvl-pro">Professional</span>.</p>
+            <!-- Interactive recommender -->
+            <h3 class="path-subheading">2. Still deciding? Answer two quick questions</h3>
+            <div class="path-recommender">
+                <div class="path-step">
+                    <p class="path-q"><span class="path-num">1</span> Which ecosystem do you work in (or want to)?</p>
+                    <div class="path-options" id="path-eco">
+                        <button type="button" class="path-opt" data-eco="azure">Microsoft Azure</button>
+                        <button type="button" class="path-opt" data-eco="aws">AWS</button>
+                        <button type="button" class="path-opt" data-eco="gcp">Google Cloud</button>
+                        <button type="button" class="path-opt" data-eco="salesforce">Salesforce</button>
+                        <button type="button" class="path-opt" data-eco="unsure">Not sure yet</button>
+                    </div>
+                </div>
+                <div class="path-step">
+                    <p class="path-q"><span class="path-num">2</span> What best describes you?</p>
+                    <div class="path-options" id="path-level">
+                        <button type="button" class="path-opt" data-level="beginner">New to AI</button>
+                        <button type="button" class="path-opt" data-level="developer">Developer / Engineer</button>
+                        <button type="button" class="path-opt" data-level="datascientist">Data Scientist</button>
+                    </div>
+                </div>
+                <div class="path-result" id="path-result" hidden></div>
+            </div>
 
-            <div class="ladder-grid">
-                <div class="ladder-card" data-provider="azure">
-                    <h4 class="ladder-title"><i class="fab fa-microsoft" style="color:#00A4EF;"></i> Azure</h4>
-                    <ol class="ladder">
-                        <li><button type="button" class="ladder-step" onclick="goToCert('certifications','panel-ai-901','azure')"><span class="lvl lvl-foundation">Foundational</span><span class="ladder-name">AI-901 &middot; AI Fundamentals</span><span class="ladder-start">Start here</span></button></li>
-                        <li><button type="button" class="ladder-step" onclick="goToCert('certifications','panel-ai-103','azure')"><span class="lvl lvl-associate">Associate</span><span class="ladder-name">AI-103 &middot; AI Engineer</span></button></li>
-                        <li><button type="button" class="ladder-step" onclick="goToCert('certifications','panel-dp-100','azure')"><span class="lvl lvl-associate">Associate</span><span class="ladder-name">DP-100 &middot; Data Scientist</span></button></li>
-                        <li><button type="button" class="ladder-step" onclick="goToCert('certifications','panel-ai-300','azure')"><span class="lvl lvl-associate">Associate</span><span class="ladder-name">AI-300 &middot; ML Ops Engineer</span></button></li>
-                        <li><button type="button" class="ladder-step" onclick="goToCert('certifications','panel-ai-200','azure')"><span class="lvl lvl-associate">Associate</span><span class="ladder-name">AI-200 &middot; AI Cloud Developer</span></button></li>
-                    </ol>
+            <!-- Learning roadmap -->
+            <h3 class="path-subheading">3. Follow the right order</h3>
+            <p class="path-note">Start with the <span class="lvl lvl-foundation">Foundational</span> exam, then choose the role-based certifications that match your job. The <span class="lvl lvl-associate">Associate</span> and <span class="lvl lvl-pro">Professional</span> exams are <em>not</em> a strict sequence &mdash; and codes like <strong>AI-901</strong> or <strong>DP-100</strong> are just exam IDs, not an order.</p>
+
+            <div class="roadmap">
+                <div class="roadmap-track" data-provider="azure">
+                    <div class="roadmap-provider"><i class="fab fa-microsoft" style="color:#00A4EF;"></i> Azure</div>
+                    <div class="roadmap-flow">
+                        <button type="button" class="roadmap-step is-start" onclick="goToCert('certifications','panel-ai-901','azure')">
+                            <span class="roadmap-dot"><i class="fas fa-flag"></i></span>
+                            <span class="roadmap-info"><span class="lvl lvl-foundation">Foundational</span><span class="roadmap-name">AI-901 &middot; AI Fundamentals</span><span class="roadmap-replaces">Replaces AI-900</span><span class="roadmap-start">Start here</span></span>
+                        </button>
+                        <div class="roadmap-branch">
+                            <span class="roadmap-branch-label">then pick your role (any order)</span>
+                            <div class="roadmap-options">
+                                <button type="button" class="roadmap-step" onclick="goToCert('certifications','panel-ai-103','azure')">
+                                    <span class="roadmap-info"><span class="lvl lvl-associate">Associate</span><span class="roadmap-name">AI-103 &middot; AI Engineer</span><span class="roadmap-replaces">Replaces AI-102</span></span>
+                                </button>
+                                <button type="button" class="roadmap-step" onclick="goToCert('certifications','panel-dp-100','azure')">
+                                    <span class="roadmap-info"><span class="lvl lvl-associate">Associate</span><span class="roadmap-name">DP-100 &middot; Data Scientist</span></span>
+                                </button>
+                                <button type="button" class="roadmap-step" onclick="goToCert('certifications','panel-ai-300','azure')">
+                                    <span class="roadmap-info"><span class="lvl lvl-associate">Associate</span><span class="roadmap-name">AI-300 &middot; ML Ops Engineer</span></span>
+                                </button>
+                                <button type="button" class="roadmap-step" onclick="goToCert('certifications','panel-ai-200','azure')">
+                                    <span class="roadmap-info"><span class="lvl lvl-associate">Associate</span><span class="roadmap-name">AI-200 &middot; AI Cloud Developer</span></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="ladder-card" data-provider="aws">
-                    <h4 class="ladder-title"><i class="fab fa-aws" style="color:#FF9900;"></i> AWS</h4>
-                    <ol class="ladder">
-                        <li><button type="button" class="ladder-step" onclick="goToCert('aws-certifications','panel-aif','aws')"><span class="lvl lvl-foundation">Foundational</span><span class="ladder-name">AIF-C01 &middot; AI Practitioner</span><span class="ladder-start">Start here</span></button></li>
-                        <li><button type="button" class="ladder-step" onclick="goToCert('aws-certifications','panel-mla','aws')"><span class="lvl lvl-associate">Associate</span><span class="ladder-name">MLA-C01 &middot; ML Engineer</span></button></li>
-                        <li><button type="button" class="ladder-step" onclick="goToCert('aws-certifications','panel-genai-dev','aws')"><span class="lvl lvl-pro">Professional</span><span class="ladder-name">Generative AI Developer</span></button></li>
-                    </ol>
+                <div class="roadmap-track" data-provider="aws">
+                    <div class="roadmap-provider"><i class="fab fa-aws" style="color:#FF9900;"></i> AWS</div>
+                    <div class="roadmap-flow">
+                        <button type="button" class="roadmap-step is-start" onclick="goToCert('aws-certifications','panel-aif','aws')">
+                            <span class="roadmap-dot"><i class="fas fa-flag"></i></span>
+                            <span class="roadmap-info"><span class="lvl lvl-foundation">Foundational</span><span class="roadmap-name">AIF-C01 &middot; AI Practitioner</span><span class="roadmap-start">Start here</span></span>
+                        </button>
+                        <div class="roadmap-branch">
+                            <span class="roadmap-branch-label">then, based on your role</span>
+                            <div class="roadmap-options">
+                                <button type="button" class="roadmap-step" onclick="goToCert('aws-certifications','panel-mla','aws')">
+                                    <span class="roadmap-info"><span class="lvl lvl-associate">Associate</span><span class="roadmap-name">MLA-C01 &middot; ML Engineer</span></span>
+                                </button>
+                                <button type="button" class="roadmap-step" onclick="goToCert('aws-certifications','panel-genai-dev','aws')">
+                                    <span class="roadmap-info"><span class="lvl lvl-pro">Professional</span><span class="roadmap-name">Generative AI Developer</span></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="ladder-card" data-provider="gcp">
-                    <h4 class="ladder-title"><i class="fab fa-google" style="color:#4285F4;"></i> Google Cloud</h4>
-                    <ol class="ladder">
-                        <li><button type="button" class="ladder-step" onclick="goToCert('gcp-certifications','panel-genai-leader','gcp')"><span class="lvl lvl-foundation">Foundational</span><span class="ladder-name">Generative AI Leader</span><span class="ladder-start">Start here</span></button></li>
-                        <li><button type="button" class="ladder-step" onclick="goToCert('gcp-certifications','panel-gcp-mle','gcp')"><span class="lvl lvl-pro">Professional</span><span class="ladder-name">Professional ML Engineer</span></button></li>
-                    </ol>
+                <div class="roadmap-track" data-provider="gcp">
+                    <div class="roadmap-provider"><i class="fab fa-google" style="color:#4285F4;"></i> Google Cloud</div>
+                    <div class="roadmap-flow">
+                        <button type="button" class="roadmap-step is-start" onclick="goToCert('gcp-certifications','panel-genai-leader','gcp')">
+                            <span class="roadmap-dot"><i class="fas fa-flag"></i></span>
+                            <span class="roadmap-info"><span class="lvl lvl-foundation">Foundational</span><span class="roadmap-name">Generative AI Leader</span><span class="roadmap-start">Start here</span></span>
+                        </button>
+                        <div class="roadmap-branch">
+                            <span class="roadmap-branch-label">then advance to</span>
+                            <div class="roadmap-options">
+                                <button type="button" class="roadmap-step" onclick="goToCert('gcp-certifications','panel-gcp-mle','gcp')">
+                                    <span class="roadmap-info"><span class="lvl lvl-pro">Professional</span><span class="roadmap-name">Professional ML Engineer</span></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="ladder-card" data-provider="salesforce">
-                    <h4 class="ladder-title"><i class="fab fa-salesforce" style="color:#00A1E0;"></i> Salesforce</h4>
-                    <ol class="ladder">
-                        <li><button type="button" class="ladder-step" onclick="goToCert('salesforce-certifications','panel-agentforce','salesforce')"><span class="lvl lvl-specialist">Specialist</span><span class="ladder-name">Agentforce Specialist</span><span class="ladder-start">Start here</span></button></li>
-                    </ol>
+                <div class="roadmap-track" data-provider="salesforce">
+                    <div class="roadmap-provider"><i class="fab fa-salesforce" style="color:#00A1E0;"></i> Salesforce</div>
+                    <div class="roadmap-flow">
+                        <button type="button" class="roadmap-step is-start" onclick="goToCert('salesforce-certifications','panel-agentforce','salesforce')">
+                            <span class="roadmap-dot"><i class="fas fa-flag"></i></span>
+                            <span class="roadmap-info"><span class="lvl lvl-specialist">Specialist</span><span class="roadmap-name">Agentforce Specialist</span><span class="roadmap-start">Start here</span></span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -530,6 +570,7 @@
                     <h3 class="category-title">
                         <span class="category-icon"><img class="cert-badge" src="https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-fundamentals-badge.svg" alt="Microsoft Certified Fundamentals badge" loading="lazy"></span>
                         AI-901: Azure AI Fundamentals
+                        <span class="updated-badge" title="Replaces the retired AI-900">Replaces AI-900</span>
                     </h3>
                     <p class="category-description">Foundational AI concepts and Azure AI services with Microsoft Foundry</p>
                 </div>
@@ -544,6 +585,7 @@
                     <h3 class="category-title">
                         <span class="category-icon"><img class="cert-badge" src="https://learn.microsoft.com/en-us/media/learn/certification/badges/microsoft-certified-associate-badge.svg" alt="Microsoft Certified Associate badge" loading="lazy"></span>
                         AI-103: Azure AI Apps and Agents Developer
+                        <span class="updated-badge" title="Replaces the retired AI-102">Replaces AI-102</span>
                     </h3>
                     <p class="category-description">Build, manage, and deploy AI apps and agents with Python and Microsoft Foundry</p>
                 </div>
@@ -692,6 +734,7 @@
                     </h3>
                     <p class="category-description">Foundational generative AI concepts and Google Cloud's AI offerings with Gemini and Vertex AI</p>
                 </div>
+                <p class="track-note"><i class="fas fa-circle-info"></i> This is a strategy-focused track that builds conceptual and business understanding. Pair it with Google Cloud's official hands-on labs and Skill Badges for full exam readiness.</p>
                 <div class="modules-grid" id="gcp-genai-leader-grid">
                     <!-- Modules will be dynamically loaded -->
                 </div>
@@ -732,6 +775,7 @@
                     </h3>
                     <p class="category-description">Build, customize, and deploy Agentforce AI agents with prompt engineering and Data Cloud grounding</p>
                 </div>
+                <p class="track-note"><i class="fas fa-circle-info"></i> This track introduces Agentforce concepts and terminology. Pair it with hands-on practice in a Salesforce org (Trailhead + a Developer Edition) to be fully exam-ready.</p>
                 <div class="modules-grid" id="salesforce-agentforce-grid">
                     <!-- Modules will be dynamically loaded -->
                 </div>
@@ -783,26 +827,6 @@
         </div>
     </section>
 
-    <!-- Meet the Creator Section -->
-    <section id="founder" class="founder-section">
-        <div class="founder-bg" aria-hidden="true">
-            <span class="founder-blob founder-blob-1"></span>
-            <span class="founder-blob founder-blob-2"></span>
-            <span class="founder-blob founder-blob-3"></span>
-        </div>
-        <div class="container">
-            <h2 class="section-title">Meet the Creator</h2>
-            <p class="founder-intro">
-                Cloudvana is created by
-                <a href="https://www.linkedin.com/in/chilakalapalli-p-141267119/" target="_blank" rel="noopener">Chilakalapalli Pavan Kalyan</a>,
-                a Full Stack Engineer and AI enthusiast passionate about building intelligent, scalable solutions and sharing knowledge.
-            </p>
-            <div class="founder-card">
-                <div class="founder-frame">
-                    <img class="founder-image" src="assets/Founder.png" alt="Chilakalapalli Pavan Kalyan - Creator profile infographic" loading="lazy">
-                </div>
-            </div>
-        </div>
     </section>
 
     <!-- Footer -->
@@ -821,7 +845,6 @@
                         <li><a href="https://aws.amazon.com/certification/" target="_blank">AWS Certifications</a></li>
                         <li><a href="https://cloud.google.com/learn/certification" target="_blank">Google Cloud Certifications</a></li>
                         <li><a href="https://trailhead.salesforce.com/credentials/agentforcespecialist" target="_blank">Salesforce Agentforce Certification</a></li>
-                        <li><a href="https://github.com/pavansydney">GitHub</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
