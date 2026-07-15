@@ -12137,8 +12137,194 @@ print("Attributions:", response.explanations)`
 };
 
 // Initialize the page
+// ============================================================
+// Practice quizzes (per certification track)
+// Data-driven: add a panel id key with an array of questions to
+// surface a quiz under that certification's modules. Each question:
+// { q, options: [..], answer: <index of correct option>, explain }
+// ============================================================
+const quizData = {
+    'panel-ai-901': [
+        { q: "Which Azure service would you use to extract sentiment and key phrases from customer reviews?", options: ["Azure AI Vision", "Azure AI Language", "Azure AI Search", "Azure Machine Learning"], answer: 1, explain: "Azure AI Language provides natural language processing features such as sentiment analysis, key phrase extraction, and entity recognition." },
+        { q: "A model that produces new text from a prompt is an example of which AI workload?", options: ["Computer vision", "Anomaly detection", "Generative AI", "Regression"], answer: 2, explain: "Generative AI creates new content (text, images, code) from a prompt, unlike classification or regression which predict labels or values." },
+        { q: "Which Responsible AI principle focuses on ensuring a system does not discriminate against groups of people?", options: ["Reliability & safety", "Fairness", "Privacy & security", "Transparency"], answer: 1, explain: "Fairness is about treating all groups equitably and avoiding bias in AI outcomes." },
+        { q: "Detecting and labelling objects within an image is part of which workload?", options: ["Natural language processing", "Computer vision", "Knowledge mining", "Conversational AI"], answer: 1, explain: "Computer vision covers image classification, object detection, and OCR." },
+        { q: "What is Azure AI Foundry (Microsoft Foundry) primarily used for?", options: ["Managing virtual networks", "Building, testing, and deploying AI solutions and agents", "Storing relational data", "Monitoring virtual machines"], answer: 1, explain: "Azure AI Foundry is the unified platform for building, evaluating, and deploying generative AI apps and agents." }
+    ],
+    'panel-ai-103': [
+        { q: "In a Retrieval-Augmented Generation (RAG) pattern, what does the retrieval step do?", options: ["Fine-tunes the model weights", "Fetches relevant context to ground the model's response", "Deploys the model to an endpoint", "Encrypts the prompt"], answer: 1, explain: "RAG retrieves relevant documents (often via a vector search) and injects them as context so the model answers from grounded facts, reducing hallucination." },
+        { q: "Which Azure service is commonly used as the knowledge/vector store for RAG?", options: ["Azure Key Vault", "Azure AI Search", "Azure Monitor", "Azure DevOps"], answer: 1, explain: "Azure AI Search provides vector and hybrid search, making it the typical retrieval layer for RAG solutions." },
+        { q: "What does tool calling (function calling) allow a large language model to do?", options: ["Increase its token limit", "Invoke external functions or APIs to take actions", "Automatically reduce latency", "Encrypt its outputs"], answer: 1, explain: "Tool/function calling lets the model request that your defined functions or APIs run, enabling agents to take real actions." },
+        { q: "To keep credentials out of code when authenticating to Azure AI services, you should use:", options: ["Hardcoded API keys", "Microsoft Entra ID / managed identities", "A public config file", "Keys in the query string"], answer: 1, explain: "Microsoft Entra ID with managed identities avoids storing secrets in code and is the recommended authentication approach." },
+        { q: "Which Azure AI Foundry capability helps you measure the quality and groundedness of generative responses?", options: ["Load balancing", "Evaluations", "Autoscaling", "Blob storage"], answer: 1, explain: "Foundry Evaluations score responses on metrics like groundedness, relevance, and coherence so you can compare and improve solutions." }
+    ],
+    'panel-dp-100': [
+        { q: "Which Azure Machine Learning concept packages your training code to run on remote compute?", options: ["Endpoint", "Job (experiment run)", "Datastore", "Workspace"], answer: 1, explain: "A job submits your training script to run on a specified compute target and tracks its outputs." },
+        { q: "What is MLflow primarily used for in Azure ML?", options: ["Network security", "Tracking experiments, parameters, and models", "Billing", "Provisioning virtual machines"], answer: 1, explain: "MLflow provides experiment tracking, model logging, and packaging, and is integrated into Azure ML." },
+        { q: "To serve a model for low-latency, real-time inference you deploy to a:", options: ["Batch endpoint", "Online (real-time) endpoint", "Datastore", "Pipeline"], answer: 1, explain: "Online endpoints provide scalable, low-latency REST inference; batch endpoints are for asynchronous scoring of large datasets." },
+        { q: "Which capability automatically tries many algorithms and hyperparameters to find the best model?", options: ["Automated ML (AutoML)", "MLflow", "ONNX", "Data drift"], answer: 0, explain: "Automated ML searches across algorithms and hyperparameters and ranks candidate models by your chosen metric." },
+        { q: "Monitoring how input data distribution changes over time is known as detecting:", options: ["Overfitting", "Data drift", "Underfitting", "Data leakage"], answer: 1, explain: "Data drift is a shift in the input distribution after deployment, which can degrade model performance and should be monitored." }
+    ],
+    'panel-aif': [
+        { q: "Which AWS service provides access to multiple foundation models through a single API?", options: ["Amazon SageMaker", "Amazon Bedrock", "Amazon Comprehend", "Amazon Rekognition"], answer: 1, explain: "Amazon Bedrock offers serverless access to foundation models from multiple providers via one API, plus features like Knowledge Bases and Guardrails." },
+        { q: "RAG is generally preferred over fine-tuning when you want to:", options: ["Permanently change the model's weights", "Ground responses on up-to-date proprietary data cost-effectively", "Train a model from scratch", "Shrink the model size"], answer: 1, explain: "RAG grounds answers on your current data without retraining, and is usually cheaper and faster to update than fine-tuning." },
+        { q: "Which AWS service extracts text and structured data from scanned documents?", options: ["Amazon Polly", "Amazon Textract", "Amazon Translate", "Amazon Lex"], answer: 1, explain: "Amazon Textract extracts text, forms, and tables from documents; Polly is text-to-speech, Lex is chatbots, Translate is language translation." },
+        { q: "Amazon Bedrock Guardrails are used to:", options: ["Speed up model training", "Filter harmful content and enforce safety policies", "Reduce storage costs", "Manage IAM roles"], answer: 1, explain: "Guardrails apply content filters, denied topics, and PII controls to generative AI applications." },
+        { q: "Which of these is a generative AI use case?", options: ["Fraud classification", "Summarizing long documents", "Forecasting next month's sales", "Detecting anomalies"], answer: 1, explain: "Summarization generates new text from input, making it generative; the others are predictive/classification tasks." }
+    ],
+    'panel-mla': [
+        { q: "Which SageMaker feature stores and serves curated ML features for training and inference?", options: ["SageMaker Feature Store", "SageMaker Ground Truth", "SageMaker Clarify", "SageMaker Neo"], answer: 0, explain: "Feature Store centralizes features so the same definitions are used consistently in training and serving, avoiding skew." },
+        { q: "To detect bias and explain model predictions in SageMaker, you use:", options: ["SageMaker Clarify", "SageMaker Pipelines", "SageMaker Edge", "SageMaker Canvas"], answer: 0, explain: "SageMaker Clarify measures bias and produces feature-importance explanations for models." },
+        { q: "Which service orchestrates repeatable, CI/CD-style ML workflows in SageMaker?", options: ["SageMaker Pipelines", "SageMaker Studio Lab", "Amazon Q", "SageMaker JumpStart"], answer: 0, explain: "SageMaker Pipelines defines and automates end-to-end ML workflows for reproducibility and CI/CD." },
+        { q: "For cost-effective inference over a large dataset that is not time-sensitive, use:", options: ["A real-time endpoint", "Batch transform", "A serverless websocket", "Edge deployment"], answer: 1, explain: "Batch transform processes large datasets asynchronously and is more cost-effective than keeping a real-time endpoint running." },
+        { q: "Large-scale data labeling for supervised learning is provided by:", options: ["SageMaker Ground Truth", "SageMaker Neo", "Feature Store", "Model Monitor"], answer: 0, explain: "SageMaker Ground Truth manages human and automated data labeling workflows." }
+    ],
+    'panel-genai-leader': [
+        { q: "Google Cloud's unified platform for building and deploying ML and generative AI is:", options: ["BigQuery", "Vertex AI", "Cloud Spanner", "Dataproc"], answer: 1, explain: "Vertex AI is Google Cloud's end-to-end platform for training, tuning, and deploying models, including Gemini." },
+        { q: "Grounding a Gemini model on your enterprise data primarily helps to:", options: ["Increase token cost", "Reduce hallucinations by supplying factual context", "Retrain the model from scratch", "Bypass safety filters"], answer: 1, explain: "Grounding supplies trusted, current data as context so responses are more accurate and less prone to hallucination." },
+        { q: "Which is a key limitation of large language models that leaders should plan for?", options: ["Guaranteed factual accuracy", "The potential to hallucinate", "Unlimited context length", "Zero operating cost"], answer: 1, explain: "LLMs can generate confident but incorrect answers (hallucinations), so grounding and human oversight matter." },
+        { q: "Converting text into numeric vectors that capture meaning for search and similarity uses:", options: ["Embeddings", "Tokenizers only", "Quantization", "Sharding"], answer: 0, explain: "Embeddings map text to vectors so semantically similar items are close together, powering semantic search and RAG." },
+        { q: "From a governance standpoint, responsible use of generative AI on Google Cloud is supported by:", options: ["Cloud CDN", "Vertex AI safety filters and Responsible AI tooling", "Cloud NAT", "Pub/Sub"], answer: 1, explain: "Vertex AI provides safety filters and Responsible AI tooling to help enforce policies and reduce harmful outputs." }
+    ],
+    'panel-gcp-mle': [
+        { q: "Which Vertex AI feature manages features for training/serving consistency?", options: ["Vertex AI Feature Store", "Cloud Armor", "Dataflow", "Looker"], answer: 0, explain: "Vertex AI Feature Store centralizes feature definitions to keep training and serving consistent." },
+        { q: "To serve a model as an autoscaling REST endpoint on Vertex AI, you deploy it to a:", options: ["BigQuery table", "Vertex AI Endpoint", "Cloud Storage bucket", "Pub/Sub topic"], answer: 1, explain: "A Vertex AI Endpoint hosts a deployed model for online predictions with autoscaling." },
+        { q: "Which managed service runs large-scale Apache Beam data pipelines on Google Cloud?", options: ["Dataflow", "Cloud SQL", "Firestore", "Memorystore"], answer: 0, explain: "Dataflow runs Apache Beam pipelines for scalable batch and streaming data processing." },
+        { q: "Vertex AI Pipelines are used to:", options: ["Manage DNS", "Orchestrate reproducible ML workflows", "Host static websites", "Store secrets"], answer: 1, explain: "Vertex AI Pipelines orchestrate and track reproducible, containerized ML workflows." },
+        { q: "To detect training-serving skew and data drift on a deployed model, use:", options: ["Vertex AI Model Monitoring", "Cloud Trace", "Cloud Build", "Artifact Registry"], answer: 0, explain: "Vertex AI Model Monitoring watches for skew and drift so you can retrain before performance degrades." }
+    ],
+    'panel-agentforce': [
+        { q: "In Agentforce, a topic primarily defines:", options: ["The UI colour theme", "A job the agent can handle, grouping related actions", "The billing tier", "The data center region"], answer: 1, explain: "A topic scopes a set of jobs the agent can do and groups the instructions and actions that handle them." },
+        { q: "Agentforce actions can be built from:", options: ["Only Apex", "Flows, Apex, and prompt templates", "Only external REST APIs", "Only reports"], answer: 1, explain: "Actions can be backed by Flows, Apex, prompt templates, and other invocable capabilities." },
+        { q: "The Einstein Trust Layer is designed to:", options: ["Speed up flows", "Provide data masking, grounding, and toxicity/audit controls", "Store files", "Manage user licenses"], answer: 1, explain: "The Einstein Trust Layer adds security and trust features such as data masking, secure grounding, zero data retention, and toxicity/audit logging." },
+        { q: "Grounding a prompt template in Salesforce means:", options: ["Deploying it to production", "Injecting CRM or Data Cloud data into the prompt for context", "Deleting related records", "Scheduling a batch job"], answer: 1, explain: "Grounding merges relevant Salesforce/Data Cloud data into the prompt so the response is specific and accurate." },
+        { q: "Which tool do you use to build and test prompt templates in Salesforce?", options: ["Flow Builder", "Prompt Builder", "Schema Builder", "Report Builder"], answer: 1, explain: "Prompt Builder is where you create, ground, and test reusable prompt templates." }
+    ],
+    'panel-ai-300': [
+        { q: "What is the primary goal of MLOps?", options: ["To build more models faster only", "To standardize and automate the ML lifecycle: build, deploy, and monitor", "To replace data scientists", "To reduce the number of cloud regions"], answer: 1, explain: "MLOps applies DevOps practices to machine learning so models are reproducibly built, deployed, monitored, and retrained." },
+        { q: "Which tool would you use to automate build-test-deploy (CI/CD) workflows for Azure Machine Learning?", options: ["Power BI", "GitHub Actions", "Azure Monitor alone", "Microsoft Excel"], answer: 1, explain: "GitHub Actions (or Azure Pipelines) can trigger Azure ML jobs to automate training and deployment as part of CI/CD." },
+        { q: "After a model is deployed, detecting data drift primarily tells you when to:", options: ["Delete the endpoint", "Retrain or update the model", "Raise the price", "Change the Azure region"], answer: 1, explain: "Drift signals that incoming data no longer matches the training data, so the model should be retrained to stay accurate." },
+        { q: "In GenAIOps, evaluating a generative model for 'groundedness' measures whether:", options: ["Responses are fast", "Responses are supported by the provided source data", "The model is small", "Tokens are cheap"], answer: 1, explain: "Groundedness checks that the model's answer is backed by the supplied context rather than fabricated." },
+        { q: "Registering a model in the Azure ML model registry mainly enables:", options: ["Faster GPUs", "Versioning and governed, repeatable deployment", "Cheaper blob storage", "Automatic data labeling"], answer: 1, explain: "The model registry versions models and provides a governed path to deploy a specific, tracked version." }
+    ],
+    'panel-ai-200': [
+        { q: "Which Azure service is a serverless container platform well-suited to hosting microservices and AI apps?", options: ["Azure Container Apps", "Azure Blob Storage", "Azure Monitor", "Azure Key Vault"], answer: 0, explain: "Azure Container Apps runs containerized microservices serverlessly with built-in scaling, ideal for AI back-ends." },
+        { q: "For a globally distributed, low-latency NoSQL data store for your app, you would use:", options: ["Azure Cosmos DB", "Azure Files", "Azure Queue Storage", "Azure DevOps"], answer: 0, explain: "Azure Cosmos DB is a globally distributed, low-latency NoSQL database with multiple APIs." },
+        { q: "Which architectural pattern decouples services so they communicate through messages/events?", options: ["A single monolith", "Event-driven architecture", "Synchronous-only calls", "Batch-only processing"], answer: 1, explain: "Event-driven architectures use events/messages (e.g., via Event Grid or Service Bus) to loosely couple and scale services independently." },
+        { q: "To store vector embeddings for RAG inside a relational database on Azure, you can use:", options: ["Azure Database for PostgreSQL with the pgvector extension", "Azure Table Storage", "Azure Queue Storage", "Azure CDN"], answer: 0, explain: "Azure Database for PostgreSQL supports the pgvector extension for storing and searching embeddings." },
+        { q: "Which service securely stores secrets, keys, and connection strings for a cloud app?", options: ["Azure Key Vault", "Azure Container Registry", "Azure Monitor", "Azure Front Door"], answer: 0, explain: "Azure Key Vault centrally and securely stores secrets, keys, and certificates, keeping them out of code." }
+    ],
+    'panel-genai-dev': [
+        { q: "Amazon Bedrock Knowledge Bases are primarily used to implement:", options: ["Model pre-training", "Retrieval-Augmented Generation (RAG)", "Billing reports", "IAM policies"], answer: 1, explain: "Knowledge Bases connect foundation models to your data sources to power managed RAG workflows." },
+        { q: "Which Bedrock feature lets a model plan multi-step tasks and call tools/APIs to complete them?", options: ["Bedrock Agents", "Bedrock Guardrails", "Amazon S3", "Amazon CloudWatch"], answer: 0, explain: "Bedrock Agents orchestrate reasoning steps and invoke actions/APIs to complete tasks." },
+        { q: "To store and query vector embeddings on AWS for semantic search, you could use:", options: ["Amazon OpenSearch Service vector engine", "Amazon SQS", "AWS Glue only", "Amazon Route 53"], answer: 0, explain: "Amazon OpenSearch Service supports vector search, a common vector store for RAG on AWS." },
+        { q: "Fine-tuning is more appropriate than RAG when you need to:", options: ["Add frequently-changing facts", "Adapt the model's style or behavior to a domain using labeled examples", "Avoid any training entirely", "Only shorten prompts"], answer: 1, explain: "Fine-tuning adjusts model weights to specialize tone/behavior; RAG is better for injecting current, changing knowledge." },
+        { q: "Amazon Bedrock Guardrails help a generative application by:", options: ["Increasing token limits", "Blocking disallowed topics and filtering harmful content and PII", "Speeding up GPUs", "Managing VPC networking"], answer: 1, explain: "Guardrails enforce content policies, denied topics, and PII redaction on inputs and outputs." }
+    ],
+    'panel-mls': [
+        { q: "Which SageMaker built-in algorithm is well-suited to classification and regression on tabular data?", options: ["XGBoost", "BlazingText", "Seq2Seq", "Object2Vec"], answer: 0, explain: "XGBoost is a gradient-boosted tree algorithm that excels on structured/tabular problems." },
+        { q: "Which technique helps reduce overfitting?", options: ["Increasing the learning rate indefinitely", "Regularization, dropout, and gathering more data", "Removing the validation set", "Training for unlimited epochs"], answer: 1, explain: "Regularization, dropout, early stopping, and more data all reduce variance and overfitting." },
+        { q: "Which metric is most appropriate for a highly imbalanced binary classifier?", options: ["Raw accuracy", "F1 score (or AUC-PR)", "Mean squared error", "R-squared"], answer: 1, explain: "With class imbalance, accuracy is misleading; F1 (and precision-recall AUC) better reflect performance on the minority class." },
+        { q: "SageMaker automatic model tuning finds good hyperparameters by:", options: ["Only manual trial and error", "Automated search (e.g., Bayesian or random) over defined ranges", "Never searching", "Deleting features at random"], answer: 1, explain: "SageMaker hyperparameter tuning runs an automated search strategy over the ranges you specify." },
+        { q: "To deploy two model versions and split live traffic between them, you use:", options: ["A single production variant", "Multiple production variants (A/B testing) on one endpoint", "Batch transform", "SageMaker Ground Truth"], answer: 1, explain: "An endpoint can host multiple production variants with weighted traffic to A/B test models in production." }
+    ]
+};
+
+function loadQuizzes() {
+    Object.keys(quizData).forEach(panelId => {
+        const panel = document.getElementById(panelId);
+        if (!panel) return;
+        const questions = quizData[panelId];
+        const best = getQuizBest(panelId);
+
+        const section = document.createElement('div');
+        section.className = 'quiz-section';
+        section.innerHTML = `
+            <div class="quiz-head">
+                <h3 class="quiz-heading"><i class="fas fa-circle-question"></i> Practice Questions</h3>
+                <span class="quiz-score">Best: ${best}/${questions.length}</span>
+            </div>
+            <p class="quiz-sub">Test your understanding &mdash; ${questions.length} multiple-choice questions. Your best score is saved on this device.</p>
+            <div class="quiz-list"></div>
+        `;
+
+        const list = section.querySelector('.quiz-list');
+        questions.forEach((item, qi) => {
+            const q = document.createElement('div');
+            q.className = 'quiz-q';
+            q.dataset.answer = item.answer;
+            const opts = item.options.map((opt, oi) =>
+                `<button type="button" class="quiz-opt" data-i="${oi}">${String.fromCharCode(65 + oi)}. ${escapeHtml(opt)}</button>`
+            ).join('');
+            q.innerHTML = `
+                <p class="quiz-q-text">${qi + 1}. ${escapeHtml(item.q)}</p>
+                <div class="quiz-opts">${opts}</div>
+                <div class="quiz-explain" hidden><i class="fas fa-lightbulb"></i> ${escapeHtml(item.explain)}</div>
+            `;
+            list.appendChild(q);
+        });
+
+        panel.appendChild(section);
+        setupQuizSection(section, panelId, questions.length);
+    });
+}
+
+function setupQuizSection(section, panelId, total) {
+    section.querySelectorAll('.quiz-q').forEach(q => {
+        const answer = parseInt(q.dataset.answer, 10);
+        const opts = q.querySelectorAll('.quiz-opt');
+        opts.forEach(opt => {
+            opt.addEventListener('click', () => {
+                if (q.classList.contains('answered')) return;
+                q.classList.add('answered');
+                const chosen = parseInt(opt.dataset.i, 10);
+                opts[answer].classList.add('correct');
+                if (chosen === answer) {
+                    q.classList.add('is-correct');
+                } else {
+                    opt.classList.add('incorrect');
+                }
+                opts.forEach(o => o.classList.add('locked'));
+                const ex = q.querySelector('.quiz-explain');
+                if (ex) ex.hidden = false;
+                updateQuizScore(section, panelId, total);
+            });
+        });
+    });
+}
+
+function updateQuizScore(section, panelId, total) {
+    const correct = section.querySelectorAll('.quiz-q.is-correct').length;
+    const answered = section.querySelectorAll('.quiz-q.answered').length;
+    const best = Math.max(getQuizBest(panelId), correct);
+    setQuizBest(panelId, best);
+    const scoreEl = section.querySelector('.quiz-score');
+    if (scoreEl) {
+        scoreEl.textContent = answered === total
+            ? `Score: ${correct}/${total} · Best: ${best}/${total}`
+            : `Best: ${best}/${total}`;
+    }
+}
+
+function getQuizBest(panelId) {
+    try {
+        return parseInt(localStorage.getItem('cloudvana-quiz-' + panelId) || '0', 10) || 0;
+    } catch (e) {
+        return 0;
+    }
+}
+
+function setQuizBest(panelId, value) {
+    try {
+        localStorage.setItem('cloudvana-quiz-' + panelId, String(value));
+    } catch (e) {
+        /* localStorage unavailable (e.g. private mode) — scores just won't persist */
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     loadModules();
+    loadQuizzes();
     setupNavigation();
     setupScrollAnimations();
     setupTabs();
@@ -12321,39 +12507,99 @@ function loadModules() {
 // Load modules into a specific grid
 function loadModulesIntoGrid(gridId, modules) {
     const grid = document.getElementById(gridId);
-    
+
     modules.forEach(module => {
-        const card = createModuleCard(module);
+        const card = createModuleCard(module, gridId);
         grid.appendChild(card);
     });
 }
 
+// ---- Module read/progress tracking (non-blocking, saved on this device) ----
+function getReadSet() {
+    try {
+        return JSON.parse(localStorage.getItem('cloudvana-read') || '{}') || {};
+    } catch (e) {
+        return {};
+    }
+}
+
+function isModuleRead(id) {
+    return !!getReadSet()[id];
+}
+
+function setModuleRead(id, value) {
+    const set = getReadSet();
+    if (value) {
+        set[id] = 1;
+    } else {
+        delete set[id];
+    }
+    try {
+        localStorage.setItem('cloudvana-read', JSON.stringify(set));
+    } catch (e) {
+        /* localStorage unavailable — progress just won't persist */
+    }
+}
+
+function toggleModuleRead(id, btn) {
+    const now = !isModuleRead(id);
+    setModuleRead(id, now);
+    document.querySelectorAll('.module-card').forEach(card => {
+        if (card.dataset.moduleId === id) {
+            card.classList.toggle('read', now);
+        }
+    });
+    if (btn) {
+        btn.classList.toggle('is-read', now);
+        btn.innerHTML = now
+            ? '<i class="fas fa-circle-check"></i> Completed'
+            : '<i class="far fa-circle"></i> Mark as complete';
+    }
+}
+
 // Create a module card element
-function createModuleCard(module) {
+function createModuleCard(module, gridId) {
     const card = document.createElement('div');
-    card.className = `module-card ${module.isNew ? 'new' : ''} ${module.isLocked ? 'locked' : ''}`;
-    card.onclick = () => openModuleModal(module);
-    
+    const moduleId = `${gridId}#${module.number}`;
+    const read = isModuleRead(moduleId);
+    card.className = `module-card ${module.isNew ? 'new' : ''} ${module.isLocked ? 'locked' : ''} ${read ? 'read' : ''}`;
+    card.dataset.moduleId = moduleId;
+    card.onclick = () => openModuleModal(module, moduleId);
+
     const lockIcon = module.isLocked ? '<div class="lock-icon">🔒</div>' : '';
-    
+    const hasCode = Array.isArray(module.detailedContent) && module.detailedContent.some(s => s && s.code);
+    const durationMeta = module.duration
+        ? `<span class="meta-item"><i class="fas fa-clock"></i> ${module.duration}</span>`
+        : '';
+    const codeMeta = hasCode
+        ? '<span class="meta-item meta-code"><i class="fas fa-code"></i> Code examples</span>'
+        : '';
+
     card.innerHTML = `
         ${lockIcon}
+        <span class="read-check" title="Completed"><i class="fas fa-circle-check"></i></span>
         <div class="module-number">${module.number}</div>
         <h4 class="module-title">${module.title}</h4>
         <p class="module-description">${module.description}</p>
         <div class="module-meta">
             <span class="meta-item"><i class="fas fa-book-open"></i> ${module.lessons}</span>
+            ${durationMeta}
+            ${codeMeta}
         </div>
     `;
-    
+
     return card;
 }
 
 // Open module details in modal
-function openModuleModal(module) {
+function openModuleModal(module, moduleId) {
     const modal = document.getElementById('moduleModal');
     const modalBody = document.getElementById('modal-body');
-    
+    const read = moduleId ? isModuleRead(moduleId) : false;
+    const readBtnHtml = moduleId ? `
+                <button class="btn read-toggle ${read ? 'is-read' : ''}" onclick="toggleModuleRead('${moduleId}', this)">
+                    ${read ? '<i class="fas fa-circle-check"></i> Completed' : '<i class="far fa-circle"></i> Mark as complete'}
+                </button>` : '';
     // Check if module is locked
     if (module.isLocked) {
         modalBody.innerHTML = `
@@ -12414,10 +12660,9 @@ function openModuleModal(module) {
             <div class="detailed-content">
                 ${contentSections}
             </div>
-            <div style="margin-top: 2rem; text-align: center;">
-                <button class="btn btn-primary" onclick="closeModal()">
-                    Close
-                </button>
+            <div class="modal-actions">
+                ${readBtnHtml}
+                <button class="btn btn-primary" onclick="closeModal()">Close</button>
             </div>
         `;
     } else {
@@ -12439,10 +12684,9 @@ function openModuleModal(module) {
                     ${module.topics.map(topic => `<li>${topic}</li>`).join('')}
                 </ul>
             </div>
-            <div style="margin-top: 2rem; text-align: center;">
-                <button class="btn btn-primary" onclick="closeModal()">
-                    Close
-                </button>
+            <div class="modal-actions">
+                ${readBtnHtml}
+                <button class="btn btn-primary" onclick="closeModal()">Close</button>
             </div>
         `;
     }
