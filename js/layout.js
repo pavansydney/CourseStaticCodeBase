@@ -25,6 +25,7 @@
                             '<li><a href="certifications.html?provider=salesforce" class="nav-link">Salesforce AI</a></li>' +
                         '</ul>' +
                     '</li>' +
+                    '<li><a href="mentorship.html" class="nav-link" data-nav="mentorship">Mentorship</a></li>' +
                     '<li><a href="about.html" class="nav-link" data-nav="about">About</a></li>' +
                 '</ul>' +
             '</div>' +
@@ -41,6 +42,7 @@
                     '<div class="footer-section">' +
                         '<h4>Links</h4>' +
                         '<ul>' +
+                            '<li><a href="mentorship.html">Mentorship Program</a></li>' +
                             '<li><a href="https://developers.google.com/machine-learning/crash-course" target="_blank">Original ML Course</a></li>' +
                             '<li><a href="https://learn.microsoft.com/credentials/certifications/browse/?products=azure&subjects=artificial-intelligence" target="_blank">Azure AI Certifications</a></li>' +
                             '<li><a href="https://aws.amazon.com/certification/" target="_blank">AWS Certifications</a></li>' +
