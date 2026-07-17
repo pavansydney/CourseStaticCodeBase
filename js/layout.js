@@ -2,6 +2,19 @@
 // single source of truth (no duplicated markup). Set the current page with
 // <body data-page="home"> etc. Runs synchronously (scripts sit at end of body).
 (function () {
+    // Apply the saved (or system) theme as early as possible to reduce flicker.
+    try {
+        var savedTheme = localStorage.getItem('cloudvana-theme');
+        if (!savedTheme) {
+            savedTheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+                ? 'dark'
+                : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    } catch (e) {
+        /* localStorage unavailable — default to light */
+    }
+
     var navHTML =
         '<nav class="navbar">' +
             '<div class="container">' +
@@ -13,8 +26,6 @@
                 '</button>' +
                 '<ul class="nav-menu" id="navMenu">' +
                     '<li><a href="index.html" class="nav-link" data-nav="home">Home</a></li>' +
-                    '<li><a href="prerequisites.html" class="nav-link" data-nav="prerequisites">Prerequisites</a></li>' +
-                    '<li><a href="find-your-path.html" class="nav-link" data-nav="find-your-path">Find Your Path</a></li>' +
                     '<li><a href="courses.html" class="nav-link" data-nav="courses">Courses</a></li>' +
                     '<li class="nav-dropdown" data-nav="certifications">' +
                         '<a href="certifications.html" class="nav-dropdown-toggle">Certifications <i class="fas fa-chevron-down"></i></a>' +
@@ -26,7 +37,15 @@
                         '</ul>' +
                     '</li>' +
                     '<li><a href="mentorship.html" class="nav-link" data-nav="mentorship">Mentorship</a></li>' +
-                    '<li><a href="about.html" class="nav-link" data-nav="about">About</a></li>' +
+                    '<li class="nav-dropdown" data-nav="resources">' +
+                        '<a href="#" class="nav-dropdown-toggle">Resources <i class="fas fa-chevron-down"></i></a>' +
+                        '<ul class="nav-dropdown-menu">' +
+                            '<li><a href="prerequisites.html" class="nav-link" data-nav="prerequisites">Prerequisites</a></li>' +
+                            '<li><a href="find-your-path.html" class="nav-link" data-nav="find-your-path">Find Your Path</a></li>' +
+                            '<li><a href="about.html" class="nav-link" data-nav="about">About</a></li>' +
+                        '</ul>' +
+                    '</li>' +
+                    '<li><button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode" title="Toggle light/dark theme"><i class="fas fa-moon"></i></button></li>' +
                 '</ul>' +
             '</div>' +
         '</nav>';
@@ -80,6 +99,37 @@
             if (toggle) toggle.classList.add('active');
         } else {
             el.classList.add('active');
+            // If this link lives inside a dropdown, mark its parent toggle active too.
+            var parentDd = el.closest ? el.closest('.nav-dropdown') : null;
+            if (parentDd) {
+                var parentToggle = parentDd.querySelector('.nav-dropdown-toggle');
+                if (parentToggle) parentToggle.classList.add('active');
+            }
         }
     });
+
+    // Wire up the light/dark theme toggle
+    function currentTheme() {
+        return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+    function setThemeIcon(btn) {
+        if (!btn) return;
+        btn.innerHTML = currentTheme() === 'dark'
+            ? '<i class="fas fa-sun"></i>'
+            : '<i class="fas fa-moon"></i>';
+    }
+    var themeBtn = document.getElementById('themeToggle');
+    setThemeIcon(themeBtn);
+    if (themeBtn) {
+        themeBtn.addEventListener('click', function () {
+            var next = currentTheme() === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            try {
+                localStorage.setItem('cloudvana-theme', next);
+            } catch (e) {
+                /* preference just won't persist */
+            }
+            setThemeIcon(themeBtn);
+        });
+    }
 })();

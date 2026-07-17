@@ -12727,29 +12727,38 @@ function applyCertQuery() {
     }
 }
 
-// Certifications nav dropdown (hover on desktop, tap on mobile)
+// Nav dropdowns (hover on desktop, tap on mobile). Supports multiple menus.
 function setupDropdown() {
-    const dropdown = document.querySelector('.nav-dropdown');
-    if (!dropdown) return;
-    const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+    const dropdowns = document.querySelectorAll('.nav-dropdown');
+    if (!dropdowns.length) return;
 
-    toggle.addEventListener('click', function(e) {
-        if (window.innerWidth <= 900) {
-            // Mobile: expand the submenu instead of navigating
-            e.preventDefault();
-            dropdown.classList.toggle('open');
-        }
-        // Desktop: follow the link to certifications.html
+    dropdowns.forEach(dropdown => {
+        const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+        if (!toggle) return;
+
+        const href = toggle.getAttribute('href');
+        const hasPage = href && href !== '#';
+
+        toggle.addEventListener('click', function (e) {
+            // Toggles with no landing page always expand; page-linked toggles
+            // only expand on mobile and otherwise follow their link.
+            if (!hasPage || window.innerWidth <= 900) {
+                e.preventDefault();
+                dropdown.classList.toggle('open');
+            }
+        });
+
+        // Close this menu after picking an item
+        dropdown.querySelectorAll('.nav-dropdown-menu .nav-link').forEach(link => {
+            link.addEventListener('click', () => dropdown.classList.remove('open'));
+        });
     });
 
-    // Close the menu after picking a provider
-    dropdown.querySelectorAll('.nav-dropdown-menu .nav-link').forEach(link => {
-        link.addEventListener('click', () => dropdown.classList.remove('open'));
-    });
-
-    // Close when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!dropdown.contains(e.target)) dropdown.classList.remove('open');
+    // Close any open menu when clicking outside
+    document.addEventListener('click', function (e) {
+        dropdowns.forEach(dropdown => {
+            if (!dropdown.contains(e.target)) dropdown.classList.remove('open');
+        });
     });
 }
 
@@ -12806,6 +12815,14 @@ function loadModules() {
     loadModulesIntoGrid('generative-ai-grid', courseData.generativeAI);
     loadModulesIntoGrid('ai-agents-grid', courseData.aiAgents);
     loadModulesIntoGrid('agent-frameworks-grid', courseData.agentFrameworks);
+    loadModulesIntoGrid('dsa-foundations-grid', courseData.dsaFoundations);
+    loadModulesIntoGrid('dsa-interview-grid', courseData.dsaInterview);
+    loadModulesIntoGrid('system-design-foundations-grid', courseData.systemDesignFoundations);
+    loadModulesIntoGrid('system-design-advanced-grid', courseData.systemDesignAdvanced);
+    loadModulesIntoGrid('os-fundamentals-grid', courseData.osFundamentals);
+    loadModulesIntoGrid('os-processes-memory-grid', courseData.osProcessesMemory);
+    loadModulesIntoGrid('networking-fundamentals-grid', courseData.networkingFundamentals);
+    loadModulesIntoGrid('networking-protocols-grid', courseData.networkingProtocols);
 }
 
 // Load modules into a specific grid
@@ -12864,11 +12881,1506 @@ function toggleModuleRead(id, btn) {
 
 // AI Engineering track grids: show the real lesson count (number of content
 // sections) so the card label always matches what opens in the modal.
-const AI_COURSE_GRIDS = ['deep-learning-grid', 'generative-ai-grid', 'ai-agents-grid', 'agent-frameworks-grid'];
+const AI_COURSE_GRIDS = [
+    'deep-learning-grid',
+    'generative-ai-grid',
+    'ai-agents-grid',
+    'agent-frameworks-grid',
+    'dsa-foundations-grid',
+    'dsa-interview-grid',
+    'system-design-foundations-grid',
+    'system-design-advanced-grid',
+    'os-fundamentals-grid',
+    'os-processes-memory-grid',
+    'networking-fundamentals-grid',
+    'networking-protocols-grid'
+];
+
+const DEEP_DIVE_GRIDS = [
+    'deep-learning-grid',
+    'generative-ai-grid',
+    'ai-agents-grid',
+    'agent-frameworks-grid',
+    'dsa-foundations-grid',
+    'dsa-interview-grid',
+    'system-design-foundations-grid',
+    'system-design-advanced-grid',
+    'os-fundamentals-grid',
+    'os-processes-memory-grid',
+    'networking-fundamentals-grid',
+    'networking-protocols-grid'
+];
+
+function getAutoDeepDiveSections(module, gridId) {
+    if (DEEP_DIVE_GRIDS.indexOf(gridId) === -1) return [];
+
+    const topics = Array.isArray(module.topics) ? module.topics : [];
+    const topicLines = topics.length
+        ? topics.map(function (t) { return '- ' + t; }).join('\n')
+        : '- Core concepts\n- Practical implementation\n- Validation and review';
+
+    const isDsa = gridId.indexOf('dsa-') === 0;
+    const isSystemDesign = gridId.indexOf('system-design-') === 0;
+    const isOs = gridId.indexOf('os-') === 0;
+    const isNetworking = gridId.indexOf('networking-') === 0;
+    const isAiEngineering = !isDsa && !isSystemDesign && !isOs && !isNetworking;
+
+    let practiceTitle;
+    let practiceContent;
+    let pitfallsTitle;
+    let pitfallsContent;
+
+    if (isSystemDesign) {
+        practiceTitle = 'Guided Design Exercise';
+        practiceContent = `Run this module as a 90-minute design round:
+
+1. 10 min: clarify functional and non-functional requirements.
+2. 20 min: capacity estimation and key assumptions.
+3. 25 min: high-level architecture and data flow.
+4. 20 min: bottlenecks, failure modes, and mitigations.
+5. 15 min: trade-offs, rollout strategy, and observability.
+
+Deliverable:
+• one high-level architecture diagram
+• one API contract sketch
+• one risk-and-mitigation table`;
+        pitfallsTitle = 'Common Design Pitfalls to Avoid';
+        pitfallsContent = `Watch for these design pitfalls:
+• skipping requirements and assumptions
+• over-designing before sizing and constraints
+• ignoring reliability and failure scenarios
+• weak trade-off discussion (cost, latency, consistency)
+
+Reviewer signal:
+balanced architecture, explicit assumptions, and operational readiness.`;
+    } else if (isDsa) {
+        practiceTitle = 'Guided Practice Sprint';
+        practiceContent = `Run this module as a 75-minute coding sprint:
+
+1. 15 min: concept refresh from notes.
+2. 25 min: solve two easy/medium problems with dry run.
+3. 20 min: implement one problem end-to-end without hints.
+4. 15 min: complexity review + edge-case testing.
+
+Checkpoint:
+• explain the optimal approach in plain language
+• state time/space complexity confidently
+• identify one common failure pattern`;
+        pitfallsTitle = 'Common Interview Mistakes to Avoid';
+        pitfallsContent = `Watch for these interview mistakes:
+• jumping to code before clarifying constraints
+• missing edge cases (empty input, duplicates, bounds)
+• weak complexity explanation
+• not discussing trade-offs between approaches
+
+Interviewer signal:
+clear reasoning + structured communication + correct complexity analysis.`;
+    } else if (isOs) {
+        practiceTitle = 'Hands-On OS Lab';
+        practiceContent = `Turn this module into a 60-minute hands-on lab on your own machine:
+
+1. 15 min: observe the concept live (e.g., list running processes, check memory usage, watch CPU load).
+2. 20 min: change one variable (start/stop a heavy process, run parallel tasks) and note the effect.
+3. 15 min: map what you observed back to the OS concept in this module.
+4. 10 min: write a 5-line summary of how the OS managed the resource.
+
+Checkpoint:
+• connect the theory to something you can actually see on a computer
+• explain what the OS did behind the scenes`;
+        pitfallsTitle = 'Common Misconceptions to Clear Up';
+        pitfallsContent = `Clear up these frequent OS misunderstandings:
+• confusing a program (on disk) with a process (running)
+• confusing storage (disk) with memory (RAM)
+• assuming more threads always means more speed
+• thinking virtual memory is "fake" memory rather than an address mapping
+
+Understanding signal:
+you can explain how the OS shares limited hardware safely and efficiently.`;
+    } else if (isNetworking) {
+        practiceTitle = 'Hands-On Networking Lab';
+        practiceContent = `Turn this module into a 60-minute practical lab:
+
+1. 15 min: inspect the concept live (e.g., run a DNS lookup, check your IP, open browser dev-tools network tab).
+2. 20 min: trace a real request and identify each layer/step involved.
+3. 15 min: break something safely (wrong URL, blocked port) and read the error/status.
+4. 10 min: summarize how the data traveled from your device to the server and back.
+
+Checkpoint:
+• connect the theory to a real request you can observe
+• name the protocols involved at each step`;
+        pitfallsTitle = 'Common Misconceptions to Clear Up';
+        pitfallsContent = `Clear up these frequent networking misunderstandings:
+• confusing IP (which machine) with port (which app)
+• thinking DNS and the web server are the same thing
+• assuming HTTPS only "hides" data (it also verifies identity + integrity)
+• treating TCP and UDP as interchangeable
+
+Understanding signal:
+you can trace a request end-to-end and justify protocol choices.`;
+    } else {
+        // AI Engineering (deep learning, generative AI, agents, frameworks)
+        practiceTitle = 'Hands-On AI Build Sprint';
+        practiceContent = `Run this module as a 75-minute build sprint:
+
+1. 15 min: restate the concept and where it fits in an AI system.
+2. 25 min: build or run a minimal example (model call, pipeline step, or agent action).
+3. 20 min: change one parameter or input and observe how behavior changes.
+4. 15 min: evaluate output quality and note one improvement.
+
+Checkpoint:
+• explain the concept in plain language
+• show a working minimal example
+• describe one quality or safety consideration`;
+        pitfallsTitle = 'Production Pitfalls & Quality Checks';
+        pitfallsContent = `Before moving on, verify:
+• can you explain this concept to a beginner in 2 minutes?
+• can you build a minimal working example from memory?
+• can you identify failure modes (hallucination, cost, latency, safety)?
+
+Senior-engineer signal:
+you can justify design and model choices, not just repeat definitions.`;
+    }
+
+    return [
+        {
+            title: 'Mastery Checklist',
+            content: `By the end of this module, you should be able to:\n\n${topicLines}\n\nSelf-check:\n• Can I explain each topic in simple language?\n• Can I apply it to a new problem?\n• Can I justify my approach and trade-offs?`
+        },
+        {
+            title: practiceTitle,
+            content: practiceContent
+        },
+        {
+            title: pitfallsTitle,
+            content: pitfallsContent
+        }
+    ];
+}
+
+function getPhaseTwoExpansionSections(module, gridId) {
+    const key = gridId + '#' + module.number;
+    const expansions = {
+        'deep-learning-grid#Module 1': [
+            {
+                title: 'Deep-Dive Example: Churn Prediction Network',
+                content: `Scenario: you are predicting customer churn from tabular features (usage, tenure, payment method, support tickets).
+
+What to design:
+• input layer matching feature count
+• two hidden layers with ReLU
+• binary output with sigmoid
+
+Engineering checks:
+• normalize numeric features
+• one-hot encode categorical values
+• track precision/recall (not accuracy alone) for imbalanced classes.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Build a 2-layer network and print output shape for a sample batch.
+
+Medium:
+Train on a small dataset and compare learning rates (1e-2 vs 1e-3).
+
+Hard:
+Diagnose overfitting by plotting train/validation loss and propose two fixes.
+
+Submission standard:
+• code runs end-to-end
+• complexity/shape reasoning is documented
+• at least one failure case is explained.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Why do hidden layers usually use ReLU?
+Answer: It introduces non-linearity and trains efficiently with reduced vanishing-gradient issues.
+
+Q2: What does backpropagation compute?
+Answer: Gradients of loss with respect to model parameters.
+
+Q3: Why split train/validation/test?
+Answer: To train, tune, and evaluate generalization honestly.
+
+Q4: Which metric matters more for imbalanced churn data?
+Answer: Precision/recall (and F1), not raw accuracy.
+
+Q5: One sign of overfitting?
+Answer: Training loss drops while validation loss rises.`
+            }
+        ],
+        'deep-learning-grid#Module 2': [
+            {
+                title: 'Deep-Dive Example: Regularization Strategy Playbook',
+                content: `Given a model that overfits after 5 epochs, create a stabilization plan:
+• add dropout (0.2-0.4)
+• apply weight decay
+• introduce early stopping
+• increase data via augmentation where applicable
+
+Decision rule:
+change one major factor at a time and compare validation metrics.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Train baseline model and report train/validation loss.
+
+Medium:
+Add dropout + weight decay and compare metrics in a table.
+
+Hard:
+Implement early stopping and explain why the selected epoch is optimal.
+
+Review rubric:
+• clear experiment setup
+• fair comparison
+• justified conclusions.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: What is underfitting?
+Answer: The model is too simple and fails on both train and validation.
+
+Q2: Purpose of weight decay?
+Answer: Penalize large weights to improve generalization.
+
+Q3: Why is validation set necessary?
+Answer: Hyperparameter tuning without leaking into final test evaluation.
+
+Q4: Is higher model complexity always better?
+Answer: No, it can overfit and hurt unseen-data performance.
+
+Q5: What does early stopping prevent?
+Answer: Over-training after validation performance plateaus or worsens.`
+            }
+        ],
+        'generative-ai-grid#Module 2': [
+            {
+                title: 'Deep-Dive Example: Reliable LLM API Design',
+                content: `Design a robust endpoint for "summarize support ticket":
+• strict system prompt
+• temperature 0.2 for deterministic output
+• max token limits
+• JSON schema response
+• timeout/retry + fallback model
+
+Production objective:
+stable, parseable output under varying ticket quality.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Create a prompt that returns bullet summary in <= 5 lines.
+
+Medium:
+Return strict JSON with keys: summary, priority, action_items.
+
+Hard:
+Add validation and retry when model returns malformed JSON.
+
+Success criteria:
+• consistent format
+• error handling
+• measurable output quality.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: What does temperature control?
+Answer: Output randomness/creativity.
+
+Q2: Why prefer structured output in apps?
+Answer: Reliable parsing and downstream automation.
+
+Q3: What is the context window?
+Answer: Maximum token budget for input + output.
+
+Q4: Should model output be trusted blindly?
+Answer: No, validate as untrusted input.
+
+Q5: Why keep a fallback model?
+Answer: Improve reliability during provider/model failures.`
+            }
+        ],
+        'generative-ai-grid#Module 5': [
+            {
+                title: 'Deep-Dive Example: RAG for Company Knowledge Base',
+                content: `Build a RAG assistant for internal policy docs.
+
+Design choices:
+• chunk size and overlap strategy
+• embedding model selection
+• vector + keyword hybrid retrieval
+• top-k tuning with grounding instructions
+
+Quality goal:
+answers must cite relevant source passages.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Index 10 documents and retrieve top-3 context chunks.
+
+Medium:
+Implement grounding prompt that references retrieved context only.
+
+Hard:
+Add retrieval evaluation set and tune chunking + top-k for better groundedness.
+
+Deliverables:
+• retrieval quality notes
+• grounded response examples
+• failure case analysis.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Main benefit of RAG over fine-tuning for changing knowledge?
+Answer: Faster updates without retraining model weights.
+
+Q2: Why use hybrid search?
+Answer: Combines semantic and lexical relevance.
+
+Q3: What reduces hallucinations in RAG?
+Answer: Strong retrieval quality + strict grounding prompt.
+
+Q4: What is chunk overlap for?
+Answer: Preserve context continuity across splits.
+
+Q5: Should you evaluate retrieval separately from generation?
+Answer: Yes, both layers affect final answer quality.`
+            }
+        ],
+        'dsa-foundations-grid#DSA · Module 1': [
+            {
+                title: 'Deep-Dive Example: Converting Brute Force to Optimal',
+                content: `Problem theme: find two numbers matching a target condition.
+
+Path:
+• brute force O(n^2)
+• identify repeated lookup
+• switch to hash map O(n)
+
+Interview value:
+showing optimization thought process is often scored higher than speed alone.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+For three simple loops, derive time complexity.
+
+Medium:
+Refactor one O(n^2) solution to O(n) and explain why.
+
+Hard:
+Given two solutions with same time complexity, compare space and practical trade-offs.
+
+Evaluation:
+• correct complexity
+• clear trade-off narrative
+• edge-case awareness.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Why start with brute force?
+Answer: It ensures correctness and reveals optimization bottlenecks.
+
+Q2: O(n log n) is usually better than O(n^2) for large n?
+Answer: Yes, due to slower growth rate.
+
+Q3: What is space complexity?
+Answer: Extra memory used by algorithm relative to input size.
+
+Q4: Why test edge cases early?
+Answer: Prevent hidden bugs before optimization.
+
+Q5: Does fastest code always win interviews?
+Answer: No, structured reasoning and correctness matter equally.`
+            }
+        ],
+        'dsa-foundations-grid#DSA · Module 2': [
+            {
+                title: 'Deep-Dive Example: Data Structure Selection Matrix',
+                content: `Given requirements (fast lookup, ordered access, top-k, dedupe), map to structures:
+• lookup/dedupe -> hash set/map
+• ordered retrieval -> heap/tree
+• sequential processing -> array/list
+
+Create your own selection matrix and reuse it during interviews.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Pick data structure for 8 scenarios and justify in one line each.
+
+Medium:
+Solve a frequency-count problem using both array and hash map, compare complexity.
+
+Hard:
+Implement top-k frequent elements with heap and explain why it scales.
+
+Rubric:
+• right structure choice
+• complexity correctness
+• concise justification.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Best structure for O(1) average lookup?
+Answer: Hash map/set.
+
+Q2: LIFO behavior belongs to?
+Answer: Stack.
+
+Q3: FIFO behavior belongs to?
+Answer: Queue.
+
+Q4: Best for dynamic top-k stream?
+Answer: Heap.
+
+Q5: Why avoid one-structure-for-all problems?
+Answer: Operation patterns differ; wrong choice harms performance.`
+            }
+        ],
+        'system-design-foundations-grid#System Design · Module 1': [
+            {
+                title: 'Deep-Dive Example: Requirement-to-Architecture Flow',
+                content: `Use this design flow for any system:
+1. functional requirements
+2. non-functional targets (latency, availability, consistency)
+3. rough capacity estimate
+4. high-level components
+5. risk and trade-off review
+
+This structure keeps designs practical and interview-ready.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Write functional and non-functional requirements for a note-taking app.
+
+Medium:
+Estimate peak RPS and daily storage for that app.
+
+Hard:
+Propose high-level architecture and defend two major trade-offs.
+
+Expected output:
+clear assumptions + measurable targets + justifiable design choices.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: What are non-functional requirements?
+Answer: Quality attributes like latency, availability, scalability, security.
+
+Q2: Why do rough estimates matter?
+Answer: They drive architecture and capacity choices.
+
+Q3: Can we optimize latency, consistency, and cost all at once?
+Answer: Usually no; trade-offs are required.
+
+Q4: Why define assumptions explicitly?
+Answer: They bound scope and make decisions reviewable.
+
+Q5: What is a common beginner mistake?
+Answer: Jumping to components before requirement clarity.`
+            }
+        ],
+        'system-design-foundations-grid#System Design · Module 2': [
+            {
+                title: 'Deep-Dive Example: Choosing the Right Building Block',
+                content: `Decision examples:
+• SQL for strong relational constraints
+• NoSQL for high write scale and flexible schema
+• Cache for read-heavy hot paths
+• Queue for async decoupling
+• CDN for global static/delivery acceleration
+
+Strong designs combine these based on workload characteristics.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Map five product scenarios to SQL/NoSQL/cache/queue choices.
+
+Medium:
+Design cache strategy for product catalog with stale-data constraints.
+
+Hard:
+Design async notification pipeline with queue retries and dead-letter handling.
+
+Assessment:
+• component fit
+• failure handling
+• operational clarity.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Why use cache-aside?
+Answer: Reduce DB load while keeping application control over cache fill.
+
+Q2: When is queue preferred over sync call?
+Answer: For slow/retry-prone workflows and traffic smoothing.
+
+Q3: SQL vs NoSQL choice starts from?
+Answer: Access patterns and consistency requirements.
+
+Q4: Why use CDN?
+Answer: Lower latency and origin offload through edge caching.
+
+Q5: Common cache pitfall?
+Answer: Poor invalidation strategy causing stale or inconsistent reads.`
+            }
+        ],
+        'dsa-interview-grid#DSA · Module 5': [
+            {
+                title: 'Deep-Dive Example: DP State Design Clinic',
+                content: `Use this DP template on any problem:
+1. define state precisely
+2. define transition relation
+3. define base case
+4. choose memoization/tabulation
+5. optimize space if possible
+
+Case: coin change / climbing stairs / knapsack style variants are solved by this same framework.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Write state and transition for Fibonacci and climbing stairs.
+
+Medium:
+Solve house robber using top-down memoization and bottom-up tabulation.
+
+Hard:
+Optimize 2D DP to 1D where valid and justify correctness.
+
+Scoring:
+• clean state definition
+• correct transitions
+• complexity explanation.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: When should DP be considered?
+Answer: Overlapping subproblems + optimal substructure.
+
+Q2: Top-down vs bottom-up difference?
+Answer: Recursion with memo vs iterative table fill.
+
+Q3: Why is state definition critical?
+Answer: It determines correctness and transition logic.
+
+Q4: Can all DP be space optimized?
+Answer: Not always; only when transitions depend on limited prior states.
+
+Q5: Common DP interview mistake?
+Answer: Memorizing formulas without deriving state/transition.`
+            }
+        ],
+        'dsa-interview-grid#DSA · Module 6': [
+            {
+                title: 'Deep-Dive Example: Graph + Greedy Decision Tree',
+                content: `Selection rules:
+• dependency ordering -> topological sort
+• shortest path weighted -> Dijkstra
+• component connectivity -> Union-Find
+• local-choice optimization -> greedy (with proof)
+
+Goal: pick the right algorithm quickly under interview pressure.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Run BFS/DFS manually on sample graph and list visit order.
+
+Medium:
+Solve course schedule with topological sort and cycle detection.
+
+Hard:
+Implement Kruskal MST with Union-Find and discuss complexity.
+
+Evaluation focus:
+• algorithm fit
+• correctness proof intuition
+• implementation stability.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Topological sort requires what graph type?
+Answer: Directed acyclic graph (DAG).
+
+Q2: Why use Union-Find in Kruskal?
+Answer: Efficient cycle detection during edge selection.
+
+Q3: BFS gives shortest path in which graph type?
+Answer: Unweighted graphs.
+
+Q4: What is greedy risk?
+Answer: Local optimum may not imply global optimum without proof.
+
+Q5: Core Dijkstra assumption?
+Answer: Non-negative edge weights.`
+            }
+        ],
+        'dsa-interview-grid#DSA · Module 7': [
+            {
+                title: 'Deep-Dive Example: 35-Minute Interview Execution Plan',
+                content: `Suggested time split:
+• 4 min clarify and restate
+• 6 min brute force + constraints
+• 8 min optimized approach and edge cases
+• 12 min coding with narration
+• 5 min testing + complexity summary
+
+This structure improves both clarity and interviewer confidence.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Record yourself explaining one easy problem in 2 minutes.
+
+Medium:
+Do full dry run before coding and catch one edge case bug.
+
+Hard:
+Mock interview with interruption handling and trade-off discussion.
+
+Review criteria:
+• communication flow
+• composure under correction
+• clarity in final complexity summary.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Why restate the problem first?
+Answer: Align understanding and reduce wrong assumptions.
+
+Q2: Should you hide brute force approach?
+Answer: No, it shows baseline thinking before optimization.
+
+Q3: Why think aloud while coding?
+Answer: Exposes reasoning and helps interviewer follow trade-offs.
+
+Q4: What closes an answer strongly?
+Answer: Correctness check + edge cases + complexity summary.
+
+Q5: Is perfect code enough without communication?
+Answer: Usually no; communication is a scoring dimension.`
+            }
+        ],
+        'system-design-advanced-grid#System Design · Module 5': [
+            {
+                title: 'Deep-Dive Example: URL Shortener at 100M Redirects/Day',
+                content: `Design upgrades at scale:
+• key generation strategy (base62, collision handling)
+• hot-link cache with TTL
+• redirect latency optimization
+• analytics ingestion via async pipeline
+• abuse detection and throttling
+
+Target:
+sub-50ms redirect for cache hits.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Design API contract for create and resolve short URL.
+
+Medium:
+Estimate storage and QPS for 10M links/day.
+
+Hard:
+Design anti-abuse and click-analytics architecture.
+
+Evaluation:
+• realistic assumptions
+• low-latency design
+• operational safeguards.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Why is cache critical in URL shortener?
+Answer: Redirect path is read-heavy and latency-sensitive.
+
+Q2: Key collision handling can be ignored?
+Answer: No, must be handled deterministically.
+
+Q3: Why async analytics?
+Answer: Keep redirect hot path fast.
+
+Q4: Common abuse vector?
+Answer: Spam/phishing links and brute-force key probing.
+
+Q5: What metric matters most for user experience?
+Answer: Redirect latency and failure rate.`
+            }
+        ],
+        'system-design-advanced-grid#System Design · Module 6': [
+            {
+                title: 'Deep-Dive Example: Chat Reliability Model',
+                content: `Build for reliability:
+• persistent connection gateway
+• message broker backbone
+• durable message store
+• delivery acknowledgment + retry
+• per-user/device cursor tracking
+
+Design explicitly for offline users and reconnection sync.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Sketch data model for users, conversations, and messages.
+
+Medium:
+Design message flow for online and offline recipients.
+
+Hard:
+Handle ordering guarantees in multi-device environment.
+
+Scoring:
+• reliability model clarity
+• ordering assumptions
+• failure recovery completeness.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Why use message broker in chat?
+Answer: Decouple producers/consumers and absorb bursts.
+
+Q2: Exactly-once delivery is always required?
+Answer: Not always; many systems use at-least-once + dedupe.
+
+Q3: Why store per-device cursor?
+Answer: Correct sync/read state across devices.
+
+Q4: Core real-time channel tech?
+Answer: WebSockets (commonly).
+
+Q5: Offline support needs what minimum component?
+Answer: Durable message persistence.`
+            }
+        ],
+        'system-design-advanced-grid#System Design · Module 7': [
+            {
+                title: 'Deep-Dive Example: Feed Service Trade-offs',
+                content: `Design decisions:
+• fan-out on write for low read latency
+• fan-out on read for lower write amplification
+• hybrid for celebrity/high-follower accounts
+• ranking service decoupled from write path
+
+Make consistency and freshness assumptions explicit.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Draw feed read path components and cache layers.
+
+Medium:
+Compare fan-out on write vs read under traffic spikes.
+
+Hard:
+Design hybrid strategy with celebrity fallback path.
+
+Expected output:
+• clear write/read trade-off discussion
+• cache invalidation strategy
+• ranking latency budget.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Why is hybrid fan-out common?
+Answer: Balances write amplification and read latency.
+
+Q2: Feed ranking should run in request hot path always?
+Answer: Prefer partial precompute + lightweight online ranking.
+
+Q3: Key cache risk in feeds?
+Answer: Stale timelines due to invalidation lag.
+
+Q4: Why separate write and read stores sometimes?
+Answer: Different access patterns and scaling requirements.
+
+Q5: Main product metric for feed quality?
+Answer: Engagement relevance with acceptable latency.`
+            }
+        ],
+        'system-design-advanced-grid#System Design · Module 8': [
+            {
+                title: 'Deep-Dive Example: Video Pipeline End-to-End',
+                content: `Pipeline blueprint:
+• chunked upload to object storage
+• async transcoding workers
+• ABR manifest generation
+• CDN edge delivery
+• playback telemetry stream
+
+Business goal:
+high completion rate with low buffering.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Define upload and playback API contracts.
+
+Medium:
+Design transcoding queue strategy with retries.
+
+Hard:
+Optimize global delivery for startup latency and cost.
+
+Review criteria:
+• throughput and storage assumptions
+• failure handling
+• QoE instrumentation quality.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Why adaptive bitrate streaming?
+Answer: Adjust quality to network conditions and reduce buffering.
+
+Q2: Why decouple upload from transcoding?
+Answer: Async processing improves reliability and scalability.
+
+Q3: What does CDN primarily improve?
+Answer: Latency and origin offload.
+
+Q4: One key playback QoE metric?
+Answer: Rebuffer ratio.
+
+Q5: Why store multiple encoded variants?
+Answer: Serve diverse bandwidth/device capabilities.`
+            }
+        ],
+        'agent-frameworks-grid#Module 2': [
+            {
+                title: 'Deep-Dive Example: LangGraph State Machine Design',
+                content: `Model agent workflow as explicit graph nodes:
+• planner node
+• tool execution node
+• reflection/validation node
+• final response node
+
+Benefits:
+• deterministic control flow
+• easier retries and human-in-the-loop insertion
+• better observability than opaque loops.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Create a two-node graph (retrieve -> answer).
+
+Medium:
+Add conditional edge for tool retry or fallback.
+
+Hard:
+Add checkpoint persistence and human approval branch.
+
+Evaluation:
+• state schema clarity
+• edge-condition correctness
+• failure-handling design.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Why use graph-based orchestration?
+Answer: Explicit, testable control flow for multi-step agent logic.
+
+Q2: What does checkpointing enable?
+Answer: Resume, auditability, and safer long-running workflows.
+
+Q3: When add human-in-the-loop node?
+Answer: High-risk actions or low-confidence outcomes.
+
+Q4: LangGraph best suited for?
+Answer: Stateful, multi-step agent systems.
+
+Q5: Common orchestration mistake?
+Answer: Missing failure branches and fallback edges.`
+            }
+        ],
+        'os-processes-memory-grid#OS · Module 5': [
+            {
+                title: 'Deep-Dive Example: Choosing a Scheduler for a Workload',
+                content: `Scenario: pick a scheduling approach for three very different systems.
+
+• Interactive phone UI -> Round Robin (responsiveness first)
+• Batch data-processing server -> SJF/throughput focus
+• Mixed real-time + background -> priority + multilevel queues
+
+Key lesson:
+there is no single best scheduler - it depends on which metric (responsiveness, throughput, fairness) matters most for that system.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Given arrival and burst times for 3 processes, compute average waiting time under FCFS.
+
+Medium:
+Compare Round Robin (time quantum = 2) vs SJF for the same processes and explain the difference.
+
+Hard:
+Design a scheduling policy for a system with both latency-sensitive and background jobs, and justify how you prevent starvation.
+
+Evaluation:
+• correct metric calculation
+• clear trade-off reasoning
+• starvation awareness.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Which algorithm is best for responsiveness?
+Answer: Round Robin (small time slices).
+
+Q2: Which minimizes average waiting time in theory?
+Answer: Shortest Job First (SJF).
+
+Q3: What problem can pure priority scheduling cause?
+Answer: Starvation of low-priority processes.
+
+Q4: What makes an OS preemptive?
+Answer: The ability to forcibly pause a running process (via timer interrupt).
+
+Q5: Why do context switches have a cost?
+Answer: Saving/restoring state consumes CPU time (overhead).`
+            }
+        ],
+        'os-processes-memory-grid#OS · Module 6': [
+            {
+                title: 'Deep-Dive Example: Tracing a Memory Access',
+                content: `Follow what happens when a program reads a variable.
+
+1. Program uses a virtual address.
+2. The MMU checks the TLB (fast cache) for a mapping.
+3. On a miss, it walks the page table to find the physical frame.
+4. If the page is not in RAM -> page fault -> load from disk.
+5. The physical address is accessed and value returned.
+
+Insight:
+virtual memory gives isolation and simplicity, but page faults and thrashing are the performance risks to watch.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Explain in your own words why two processes can both use address 0x1000 safely.
+
+Medium:
+Given a small page table, translate three virtual addresses to physical addresses.
+
+Hard:
+A system is thrashing under load. Propose three fixes and explain the trade-offs of each.
+
+Rubric:
+• correct translation logic
+• clear understanding of isolation
+• practical thrashing remedies.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: What is a page fault?
+Answer: Access to a page not currently in RAM, requiring a load from disk.
+
+Q2: What does the page table map?
+Answer: Virtual pages to physical frames.
+
+Q3: What is the TLB for?
+Answer: Caching recent address translations to speed up memory access.
+
+Q4: What is thrashing?
+Answer: Excessive swapping where the system does little real work.
+
+Q5: One key benefit of virtual memory?
+Answer: Process isolation (and the illusion of large contiguous memory).`
+            }
+        ],
+        'os-processes-memory-grid#OS · Module 7': [
+            {
+                title: 'Deep-Dive Example: Fixing a Race Condition',
+                content: `Scenario: two threads increment a shared counter and updates are lost.
+
+Root cause:
+read-modify-write is not atomic, so interleaving causes lost updates.
+
+Fix:
+protect the critical section with a mutex so only one thread updates at a time.
+
+Caution:
+locking too broadly kills performance; locking inconsistently can cause deadlock.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Identify the critical section in a shared-counter example.
+
+Medium:
+Rewrite the counter update using a mutex and explain why it is now safe.
+
+Hard:
+Given two threads acquiring two locks in different orders, show how deadlock occurs and fix it.
+
+Assessment:
+• correct critical-section identification
+• proper lock usage
+• deadlock prevention strategy.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: What is a race condition?
+Answer: A bug where the outcome depends on unpredictable thread timing on shared data.
+
+Q2: What does a mutex guarantee?
+Answer: Only one thread is in the critical section at a time.
+
+Q3: Difference between binary and counting semaphore?
+Answer: Binary allows 1 holder; counting allows N concurrent holders.
+
+Q4: Name one of the four deadlock conditions.
+Answer: Circular wait (also: mutual exclusion, hold and wait, no preemption).
+
+Q5: A simple way to prevent deadlock?
+Answer: Always acquire locks in a consistent global order.`
+            }
+        ],
+        'networking-protocols-grid#Networking · Module 3': [
+            {
+                title: 'Deep-Dive Example: Picking TCP or UDP',
+                content: `Decide the transport protocol for real features.
+
+• File download / web page -> TCP (every byte must arrive, in order)
+• Live video call -> UDP (low latency; a dropped frame beats a long delay)
+• Online multiplayer game -> UDP (fast updates, app handles loss)
+• Bank transaction API -> TCP (correctness is non-negotiable)
+
+Principle:
+reliability vs latency is the core trade-off.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+List two applications for TCP and two for UDP with one-line reasons.
+
+Medium:
+Explain the TCP 3-way handshake and why it exists.
+
+Hard:
+Design how a video-call app could use UDP but still recover gracefully from packet loss.
+
+Evaluation:
+• correct protocol choice
+• handshake understanding
+• practical loss-handling design.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Which protocol guarantees ordered, reliable delivery?
+Answer: TCP.
+
+Q2: Which protocol has no handshake and lower latency?
+Answer: UDP.
+
+Q3: What are the 3 steps of the TCP handshake?
+Answer: SYN, SYN-ACK, ACK.
+
+Q4: Why is DNS often over UDP?
+Answer: Small, fast queries where speed matters more than guaranteed delivery.
+
+Q5: Best choice for a live voice call?
+Answer: UDP.`
+            }
+        ],
+        'networking-protocols-grid#Networking · Module 4': [
+            {
+                title: 'Deep-Dive Example: Debugging a Slow/Broken Domain',
+                content: `Scenario: a newly launched site is unreachable for some users.
+
+Checklist:
+1. Does the domain have a correct A/AAAA record?
+2. Is the TTL causing stale cached answers after a recent change?
+3. Are the authoritative name servers correct?
+4. Is it a DNS issue or a server issue (isolate with direct IP access)?
+
+Insight:
+many "website down" issues are actually DNS propagation or misconfiguration problems.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Match record types (A, CNAME, MX, TXT) to their purpose.
+
+Medium:
+Explain the full resolution path from browser to authoritative server.
+
+Hard:
+You changed your server IP but users still hit the old one. Explain why and how TTL planning avoids this.
+
+Rubric:
+• correct record knowledge
+• accurate resolution flow
+• TTL/propagation understanding.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: What does DNS translate?
+Answer: Domain names into IP addresses.
+
+Q2: Which record maps a name to an IPv4 address?
+Answer: A record.
+
+Q3: What does TTL control?
+Answer: How long a DNS record can be cached.
+
+Q4: Why can DNS changes take time to appear?
+Answer: Cached records persist until TTL expires (propagation).
+
+Q5: Which record type defines mail servers?
+Answer: MX record.`
+            }
+        ],
+        'networking-protocols-grid#Networking · Module 5': [
+            {
+                title: 'Deep-Dive Example: The Full Journey of a Page Load',
+                content: `Trace visiting https://example.com end to end.
+
+1. DNS resolves example.com to an IP.
+2. TCP connection is established (3-way handshake).
+3. TLS handshake sets up encryption (HTTPS).
+4. Browser sends an HTTP GET request.
+5. Server process (managed by its OS) builds a response.
+6. Response returns with a status code (e.g., 200).
+7. Browser renders HTML, CSS, and JS.
+
+This single action combines DNS, TCP/IP, TLS, HTTP, and OS process handling.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Match status codes (200, 301, 404, 500) to their meaning.
+
+Medium:
+Explain the difference between HTTP and HTTPS and what TLS adds.
+
+Hard:
+Given a page that loads slowly, list where in the request lifecycle the delay could occur and how to diagnose each.
+
+Assessment:
+• correct status-code knowledge
+• clear TLS explanation
+• structured performance reasoning.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: What transport protocol does HTTP usually run on?
+Answer: TCP.
+
+Q2: What does HTTPS add over HTTP?
+Answer: TLS encryption, integrity, and server authentication.
+
+Q3: What does a 404 status mean?
+Answer: Resource not found (client-side error).
+
+Q4: What does a 5xx status indicate?
+Answer: A server-side error.
+
+Q5: What is the first network step when visiting a domain?
+Answer: A DNS lookup to resolve the IP address.`
+            }
+        ],
+        'os-fundamentals-grid#OS · Module 1': [
+            {
+                title: 'Deep-Dive Example: What Happens When You Open an App',
+                content: `Trace clicking an application icon.
+
+1. The OS locates the program file on disk.
+2. It loads the program into memory and creates a process.
+3. The scheduler gives the process CPU time.
+4. The app requests services (files, network, screen) via system calls.
+5. The kernel safely performs those privileged operations.
+
+Insight:
+the OS is the trusted middle layer - your app never touches hardware directly.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+List three things the OS manages and give one everyday example of each.
+
+Medium:
+Explain the difference between kernel space and user space with a real scenario.
+
+Hard:
+Pick a common action (saving a file) and describe which system calls and OS responsibilities are involved.
+
+Evaluation:
+• clear grasp of OS role
+• correct kernel/user distinction
+• accurate mapping of actions to OS services.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: What is the main job of an operating system?
+Answer: Manage hardware resources and act as a safe layer between apps and hardware.
+
+Q2: What runs in kernel space?
+Answer: The trusted OS core (scheduler, memory manager, drivers) with full hardware access.
+
+Q3: What is a system call?
+Answer: A request from a user program for a privileged OS service.
+
+Q4: Why separate kernel and user space?
+Answer: Protection - a buggy app cannot directly crash or corrupt the system.
+
+Q5: Name two OS responsibilities.
+Answer: Process management and memory management (also files, devices, security).`
+            }
+        ],
+        'os-fundamentals-grid#OS · Module 2': [
+            {
+                title: 'Deep-Dive Example: One Program, Many Processes',
+                content: `Open the same browser twice - you now have two independent processes from one program.
+
+Why they do not interfere:
+• each process gets its own memory space
+• each has its own state saved in a PCB
+• the OS schedules them separately
+
+Insight:
+"program" is the passive file; "process" is the active, running instance.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+In your own words, explain program vs process using a real example.
+
+Medium:
+Describe the fetch-decode-execute cycle and why it repeats.
+
+Hard:
+Explain how timer interrupts let a single CPU appear to run many programs at once.
+
+Rubric:
+• correct program/process distinction
+• accurate CPU cycle description
+• clear link between interrupts and multitasking.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: Difference between a program and a process?
+Answer: A program is a passive file; a process is a running instance with its own state.
+
+Q2: What are the three steps of the CPU cycle?
+Answer: Fetch, decode, execute.
+
+Q3: What is an interrupt?
+Answer: A signal that makes the CPU pause and handle an urgent event.
+
+Q4: How do interrupts help multitasking?
+Answer: Timer interrupts let the OS switch between processes.
+
+Q5: Can one program create multiple processes?
+Answer: Yes, running it multiple times creates independent processes.`
+            }
+        ],
+        'os-fundamentals-grid#OS · Module 3': [
+            {
+                title: 'Deep-Dive Example: Following a File From Name to Disk',
+                content: `You open /home/user/report.txt.
+
+1. The OS resolves the path through the directory tree.
+2. Metadata (inode) tells it which disk blocks hold the file.
+3. The OS reads those blocks into RAM.
+4. Permissions are checked to confirm you are allowed access.
+
+Insight:
+the file system is a clean human-friendly view over messy physical storage.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Explain the difference between an absolute path and a relative path with examples.
+
+Medium:
+Describe how file permissions (read/write/execute) protect a shared system.
+
+Hard:
+Explain the difference between storage and memory and why the OS constantly moves data between them.
+
+Assessment:
+• correct path understanding
+• clear permission model
+• accurate disk-vs-RAM reasoning.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: What is a directory?
+Answer: A structure that organizes files into a hierarchy (folder).
+
+Q2: What does an inode-style metadata record track?
+Answer: Where a file's data blocks live on disk (plus attributes).
+
+Q3: What are the three basic Unix permission types?
+Answer: Read, write, execute.
+
+Q4: Key difference between RAM and disk?
+Answer: RAM is fast and temporary; disk is slower and permanent.
+
+Q5: Why do we need file permissions?
+Answer: To control access and protect data between users/programs.`
+            }
+        ],
+        'os-processes-memory-grid#OS · Module 4': [
+            {
+                title: 'Deep-Dive Example: Why Your App Stays Responsive',
+                content: `A photo app downloads images while the UI still scrolls smoothly.
+
+How:
+• the UI runs on one thread
+• the download runs on another thread
+• both share the process memory but run "concurrently"
+
+Insight:
+threads let one application do several things at once without freezing.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+List the process states and what triggers moving between Ready and Running.
+
+Medium:
+Explain the difference between a thread and a process, with one benefit and one risk of threads.
+
+Hard:
+Describe what happens during a context switch and why too many switches hurt performance.
+
+Evaluation:
+• correct state model
+• clear thread vs process contrast
+• accurate context-switch explanation.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: What does a Process Control Block store?
+Answer: Process ID, state, saved registers, memory info, and open files.
+
+Q2: How do threads differ from processes?
+Answer: Threads share the process's memory and are lighter to create/switch.
+
+Q3: What is a context switch?
+Answer: Saving one process/thread's state and loading another's to run it.
+
+Q4: Why is IPC needed?
+Answer: Processes have separate memory and need explicit ways to communicate.
+
+Q5: Name one IPC method.
+Answer: Pipes (also message queues, shared memory, sockets).`
+            }
+        ],
+        'networking-fundamentals-grid#Networking · Module 1': [
+            {
+                title: 'Deep-Dive Example: A Message Through the Layers',
+                content: `Sending a chat message travels down the layers and back up.
+
+Sending side:
+• Application: your text
+• Transport: adds port + reliability info
+• Internet: adds source/destination IP
+• Link: puts bits on the wire
+
+Receiving side unwraps each layer in reverse.
+
+Insight:
+layering lets each part (Wi-Fi, IP, HTTP) evolve independently.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+List the four TCP/IP layers and one protocol at each.
+
+Medium:
+Explain encapsulation using the "nested envelopes" analogy.
+
+Hard:
+Explain the client-server model and how IP + port together deliver data to the right app.
+
+Rubric:
+• correct layer knowledge
+• clear encapsulation explanation
+• accurate IP-vs-port distinction.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: What is a network?
+Answer: Two or more devices connected to exchange data.
+
+Q2: Name the four TCP/IP layers.
+Answer: Application, Transport, Internet, Link.
+
+Q3: What is encapsulation?
+Answer: Each layer wrapping data with its own header as it goes down the stack.
+
+Q4: What does a port number identify?
+Answer: Which service/app on a machine.
+
+Q5: What does the IP identify?
+Answer: Which machine on the network.`
+            }
+        ],
+        'networking-fundamentals-grid#Networking · Module 2': [
+            {
+                title: 'Deep-Dive Example: How Your Devices Share One Public IP',
+                content: `At home, your phone, laptop, and TV all browse the internet using one public IP.
+
+How:
+• each device gets a private IP from the router
+• the router uses NAT to map them to its single public IP
+• responses are routed back to the right device
+
+Insight:
+private IPs organize the local network; NAT bridges them to the public internet.`
+            },
+            {
+                title: 'Graded Exercises (Easy -> Medium -> Hard)',
+                content: `Easy:
+Give an example of a private IP and a public IP and state the difference.
+
+Medium:
+Explain in simple terms what routing does across the internet.
+
+Hard:
+Explain how NAT lets many devices share one public IP and why IPv6 reduces the need for it.
+
+Assessment:
+• correct public/private distinction
+• clear routing explanation
+• accurate NAT understanding.`
+            },
+            {
+                title: 'Mini Quiz (with Answers)',
+                content: `Q1: What does an IP address identify?
+Answer: A device on a network.
+
+Q2: Difference between IPv4 and IPv6?
+Answer: IPv6 has a far larger address space than IPv4.
+
+Q3: Are private IPs directly reachable from the internet?
+Answer: No, they are used inside local networks.
+
+Q4: What does routing do?
+Answer: Moves packets across routers toward the destination network.
+
+Q5: What does NAT enable?
+Answer: Many private devices to share one public IP.`
+            }
+        ]
+    };
+
+    return expansions[key] || [];
+}
 
 function moduleLessonsLabel(module, gridId) {
     if (AI_COURSE_GRIDS.indexOf(gridId) !== -1 && Array.isArray(module.detailedContent) && module.detailedContent.length) {
-        const n = module.detailedContent.length;
+        const n = module.detailedContent.length + getAutoDeepDiveSections(module, gridId).length + getPhaseTwoExpansionSections(module, gridId).length;
         return n + (n === 1 ? ' lesson' : ' lessons');
     }
     return module.lessons;
@@ -12940,8 +14452,12 @@ function openModuleModal(module, moduleId) {
     
     // Check if module has detailed content
     if (module.detailedContent && module.detailedContent.length > 0) {
+        const gridId = moduleId ? moduleId.split('#')[0] : '';
+        const allSections = module.detailedContent
+            .concat(getAutoDeepDiveSections(module, gridId))
+            .concat(getPhaseTwoExpansionSections(module, gridId));
         // Show detailed content with expandable sections
-        const contentSections = module.detailedContent.map((section, index) => `
+        const contentSections = allSections.map((section, index) => `
             <div class="content-section">
                 <div class="content-header" onclick="toggleContent(${index})">
                     <h3 class="content-title">
