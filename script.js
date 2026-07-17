@@ -8215,6 +8215,296 @@ for r in results:
     ],
 
     // ==========================================================
+    // AB-731: Microsoft Certified AI Transformation Leader
+    // ==========================================================
+    azureAiTransformationLeader: [
+        {
+            number: "AB-731 · Module 1",
+            title: "AI Transformation Strategy & Vision",
+            description: "Define enterprise AI vision, align stakeholders, and prioritize initiatives tied to business outcomes.",
+            duration: "45 min",
+            lessons: "4 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Business outcomes-first AI strategy",
+                "Current-state and readiness assessment",
+                "Prioritization frameworks",
+                "Executive communication"
+            ],
+            detailedDescription: "AB-731 starts with strategic clarity. This module helps leaders identify where AI creates measurable value, assess organizational readiness, and build a transformation roadmap that aligns business, technology, and operating constraints.",
+            detailedContent: [
+                {
+                    title: "Start with Business Outcomes",
+                    content: `Successful AI programs begin with measurable business outcomes, not tools.
+
+<strong>Focus areas:</strong>
+• Revenue growth (new products, improved conversion)
+• Cost efficiency (automation, optimization)
+• Risk reduction (compliance, fraud, reliability)
+• Customer experience (faster service, personalization)
+
+<strong>Leadership principle:</strong> Choose a small number of high-value outcomes and use them to guide all AI investment decisions.`
+                },
+                {
+                    title: "Assess Readiness Across People, Process, and Platform",
+                    content: `Readiness determines transformation speed.
+
+<strong>People:</strong> Skills, sponsorship, and change capacity
+<strong>Process:</strong> Governance, decision rights, and delivery model
+<strong>Platform:</strong> Data quality, security, integration, and tooling
+
+<strong>Exam tip:</strong> AB-731 emphasizes that weak governance or poor data quality can block AI value even when model quality is high.`
+                },
+                {
+                    title: "Prioritize an AI Portfolio",
+                    content: `Use an explicit framework to choose what to do first.
+
+<strong>Common rubric:</strong>
+• Business value (impact)
+• Feasibility (data + technical effort)
+• Time-to-value (delivery speed)
+• Risk and compliance complexity
+
+Prioritize quick wins that build confidence while funding longer-term strategic capabilities.`,
+                    code: `# Example prioritization scorecard (concept)
+initiatives = [
+    {"name": "Contact center copilot", "value": 5, "feasibility": 4, "speed": 4, "risk": 2},
+    {"name": "Contract intelligence", "value": 4, "feasibility": 3, "speed": 3, "risk": 3},
+    {"name": "Predictive maintenance", "value": 5, "feasibility": 2, "speed": 2, "risk": 3},
+]
+
+for item in initiatives:
+    item["score"] = item["value"] + item["feasibility"] + item["speed"] - item["risk"]
+
+for row in sorted(initiatives, key=lambda x: x["score"], reverse=True):
+    print(row["name"], "->", row["score"])`
+                },
+                {
+                    title: "Communicate Strategy to Executives",
+                    content: `Executive alignment requires a clear narrative:
+
+1. Why change now?
+2. What measurable outcomes are targeted?
+3. Which capabilities must be built?
+4. What risks are controlled and how?
+5. What milestones prove progress?
+
+A concise transformation story improves funding decisions and cross-functional alignment.`
+                }
+            ]
+        },
+        {
+            number: "AB-731 · Module 2",
+            title: "Responsible AI, Governance, and Risk",
+            description: "Establish responsible AI controls, policy guardrails, and governance structures for safe scale.",
+            duration: "50 min",
+            lessons: "4 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Responsible AI principles",
+                "Model and data governance",
+                "Risk management and controls",
+                "Policy, compliance, and auditability"
+            ],
+            detailedDescription: "AI transformation fails without trust. This module covers governance operating models, risk controls, and responsible AI practices that make enterprise deployment safe, compliant, and auditable.",
+            detailedContent: [
+                {
+                    title: "Design Governance for Scale",
+                    content: `Governance should accelerate safe delivery, not slow everything down.
+
+<strong>Key elements:</strong>
+• Clear decision rights (who approves what)
+• Tiered controls by use-case risk
+• Required documentation and review gates
+• Escalation paths for high-impact issues`
+                },
+                {
+                    title: "Build a Practical Risk Framework",
+                    content: `AI risk spans technical, legal, operational, and reputational domains.
+
+<strong>Typical risk categories:</strong>
+• Fairness and bias
+• Privacy and data leakage
+• Hallucinations and reliability
+• Security and prompt injection
+• Regulatory non-compliance
+
+Controls should map directly to these risk categories with clear ownership.`
+                },
+                {
+                    title: "Implement Guardrails and Monitoring",
+                    content: `Guardrails are only effective when continuously monitored.
+
+<strong>Guardrail examples:</strong>
+• Input/output safety filters
+• Human-in-the-loop approvals for high-risk actions
+• Grounding and citation requirements
+• Logging and audit trails for sensitive workflows`,
+                    code: `# Governance control checklist (concept)
+controls = {
+    "safety_filters": True,
+    "pii_redaction": True,
+    "human_approval_for_high_risk": True,
+    "audit_logging": True,
+    "fallback_path": True,
+}
+
+for name, enabled in controls.items():
+    print(f"{name:30} {'OK' if enabled else 'MISSING'}")`
+                },
+                {
+                    title: "Operationalize Responsible AI",
+                    content: `Responsible AI must be embedded into delivery lifecycles.
+
+<strong>Operating pattern:</strong>
+• Assess risk before deployment
+• Validate against policy and quality thresholds
+• Monitor outcomes after release
+• Trigger incident and remediation workflows when thresholds are exceeded`
+                }
+            ]
+        },
+        {
+            number: "AB-731 · Module 3",
+            title: "Operating Model, Architecture, and Delivery",
+            description: "Choose an enterprise AI operating model and delivery approach that balances speed, control, and reuse.",
+            duration: "45 min",
+            lessons: "4 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Centralized vs federated AI teams",
+                "Reference architecture and platform services",
+                "Use-case factory model",
+                "Value realization cadence"
+            ],
+            detailedDescription: "This module helps leaders design how AI initiatives are delivered across the enterprise: team topology, platform standards, reuse patterns, and release governance for reliable scale.",
+            detailedContent: [
+                {
+                    title: "Select the Right Operating Model",
+                    content: `There is no one-size-fits-all AI organization.
+
+<strong>Common models:</strong>
+• <strong>Centralized:</strong> Strong standards, slower domain responsiveness
+• <strong>Federated:</strong> Domain speed, requires strong platform governance
+• <strong>Hybrid:</strong> Shared platform + domain delivery squads
+
+Most enterprises converge on hybrid as transformation matures.`
+                },
+                {
+                    title: "Standardize Through a Reference Architecture",
+                    content: `A reference architecture improves consistency, security, and speed.
+
+<strong>Include standards for:</strong>
+• Identity and access
+• Data access and grounding patterns
+• Prompt/model lifecycle and evaluation
+• Observability, incident management, and rollback`
+                },
+                {
+                    title: "Run a Use-Case Factory",
+                    content: `A use-case factory repeatedly takes ideas from intake to production.
+
+<strong>Factory stages:</strong>
+1. Intake and qualification
+2. Discovery and feasibility
+3. MVP build and evaluation
+4. Production hardening
+5. Scale and optimization`,
+                    code: `# Throughput dashboard example (concept)
+pipeline = {
+    "intake": 27,
+    "discovery": 14,
+    "mvp": 8,
+    "production": 3,
+}
+
+for stage, count in pipeline.items():
+    print(f"{stage:12}: {count}")`
+                },
+                {
+                    title: "Measure Value Realization",
+                    content: `Delivery velocity is not enough; leaders must show realized value.
+
+<strong>Track both:</strong>
+• Leading indicators (adoption, cycle time, quality)
+• Lagging indicators (cost savings, revenue, risk reduction)
+
+Use quarterly business reviews to recalibrate the portfolio.`
+                }
+            ]
+        },
+        {
+            number: "AB-731 · Module 4",
+            title: "Adoption, Change Management, and AI Culture",
+            description: "Drive adoption with capability building, communication, and durable change-management practices.",
+            duration: "40 min",
+            lessons: "4 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Stakeholder mapping and change strategy",
+                "Workforce enablement and role evolution",
+                "Adoption metrics and feedback loops",
+                "Scaling an AI-first culture"
+            ],
+            detailedDescription: "Transformation is sustained by people, not only platforms. This module focuses on change management, upskilling, and adoption leadership so AI capabilities become part of day-to-day operations.",
+            detailedContent: [
+                {
+                    title: "Build a Change Strategy",
+                    content: `Adoption increases when users understand why change matters and how it helps them.
+
+<strong>Core actions:</strong>
+• Segment stakeholders by impact
+• Define role-specific value messages
+• Plan communications, training, and support`
+                },
+                {
+                    title: "Enable the Workforce",
+                    content: `Capability-building should align to job families.
+
+<strong>Example pathways:</strong>
+• Leaders: governance, portfolio steering, value tracking
+• Builders: solution patterns, quality, safety, operations
+• End users: prompt literacy, policy boundaries, escalation paths`
+                },
+                {
+                    title: "Track Adoption and Outcomes",
+                    content: `Adoption metrics reveal whether transformation is real.
+
+<strong>Measure:</strong>
+• Active usage by persona
+• Task success and time saved
+• User satisfaction and trust
+• Escalation and override rates`,
+                    code: `# Sample adoption KPI snapshot (concept)
+kpis = {
+    "weekly_active_users": 420,
+    "task_time_reduction_pct": 31,
+    "user_satisfaction": 4.3,
+    "high_risk_escalation_rate_pct": 2.1,
+}
+
+for k, v in kpis.items():
+    print(f"{k:30}: {v}")`
+                },
+                {
+                    title: "Create a Continuous Improvement Loop",
+                    content: `Mature AI organizations continuously learn from usage.
+
+<strong>Loop:</strong>
+1. Collect feedback and telemetry
+2. Improve policy, prompts, workflows, and training
+3. Re-measure outcomes
+4. Scale successful patterns across teams`
+                }
+            ]
+        }
+    ],
+
+    // ==========================================================
     // DP-100: Azure Data Scientist Associate
     // ==========================================================
     azureDataScientist: [
@@ -12151,6 +12441,13 @@ const quizData = {
         { q: "Detecting and labelling objects within an image is part of which workload?", options: ["Natural language processing", "Computer vision", "Knowledge mining", "Conversational AI"], answer: 1, explain: "Computer vision covers image classification, object detection, and OCR." },
         { q: "What is Azure AI Foundry (Microsoft Foundry) primarily used for?", options: ["Managing virtual networks", "Building, testing, and deploying AI solutions and agents", "Storing relational data", "Monitoring virtual machines"], answer: 1, explain: "Azure AI Foundry is the unified platform for building, evaluating, and deploying generative AI apps and agents." }
     ],
+    'panel-ab-731': [
+        { q: "For AB-731, what should an AI transformation roadmap start with?", options: ["Selecting a model provider", "Buying GPU capacity", "Business outcomes and measurable value", "Building a chatbot pilot"], answer: 2, explain: "AB-731 focuses on outcome-first strategy: define business value first, then choose technology and delivery patterns." },
+        { q: "Which operating model commonly balances enterprise standards with domain delivery speed?", options: ["Fully centralized", "Fully decentralized", "Hybrid model", "Vendor-managed only"], answer: 2, explain: "A hybrid model combines a shared AI platform/governance layer with domain-aligned product teams." },
+        { q: "In AI governance, which control best supports auditability?", options: ["Informal approvals", "Undocumented prompt edits", "Comprehensive logging and traceability", "Disabling user feedback"], answer: 2, explain: "Auditability requires clear logs, decision trails, and evidence of policy enforcement across workflows." },
+        { q: "What is the main purpose of an AI use-case portfolio rubric?", options: ["To maximize model size", "To prioritize initiatives by value, feasibility, speed, and risk", "To remove governance reviews", "To standardize job titles"], answer: 1, explain: "Portfolio rubrics help leaders consistently choose high-value, feasible use cases while managing risk." },
+        { q: "Which metric is most directly tied to transformation adoption?", options: ["Cloud region count", "Weekly active users and task success by persona", "Total lines of prompt text", "Number of data sources connected"], answer: 1, explain: "AB-731 emphasizes adoption and value realization, so usage and task-level outcomes are key indicators." }
+    ],
     'panel-ai-103': [
         { q: "In a Retrieval-Augmented Generation (RAG) pattern, what does the retrieval step do?", options: ["Fine-tunes the model weights", "Fetches relevant context to ground the model's response", "Deploys the model to an endpoint", "Encrypts the prompt"], answer: 1, explain: "RAG retrieves relevant documents (often via a vector search) and injects them as context so the model answers from grounded facts, reducing hallucination." },
         { q: "Which Azure service is commonly used as the knowledge/vector store for RAG?", options: ["Azure Key Vault", "Azure AI Search", "Azure Monitor", "Azure DevOps"], answer: 1, explain: "Azure AI Search provides vector and hybrid search, making it the typical retrieval layer for RAG solutions." },
@@ -12325,9 +12622,9 @@ function setQuizBest(panelId, value) {
 document.addEventListener('DOMContentLoaded', function() {
     loadModules();
     loadQuizzes();
+    setupTabs();
     applyCertQuery();
     setupScrollAnimations();
-    setupTabs();
     setupCertFilter();
     setupDropdown();
     setupProviderMarquee();
@@ -12492,6 +12789,7 @@ function loadModules() {
     loadModulesIntoGrid('advanced-ml-grid', courseData.advancedML);
     loadModulesIntoGrid('realworld-ml-grid', courseData.realWorldML);
     loadModulesIntoGrid('ai-fundamentals-grid', courseData.aiFundamentals);
+    loadModulesIntoGrid('azure-ai-transformation-leader-grid', courseData.azureAiTransformationLeader);
     loadModulesIntoGrid('ai-apps-agents-grid', courseData.aiAppsAgents);
     loadModulesIntoGrid('azure-data-scientist-grid', courseData.azureDataScientist);
     loadModulesIntoGrid('azure-mlops-grid', courseData.azureMlOps);
@@ -12588,7 +12886,7 @@ function createModuleCard(module, gridId) {
     const lockIcon = module.isLocked ? '<div class="lock-icon">🔒</div>' : '';
     const hasCode = Array.isArray(module.detailedContent) && module.detailedContent.some(s => s && s.code);
     const durationMeta = module.duration
-        ? `<span class="meta-item"><i class="fas fa-clock"></i> ${module.duration}</span>`
+        ? `<span class="meta-item"><i class="fas fa-book-reader"></i> Est. read time: ${module.duration}</span>`
         : '';
     const codeMeta = hasCode
         ? '<span class="meta-item meta-code"><i class="fas fa-code"></i> Code examples</span>'
