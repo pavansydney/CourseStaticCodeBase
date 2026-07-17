@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentorship Program - Cloudvana</title>
+    <meta name="description" content="Cloudvana mentorship programs for AI learners. Start with free mentorship tracks or enroll in paid mentorship at 49 INR per course.">
+    <meta name="author" content="Chilakalapalli Pavan Kalyan">
+    <meta name="theme-color" content="#4285f4">
+    <link rel="icon" type="image/jpeg" href="assets/Cloudvana%20logo.jpg">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="mentorship">
+    <div id="site-nav"></div>
+
+    <section class="mentorship-hero page-section">
+        <div class="container">
+            <span class="mentorship-kicker">Cloudvana Mentorship</span>
+            <h1 class="mentorship-title">Learn Faster With Structured Guidance</h1>
+            <p class="mentorship-subtitle">Only currently active plans are shown below: free options for beginners and a paid plan at 49 INR per course for focused support.</p>
+            <div class="mentorship-hero-cta">
+                <a class="btn btn-primary" href="#plans">View Active Plans</a>
+                <a class="btn btn-secondary" href="#apply">Apply Now</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="plans" class="mentorship-section">
+        <div class="container">
+            <h2 class="section-title">Active Plans</h2>
+            <p class="section-subtitle">Simple choices. No hidden tiers. Pick what matches your current stage.</p>
+
+            <div class="mentorship-plans-grid">
+                <article class="mentorship-plan free-plan">
+                    <span class="plan-badge plan-badge-free">Free</span>
+                    <h3>Community Guidance</h3>
+                    <p class="plan-price">0 INR</p>
+                    <p class="plan-blurb">Best for learners who want direction, checkpoints, and peer accountability.</p>
+                    <ul class="plan-list">
+                        <li>Weekly study roadmap suggestions</li>
+                        <li>Beginner-friendly Q&A support</li>
+                        <li>Recommended next modules</li>
+                        <li>Access to free cert prep path</li>
+                    </ul>
+                    <a class="btn btn-secondary" href="#apply">Start Free</a>
+                </article>
+
+                <article class="mentorship-plan free-plan">
+                    <span class="plan-badge plan-badge-free">Free</span>
+                    <h3>Starter Cert Sprint</h3>
+                    <p class="plan-price">0 INR</p>
+                    <p class="plan-blurb">Best for first-time exam takers preparing for foundational certifications.</p>
+                    <ul class="plan-list">
+                        <li>14-day starter study checklist</li>
+                        <li>High-priority topics only</li>
+                        <li>Practice quiz recommendations</li>
+                        <li>Exam readiness self-review template</li>
+                    </ul>
+                    <a class="btn btn-secondary" href="#apply">Join Free Sprint</a>
+                </article>
+
+                <article class="mentorship-plan paid-plan featured-plan">
+                    <span class="plan-badge plan-badge-featured">Most Chosen</span>
+                    <h3>Focused Mentorship</h3>
+                    <p class="plan-price">49 INR <span>/ course</span></p>
+                    <p class="plan-blurb">Best for learners who want direct feedback and structured weekly momentum.</p>
+                    <ul class="plan-list">
+                        <li>Personalized study sequence per course</li>
+                        <li>Doubt-clearing and learning checkpoints</li>
+                        <li>Weak-topic recovery plan</li>
+                        <li>Final readiness review before exam</li>
+                    </ul>
+                    <a class="btn btn-primary" href="#apply">Enroll at 49 INR</a>
+                </article>
+            </div>
+
+            <p class="plans-footnote"><i class="fas fa-circle-info"></i> Advanced mentorship tiers are intentionally hidden until they are production-ready.</p>
+        </div>
+    </section>
+
+    <section class="mentorship-section mentorship-steps">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <span class="step-number">1</span>
+                    <h3>Choose Your Plan</h3>
+                    <p>Select free guidance or the paid 49 INR mentorship track.</p>
+                </div>
+                <div class="step-card">
+                    <span class="step-number">2</span>
+                    <h3>Pick Your Course</h3>
+                    <p>Choose the certification course you want support with.</p>
+                </div>
+                <div class="step-card">
+                    <span class="step-number">3</span>
+                    <h3>Start With A Roadmap</h3>
+                    <p>Get a clear action plan and begin with weekly milestones.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="apply" class="mentorship-section mentorship-apply">
+        <div class="container">
+            <h2 class="section-title">Apply For Mentorship</h2>
+            <p class="section-subtitle">Share basic details and your target course. This form is for interest collection.</p>
+
+            <form class="mentorship-form" id="mentorshipForm">
+                <div class="form-grid">
+                    <label>
+                        Full Name
+                        <input type="text" name="name" required placeholder="Your name">
+                    </label>
+                    <label>
+                        Email
+                        <input type="email" name="email" required placeholder="your@email.com">
+                    </label>
+                    <label>
+                        Plan
+                        <select name="plan" required>
+                            <option value="">Select plan</option>
+                            <option value="community-free">Community Guidance - Free</option>
+                            <option value="starter-sprint-free">Starter Cert Sprint - Free</option>
+                            <option value="focused-49">Focused Mentorship - 49 INR per course</option>
+                        </select>
+                    </label>
+                    <label>
+                        Target Course
+                        <input type="text" name="course" required placeholder="Example: AI-103 or AB-731">
+                    </label>
+                </div>
+                <label>
+                    Your Goal
+                    <textarea name="goal" rows="4" placeholder="Tell us what you want to achieve in the next 4-8 weeks"></textarea>
+                </label>
+                <button class="btn btn-primary" type="submit">Submit Application</button>
+                <p class="form-note" id="mentorshipFormMsg" aria-live="polite"></p>
+            </form>
+        </div>
+    </section>
+
+    <div id="site-footer"></div>
+
+    <script src="js/layout.js"></script>
+    <script src="script.js"></script>
+    <script>
+        (function () {
+            var form = document.getElementById('mentorshipForm');
+            var msg = document.getElementById('mentorshipFormMsg');
+            if (!form || !msg) return;
+
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                msg.textContent = 'Thanks. Your mentorship request is recorded. We will contact you soon.';
+                form.reset();
+            });
+        })();
+    </script>
+</body>
+</html>
