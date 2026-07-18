@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="SAP Certified Generative AI Developer badge">
+  <defs>
+    <linearGradient id="sapBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00AEEF"/>
+      <stop offset="1" stop-color="#0057B8"/>
+    </linearGradient>
+    <linearGradient id="sapRing" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0FAAFF"/>
+      <stop offset="1" stop-color="#003A73"/>
+    </linearGradient>
+  </defs>
+  <!-- Outer certification ring -->
+  <circle cx="60" cy="60" r="56" fill="#fff" stroke="url(#sapRing)" stroke-width="6"/>
+  <circle cx="60" cy="60" r="47" fill="none" stroke="#0057B8" stroke-width="1.5" opacity="0.35"/>
+  <!-- SAP parallelogram logo -->
+  <polygon points="20,48 100,48 88,80 32,80" fill="url(#sapBlue)"/>
+  <text x="60" y="72" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#ffffff" letter-spacing="1">SAP</text>
+  <!-- Credential labels -->
+  <text x="60" y="26" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="8.5" font-weight="700" fill="#003A73">CERTIFIED</text>
+  <text x="60" y="94" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="7.5" font-weight="700" fill="#0057B8">GENERATIVE AI</text>
+  <text x="60" y="103" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="7.5" font-weight="700" fill="#0057B8">DEVELOPER</text>
+</svg>

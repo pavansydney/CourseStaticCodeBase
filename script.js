@@ -14746,6 +14746,441 @@ SELECT * FROM ML.EVALUATE(MODEL \`ds.churn\`);`
                 }
             ]
         }
+    ],
+    sapGenAiDeveloper: [
+        {
+            number: "C_AIG · Module 1",
+            title: "SAP Generative AI Foundations",
+            description: "Understand generative AI on SAP Business Technology Platform and where the Generative AI Hub fits.",
+            duration: "55 min",
+            lessons: "3 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Generative AI & LLM basics",
+                "SAP BTP AI portfolio",
+                "Generative AI Hub overview"
+            ],
+            detailedDescription: "This domain introduces generative AI concepts and how SAP delivers them through SAP Business Technology Platform (BTP). You learn what large language models do, the SAP AI portfolio, and the role of the Generative AI Hub in SAP AI Core.",
+            detailedContent: [
+                {
+                    title: "Generative AI & LLM Basics",
+                    content: `<strong>Generative AI</strong> uses large language models (LLMs) to produce text, code, and structured output from natural-language prompts.
+
+<strong>Key ideas:</strong>
+• LLMs predict the next token from context
+• <strong>Tokens</strong>, context windows, and temperature shape output
+• Foundation models are adapted through prompting, RAG, and fine-tuning
+
+<strong>Exam tip:</strong> Know the difference between prompting, retrieval augmentation, and fine-tuning as adaptation strategies.`
+                },
+                {
+                    title: "SAP BTP AI Portfolio",
+                    content: `<strong>SAP Business Technology Platform (BTP)</strong> is where SAP AI capabilities are built and consumed.
+
+<strong>Core building blocks:</strong>
+• <strong>SAP AI Core</strong> - runtime for training and serving AI
+• <strong>SAP AI Launchpad</strong> - central operations UI
+• <strong>Generative AI Hub</strong> - access to leading foundation models
+• <strong>SAP HANA Cloud Vector Engine</strong> - embeddings and similarity search
+
+<strong>Exam tip:</strong> AI Core runs the workloads; AI Launchpad manages them.`
+                },
+                {
+                    title: "Generative AI Hub Overview",
+                    content: `The <strong>Generative AI Hub</strong> in SAP AI Core gives trusted, governed access to multiple foundation models.
+
+<strong>Capabilities:</strong>
+• A single API and SDK across model providers
+• Prompt experimentation in the hub
+• Content filtering and data masking for trust
+• Orchestration of prompts, grounding, and filtering
+
+<strong>Exam tip:</strong> The Generative AI Hub abstracts model providers behind one consistent, governed interface.`
+                }
+            ]
+        },
+        {
+            number: "C_AIG · Module 2",
+            title: "SAP AI Core & AI Launchpad",
+            description: "Provision, configure, and operate generative AI workloads with SAP AI Core and SAP AI Launchpad.",
+            duration: "60 min",
+            lessons: "4 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Resource groups & configurations",
+                "Deployments & model access",
+                "SAP AI Launchpad operations",
+                "Security & entitlements"
+            ],
+            detailedDescription: "This domain covers the operational backbone: setting up SAP AI Core, creating configurations and deployments for foundation models, and managing everything through SAP AI Launchpad with proper security.",
+            detailedContent: [
+                {
+                    title: "Resource Groups & Configurations",
+                    content: `<strong>SAP AI Core</strong> isolates work using <strong>resource groups</strong>.
+
+<strong>Key objects:</strong>
+• <strong>Resource group:</strong> tenant-level isolation of artifacts and secrets
+• <strong>Configuration:</strong> a reusable definition of a workload (model, scenario, parameters)
+• <strong>Executable/scenario:</strong> the template a configuration is based on
+
+<strong>Exam tip:</strong> A configuration is the recipe; a deployment is the running instance.`
+                },
+                {
+                    title: "Deployments & Model Access",
+                    content: `A <strong>deployment</strong> serves a foundation model behind an inference endpoint.
+
+<strong>Flow:</strong>
+1. Create a configuration for the target model
+2. Start a deployment from that configuration
+3. Call the deployment URL via the harmonized inference API
+
+<strong>Exam tip:</strong> Deployments expose a stable endpoint that apps and the orchestration service call.`
+                },
+                {
+                    title: "SAP AI Launchpad Operations",
+                    content: `<strong>SAP AI Launchpad</strong> is the central UI to operate AI across AI Core instances.
+
+<strong>You can:</strong>
+• Browse scenarios, configurations, and deployments
+• Test prompts in the Generative AI Hub
+• Monitor deployment status and logs
+• Manage connections to multiple AI Core runtimes
+
+<strong>Exam tip:</strong> Launchpad is for operations and experimentation, not for hosting your app code.`
+                },
+                {
+                    title: "Security & Entitlements",
+                    content: `Access is controlled through SAP BTP.
+
+<strong>Essentials:</strong>
+• <strong>Service keys</strong> and <strong>OAuth</strong> for API access
+• BTP <strong>role collections</strong> for user permissions
+• Resource-group scoping for isolation
+• Content filtering and data masking for safe outputs
+
+<strong>Exam tip:</strong> Least-privilege entitlements plus resource-group isolation keep workloads secure.`
+                }
+            ]
+        },
+        {
+            number: "C_AIG · Module 3",
+            title: "Prompt Engineering with the Generative AI Hub",
+            description: "Design effective, reusable prompts and call foundation models through the harmonized API and SDK.",
+            duration: "60 min",
+            lessons: "4 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Prompt design patterns",
+                "System vs user messages",
+                "Model parameters",
+                "Harmonized API & SDK"
+            ],
+            detailedDescription: "The largest developer domain covers prompt engineering: writing clear instructions, using message roles, tuning model parameters, and calling models programmatically through the Generative AI Hub SDK.",
+            detailedContent: [
+                {
+                    title: "Prompt Design Patterns",
+                    content: `Good prompts are specific, contextual, and structured.
+
+<strong>Patterns:</strong>
+• <strong>Zero-shot</strong> and <strong>few-shot</strong> examples
+• Role and format instructions
+• Chain-of-thought for reasoning tasks
+• Delimiters to separate instructions from data
+
+<strong>Exam tip:</strong> Provide context, constraints, and the desired output format to improve reliability.`
+                },
+                {
+                    title: "System vs User Messages",
+                    content: `Chat-style models use message <strong>roles</strong>.
+
+<strong>Roles:</strong>
+• <strong>System:</strong> sets behavior, persona, and rules
+• <strong>User:</strong> the request
+• <strong>Assistant:</strong> prior model responses for context
+
+<strong>Exam tip:</strong> Put durable rules and guardrails in the system message; put the task in the user message.`
+                },
+                {
+                    title: "Model Parameters",
+                    content: `Parameters control generation behavior.
+
+<strong>Common parameters:</strong>
+• <strong>temperature</strong> / <strong>top_p</strong> - randomness vs determinism
+• <strong>max_tokens</strong> - output length
+• <strong>frequency/presence penalties</strong> - repetition control
+
+<strong>Exam tip:</strong> Lower temperature for factual, deterministic tasks; higher for creative generation.`
+                },
+                {
+                    title: "Harmonized API & SDK",
+                    content: `The Generative AI Hub exposes a <strong>harmonized API</strong> across model providers.
+
+<strong>Developer options:</strong>
+• Native REST inference endpoints
+• The <strong>generative-ai-hub-sdk</strong> (Python)
+• LangChain-compatible interfaces
+
+<strong>Exam tip:</strong> The harmonized interface lets you switch models with minimal code changes.`
+                }
+            ]
+        },
+        {
+            number: "C_AIG · Module 4",
+            title: "Embeddings, Vector Search & RAG",
+            description: "Ground responses in enterprise data using embeddings, SAP HANA Cloud Vector Engine, and Retrieval-Augmented Generation.",
+            duration: "60 min",
+            lessons: "4 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Embeddings & vectors",
+                "SAP HANA Cloud Vector Engine",
+                "RAG pipeline design",
+                "Chunking & retrieval quality"
+            ],
+            detailedDescription: "This domain covers grounding: converting content to embeddings, storing and searching them in SAP HANA Cloud Vector Engine, and building Retrieval-Augmented Generation pipelines that keep answers accurate and current.",
+            detailedContent: [
+                {
+                    title: "Embeddings & Vectors",
+                    content: `<strong>Embeddings</strong> turn text into numeric vectors that capture meaning.
+
+<strong>Key ideas:</strong>
+• Similar content produces nearby vectors
+• Similarity is measured with cosine or dot product
+• Embedding models are called through the Generative AI Hub
+
+<strong>Exam tip:</strong> Embeddings power semantic search - the retrieval half of RAG.`
+                },
+                {
+                    title: "SAP HANA Cloud Vector Engine",
+                    content: `<strong>SAP HANA Cloud</strong> stores embeddings with its <strong>Vector Engine</strong>.
+
+<strong>Capabilities:</strong>
+• A native <strong>REAL_VECTOR</strong> column type
+• Similarity functions for nearest-neighbor search
+• Combine vector search with SQL and business data
+
+<strong>Exam tip:</strong> HANA Cloud lets you keep vectors alongside governed enterprise data for grounded retrieval.`
+                },
+                {
+                    title: "RAG Pipeline Design",
+                    content: `<strong>Retrieval-Augmented Generation (RAG)</strong> grounds an LLM in your own knowledge.
+
+<strong>Pipeline:</strong>
+1. Embed and index source documents
+2. Retrieve relevant chunks for a query
+3. Add them to the prompt as context
+4. Generate a grounded, cited answer
+
+<strong>Exam tip:</strong> RAG reduces hallucinations by anchoring generation to retrieved, trusted content.`
+                },
+                {
+                    title: "Chunking & Retrieval Quality",
+                    content: `Retrieval quality depends on how you prepare data.
+
+<strong>Best practices:</strong>
+• Chunk documents by semantic boundaries
+• Balance chunk size vs context relevance
+• Store useful metadata for filtering
+• Evaluate retrieval with representative queries
+
+<strong>Exam tip:</strong> Better chunking and metadata filtering usually improves answers more than a bigger model.`
+                }
+            ]
+        },
+        {
+            number: "C_AIG · Module 5",
+            title: "Orchestration, Grounding & Function Calling",
+            description: "Compose prompts, grounding, filtering, and tools with the SAP AI Core orchestration service.",
+            duration: "55 min",
+            lessons: "3 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Orchestration service",
+                "Grounding & templating",
+                "Function calling & agents"
+            ],
+            detailedDescription: "This domain covers the orchestration workflow in SAP AI Core that chains templating, model calls, grounding, and content filtering, plus function calling to let models trigger tools and actions.",
+            detailedContent: [
+                {
+                    title: "Orchestration Service",
+                    content: `The <strong>orchestration service</strong> in the Generative AI Hub composes generative AI steps into one call.
+
+<strong>Modules include:</strong>
+• <strong>Templating</strong> - reusable prompt templates
+• <strong>Model configuration</strong> - which model and parameters
+• <strong>Grounding</strong> - inject retrieved data
+• <strong>Content filtering</strong> and <strong>data masking</strong>
+
+<strong>Exam tip:</strong> Orchestration lets you combine templating, grounding, and filtering without wiring each step yourself.`
+                },
+                {
+                    title: "Grounding & Templating",
+                    content: `<strong>Templating</strong> defines a prompt with placeholders filled at runtime.
+
+<strong>Grounding module:</strong>
+• Retrieves relevant documents (e.g., from HANA Cloud)
+• Injects them into the template
+• Keeps responses specific and current
+
+<strong>Exam tip:</strong> Templating + grounding in orchestration is the managed way to build RAG on SAP.`
+                },
+                {
+                    title: "Function Calling & Agents",
+                    content: `<strong>Function calling</strong> lets a model request a tool with structured arguments.
+
+<strong>Flow:</strong>
+1. Describe available functions/tools to the model
+2. The model returns a structured call
+3. Your app runs it and returns the result
+4. The model uses the result to respond
+
+<strong>Exam tip:</strong> Function calling is the foundation for agentic workflows that take real actions on SAP data.`
+                }
+            ]
+        },
+        {
+            number: "C_AIG · Module 6",
+            title: "Responsible AI, Trust & Operations",
+            description: "Apply content filtering, data masking, and monitoring to ship generative AI responsibly on SAP BTP.",
+            duration: "50 min",
+            lessons: "3 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Content filtering & data masking",
+                "Responsible & ethical AI",
+                "Monitoring & lifecycle"
+            ],
+            detailedDescription: "This domain covers trust and operations: protecting sensitive data with masking, filtering harmful content, following SAP's responsible AI principles, and monitoring deployments through their lifecycle.",
+            detailedContent: [
+                {
+                    title: "Content Filtering & Data Masking",
+                    content: `SAP builds trust directly into the Generative AI Hub.
+
+<strong>Guardrails:</strong>
+• <strong>Content filtering</strong> on inputs and outputs
+• <strong>Data masking</strong> of PII before it reaches the model
+• Configurable within orchestration
+
+<strong>Exam tip:</strong> Masking protects sensitive data; filtering blocks harmful or unwanted content.`
+                },
+                {
+                    title: "Responsible & Ethical AI",
+                    content: `SAP follows guiding principles for <strong>ethical AI</strong>.
+
+<strong>Principles emphasize:</strong>
+• Human agency and oversight
+• Transparency and explainability
+• Fairness and bias mitigation
+• Data privacy and security
+
+<strong>Exam tip:</strong> Responsible AI is a design requirement, not an afterthought - keep humans in the loop for high-impact decisions.`
+                },
+                {
+                    title: "Monitoring & Lifecycle",
+                    content: `Operate generative AI workloads reliably after launch.
+
+<strong>Practices:</strong>
+• Monitor deployment health and logs in AI Launchpad
+• Track cost, latency, and token usage
+• Version configurations and prompts
+• Re-evaluate grounding sources over time
+
+<strong>Exam tip:</strong> Treat deployments and prompts as versioned artifacts you monitor and iterate on.`
+                }
+            ]
+        },
+        {
+            number: "C_AIG · Module 7",
+            title: "Hands-On Labs & Exam Readiness",
+            description: "Guided Generative AI Hub and SAP AI Core labs plus a domain-mapped study plan and exam-day strategy for the C_AIG exam.",
+            duration: "55 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Lab: Call a model with the SDK",
+                "Lab: Build a RAG pipeline on HANA Cloud",
+                "Lab: Orchestration with grounding",
+                "Exam domain study plan",
+                "Exam-day strategy"
+            ],
+            detailedDescription: "Turn C_AIG concepts into practice using SAP AI Core, the Generative AI Hub, and SAP HANA Cloud, then map your study to the exam domains and apply a practical exam-day strategy.",
+            detailedContent: [
+                {
+                    title: "Lab: Call a Model with the SDK",
+                    content: `<strong>Goal:</strong> run your first generative AI call on SAP.
+
+<strong>Steps:</strong>
+1. Provision SAP AI Core and bind a service key.
+2. Create a configuration and deployment for a foundation model.
+3. Install the <strong>generative-ai-hub-sdk</strong> and authenticate.
+4. Send a prompt and read the response.
+
+<strong>Takeaway:</strong> A deployment plus the harmonized SDK is all you need to call a model.`
+                },
+                {
+                    title: "Lab: Build a RAG Pipeline on HANA Cloud",
+                    content: `<strong>Goal:</strong> ground answers in your own documents.
+
+<strong>Steps:</strong>
+1. Chunk and embed source documents via the hub.
+2. Store vectors in a HANA Cloud REAL_VECTOR column.
+3. Retrieve top matches for a query with similarity search.
+4. Add retrieved chunks to the prompt and generate an answer.
+
+<strong>Takeaway:</strong> Embeddings + HANA Cloud Vector Engine + prompting = grounded, accurate responses.`
+                },
+                {
+                    title: "Lab: Orchestration with Grounding",
+                    content: `<strong>Goal:</strong> use the managed orchestration workflow.
+
+<strong>Steps:</strong>
+1. Define a prompt template with placeholders.
+2. Configure the grounding module to retrieve context.
+3. Enable content filtering and data masking.
+4. Run the orchestrated call and inspect each module's output.
+
+<strong>Takeaway:</strong> Orchestration composes templating, grounding, and filtering into a single trusted call.`
+                },
+                {
+                    title: "Exam Domain Study Plan",
+                    content: `Map your study to the C_AIG exam areas.
+
+<strong>Foundations & platform:</strong> Modules 1-2 (BTP, AI Core, AI Launchpad).
+<strong>Prompt engineering:</strong> Module 3 (design, roles, parameters, SDK).
+<strong>Grounding & RAG:</strong> Module 4 (embeddings, HANA Cloud, retrieval).
+<strong>Orchestration & tools:</strong> Module 5 (orchestration, function calling).
+<strong>Trust & operations:</strong> Module 6 plus Module 7 labs.
+
+<strong>Recommended plan:</strong>
+• Week 1: Modules 1-2 + SDK lab
+• Week 2: Modules 3-4 + RAG lab
+• Week 3: Modules 5-6 + orchestration lab
+• Week 4: Review + practice questions
+
+<strong>Pair with:</strong> the official SAP Learning journey and hands-on time in an SAP BTP trial or free-tier account.`
+                },
+                {
+                    title: "Exam-Day Strategy",
+                    content: `The C_AIG exam is developer- and scenario-based.
+
+<strong>During the exam:</strong>
+• Match scenarios to the right building block (deployment, orchestration, grounding, function calling)
+• When accuracy is the goal, think RAG with HANA Cloud embeddings
+• When privacy or safety is mentioned, think data masking and content filtering
+• When tools/actions are needed, think function calling
+• Prefer the harmonized API and orchestration over hard-coding a single provider
+
+<strong>Mindset:</strong> you are building trusted, grounded generative AI apps on SAP BTP.`
+                }
+            ]
+        }
     ]
 };
 
@@ -14967,6 +15402,23 @@ const quizData = {
         { q: "Which metric is most appropriate for a highly imbalanced binary classifier?", options: ["Raw accuracy", "F1 score (or AUC-PR)", "Mean squared error", "R-squared"], answer: 1, explain: "With class imbalance, accuracy is misleading; F1 (and precision-recall AUC) better reflect performance on the minority class." },
         { q: "SageMaker automatic model tuning finds good hyperparameters by:", options: ["Only manual trial and error", "Automated search (e.g., Bayesian or random) over defined ranges", "Never searching", "Deleting features at random"], answer: 1, explain: "SageMaker hyperparameter tuning runs an automated search strategy over the ranges you specify." },
         { q: "To deploy two model versions and split live traffic between them, you use:", options: ["A single production variant", "Multiple production variants (A/B testing) on one endpoint", "Batch transform", "SageMaker Ground Truth"], answer: 1, explain: "An endpoint can host multiple production variants with weighted traffic to A/B test models in production." }
+    ],
+    'panel-sap-caig': [
+        { q: "Which SAP BTP service provides governed access to multiple foundation models through one harmonized interface?", options: ["Generative AI Hub in SAP AI Core", "SAP Fiori", "SAP Build Apps", "SAP Signavio"], answer: 0, explain: "The Generative AI Hub in SAP AI Core gives trusted, governed access to leading foundation models behind one API and SDK." },
+        { q: "In SAP AI Core, what is the difference between a configuration and a deployment?", options: ["They are identical", "A configuration is the reusable recipe; a deployment is the running, callable instance", "A deployment is the recipe; a configuration is the endpoint", "Neither is used for models"], answer: 1, explain: "A configuration defines a workload (model, scenario, parameters); a deployment is the running instance that exposes an inference endpoint." },
+        { q: "SAP AI Launchpad is primarily used to:", options: ["Host your application backend code", "Operate, monitor, and experiment with AI across AI Core instances", "Replace SAP HANA Cloud", "Store source code repositories"], answer: 1, explain: "AI Launchpad is the central operations and experimentation UI, not a place to host application code." },
+        { q: "SAP AI Core isolates artifacts and secrets per tenant using:", options: ["Resource groups", "Route tables", "Fiori tiles", "Transport requests"], answer: 0, explain: "Resource groups provide tenant-level isolation of artifacts, configurations, deployments, and secrets." },
+        { q: "In chat-style prompting, durable rules and persona should go in the:", options: ["User message", "System message", "Assistant message", "Function result"], answer: 1, explain: "The system message sets behavior, persona, and guardrails; the user message carries the specific task." },
+        { q: "For factual, deterministic output you should generally set temperature:", options: ["High", "Low", "It has no effect", "To max_tokens"], answer: 1, explain: "Lower temperature reduces randomness, which suits factual and deterministic tasks." },
+        { q: "Embeddings are best described as:", options: ["Compressed images", "Numeric vectors that capture the meaning of text for similarity search", "Encrypted passwords", "SQL indexes only"], answer: 1, explain: "Embeddings map text to vectors where similar meanings are near each other, enabling semantic search." },
+        { q: "Where can you natively store and search vector embeddings alongside business data on SAP?", options: ["SAP HANA Cloud Vector Engine", "SAP GUI", "SAP Web IDE", "ABAP Dictionary"], answer: 0, explain: "SAP HANA Cloud provides a native REAL_VECTOR type and similarity search for embeddings." },
+        { q: "Retrieval-Augmented Generation (RAG) primarily helps by:", options: ["Increasing token limits", "Grounding responses in retrieved, trusted content to reduce hallucinations", "Training the model from scratch", "Encrypting the network"], answer: 1, explain: "RAG retrieves relevant context and adds it to the prompt so answers stay accurate and current." },
+        { q: "The SAP AI Core orchestration service lets you combine, in one call:", options: ["Only model inference", "Templating, model configuration, grounding, and content filtering", "Only data masking", "Networking and DNS"], answer: 1, explain: "Orchestration composes templating, grounding, model calls, and filtering into a single managed workflow." },
+        { q: "Function calling enables a model to:", options: ["Retrain itself", "Return a structured request so your app can run a tool/API and feed results back", "Delete deployments", "Bypass authentication"], answer: 1, explain: "Function calling produces structured tool calls, the foundation of agentic workflows that take real actions." },
+        { q: "To prevent sensitive PII from reaching a foundation model, you use:", options: ["Data masking", "Provisioned throughput", "A larger context window", "A CDN"], answer: 0, explain: "Data masking removes or obfuscates PII before prompts reach the model, part of SAP's trust guardrails." },
+        { q: "Content filtering in the Generative AI Hub is applied to:", options: ["Only outputs", "Only inputs", "Both inputs and outputs", "Neither"], answer: 2, explain: "Content filtering can screen both prompts (inputs) and generated responses (outputs) for harmful content." },
+        { q: "Which developer option lets you switch models with minimal code changes?", options: ["The harmonized API/SDK of the Generative AI Hub", "Hard-coding one provider's SDK", "Editing ABAP reports", "Rewriting the app per model"], answer: 0, explain: "The harmonized interface abstracts providers, so changing models requires little code change." },
+        { q: "SAP's responsible AI principles emphasize:", options: ["Maximum automation with no oversight", "Human oversight, transparency, fairness, and data privacy", "Ignoring bias", "Removing audit logs"], answer: 1, explain: "SAP's ethical AI principles stress human agency, transparency, fairness/bias mitigation, and privacy." }
     ]
 };
 
@@ -15072,6 +15524,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupDropdown();
     setupProviderMarquee();
     setupPathFinder();
+    setupRoadmapTabs();
     setupNavToggle();
 });
 
@@ -15251,6 +15704,7 @@ function loadModules() {
     loadModulesIntoGrid('gcp-genai-leader-grid', courseData.gcpGenAiLeader);
     loadModulesIntoGrid('gcp-mle-grid', courseData.gcpMlEngineer);
     loadModulesIntoGrid('salesforce-agentforce-grid', courseData.salesforceAgentforce);
+    loadModulesIntoGrid('sap-genai-developer-grid', courseData.sapGenAiDeveloper);
     // AI Engineering: Zero to Hero (defined in js/ai-courses.js, Courses page only)
     loadModulesIntoGrid('deep-learning-grid', courseData.deepLearning);
     loadModulesIntoGrid('generative-ai-grid', courseData.generativeAI);
@@ -17092,6 +17546,9 @@ function setupPathFinder() {
         'salesforce|beginner':      { name: 'Agentforce Specialist', why: 'Learn to build and deploy Salesforce Agentforce AI agents.', section: 'salesforce-certifications', tab: 'panel-agentforce', provider: 'salesforce' },
         'salesforce|developer':     { name: 'Agentforce Specialist', why: 'Build agents, prompts, and actions on the Salesforce Platform.', section: 'salesforce-certifications', tab: 'panel-agentforce', provider: 'salesforce' },
         'salesforce|datascientist': { name: 'Agentforce Specialist', why: 'Ground agents in Data Cloud and design effective prompts.', section: 'salesforce-certifications', tab: 'panel-agentforce', provider: 'salesforce' },
+        'sap|beginner':      { name: 'C_AIG · SAP Generative AI Developer', why: 'Learn to build generative AI apps on SAP BTP with the Generative AI Hub and SAP AI Core.', section: 'sap-certifications', tab: 'panel-sap-caig', provider: 'sap' },
+        'sap|developer':     { name: 'C_AIG · SAP Generative AI Developer', why: 'Build prompts, RAG, and orchestration on SAP BTP with SAP AI Core and HANA Cloud.', section: 'sap-certifications', tab: 'panel-sap-caig', provider: 'sap' },
+        'sap|datascientist': { name: 'C_AIG · SAP Generative AI Developer', why: 'Ground models in enterprise data using embeddings and SAP HANA Cloud Vector Engine.', section: 'sap-certifications', tab: 'panel-sap-caig', provider: 'sap' },
         'unsure|beginner':      { name: 'AWS AI Practitioner or Azure AI Fundamentals', why: 'Start with a foundational cert. AWS has the biggest market; Azure is great if your workplace uses Microsoft.', section: 'aws-certifications', tab: 'panel-aif', provider: 'aws' },
         'unsure|developer':     { name: 'AWS ML Engineer (MLA-C01)', why: 'AWS offers the broadest opportunities for developers. Prefer Azure or GCP if your company already uses them.', section: 'aws-certifications', tab: 'panel-mla', provider: 'aws' },
         'unsure|datascientist': { name: 'Google Cloud Professional ML Engineer', why: 'Google Cloud shines for data science. Azure DP-100 is a strong alternative in Microsoft shops.', section: 'gcp-certifications', tab: 'panel-gcp-mle', provider: 'gcp' }
@@ -17118,6 +17575,9 @@ function setupPathFinder() {
         result.querySelector('.path-result-btn').addEventListener('click', function () {
             goToCert(reco.section, reco.tab, reco.provider);
         });
+        // Connect the recommendation to the roadmap below so the user sees
+        // the matching provider's path without hunting for it.
+        if (reco.provider) selectRoadmapProvider(reco.provider);
     }
 
     ecoGroup.querySelectorAll('.path-opt').forEach(function (btn) {
@@ -17133,6 +17593,28 @@ function setupPathFinder() {
             selectIn(levelGroup, 'level', state.level);
             render();
         });
+    });
+}
+
+// Roadmap provider tabs: show one provider's certification path at a time
+function setupRoadmapTabs() {
+    const tabs = document.getElementById('roadmapTabs');
+    if (!tabs) return;
+    tabs.querySelectorAll('.roadmap-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            selectRoadmapProvider(tab.dataset.provider);
+        });
+    });
+}
+
+function selectRoadmapProvider(provider) {
+    const tabs = document.getElementById('roadmapTabs');
+    if (!tabs) return;
+    tabs.querySelectorAll('.roadmap-tab').forEach(function (t) {
+        t.classList.toggle('is-active', t.dataset.provider === provider);
+    });
+    document.querySelectorAll('.roadmap-track').forEach(function (track) {
+        track.classList.toggle('is-active', track.dataset.provider === provider);
     });
 }
 

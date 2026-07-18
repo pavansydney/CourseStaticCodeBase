@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find Your Path — Cloudvana</title>
-    <meta name="description" content="Not sure which AI certification to pursue? Compare Azure, AWS, Google Cloud, and Salesforce, answer two quick questions, and follow the certifications in the right order.">
+    <meta name="description" content="Not sure which AI certification to pursue? Compare Azure, AWS, Google Cloud, Salesforce, and SAP, answer two quick questions, and follow the certifications in the right order.">
     <meta name="author" content="Chilakalapalli Pavan Kalyan">
     <meta name="theme-color" content="#4285f4">
     <meta name="google-site-verification" content="okR4wrh-4aH5RLFmJPOSof5rAZKjbeRNU5VB0J33UYk" />
@@ -20,36 +20,11 @@
     <section id="find-your-path" class="path-section page-section">
         <div class="container">
             <h2 class="section-title">Find Your Path</h2>
-            <p class="section-subtitle">Compare the four providers, answer two quick questions, then follow the certifications in the right order.</p>
+            <p class="section-subtitle">Answer two quick questions and we'll recommend the certification that fits &mdash; then follow the roadmap to reach it.</p>
 
-            <!-- Provider guidance (start here) -->
-            <h3 class="path-subheading">1. Which provider is right for you?</h3>
-            <div class="provider-guide-grid">
-                <div class="provider-guide-card">
-                    <h4><i class="fab fa-microsoft" style="color:#00A4EF;"></i> Microsoft Azure</h4>
-                    <p>Best for teams already using Microsoft 365, Azure, or Copilot who want AI that integrates seamlessly into their existing ecosystem.</p>
-                    <button type="button" class="btn btn-secondary" onclick="goToCert('certifications','panel-ai-901','azure')">Explore Azure &rarr;</button>
-                </div>
-                <div class="provider-guide-card">
-                    <h4><i class="fab fa-aws" style="color:#FF9900;"></i> AWS</h4>
-                    <p>Best for the broadest job market and the widest catalog of AI/ML services, from Bedrock to SageMaker, with strong industry adoption.</p>
-                    <button type="button" class="btn btn-secondary" onclick="goToCert('aws-certifications','panel-aif','aws')">Explore AWS &rarr;</button>
-                </div>
-                <div class="provider-guide-card">
-                    <h4><i class="fab fa-google" style="color:#4285F4;"></i> Google Cloud</h4>
-                    <p>Best for data-heavy and ML-focused roles built around Vertex AI, BigQuery, and Gemini, with strong data science community support.</p>
-                    <button type="button" class="btn btn-secondary" onclick="goToCert('gcp-certifications','panel-genai-leader','gcp')">Explore Google Cloud &rarr;</button>
-                </div>
-                <div class="provider-guide-card">
-                    <h4><i class="fab fa-salesforce" style="color:#00A1E0;"></i> Salesforce</h4>
-                    <p>Best for CRM, Service, or Sales professionals who want to build and deploy Agentforce AI agents within the Salesforce ecosystem.</p>
-                    <button type="button" class="btn btn-secondary" onclick="goToCert('salesforce-certifications','panel-agentforce','salesforce')">Explore Salesforce &rarr;</button>
-                </div>
-            </div>
-
-            <!-- Interactive recommender -->
-            <h3 class="path-subheading">2. Still deciding? Answer two quick questions</h3>
-            <div class="path-recommender">
+            <!-- Step 1: guided recommender (primary action) -->
+            <div class="path-recommender path-recommender--hero">
+                <p class="path-rec-lead"><i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i> Get your personalized recommendation</p>
                 <div class="path-step">
                     <p class="path-q"><span class="path-num">1</span> Which cloud platform is most relevant to your role?</p>
                     <div class="path-options" id="path-eco">
@@ -57,6 +32,7 @@
                         <button type="button" class="path-opt" data-eco="aws">AWS</button>
                         <button type="button" class="path-opt" data-eco="gcp">Google Cloud</button>
                         <button type="button" class="path-opt" data-eco="salesforce">Salesforce</button>
+                        <button type="button" class="path-opt" data-eco="sap">SAP</button>
                         <button type="button" class="path-opt" data-eco="unsure">Not sure yet</button>
                     </div>
                 </div>
@@ -71,12 +47,20 @@
                 <div class="path-result" id="path-result" hidden></div>
             </div>
 
-            <!-- Learning roadmap -->
-            <h3 class="path-subheading">3. Follow the right order</h3>
-            <p class="path-note">Start with the <span class="lvl lvl-foundation">Foundational</span> exam, then choose the role-based certifications that match your job. The <span class="lvl lvl-associate">Associate</span> and <span class="lvl lvl-pro">Professional</span> exams are <em>not</em> a strict sequence &mdash; and codes like <strong>AI-901</strong> or <strong>DP-100</strong> are just exam IDs, not an order.</p>
+            <!-- Step 2: roadmap, one provider at a time -->
+            <h3 class="path-subheading">Follow the roadmap</h3>
+            <p class="path-note">Pick a provider to see its path. Start with the <span class="lvl lvl-foundation">Foundational</span> exam, then add the role-based certifications that match your job &mdash; the <span class="lvl lvl-associate">Associate</span> and <span class="lvl lvl-pro">Professional</span> exams are <em>not</em> a strict sequence.</p>
+
+            <div class="roadmap-tabs" id="roadmapTabs" role="tablist">
+                <button type="button" class="roadmap-tab is-active" data-provider="azure"><i class="fab fa-microsoft" aria-hidden="true"></i> Azure</button>
+                <button type="button" class="roadmap-tab" data-provider="aws"><i class="fab fa-aws" aria-hidden="true"></i> AWS</button>
+                <button type="button" class="roadmap-tab" data-provider="gcp"><i class="fab fa-google" aria-hidden="true"></i> Google Cloud</button>
+                <button type="button" class="roadmap-tab" data-provider="salesforce"><i class="fab fa-salesforce" aria-hidden="true"></i> Salesforce</button>
+                <button type="button" class="roadmap-tab" data-provider="sap"><img src="assets/sap.svg" alt="" class="roadmap-tab-logo"> SAP</button>
+            </div>
 
             <div class="roadmap">
-                <div class="roadmap-track" data-provider="azure">
+                <div class="roadmap-track is-active" data-provider="azure">
                     <div class="roadmap-provider"><i class="fab fa-microsoft" style="color:#00A4EF;"></i> Azure</div>
                     <div class="roadmap-flow">
                         <button type="button" class="roadmap-step is-start" onclick="goToCert('certifications','panel-ai-901','azure')">
@@ -148,7 +132,63 @@
                         </button>
                     </div>
                 </div>
+                <div class="roadmap-track" data-provider="sap">
+                    <div class="roadmap-provider"><img src="assets/sap.svg" alt="SAP" class="roadmap-provider-logo"> SAP</div>
+                    <div class="roadmap-flow">
+                        <button type="button" class="roadmap-step is-start" onclick="goToCert('sap-certifications','panel-sap-caig','sap')">
+                            <span class="roadmap-dot"><i class="fas fa-flag"></i></span>
+                            <span class="roadmap-info"><span class="lvl lvl-associate">Associate</span><span class="roadmap-name">C_AIG &middot; SAP Generative AI Developer</span><span class="roadmap-start">Start here</span></span>
+                        </button>
+                    </div>
+                </div>
             </div>
+
+            <!-- Reference: full provider comparison (secondary, on demand) -->
+            <details class="provider-compare">
+                <summary><span class="provider-compare-summary"><i class="fas fa-circle-info" aria-hidden="true"></i> Compare all five providers side by side</span><i class="fas fa-chevron-down provider-compare-chevron" aria-hidden="true"></i></summary>
+                <div class="provider-guide-grid">
+                    <div class="provider-guide-card provider-guide-card--azure">
+                        <div class="provider-guide-head">
+                            <span class="provider-guide-icon"><i class="fab fa-microsoft" aria-hidden="true"></i></span>
+                            <h4>Microsoft Azure</h4>
+                        </div>
+                        <p>Best for teams already using Microsoft 365, Azure, or Copilot who want AI that integrates seamlessly into their existing ecosystem.</p>
+                        <button type="button" class="provider-guide-cta" onclick="goToCert('certifications','panel-ai-901','azure')" aria-label="Explore Azure certifications">Explore Azure <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="provider-guide-card provider-guide-card--aws">
+                        <div class="provider-guide-head">
+                            <span class="provider-guide-icon"><i class="fab fa-aws" aria-hidden="true"></i></span>
+                            <h4>AWS</h4>
+                        </div>
+                        <p>Best for the broadest job market and the widest catalog of AI/ML services, from Bedrock to SageMaker, with strong industry adoption.</p>
+                        <button type="button" class="provider-guide-cta" onclick="goToCert('aws-certifications','panel-aif','aws')" aria-label="Explore AWS certifications">Explore AWS <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="provider-guide-card provider-guide-card--gcp">
+                        <div class="provider-guide-head">
+                            <span class="provider-guide-icon"><i class="fab fa-google" aria-hidden="true"></i></span>
+                            <h4>Google Cloud</h4>
+                        </div>
+                        <p>Best for data-heavy and ML-focused roles built around Vertex AI, BigQuery, and Gemini, with strong data science community support.</p>
+                        <button type="button" class="provider-guide-cta" onclick="goToCert('gcp-certifications','panel-genai-leader','gcp')" aria-label="Explore Google Cloud certifications">Explore Google Cloud <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="provider-guide-card provider-guide-card--salesforce">
+                        <div class="provider-guide-head">
+                            <span class="provider-guide-icon"><i class="fab fa-salesforce" aria-hidden="true"></i></span>
+                            <h4>Salesforce</h4>
+                        </div>
+                        <p>Best for CRM, Service, or Sales professionals who want to build and deploy Agentforce AI agents within the Salesforce ecosystem.</p>
+                        <button type="button" class="provider-guide-cta" onclick="goToCert('salesforce-certifications','panel-agentforce','salesforce')" aria-label="Explore Salesforce certifications">Explore Salesforce <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+                    </div>
+                    <div class="provider-guide-card provider-guide-card--sap">
+                        <div class="provider-guide-head">
+                            <span class="provider-guide-icon provider-guide-icon--img"><img src="assets/sap.svg" alt="SAP"></span>
+                            <h4>SAP</h4>
+                        </div>
+                        <p>Best for SAP and enterprise developers who want to build generative AI apps on SAP Business Technology Platform with the Generative AI Hub and SAP AI Core.</p>
+                        <button type="button" class="provider-guide-cta" onclick="goToCert('sap-certifications','panel-sap-caig','sap')" aria-label="Explore SAP certifications">Explore SAP <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </details>
         </div>
     </section>
 

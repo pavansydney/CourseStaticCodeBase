@@ -31,6 +31,7 @@
                             '<li><a href="certifications.html?provider=aws" class="nav-link">AWS AI</a></li>' +
                             '<li><a href="certifications.html?provider=gcp" class="nav-link">GCP AI</a></li>' +
                             '<li><a href="certifications.html?provider=salesforce" class="nav-link">Salesforce AI</a></li>' +
+                            '<li><a href="certifications.html?provider=sap" class="nav-link">SAP AI</a></li>' +
                         '</ul>' +
                     '</li>' +
                     '<li><a href="mentorship.html" class="nav-link" data-nav="mentorship">Mentorship</a></li>' +
@@ -53,7 +54,7 @@
                 '<div class="footer-content">' +
                     '<div class="footer-section">' +
                         '<h4>Cloudvana</h4>' +
-                        '<p>Machine learning fundamentals and Azure, AWS, Google Cloud &amp; Salesforce AI certification prep for everyone</p>' +
+                        '<p>Machine learning fundamentals and Azure, AWS, Google Cloud, Salesforce &amp; SAP AI certification prep for everyone</p>' +
                     '</div>' +
                     '<div class="footer-section">' +
                         '<h4>Links</h4>' +
@@ -64,6 +65,7 @@
                             '<li><a href="https://aws.amazon.com/certification/" target="_blank">AWS Certifications</a></li>' +
                             '<li><a href="https://cloud.google.com/learn/certification" target="_blank">Google Cloud Certifications</a></li>' +
                             '<li><a href="https://trailhead.salesforce.com/credentials/agentforcespecialist" target="_blank">Salesforce Agentforce Certification</a></li>' +
+                            '<li><a href="https://learning.sap.com/certifications/sap-certified-associate-sap-generative-ai-developer" target="_blank">SAP Generative AI Developer Certification</a></li>' +
                         '</ul>' +
                     '</div>' +
                     '<div class="footer-section">' +

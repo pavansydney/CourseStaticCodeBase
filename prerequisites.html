@@ -22,76 +22,72 @@
             <h2 class="section-title">Prerequisites & Prework</h2>
             <p class="section-subtitle">Prepare yourself for success across the machine learning and cloud AI certification tracks</p>
 
-            <div class="prereq-intro">
-            <div class="category-section">
-                    <h3>Are these courses right for you?</h3>
-                <p>Neither the Machine Learning Crash Course nor the cloud AI certification tracks (Azure, AWS, Google Cloud, and Salesforce) assume prior AI experience. To get the most from the lessons and exercises, we recommend meeting the prerequisites below. Not every item applies to every track &mdash; treat it as a checklist for the path you choose.</p>
+            <!-- Intro banner -->
+            <div class="prereq-banner">
+                <h3>Are these courses right for you?</h3>
+                <p>Neither the Machine Learning Crash Course nor the cloud AI certification tracks (Azure, AWS, Google Cloud, Salesforce, and SAP) assume prior AI experience. Pick a topic below to see what's recommended &mdash; not every item applies to every track.</p>
             </div>
 
-            <div class="prereq-grid">
-                <!-- Prework Card -->
-                <div class="prereq-card accordion-item">
-                    <div class="prereq-header accordion-header" onclick="toggleAccordion(this)">
-                        <div class="header-left">
-                            <span class="prereq-icon"><i class="fas fa-book-reader"></i></span>
-                            <h3>Prework</h3>
-                        </div>
-                        <span class="accordion-toggle">+</span>
-                    </div>
-                    <div class="accordion-content">
-                        <div class="prereq-content">
-                            <p class="prereq-intro-text">Recommended before the machine learning &amp; data tracks:</p>
-                            <ol class="prereq-list">
-                            <li>
-                                <strong>Introduction to Machine Learning</strong>
-                                <p>If you're new to ML, take the intro course to learn fundamental concepts</p>
-                                <a href="https://developers.google.com/machine-learning/intro-to-ml" target="_blank" class="prereq-link">
-                                    <i class="fas fa-external-link-alt"></i> Visit Course
-                                </a>
-                            </li>
-                            <li>
-                                <strong>NumPy Tutorial</strong>
-                                <p>Complete the NumPy Ultraquick Tutorial for essential array operations</p>
-                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
-                                    <a href="https://numpy.org/" target="_blank" class="prereq-link">
-                                        <i class="fas fa-external-link-alt"></i> NumPy Website
-                                    </a>
-                                    <a href="https://colab.research.google.com/github/google/eng-edu/blob/main/ml/cc/exercises/numpy_ultraquick_tutorial.ipynb?utm_source=mlcc&utm_campaign=colab-external&utm_medium=referral&utm_content=mlcc-prework&hl=en" target="_blank" class="prereq-link">
-                                        <i class="fas fa-code"></i> Ultraquick Tutorial
-                                    </a>
-                                </div>
-                            </li>
-                            <li>
-                                <strong>pandas Tutorial</strong>
-                                <p>Complete the pandas UltraQuick Tutorial for data manipulation skills</p>
-                                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
-                                    <a href="https://pandas.pydata.org/" target="_blank" class="prereq-link">
-                                        <i class="fas fa-external-link-alt"></i> pandas Website
-                                    </a>
-                                    <a href="https://colab.research.google.com/github/google/eng-edu/blob/main/ml/cc/exercises/pandas_dataframe_ultraquick_tutorial.ipynb?utm_source=mlcc&utm_campaign=colab-external&utm_medium=referral&utm_content=mlcc-prework&hl=en" target="_blank" class="prereq-link">
-                                        <i class="fas fa-code"></i> Ultraquick Tutorial
-                                    </a>
-                                </div>
-                            </li>
-                        </ol>
-                        </div>
-                    </div>
-                </div>
+            <!-- Topic tabs -->
+            <div class="section-tabs prereq-tabs">
+                <button class="section-tab active" data-target="pp-prework"><i class="fas fa-book-reader" aria-hidden="true"></i> Prework</button>
+                <button class="section-tab" data-target="pp-math"><i class="fas fa-calculator" aria-hidden="true"></i> Mathematics</button>
+                <button class="section-tab" data-target="pp-programming"><i class="fas fa-code" aria-hidden="true"></i> Programming</button>
+                <button class="section-tab" data-target="pp-cloud"><i class="fas fa-cloud" aria-hidden="true"></i> Cloud Essentials</button>
+                <button class="section-tab" data-target="pp-experience"><i class="fas fa-user-graduate" aria-hidden="true"></i> Experience</button>
+            </div>
 
-                <!-- Math Prerequisites -->
-                <div class="prereq-card accordion-item">
-                    <div class="prereq-header accordion-header" onclick="toggleAccordion(this)">
-                        <div class="header-left">
-                            <span class="prereq-icon"><i class="fas fa-calculator"></i></span>
-                            <h3>Mathematics</h3>
+            <!-- Prework -->
+            <div class="tab-panel active" id="pp-prework">
+                <div class="prereq-panel">
+                    <div class="prereq-panel-head">
+                        <span class="prereq-panel-icon"><i class="fas fa-book-reader" aria-hidden="true"></i></span>
+                        <div>
+                            <h3>Prework</h3>
+                            <p class="prereq-panel-sub">Recommended before the machine learning &amp; data tracks</p>
                         </div>
-                        <span class="accordion-toggle">+</span>
                     </div>
-                    <div class="accordion-content">
-                        <div class="prereq-content">
-                            <p class="prereq-intro-text">Most relevant for the machine learning &amp; data science tracks:</p>
-                            <div class="math-section">
-                                <h4>Algebra</h4>
+                    <ul class="prereq-items">
+                        <li>
+                            <strong>Introduction to Machine Learning</strong>
+                            <p>If you're new to ML, take the intro course to learn fundamental concepts.</p>
+                            <div class="prereq-links">
+                                <a href="https://developers.google.com/machine-learning/intro-to-ml" target="_blank" rel="noopener" class="prereq-link"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Visit course</a>
+                            </div>
+                        </li>
+                        <li>
+                            <strong>NumPy Tutorial</strong>
+                            <p>Complete the NumPy Ultraquick Tutorial for essential array operations.</p>
+                            <div class="prereq-links">
+                                <a href="https://numpy.org/" target="_blank" rel="noopener" class="prereq-link"><i class="fas fa-external-link-alt" aria-hidden="true"></i> NumPy website</a>
+                                <a href="https://colab.research.google.com/github/google/eng-edu/blob/main/ml/cc/exercises/numpy_ultraquick_tutorial.ipynb?utm_source=mlcc&utm_campaign=colab-external&utm_medium=referral&utm_content=mlcc-prework&hl=en" target="_blank" rel="noopener" class="prereq-link"><i class="fas fa-code" aria-hidden="true"></i> Ultraquick tutorial</a>
+                            </div>
+                        </li>
+                        <li>
+                            <strong>pandas Tutorial</strong>
+                            <p>Complete the pandas UltraQuick Tutorial for data manipulation skills.</p>
+                            <div class="prereq-links">
+                                <a href="https://pandas.pydata.org/" target="_blank" rel="noopener" class="prereq-link"><i class="fas fa-external-link-alt" aria-hidden="true"></i> pandas website</a>
+                                <a href="https://colab.research.google.com/github/google/eng-edu/blob/main/ml/cc/exercises/pandas_dataframe_ultraquick_tutorial.ipynb?utm_source=mlcc&utm_campaign=colab-external&utm_medium=referral&utm_content=mlcc-prework&hl=en" target="_blank" rel="noopener" class="prereq-link"><i class="fas fa-code" aria-hidden="true"></i> Ultraquick tutorial</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Mathematics -->
+            <div class="tab-panel" id="pp-math">
+                <div class="prereq-panel">
+                    <div class="prereq-panel-head">
+                        <span class="prereq-panel-icon"><i class="fas fa-calculator" aria-hidden="true"></i></span>
+                        <div>
+                            <h3>Mathematics</h3>
+                            <p class="prereq-panel-sub">Most relevant for the machine learning &amp; data science tracks</p>
+                        </div>
+                    </div>
+                    <div class="prereq-cols">
+                        <div class="math-section">
+                            <h4>Algebra</h4>
                             <ul>
                                 <li>Variables, coefficients, and functions</li>
                                 <li>Linear equations (e.g., y = b + w₁x₁ + w₂x₂)</li>
@@ -121,24 +117,23 @@
                                 <li>Partial derivatives and chain rule</li>
                             </ul>
                         </div>
-                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Programming Prerequisites -->
-                <div class="prereq-card accordion-item">
-                    <div class="prereq-header accordion-header" onclick="toggleAccordion(this)">
-                        <div class="header-left">
-                            <span class="prereq-icon"><i class="fas fa-code"></i></span>
+            <!-- Programming -->
+            <div class="tab-panel" id="pp-programming">
+                <div class="prereq-panel">
+                    <div class="prereq-panel-head">
+                        <span class="prereq-panel-icon"><i class="fas fa-code" aria-hidden="true"></i></span>
+                        <div>
                             <h3>Programming</h3>
+                            <p class="prereq-panel-sub">Used across every track &mdash; ML exercises and cloud AI SDKs</p>
                         </div>
-                        <span class="accordion-toggle">+</span>
                     </div>
-                    <div class="accordion-content">
-                        <div class="prereq-content">
-                            <p class="prereq-intro-text">Used across every track &mdash; ML exercises and Azure AI SDKs:</p>
-                            <div class="math-section">
-                                <h4>Python Basics</h4>
+                    <div class="prereq-cols">
+                        <div class="math-section">
+                            <h4>Python Basics</h4>
                             <ul>
                                 <li>Defining and calling functions</li>
                                 <li>Dictionaries, lists, and sets</li>
@@ -155,71 +150,65 @@
                                 <li>Working with cloud consoles</li>
                             </ul>
                         </div>
-                        </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Cloud Essentials -->
-                <div class="prereq-card accordion-item">
-                    <div class="prereq-header accordion-header" onclick="toggleAccordion(this)">
-                        <div class="header-left">
-                            <span class="prereq-icon"><i class="fas fa-cloud"></i></span>
+            <!-- Cloud Essentials -->
+            <div class="tab-panel" id="pp-cloud">
+                <div class="prereq-panel">
+                    <div class="prereq-panel-head">
+                        <span class="prereq-panel-icon"><i class="fas fa-cloud" aria-hidden="true"></i></span>
+                        <div>
                             <h3>Cloud Essentials</h3>
-                        </div>
-                        <span class="accordion-toggle">+</span>
-                    </div>
-                    <div class="accordion-content">
-                        <div class="prereq-content">
-                            <p class="prereq-intro-text">Recommended before the cloud AI certification tracks:</p>
-                            <ol class="prereq-list">
-                                <li>
-                                    <strong>Create a Free Cloud Account</strong>
-                                    <p>Spin up a free account on your chosen cloud to try AI services hands-on</p>
-                                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
-                                        <a href="https://azure.microsoft.com/free/" target="_blank" class="prereq-link"><i class="fas fa-external-link-alt"></i> Azure</a>
-                                        <a href="https://aws.amazon.com/free/" target="_blank" class="prereq-link"><i class="fas fa-external-link-alt"></i> AWS</a>
-                                        <a href="https://cloud.google.com/free" target="_blank" class="prereq-link"><i class="fas fa-external-link-alt"></i> Google Cloud</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <strong>Set Up a Learning Profile</strong>
-                                    <p>Track progress and take practice assessments on the official learning platforms</p>
-                                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: center;">
-                                        <a href="https://learn.microsoft.com/training/" target="_blank" class="prereq-link"><i class="fas fa-external-link-alt"></i> Microsoft Learn</a>
-                                        <a href="https://skillbuilder.aws/" target="_blank" class="prereq-link"><i class="fas fa-external-link-alt"></i> AWS Skill Builder</a>
-                                        <a href="https://www.skills.google/" target="_blank" class="prereq-link"><i class="fas fa-external-link-alt"></i> Google Skills</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <strong>Learn the Cloud Console</strong>
-                                    <p>Get comfortable creating resources and navigating your cloud provider's portal or console</p>
-                                </li>
-                            </ol>
+                            <p class="prereq-panel-sub">Recommended before the cloud AI certification tracks</p>
                         </div>
                     </div>
+                    <ul class="prereq-items">
+                        <li>
+                            <strong>Create a Free Cloud Account</strong>
+                            <p>Spin up a free account on your chosen cloud to try AI services hands-on.</p>
+                            <div class="prereq-links">
+                                <a href="https://azure.microsoft.com/free/" target="_blank" rel="noopener" class="prereq-link"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Azure</a>
+                                <a href="https://aws.amazon.com/free/" target="_blank" rel="noopener" class="prereq-link"><i class="fas fa-external-link-alt" aria-hidden="true"></i> AWS</a>
+                                <a href="https://cloud.google.com/free" target="_blank" rel="noopener" class="prereq-link"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Google Cloud</a>
+                            </div>
+                        </li>
+                        <li>
+                            <strong>Set Up a Learning Profile</strong>
+                            <p>Track progress and take practice assessments on the official learning platforms.</p>
+                            <div class="prereq-links">
+                                <a href="https://learn.microsoft.com/training/" target="_blank" rel="noopener" class="prereq-link"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Microsoft Learn</a>
+                                <a href="https://skillbuilder.aws/" target="_blank" rel="noopener" class="prereq-link"><i class="fas fa-external-link-alt" aria-hidden="true"></i> AWS Skill Builder</a>
+                                <a href="https://www.skills.google/" target="_blank" rel="noopener" class="prereq-link"><i class="fas fa-external-link-alt" aria-hidden="true"></i> Google Skills</a>
+                            </div>
+                        </li>
+                        <li>
+                            <strong>Learn the Cloud Console</strong>
+                            <p>Get comfortable creating resources and navigating your cloud provider's portal or console.</p>
+                        </li>
+                    </ul>
                 </div>
+            </div>
 
-                <!-- Experience Level -->
-                <div class="prereq-card accordion-item">
-                    <div class="prereq-header accordion-header" onclick="toggleAccordion(this)">
-                        <div class="header-left">
-                            <span class="prereq-icon"><i class="fas fa-user-graduate"></i></span>
+            <!-- Experience -->
+            <div class="tab-panel" id="pp-experience">
+                <div class="prereq-panel">
+                    <div class="prereq-panel-head">
+                        <span class="prereq-panel-icon"><i class="fas fa-user-graduate" aria-hidden="true"></i></span>
+                        <div>
                             <h3>Experience Level</h3>
+                            <p class="prereq-panel-sub">Who these courses are designed for</p>
                         </div>
-                        <span class="accordion-toggle">+</span>
                     </div>
-                    <div class="accordion-content">
-                        <div class="prereq-content">
-                            <div class="experience-item">
-                                <h4>✅ Perfect if you:</h4>
-                                <ul>
-                                <li>Have little or no AI / ML background</li>
-                                <li>Want a current understanding of ML and cloud AI services</li>
-                                <li>Are comfortable with basic Python</li>
-                                <li>Want practical skills or an AI certification on Azure, AWS, Google Cloud, or Salesforce</li>
-                            </ul>
-                        </div>
-                        </div>
+                    <div class="experience-item">
+                        <h4><i class="fas fa-circle-check" aria-hidden="true"></i> Perfect if you:</h4>
+                        <ul>
+                            <li>Have little or no AI / ML background</li>
+                            <li>Want a current understanding of ML and cloud AI services</li>
+                            <li>Are comfortable with basic Python</li>
+                            <li>Want practical skills or an AI certification on Azure, AWS, Google Cloud, Salesforce, or SAP</li>
+                        </ul>
                     </div>
                 </div>
             </div>
