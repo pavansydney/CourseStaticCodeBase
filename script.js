@@ -7460,6 +7460,249 @@ for category in result.categories_analysis:
     print(category.category, "severity:", category.severity)`
                 }
             ]
+        },
+        {
+            number: "AI-901 · Module 7",
+            title: "Document Intelligence, Knowledge Mining & Service Selection",
+            description: "Round out the exam breadth: extract data from documents, mine knowledge with Azure AI Search, apply Content Safety, and choose and provision the right service.",
+            duration: "55 min",
+            lessons: "6 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Document Intelligence",
+                "Knowledge mining with Azure AI Search",
+                "Azure AI Content Safety",
+                "Single-service vs multi-service resources",
+                "Authentication: keys vs Entra ID",
+                "Choosing the right Azure AI service"
+            ],
+            detailedDescription: "AI-901 tests the full breadth of Azure AI workloads. This module covers the remaining high-value services - Document Intelligence, knowledge mining with Azure AI Search, and Content Safety - plus how to provision and secure Azure AI resources and pick the right service for a scenario.",
+            detailedContent: [
+                {
+                    title: "Document Intelligence",
+                    content: `<strong>Azure AI Document Intelligence</strong> extracts text, key-value pairs, tables, and structure from documents.
+
+<strong>Model options:</strong>
+• <strong>Prebuilt models:</strong> invoices, receipts, IDs, business cards, tax forms
+• <strong>Layout model:</strong> text, tables, and structure from any document
+• <strong>Custom models:</strong> train on your own forms
+
+<strong>Exam tip:</strong> Document Intelligence is the answer when a scenario needs structured data extracted from forms or documents - not general OCR alone.`,
+                    code: `# Extract fields from an invoice (Azure AI Document Intelligence)
+from azure.ai.documentintelligence import DocumentIntelligenceClient
+from azure.core.credentials import AzureKeyCredential
+
+client = DocumentIntelligenceClient(
+    "https://<resource>.cognitiveservices.azure.com/",
+    AzureKeyCredential("<key>"))
+
+poller = client.begin_analyze_document(
+    "prebuilt-invoice",
+    {"urlSource": "https://aka.ms/azai/invoice-sample.pdf"})
+for doc in poller.result().documents:
+    total = doc.fields.get("InvoiceTotal")
+    if total:
+        print("Invoice total:", total.get("content"))`
+                },
+                {
+                    title: "Knowledge Mining with Azure AI Search",
+                    content: `<strong>Knowledge mining</strong> makes large content sets searchable and is the backbone of enterprise RAG.
+
+<strong>Azure AI Search core objects:</strong>
+• <strong>Data source:</strong> Blob, SQL, Cosmos DB
+• <strong>Index:</strong> the searchable schema (fields, vectors)
+• <strong>Indexer:</strong> pulls and populates the index
+• <strong>Skillset:</strong> AI enrichment (OCR, entities, embeddings) during indexing
+
+<strong>Exam tip:</strong> Azure AI Search is the knowledge-mining and retrieval service - and the vector store behind grounding for generative AI.`
+                },
+                {
+                    title: "Azure AI Content Safety",
+                    content: `<strong>Azure AI Content Safety</strong> detects and filters harmful content across four categories: hate, sexual, violence, and self-harm, each with severity levels.
+
+<strong>Capabilities:</strong>
+• Analyze text and images for harmful content
+• Prompt shields against jailbreak attempts
+• Groundedness detection for hallucinations
+• Custom blocklists
+
+<strong>Exam tip:</strong> Content Safety applies to both user input and model output and is central to building responsible generative AI apps.`
+                },
+                {
+                    title: "Single-Service vs Multi-Service Resources",
+                    content: `Provisioning is a common exam topic.
+
+<strong>Single-service resource:</strong>
+• One capability (for example, just Vision)
+• Its own key and endpoint, granular billing
+
+<strong>Multi-service (Azure AI services / Foundry) resource:</strong>
+• Many capabilities behind one key and endpoint
+• Simpler management for solutions that combine services
+
+<strong>Exam tip:</strong> Prefer a multi-service resource when a solution uses several AI capabilities together.`
+                },
+                {
+                    title: "Authentication: Keys vs Entra ID",
+                    content: `Clients authenticate to Azure AI services in two main ways.
+
+<strong>API keys:</strong>
+• Simple; pass the key with each request
+• Good for development; rotate regularly; never commit to source
+
+<strong>Microsoft Entra ID (recommended for production):</strong>
+• Managed identities - no secrets in code
+• Role-based access control (least privilege)
+• Central auditing
+
+<strong>Exam tip:</strong> For production, prefer Entra ID with managed identities over keys.`
+                },
+                {
+                    title: "Choosing the Right Azure AI Service",
+                    content: `The exam frequently asks you to map a scenario to a service.
+
+<strong>Quick map:</strong>
+• Analyze images / OCR -> Azure AI Vision
+• Extract data from forms -> Document Intelligence
+• Sentiment, entities, language -> Azure AI Language
+• Speech-to-text / text-to-speech -> Azure AI Speech
+• Translate text -> Azure AI Translator
+• Search over content -> Azure AI Search
+• Generate content -> Azure OpenAI in Foundry
+• Filter harmful content -> Content Safety
+
+<strong>Rule:</strong> pick the prebuilt service that matches the workload before considering custom models.`,
+                    code: `# Map scenarios to the right Azure AI service
+services = {
+    "Read text from scanned receipts": "Document Intelligence",
+    "Detect objects in photos":        "Azure AI Vision",
+    "Summarize support tickets":       "Azure AI Language",
+    "Transcribe a meeting recording":  "Azure AI Speech",
+    "Answer from company documents":   "Azure AI Search + Azure OpenAI",
+}
+for scenario, service in services.items():
+    print(f"{scenario:34} -> {service}")`
+                }
+            ]
+        },
+        {
+            number: "AI-901 · Module 8",
+            title: "Hands-On Labs & Exam Readiness",
+            description: "Guided Azure AI Studio/Foundry labs plus a domain-mapped study plan and exam-day strategy for AI-901.",
+            duration: "55 min",
+            lessons: "6 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Lab: Language Studio sentiment",
+                "Lab: Vision Studio image analysis",
+                "Lab: Foundry playground & Azure OpenAI",
+                "Lab: Content Safety",
+                "Exam domain study plan",
+                "Exam-day strategy"
+            ],
+            detailedDescription: "Turn AI-901 concepts into practice. This module provides four guided labs you can run in a free Azure account, then maps your study to the official exam domains and gives a practical exam-day strategy.",
+            detailedContent: [
+                {
+                    title: "Lab: Language Studio Sentiment",
+                    content: `<strong>Goal:</strong> experience prebuilt NLP with no code.
+
+<strong>Steps:</strong>
+1. In the Azure portal, create an Azure AI Language resource.
+2. Open Language Studio and pick "Analyze sentiment and opinions".
+3. Paste a few product reviews and run the analysis.
+4. Note document- and sentence-level sentiment and confidence scores.
+
+<strong>Takeaway:</strong> prebuilt language features work instantly - no training required.`,
+                    code: `# The same analysis in code (Azure AI Language)
+from azure.ai.textanalytics import TextAnalyticsClient
+from azure.core.credentials import AzureKeyCredential
+
+client = TextAnalyticsClient(
+    "https://<resource>.cognitiveservices.azure.com/",
+    AzureKeyCredential("<key>"))
+result = client.analyze_sentiment(["The course was fantastic!"])[0]
+print(result.sentiment, result.confidence_scores)`
+                },
+                {
+                    title: "Lab: Vision Studio Image Analysis",
+                    content: `<strong>Goal:</strong> see computer vision capabilities firsthand.
+
+<strong>Steps:</strong>
+1. Create an Azure AI Vision resource.
+2. Open Vision Studio and try "Add captions to images".
+3. Upload an image and review the caption, tags, and objects.
+4. Try the "Extract text (OCR)" feature on a photo of text.
+
+<strong>Takeaway:</strong> one service provides captions, tags, objects, and OCR through simple APIs.`
+                },
+                {
+                    title: "Lab: Foundry Playground & Azure OpenAI",
+                    content: `<strong>Goal:</strong> experience generative AI and grounding.
+
+<strong>Steps:</strong>
+1. In Microsoft Foundry, deploy a GPT model.
+2. Open the Chat playground and set a system message.
+3. Ask a question, then add your own data to ground the answer.
+4. Compare answers with and without grounding.
+
+<strong>Takeaway:</strong> Foundry is where you build, test, and deploy generative AI; grounding on your data reduces hallucinations.`,
+                    code: `# Chat completion with Azure OpenAI in Foundry
+from openai import AzureOpenAI
+
+client = AzureOpenAI(
+    azure_endpoint="https://<resource>.openai.azure.com/",
+    api_key="<key>", api_version="2024-10-21")
+resp = client.chat.completions.create(
+    model="gpt-4o",  # your deployment name
+    messages=[{"role": "user", "content": "Explain Azure AI in one line."}])
+print(resp.choices[0].message.content)`
+                },
+                {
+                    title: "Lab: Content Safety",
+                    content: `<strong>Goal:</strong> understand responsible AI guardrails in practice.
+
+<strong>Steps:</strong>
+1. Create an Azure AI Content Safety resource.
+2. Open Content Safety Studio and try "Moderate text content".
+3. Test benign and borderline text and review category severities.
+4. Explore prompt shields for jailbreak detection.
+
+<strong>Takeaway:</strong> Content Safety screens both input and output - a core part of responsible generative AI.`
+                },
+                {
+                    title: "Exam Domain Study Plan",
+                    content: `Map your study to the official AI-901 (Azure AI Fundamentals) domains.
+
+<strong>Describe AI workloads & considerations:</strong> Modules 1 and 6 (workloads, responsible AI).
+<strong>ML principles on Azure:</strong> Module 2 (supervised/unsupervised, training, AutoML).
+<strong>Computer vision:</strong> Module 3 (classification, detection, OCR, faces).
+<strong>NLP:</strong> Module 4 plus Module 7 (language, speech, translation, Document Intelligence, knowledge mining).
+<strong>Generative AI:</strong> Module 5 plus Module 8 labs (LLMs, prompts, RAG, Foundry).
+
+<strong>Recommended plan:</strong>
+• Week 1: Modules 1-3 + Vision/Language labs
+• Week 2: Modules 4-5 + 7 + Foundry lab
+• Week 3: Modules 6 + 8 + Microsoft Learn practice assessment
+• Week 4: Review + full practice test
+
+<strong>Pair with:</strong> the free Microsoft Learn AI-900/AI-901 learning paths and official practice assessment.`
+                },
+                {
+                    title: "Exam-Day Strategy",
+                    content: `AI-901 is conceptual and scenario-based - no coding required.
+
+<strong>During the exam:</strong>
+• Match each scenario to the correct workload (vision, NLP, generative, ML)
+• Pick the prebuilt service that fits before considering custom models
+• For "combine several capabilities," choose a multi-service/Foundry resource
+• For production auth, prefer Entra ID and managed identities
+• When responsible AI is mentioned, map to the correct principle or Content Safety
+
+<strong>Mindset:</strong> you are identifying the right Azure capability for a business need, not writing code.`
+                }
+            ]
         }
     ],
 
@@ -8211,6 +8454,178 @@ for r in results:
     print(r["title"], "-", r["@search.score"])`
                 }
             ]
+        },
+        {
+            number: "AI-103 · Module 6",
+            title: "Speech, Translation & Content Understanding",
+            description: "Round out AI-103 breadth: build speech, translation, and audio/video content-understanding solutions with Azure AI.",
+            duration: "50 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Speech-to-text & text-to-speech",
+                "Speech translation",
+                "Azure AI Translator (custom)",
+                "Audio/video content understanding",
+                "Choosing the right modality service"
+            ],
+            detailedDescription: "AI-103 requires implementing speech, translation, and content-understanding features. This module covers Azure AI Speech, Translator with custom models, and analyzing audio and video content in production solutions.",
+            detailedContent: [
+                {
+                    title: "Speech-to-Text & Text-to-Speech",
+                    content: `<strong>Azure AI Speech</strong> adds voice to applications.
+
+<strong>Speech-to-text:</strong> real-time and batch transcription, custom speech models for domain terms.
+<strong>Text-to-speech:</strong> natural neural voices, SSML control, and custom neural voice (gated).
+
+<strong>Exam tip:</strong> use batch transcription for large volumes of recorded audio and real-time for live scenarios.`,
+                    code: `# Synthesize speech from text (Azure AI Speech SDK)
+import azure.cognitiveservices.speech as speechsdk
+
+cfg = speechsdk.SpeechConfig(subscription="<key>", region="<region>")
+cfg.speech_synthesis_voice_name = "en-US-JennyNeural"
+synth = speechsdk.SpeechSynthesizer(speech_config=cfg)
+synth.speak_text_async("Welcome to the AI-103 course!").get()`
+                },
+                {
+                    title: "Speech Translation",
+                    content: `<strong>Speech translation</strong> converts spoken input in one language to text or speech in another.
+
+<strong>Use cases:</strong>
+• Live multilingual meetings and captions
+• Voice assistants for global users
+
+<strong>Exam tip:</strong> speech translation combines recognition and translation in one pipeline - distinct from text-only Translator.`
+                },
+                {
+                    title: "Azure AI Translator (Custom)",
+                    content: `<strong>Azure AI Translator</strong> provides text translation across 100+ languages.
+
+<strong>Capabilities:</strong>
+• Auto language detection and transliteration
+• <strong>Custom Translator</strong> for domain-specific terminology
+• Document translation preserving format
+
+<strong>Exam tip:</strong> use Custom Translator when generic translation misses industry or brand terms.`
+                },
+                {
+                    title: "Audio/Video Content Understanding",
+                    content: `Beyond transcription, Azure extracts insights from media.
+
+<strong>Options:</strong>
+• <strong>Azure AI Video Indexer</strong> - transcripts, faces, topics, and scenes from recorded video
+• Content understanding pipelines that combine speech, vision, and language
+
+<strong>Exam tip:</strong> Video Indexer is the answer for extracting rich insights from recorded media at scale.`
+                },
+                {
+                    title: "Choosing the Right Modality Service",
+                    content: `Match the media task to the right service.
+
+<strong>Quick map:</strong>
+• Transcribe audio -> Azure AI Speech (speech-to-text)
+• Generate speech -> Azure AI Speech (text-to-speech)
+• Translate text -> Azure AI Translator
+• Translate speech -> Speech translation
+• Insights from video -> Azure AI Video Indexer
+
+<strong>Rule:</strong> choose the prebuilt modality service that matches the input and required output.`
+                }
+            ]
+        },
+        {
+            number: "AI-103 · Module 7",
+            title: "Hands-On Labs & Exam Readiness",
+            description: "Guided Foundry/SDK labs plus a domain-mapped study plan and exam-day strategy for AI-103.",
+            duration: "55 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Lab: RAG with Azure AI Search",
+                "Lab: Build an agent (Foundry Agent Service)",
+                "Lab: Document Intelligence extraction",
+                "Exam domain study plan",
+                "Exam-day strategy"
+            ],
+            detailedDescription: "Turn AI-103 skills into practice with guided labs using Microsoft Foundry and the Azure AI SDKs, then map your study to the official exam skills and apply an exam-day strategy.",
+            detailedContent: [
+                {
+                    title: "Lab: RAG with Azure AI Search",
+                    content: `<strong>Goal:</strong> ground a model on your own data.
+
+<strong>Steps:</strong>
+1. Create an Azure AI Search index and load a few documents.
+2. Add vector fields and an embedding skill.
+3. Retrieve top matches for a query and inject them into a prompt.
+4. Compare grounded vs ungrounded answers.
+
+<strong>Takeaway:</strong> vector/hybrid search in Azure AI Search is the retrieval engine for enterprise RAG.`,
+                    code: `# Retrieve grounding context from Azure AI Search
+from azure.search.documents import SearchClient
+from azure.core.credentials import AzureKeyCredential
+
+client = SearchClient("https://<search>.search.windows.net", "docs",
+                      AzureKeyCredential("<key>"))
+ctx = "\\n".join(d["content"] for d in client.search("deploy a model", top=3))
+print(ctx[:80], "...")`
+                },
+                {
+                    title: "Lab: Build an Agent (Foundry Agent Service)",
+                    content: `<strong>Goal:</strong> create an agent that uses tools.
+
+<strong>Steps:</strong>
+1. In Microsoft Foundry, create an agent with instructions.
+2. Add a tool (file search / function calling).
+3. Create a thread, post a message, and run the agent.
+4. Inspect how it plans and calls tools.
+
+<strong>Takeaway:</strong> the Foundry Agent Service manages threads, tool calls, and state so you focus on behavior.`
+                },
+                {
+                    title: "Lab: Document Intelligence Extraction",
+                    content: `<strong>Goal:</strong> extract structured data from documents.
+
+<strong>Steps:</strong>
+1. Use a prebuilt invoice or layout model.
+2. Analyze a sample document.
+3. Read fields, tables, and confidence scores.
+4. Consider when a custom model is needed.
+
+<strong>Takeaway:</strong> Document Intelligence turns unstructured documents into structured data for downstream apps.`
+                },
+                {
+                    title: "Exam Domain Study Plan",
+                    content: `Map your study to the official AI-103 skills.
+
+<strong>Plan & manage Azure AI:</strong> Module 1 (services, provisioning, auth, monitoring, cost).
+<strong>Generative & agentic solutions:</strong> Module 2 + Module 7 labs (RAG, tool calling, agents, evaluation).
+<strong>Computer vision solutions:</strong> Module 3.
+<strong>NLP / text solutions:</strong> Module 4 + Module 6 (language, speech, translation).
+<strong>Information extraction & knowledge mining:</strong> Module 5 + Module 7 (Document Intelligence, Azure AI Search).
+
+<strong>Recommended plan:</strong>
+• Weeks 1-2: Modules 1-3 + RAG lab
+• Week 3: Modules 4-6 + agent and Document Intelligence labs
+• Week 4: Module 7 + Microsoft Learn practice assessment
+
+<strong>Pair with:</strong> the Microsoft Learn AI-102/AI-103 learning paths and hands-on Azure practice.`
+                },
+                {
+                    title: "Exam-Day Strategy",
+                    content: `AI-103 is a developer exam - expect SDK, config, and scenario questions.
+
+<strong>During the exam:</strong>
+• Match the scenario to the right Azure AI service and SDK
+• For grounding, think Azure AI Search (vector/hybrid) + RAG
+• For agents, think Foundry Agent Service (threads, tools, runs)
+• For production auth, prefer Entra ID and managed identities
+• Watch for monitoring, throttling (429 + retries), and cost cues
+
+<strong>Mindset:</strong> you are the AI developer building, securing, and operating a solution.`
+                }
+            ]
         }
     ],
 
@@ -8499,6 +8914,166 @@ for k, v in kpis.items():
 2. Improve policy, prompts, workflows, and training
 3. Re-measure outcomes
 4. Scale successful patterns across teams`
+                }
+            ]
+        },
+        {
+            number: "AB-731 · Module 5",
+            title: "AI Value Cases, Metrics & Financial Governance",
+            description: "Quantify AI value, define metrics and KPIs, and govern AI spend and ROI as a transformation leader.",
+            duration: "50 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Building an AI value case",
+                "Outcome metrics & KPIs",
+                "Cost & FinOps for AI",
+                "ROI and portfolio decisions",
+                "Communicating value to executives"
+            ],
+            detailedDescription: "AI Transformation Leaders must prove value, not just deliver capability. This module covers building value cases, defining metrics, governing AI spend, and communicating ROI to executives.",
+            detailedContent: [
+                {
+                    title: "Building an AI Value Case",
+                    content: `Every initiative needs a defensible value case.
+
+<strong>Include:</strong>
+• Problem and target outcome
+• Baseline and expected improvement
+• Costs (build, run, change management)
+• Risks and mitigations
+
+<strong>Leadership principle:</strong> tie every AI initiative to a measurable business outcome before funding it.`
+                },
+                {
+                    title: "Outcome Metrics & KPIs",
+                    content: `Define how success is measured up front.
+
+<strong>Metric types:</strong>
+• Leading indicators: adoption, cycle time, quality
+• Lagging indicators: revenue, cost savings, risk reduction
+• Guardrail metrics: safety, satisfaction, error rates
+
+<strong>Exam tip:</strong> a strong leader pairs value metrics with guardrail metrics so speed does not erode trust.`
+                },
+                {
+                    title: "Cost & FinOps for AI",
+                    content: `AI cost is an operating discipline, not an afterthought.
+
+<strong>Cost drivers:</strong>
+• Token/compute usage and model choice
+• Data storage, retrieval, and pipelines
+• Human oversight and support
+
+<strong>FinOps practices:</strong> tagging and showback, budgets and alerts, right-sizing, caching, and reserved/provisioned capacity where steady.`
+                },
+                {
+                    title: "ROI and Portfolio Decisions",
+                    content: `Leaders manage a portfolio, not a single project.
+
+<strong>Decisions:</strong>
+• Fund, scale, pivot, or stop based on evidence
+• Balance quick wins with strategic bets
+• Reallocate from low-ROI to high-ROI initiatives
+
+<strong>Cadence:</strong> review the portfolio quarterly against value and guardrail metrics.`
+                },
+                {
+                    title: "Communicating Value to Executives",
+                    content: `Value must be communicated to sustain investment.
+
+<strong>Executive narrative:</strong>
+1. Outcome achieved vs target
+2. Cost and ROI
+3. Risks controlled
+4. What to fund next and why
+
+<strong>Exam tip:</strong> concise, outcome-first communication drives continued sponsorship and funding.`
+                }
+            ]
+        },
+        {
+            number: "AB-731 · Module 6",
+            title: "Playbooks & Exam Readiness",
+            description: "Practical transformation playbooks plus a study plan and exam-day strategy for the AI Transformation Leader assessment.",
+            duration: "50 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Playbook: 90-day transformation start",
+                "Playbook: Governance operating model",
+                "Playbook: Adoption & change plan",
+                "Exam domain study plan",
+                "Exam-day strategy"
+            ],
+            detailedDescription: "Turn AB-731 concepts into action with concrete leadership playbooks, then map your study to the assessment areas and apply an exam-day strategy for this strategy-focused credential.",
+            detailedContent: [
+                {
+                    title: "Playbook: 90-Day Transformation Start",
+                    content: `A practical first-90-days plan.
+
+<strong>Days 0-30:</strong> align on outcomes, assess readiness, pick 2-3 high-value use cases.
+<strong>Days 31-60:</strong> stand up governance, run pilots, define metrics.
+<strong>Days 61-90:</strong> evaluate pilots, decide scale/stop, publish a roadmap.
+
+<strong>Outcome:</strong> momentum with evidence, not a big-bang rollout.`
+                },
+                {
+                    title: "Playbook: Governance Operating Model",
+                    content: `A right-sized governance model accelerates safe delivery.
+
+<strong>Define:</strong>
+• Decision rights (who approves what)
+• Risk tiers and required controls by tier
+• Review gates and escalation paths
+• A center of excellence for standards
+
+<strong>Principle:</strong> governance should enable safe speed, not block progress.`
+                },
+                {
+                    title: "Playbook: Adoption & Change Plan",
+                    content: `Adoption determines whether value is realized.
+
+<strong>Plan elements:</strong>
+• Stakeholder mapping by impact
+• Role-specific value messaging
+• Training and enablement by job family
+• Feedback loops and champions
+
+<strong>Principle:</strong> transformation is sustained by people, not only platforms.`
+                },
+                {
+                    title: "Exam Domain Study Plan",
+                    content: `Map your study to the AI Transformation Leader assessment areas.
+
+<strong>Strategy & vision:</strong> Module 1.
+<strong>Responsible AI, governance & risk:</strong> Module 2 + Module 6 playbook.
+<strong>Operating model & delivery:</strong> Module 3.
+<strong>Adoption & culture:</strong> Module 4 + Module 6 playbook.
+<strong>Value, metrics & FinOps:</strong> Module 5.
+
+<strong>Recommended plan:</strong>
+• Week 1: Modules 1-2
+• Week 2: Modules 3-4 + playbooks
+• Week 3: Modules 5-6 + practice assessment
+• Week 4: Review + scenario practice
+
+<strong>Pair with:</strong> Microsoft's official AI Transformation Leader practice assessment.`
+                },
+                {
+                    title: "Exam-Day Strategy",
+                    content: `AB-731 is strategy- and leadership-focused.
+
+<strong>During the exam:</strong>
+• Read for the business outcome and constraint first
+• Choose options that tie to measurable value and responsible AI
+• Prefer pilot-then-scale over big-bang rollouts
+• Favor governance that enables safe speed
+• Eliminate options that ignore adoption, risk, or metrics
+
+<strong>Mindset:</strong> you are the leader steering responsible, valuable AI transformation - not an engineer.`
                 }
             ]
         }
@@ -9156,6 +9731,176 @@ monitor = MonitorSchedule(
 ml_client.schedules.begin_create_or_update(monitor).result()`
                 }
             ]
+        },
+        {
+            number: "DP-100 · Module 6",
+            title: "Responsible ML, Fairness & Interpretability",
+            description: "Apply the Responsible AI dashboard, Fairlearn, interpretability, and error analysis to build fair, explainable models on Azure ML.",
+            duration: "50 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Responsible AI dashboard",
+                "Fairness with Fairlearn",
+                "Model interpretability",
+                "Error analysis",
+                "Data drift & monitoring"
+            ],
+            detailedDescription: "Responsible ML is part of the data scientist's job. This module covers the Azure Machine Learning Responsible AI dashboard and its components - fairness (Fairlearn), interpretability, error analysis - plus monitoring deployed models for drift.",
+            detailedContent: [
+                {
+                    title: "Responsible AI Dashboard",
+                    content: `The <strong>Responsible AI dashboard</strong> in Azure ML brings model debugging tools into one view.
+
+<strong>Components:</strong>
+• Error analysis
+• Model interpretability (feature importance)
+• Fairness assessment (Fairlearn)
+• Data explorer and counterfactuals
+
+<strong>Exam tip:</strong> use the Responsible AI dashboard to diagnose where and why a model underperforms across groups.`
+                },
+                {
+                    title: "Fairness with Fairlearn",
+                    content: `<strong>Fairlearn</strong> measures and mitigates unfairness across sensitive groups.
+
+<strong>Workflow:</strong>
+• Choose sensitive features (e.g., age group)
+• Compare metrics disaggregated by group
+• Apply mitigation (e.g., reweighting) and re-measure
+
+<strong>Exam tip:</strong> fairness is about disaggregated metrics, not overall accuracy alone.`
+                },
+                {
+                    title: "Model Interpretability",
+                    content: `<strong>Interpretability</strong> explains why a model makes predictions.
+
+<strong>Approaches:</strong>
+• Global importance (which features matter overall)
+• Local explanations (why this prediction)
+
+<strong>On Azure ML:</strong> the interpret tooling produces feature importances for transparency and debugging - key for trust and compliance.`,
+                    code: `# Feature importance for transparency (Azure ML interpret)
+from azureml.interpret import ExplanationClient
+
+client = ExplanationClient.from_run(run)
+explanation = client.download_model_explanation()
+for feature, importance in explanation.get_feature_importance_dict().items():
+    print(f"{feature:20} {importance:.3f}")`
+                },
+                {
+                    title: "Error Analysis",
+                    content: `<strong>Error analysis</strong> finds where a model fails, not just how often.
+
+<strong>Value:</strong>
+• Identify cohorts with high error rates
+• Reveal data gaps or bias hotspots
+• Prioritize fixes where they matter most
+
+<strong>Exam tip:</strong> a model with good overall accuracy can still fail badly for a specific subgroup - error analysis surfaces that.`
+                },
+                {
+                    title: "Data Drift & Monitoring",
+                    content: `Deployed models degrade as live data diverges from training data.
+
+<strong>Monitor for:</strong>
+• Feature distribution changes (data drift)
+• Prediction drift
+• Data quality issues
+
+<strong>Action:</strong> alert on drift and trigger retraining - closing the MLOps loop. On Azure ML, model monitoring automates this.`
+                }
+            ]
+        },
+        {
+            number: "DP-100 · Module 7",
+            title: "Hands-On Labs & Exam Readiness (Archived - see AI-300)",
+            description: "Guided Azure ML labs and a study plan. Note: DP-100 retired June 2026; new learners should prepare for AI-300 instead.",
+            duration: "50 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Retirement note & AI-300 successor",
+                "Lab: Train & register a model",
+                "Lab: Deploy an online endpoint",
+                "Lab: Pipeline & drift monitoring",
+                "Exam-day strategy"
+            ],
+            detailedDescription: "DP-100 retired in June 2026 and is archived here for reference. New learners should prepare for AI-300 (ML Operations Engineer). These labs remain useful for Azure ML fundamentals that carry over to AI-300.",
+            detailedContent: [
+                {
+                    title: "Retirement Note & AI-300 Successor",
+                    content: `<strong>Important:</strong> DP-100 (Azure Data Scientist Associate) <strong>retired in June 2026</strong>.
+
+<strong>What to do instead:</strong>
+• New learners should prepare for <strong>AI-300 (ML Operations Engineer Associate)</strong>, the successor.
+• AI-300 covers modern MLOps and GenAIOps on Azure.
+• The Azure ML fundamentals in this track (workspaces, jobs, MLflow, endpoints, pipelines) still apply to AI-300.
+
+Use this archived content to build core Azure ML skills, then switch to the AI-300 track for current exam prep.`
+                },
+                {
+                    title: "Lab: Train & Register a Model",
+                    content: `<strong>Goal:</strong> run a training job and register the model.
+
+<strong>Steps:</strong>
+1. Create an Azure ML workspace and a compute cluster.
+2. Submit a training script as a command job.
+3. Track metrics with MLflow.
+4. Register the best model in the workspace.
+
+<strong>Takeaway:</strong> jobs + MLflow + the model registry are the core Azure ML training flow.`,
+                    code: `# Submit a training job (Azure ML SDK v2)
+from azure.ai.ml import command, Input
+
+job = command(
+    code="./src",
+    command="python train.py --data \${{inputs.data}}",
+    inputs={"data": Input(type="uri_file", path="azureml:diabetes-data:1")},
+    environment="sklearn-env:1", compute="cpu-cluster",
+    experiment_name="diabetes-training")
+ml_client.jobs.create_or_update(job)`
+                },
+                {
+                    title: "Lab: Deploy an Online Endpoint",
+                    content: `<strong>Goal:</strong> serve a model for real-time scoring.
+
+<strong>Steps:</strong>
+1. Register a trained model.
+2. Create a managed online endpoint.
+3. Create a deployment and route traffic.
+4. Send a test request.
+
+<strong>Takeaway:</strong> managed online endpoints host models behind HTTPS with blue/green rollout support.`
+                },
+                {
+                    title: "Lab: Pipeline & Drift Monitoring",
+                    content: `<strong>Goal:</strong> automate and observe.
+
+<strong>Steps:</strong>
+1. Compose a training pipeline from components.
+2. Schedule it to run on a recurrence.
+3. Enable data drift monitoring on the endpoint.
+4. Review drift alerts.
+
+<strong>Takeaway:</strong> pipelines + drift monitoring are the foundation of MLOps that carries into AI-300.`
+                },
+                {
+                    title: "Exam-Day Strategy",
+                    content: `If you must sit an archived DP-100 exam, or are transferring skills to AI-300:
+
+<strong>Focus areas:</strong>
+• Workspace, compute, data assets, environments
+• Jobs, sweeps (hyperparameter tuning), MLflow tracking
+• Online vs batch endpoints and safe rollout
+• Pipelines, components, and drift monitoring
+• Responsible ML (fairness, interpretability)
+
+<strong>Recommendation:</strong> prioritize the <strong>AI-300</strong> track for current, exam-relevant preparation.`
+                }
+            ]
         }
     ],
 
@@ -9597,6 +10342,188 @@ for c in result.categories_analysis:
 <strong>Outcome:</strong> Reliable, safe, and cost-effective AI systems that improve over time.`
                 }
             ]
+        },
+        {
+            number: "AI-300 · Module 6",
+            title: "Security, Networking & Governance for MLOps",
+            description: "Secure the MLOps platform end to end: managed identities, private networking, secrets, encryption, and governance across environments.",
+            duration: "50 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Managed identities & RBAC",
+                "Private endpoints & VNet isolation",
+                "Secrets with Key Vault",
+                "Encryption & CMEK",
+                "Governance across environments"
+            ],
+            detailedDescription: "AI-300 expects you to secure and govern the ML platform. This module covers identity and access, network isolation, secret management, encryption, and multi-environment governance for production MLOps and GenAIOps.",
+            detailedContent: [
+                {
+                    title: "Managed Identities & RBAC",
+                    content: `Prefer keyless, least-privilege access.
+
+<strong>Practices:</strong>
+• Use managed identities for service-to-service auth
+• Apply built-in roles (Reader, Contributor, AzureML Data Scientist)
+• Scope access at workspace or resource level
+
+<strong>Exam tip:</strong> managed identities + RBAC beat storing keys, and least privilege is the default answer.`
+                },
+                {
+                    title: "Private Endpoints & VNet Isolation",
+                    content: `Sensitive workloads should not traverse the public internet.
+
+<strong>Controls:</strong>
+• Private endpoints for the workspace and dependent resources
+• VNet integration for compute
+• Restrict public network access
+
+<strong>Exam tip:</strong> private endpoints + VNet isolation is the standard answer for network-sensitive ML platforms.`
+                },
+                {
+                    title: "Secrets with Key Vault",
+                    content: `Never hardcode secrets.
+
+<strong>Practices:</strong>
+• Store keys, connection strings, and certs in Azure Key Vault
+• Access them at runtime via managed identity
+• Rotate and audit secrets
+
+<strong>Exam tip:</strong> reference Key Vault secrets rather than embedding them in code or config.`
+                },
+                {
+                    title: "Encryption & CMEK",
+                    content: `Protect data at rest and in transit.
+
+<strong>Options:</strong>
+• Platform-managed keys by default
+• <strong>Customer-managed keys (CMEK)</strong> for regulatory control
+• Encryption in transit via TLS
+
+<strong>Exam tip:</strong> choose CMEK when compliance requires customer control over encryption keys.`
+                },
+                {
+                    title: "Governance Across Environments",
+                    content: `Production MLOps spans dev, test, and prod.
+
+<strong>Governance:</strong>
+• Infrastructure as code (Bicep) for consistent environments
+• Policy controls and audit logging
+• Approvals in CI/CD before production
+
+<strong>Exam tip:</strong> reproducible, governed environments via IaC and CI/CD approvals are recurring AI-300 themes.`,
+                    code: `// Bicep: provision an Azure ML workspace per environment
+resource ml 'Microsoft.MachineLearningServices/workspaces@2024-04-01' = {
+  name: mlName
+  location: location
+  identity: { type: 'SystemAssigned' }
+  properties: {
+    storageAccount: storageId
+    keyVault: keyVaultId
+    applicationInsights: appInsightsId
+  }
+}`
+                }
+            ]
+        },
+        {
+            number: "AI-300 · Module 7",
+            title: "Hands-On Labs & Exam Readiness",
+            description: "Guided MLOps/GenAIOps labs plus a domain-mapped study plan and exam-day strategy for AI-300.",
+            duration: "55 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Lab: IaC workspace with Bicep",
+                "Lab: CI/CD with GitHub Actions",
+                "Lab: GenAIOps with Foundry",
+                "Exam domain study plan",
+                "Exam-day strategy"
+            ],
+            detailedDescription: "Turn AI-300 skills into practice with guided labs for infrastructure as code, CI/CD, and GenAIOps, then map your study to the exam domains and apply an exam-day strategy.",
+            detailedContent: [
+                {
+                    title: "Lab: IaC Workspace with Bicep",
+                    content: `<strong>Goal:</strong> provision MLOps infrastructure as code.
+
+<strong>Steps:</strong>
+1. Write a Bicep template for an Azure ML workspace and dependencies.
+2. Deploy it with the Azure CLI to a dev resource group.
+3. Re-deploy to a test environment to prove repeatability.
+
+<strong>Takeaway:</strong> IaC gives consistent, reviewable dev/test/prod environments.`,
+                    code: `# Deploy the Bicep template (Azure CLI)
+az deployment group create \\
+  --resource-group my-rg \\
+  --template-file main.bicep \\
+  --parameters mlName=my-ws location=eastus`
+                },
+                {
+                    title: "Lab: CI/CD with GitHub Actions",
+                    content: `<strong>Goal:</strong> automate training and deployment.
+
+<strong>Steps:</strong>
+1. Add a workflow that authenticates to Azure.
+2. Run an Azure ML job on push.
+3. Register and deploy the model with approvals for production.
+
+<strong>Takeaway:</strong> GitHub Actions calling the Azure ML CLI is the backbone of AI-300 MLOps.`,
+                    code: `# .github/workflows/train.yml (excerpt)
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/login@v2
+        with: { creds: \${{ secrets.AZURE_CREDENTIALS }} }
+      - run: az ml job create --file pipeline.yml -g my-rg -w my-ws`
+                },
+                {
+                    title: "Lab: GenAIOps with Foundry",
+                    content: `<strong>Goal:</strong> operationalize a generative solution.
+
+<strong>Steps:</strong>
+1. Create a Microsoft Foundry project and connections.
+2. Deploy a foundation model.
+3. Build a prompt flow and run batch evaluations.
+4. Add content safety and tracing.
+
+<strong>Takeaway:</strong> GenAIOps = provisioning, prompt flow, evaluation, safety, and observability for generative AI.`
+                },
+                {
+                    title: "Exam Domain Study Plan",
+                    content: `Map your study to the official AI-300 domains.
+
+<strong>MLOps infrastructure (IaC):</strong> Module 1 + Module 6 + IaC lab.
+<strong>ML model lifecycle & operations:</strong> Module 2 + CI/CD lab.
+<strong>GenAIOps infrastructure:</strong> Module 3 + Foundry lab.
+<strong>GenAI QA & observability:</strong> Module 4.
+<strong>Optimization & AIOps:</strong> Module 5 + Module 7.
+
+<strong>Recommended plan:</strong>
+• Weeks 1-2: Modules 1-3 + IaC and CI/CD labs
+• Week 3: Modules 4-6 + GenAIOps lab
+• Week 4: Module 7 + Microsoft Learn practice assessment
+
+<strong>Pair with:</strong> the Microsoft Learn AI-300 learning path and hands-on Azure practice.`
+                },
+                {
+                    title: "Exam-Day Strategy",
+                    content: `AI-300 is an operations exam - expect IaC, CI/CD, and monitoring scenarios.
+
+<strong>During the exam:</strong>
+• For repeatable environments, think Bicep + CLI (IaC)
+• For automation, think GitHub Actions + Azure ML CLI
+• For generative solutions, think Foundry + prompt flow + evaluations
+• For security, think managed identities, private endpoints, Key Vault, CMEK
+• Watch for drift, retraining, cost, and safety cues
+
+<strong>Mindset:</strong> you are the ML operations engineer building a secure, automated, observable platform.`
+                }
+            ]
         }
     ],
 
@@ -9936,6 +10863,200 @@ logging.getLogger(__name__).info("AI request handled", extra={"tokens": 128})`
 • <strong>Cost spikes:</strong> token usage → review caching and prompt size
 
 <strong>Approach:</strong> Use the Application Map to isolate the failing component, inspect traces, then reproduce and fix. Instrument thoroughly so issues are diagnosable.`
+                }
+            ]
+        },
+        {
+            number: "AI-200 · Module 6",
+            title: "Integrating Azure OpenAI & AI Services into Apps",
+            description: "Wire Azure OpenAI, AI services, and RAG into cloud apps with resilient, secure integration patterns.",
+            duration: "50 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Calling Azure OpenAI from apps",
+                "RAG integration pattern",
+                "Resilience: retries & backpressure",
+                "Streaming responses",
+                "Securing AI calls"
+            ],
+            detailedDescription: "The AI-200 developer builds AI-powered cloud apps. This module covers integrating Azure OpenAI and AI services into applications with RAG, resilience, streaming, and security patterns.",
+            detailedContent: [
+                {
+                    title: "Calling Azure OpenAI from Apps",
+                    content: `Applications call your Azure OpenAI <strong>deployment</strong>, not the raw model.
+
+<strong>Essentials:</strong>
+• Use the deployment name and endpoint
+• Authenticate with Entra ID (managed identity) in production
+• Handle tokens, timeouts, and errors
+
+<strong>Exam tip:</strong> you call the deployment name; secure it with managed identity, not keys, in production.`,
+                    code: `# Chat completion from an app (Azure OpenAI)
+from openai import AzureOpenAI
+
+client = AzureOpenAI(
+    azure_endpoint="https://<resource>.openai.azure.com/",
+    api_key="<key>", api_version="2024-10-21")
+resp = client.chat.completions.create(
+    model="gpt-4o",  # deployment name
+    messages=[{"role": "user", "content": "Summarize this ticket."}])
+print(resp.choices[0].message.content)`
+                },
+                {
+                    title: "RAG Integration Pattern",
+                    content: `Ground app responses on your data.
+
+<strong>Flow:</strong>
+1. Embed the user query
+2. Retrieve top matches from Azure AI Search (or a vector DB like pgvector)
+3. Add context to the prompt
+4. Call the model and return a grounded answer
+
+<strong>Exam tip:</strong> for AI-200, the vector store may be Azure AI Search, Cosmos DB, PostgreSQL (pgvector), or Redis - choose based on the app's data layer.`
+                },
+                {
+                    title: "Resilience: Retries & Backpressure",
+                    content: `Production AI calls must handle failure and load.
+
+<strong>Patterns:</strong>
+• Exponential backoff on HTTP 429 (throttling)
+• Circuit breakers and timeouts
+• Queues (Service Bus) to smooth spikes
+• Fallback models or cached responses
+
+<strong>Exam tip:</strong> retries with backoff plus queue-based load leveling keep AI apps reliable under load.`,
+                    code: `# Retry on throttling (HTTP 429) with backoff
+import time
+from openai import RateLimitError
+
+def call_with_retry(fn, **kw):
+    for attempt in range(5):
+        try:
+            return fn(**kw)
+        except RateLimitError:
+            time.sleep(2 ** attempt)
+    raise RuntimeError("Exceeded retries")`
+                },
+                {
+                    title: "Streaming Responses",
+                    content: `Streaming improves perceived latency for chat UIs.
+
+<strong>How:</strong>
+• Request a streamed completion
+• Send tokens to the client as they arrive (e.g., via SSE or WebSockets)
+
+<strong>Exam tip:</strong> streaming is the answer when users need fast, incremental responses in a conversational app.`
+                },
+                {
+                    title: "Securing AI Calls",
+                    content: `Protect the AI integration end to end.
+
+<strong>Controls:</strong>
+• Managed identity + Key Vault for secrets
+• Private networking for AI endpoints
+• Content Safety on input and output
+• Rate limiting and per-user quotas
+
+<strong>Exam tip:</strong> combine identity, network isolation, and content safety for a secure AI app.`
+                }
+            ]
+        },
+        {
+            number: "AI-200 · Module 7",
+            title: "Hands-On Labs & Exam Readiness",
+            description: "Guided Azure app + AI labs plus a domain-mapped study plan and exam-day strategy for AI-200.",
+            duration: "55 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Lab: Deploy an AI API to Container Apps",
+                "Lab: RAG with PostgreSQL/pgvector",
+                "Lab: Event-driven processing",
+                "Exam domain study plan",
+                "Exam-day strategy"
+            ],
+            detailedDescription: "Turn AI-200 skills into practice with guided labs for containerized hosting, RAG data services, and event-driven integration, then map your study to the exam and apply an exam-day strategy.",
+            detailedContent: [
+                {
+                    title: "Lab: Deploy an AI API to Container Apps",
+                    content: `<strong>Goal:</strong> host an AI-backed API serverlessly.
+
+<strong>Steps:</strong>
+1. Containerize a small API that calls Azure OpenAI.
+2. Push the image to Azure Container Registry.
+3. Deploy to Azure Container Apps with external ingress.
+4. Scale rules on HTTP concurrency.
+
+<strong>Takeaway:</strong> Container Apps host AI APIs with autoscaling and no cluster management.`,
+                    code: `# Deploy to Azure Container Apps (Azure CLI)
+az containerapp create --name ai-api --resource-group my-rg \\
+  --environment my-env \\
+  --image myregistry.azurecr.io/ai-api:latest \\
+  --target-port 8000 --ingress external \\
+  --min-replicas 0 --max-replicas 10`
+                },
+                {
+                    title: "Lab: RAG with PostgreSQL/pgvector",
+                    content: `<strong>Goal:</strong> store and query embeddings in a relational DB.
+
+<strong>Steps:</strong>
+1. Enable the pgvector extension on Azure Database for PostgreSQL.
+2. Store document embeddings in a vector column.
+3. Query nearest neighbors for a user question.
+4. Ground the model on the retrieved rows.
+
+<strong>Takeaway:</strong> pgvector keeps relational data and embeddings together for RAG.`,
+                    code: `-- Query nearest neighbors with pgvector
+CREATE EXTENSION IF NOT EXISTS vector;
+SELECT id, content
+FROM docs
+ORDER BY embedding <-> '[0.12, 0.03, ...]'
+LIMIT 3;`
+                },
+                {
+                    title: "Lab: Event-Driven Processing",
+                    content: `<strong>Goal:</strong> build a resilient async AI pipeline.
+
+<strong>Steps:</strong>
+1. Upload a document to Blob Storage.
+2. Event Grid fires an event to a Function.
+3. The Function enqueues a job on Service Bus.
+4. A Container Apps worker embeds and indexes the document.
+
+<strong>Takeaway:</strong> events + queues decouple components and absorb spikes.`
+                },
+                {
+                    title: "Exam Domain Study Plan",
+                    content: `Map your study to the AI-200 skill areas.
+
+<strong>Containerized hosting:</strong> Module 1 + Container Apps lab.
+<strong>Data services for AI:</strong> Module 2 + pgvector RAG lab.
+<strong>Event-driven integration:</strong> Module 3 + event lab.
+<strong>Security & configuration:</strong> Module 4 + Module 6.
+<strong>Observability & AI integration:</strong> Module 5 + Module 6.
+
+<strong>Recommended plan:</strong>
+• Weeks 1-2: Modules 1-3 + Container Apps and RAG labs
+• Week 3: Modules 4-6 + event-driven lab
+• Week 4: Module 7 + Microsoft Learn practice assessment
+
+<strong>Pair with:</strong> the Microsoft Learn AI-200 learning path and hands-on Azure practice.`
+                },
+                {
+                    title: "Exam-Day Strategy",
+                    content: `AI-200 is a cloud developer exam - expect hosting, data, and integration scenarios.
+
+<strong>During the exam:</strong>
+• Match hosting to needs: Container Apps (default), AKS (complex scale), Functions (event-driven)
+• For vectors, pick the store that fits the app (AI Search, Cosmos, PostgreSQL, Redis)
+• For decoupling, think Event Grid (events) and Service Bus (work queues)
+• For secrets, think Key Vault + managed identity
+• For reliability, think retries, backpressure, and observability
+
+<strong>Mindset:</strong> you are the cloud developer building, securing, and operating an AI application.`
                 }
             ]
         }
@@ -10394,6 +11515,242 @@ bedrock.put_model_invocation_logging_configuration(
 print("Invocation logging enabled")`
                 }
             ]
+        },
+        {
+            number: "AIF-C01 · Module 6",
+            title: "AWS AI/ML Service Landscape & Choosing the Right Service",
+            description: "Know the full AWS AI stack and pick the right service: Bedrock, SageMaker, and the managed AI services, plus foundation model selection and managed RAG.",
+            duration: "55 min",
+            lessons: "6 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "The AWS AI/ML stack",
+                "Amazon Bedrock deep dive",
+                "Managed AI services",
+                "Foundation model selection",
+                "Knowledge Bases & Agents",
+                "Choosing the right service"
+            ],
+            detailedDescription: "AIF-C01 tests whether you can map business problems to the right AWS AI service. This module covers the layered AWS AI/ML stack, Amazon Bedrock in depth, the managed AI services, how to choose a foundation model, and managed RAG and agents.",
+            detailedContent: [
+                {
+                    title: "The AWS AI/ML Stack",
+                    content: `AWS organizes AI/ML into layers, simplest first.
+
+<strong>AI services (no ML expertise):</strong>
+• Rekognition (vision), Comprehend (NLP), Textract (documents)
+• Transcribe (speech-to-text), Polly (text-to-speech), Translate
+• Lex (chatbots), Personalize (recommendations), Kendra (search)
+
+<strong>Generative AI:</strong>
+• Amazon Bedrock (foundation models via one API)
+• Amazon Q (AI assistant)
+
+<strong>ML platform:</strong>
+• Amazon SageMaker (build/train/deploy custom models)
+
+<strong>Exam tip:</strong> prefer a managed AI service for common tasks; use Bedrock for generative AI; use SageMaker for custom models.`
+                },
+                {
+                    title: "Amazon Bedrock Deep Dive",
+                    content: `<strong>Amazon Bedrock</strong> provides serverless access to foundation models from Amazon and partners (Anthropic Claude, Meta Llama, Mistral, and more) through a single API.
+
+<strong>Key features:</strong>
+• <strong>Model choice</strong> across providers
+• <strong>Knowledge Bases</strong> for managed RAG
+• <strong>Agents</strong> for multi-step tasks and tool use
+• <strong>Guardrails</strong> for safety and PII controls
+• <strong>Fine-tuning</strong> and custom models
+
+<strong>Exam tip:</strong> Bedrock is the default answer for building generative AI on AWS without managing infrastructure.`,
+                    code: `# Invoke a foundation model on Amazon Bedrock (Python)
+import boto3, json
+
+bedrock = boto3.client("bedrock-runtime", region_name="us-east-1")
+resp = bedrock.invoke_model(
+    modelId="anthropic.claude-3-5-sonnet-20240620-v1:0",
+    body=json.dumps({
+        "anthropic_version": "bedrock-2023-05-31",
+        "max_tokens": 200,
+        "messages": [{"role": "user", "content": "Explain generative AI in one line."}],
+    }))
+print(json.loads(resp["body"].read())["content"][0]["text"])`
+                },
+                {
+                    title: "Managed AI Services",
+                    content: `AWS managed AI services solve common problems with a single API call.
+
+<strong>Match service to task:</strong>
+• <strong>Rekognition</strong> - image/video analysis, moderation
+• <strong>Textract</strong> - text, forms, and tables from documents
+• <strong>Comprehend</strong> - sentiment, entities, key phrases, PII
+• <strong>Transcribe / Polly</strong> - speech-to-text / text-to-speech
+• <strong>Translate</strong> - language translation
+• <strong>Lex</strong> - conversational bots
+• <strong>Personalize</strong> - recommendations
+• <strong>Kendra</strong> - intelligent enterprise search
+
+<strong>Rule:</strong> pick the managed service that matches the task before building a custom model.`
+                },
+                {
+                    title: "Foundation Model Selection",
+                    content: `Choosing a foundation model balances quality, cost, latency, and modality.
+
+<strong>Consider:</strong>
+• <strong>Capability</strong>: reasoning, coding, vision, long context
+• <strong>Cost</strong>: price per input/output token
+• <strong>Latency</strong>: smaller models respond faster
+• <strong>Modality</strong>: text-only vs multimodal
+
+<strong>On Bedrock:</strong> you can evaluate and switch models through one API, so start with a smaller/cheaper model and scale up only if quality requires it.`
+                },
+                {
+                    title: "Knowledge Bases & Agents",
+                    content: `Two Bedrock features power real applications.
+
+<strong>Knowledge Bases (managed RAG):</strong>
+• Connect foundation models to your data sources
+• Handle chunking, embeddings, and retrieval for you
+• Ground answers and add citations
+
+<strong>Agents:</strong>
+• Plan multi-step tasks
+• Call APIs and tools (action groups)
+• Combine with Knowledge Bases for grounded actions
+
+<strong>Exam tip:</strong> Knowledge Bases = managed RAG; Agents = reasoning + tool use.`
+                },
+                {
+                    title: "Choosing the Right Service",
+                    content: `The exam frequently asks you to map a scenario to a service.
+
+<strong>Quick map:</strong>
+• Analyze images/video -> Rekognition
+• Extract data from documents -> Textract
+• Sentiment/entities from text -> Comprehend
+• Speech-to-text -> Transcribe
+• Build a chatbot -> Lex (or Bedrock Agents for generative)
+• Recommendations -> Personalize
+• Enterprise search -> Kendra
+• Generative AI app -> Bedrock (+ Knowledge Bases/Agents/Guardrails)
+• Custom ML model -> SageMaker`,
+                    code: `# Map scenarios to the right AWS AI service
+services = {
+    "Moderate user-uploaded images":     "Amazon Rekognition",
+    "Extract fields from invoices":      "Amazon Textract",
+    "Detect sentiment in reviews":       "Amazon Comprehend",
+    "Answer from company docs (RAG)":    "Bedrock Knowledge Bases",
+    "Train a custom fraud model":        "Amazon SageMaker",
+}
+for scenario, service in services.items():
+    print(f"{scenario:32} -> {service}")`
+                }
+            ]
+        },
+        {
+            number: "AIF-C01 · Module 7",
+            title: "Hands-On Labs & Exam Readiness",
+            description: "Guided Amazon Bedrock labs plus a domain-mapped study plan and exam-day strategy for AIF-C01.",
+            duration: "55 min",
+            lessons: "6 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Lab: Bedrock playground",
+                "Lab: Knowledge Bases (RAG)",
+                "Lab: Guardrails",
+                "Lab: A managed AI service",
+                "Exam domain study plan",
+                "Exam-day strategy"
+            ],
+            detailedDescription: "Turn AIF-C01 concepts into practice with guided labs in the AWS console, then map your study to the official exam domains and apply a practical exam-day strategy.",
+            detailedContent: [
+                {
+                    title: "Lab: Bedrock Playground",
+                    content: `<strong>Goal:</strong> experience foundation models and prompting.
+
+<strong>Steps:</strong>
+1. In the AWS console, open Amazon Bedrock and request model access.
+2. Open the Chat/Text playground and pick a model (e.g., Claude).
+3. Try a prompt, then adjust temperature and max tokens.
+4. Compare two different models on the same prompt.
+
+<strong>Takeaway:</strong> Bedrock gives one interface to many models; parameters shape output.`
+                },
+                {
+                    title: "Lab: Knowledge Bases (RAG)",
+                    content: `<strong>Goal:</strong> see managed retrieval-augmented generation.
+
+<strong>Steps:</strong>
+1. Upload a few documents to an S3 bucket.
+2. Create a Bedrock Knowledge Base pointing to that bucket.
+3. Ask questions and observe grounded answers with citations.
+
+<strong>Takeaway:</strong> Knowledge Bases handle chunking, embeddings, and retrieval so answers are grounded in your data.`
+                },
+                {
+                    title: "Lab: Guardrails",
+                    content: `<strong>Goal:</strong> apply responsible AI controls.
+
+<strong>Steps:</strong>
+1. Create a Bedrock Guardrail.
+2. Add denied topics and a PII filter.
+3. Test prompts that should be blocked or redacted.
+
+<strong>Takeaway:</strong> Guardrails enforce content policies, denied topics, and PII protection on input and output.`
+                },
+                {
+                    title: "Lab: A Managed AI Service",
+                    content: `<strong>Goal:</strong> solve a task with no ML training.
+
+<strong>Steps:</strong>
+1. Open Amazon Comprehend (or Rekognition) in the console.
+2. Run the built-in analysis on sample text or an image.
+3. Review the structured results and confidence scores.
+
+<strong>Takeaway:</strong> managed AI services deliver instant results for common tasks - no model building required.`,
+                    code: `# Detect sentiment with Amazon Comprehend (Python)
+import boto3
+
+comprehend = boto3.client("comprehend", region_name="us-east-1")
+result = comprehend.detect_sentiment(
+    Text="This AWS course is excellent and easy to follow!",
+    LanguageCode="en")
+print(result["Sentiment"], result["SentimentScore"])`
+                },
+                {
+                    title: "Exam Domain Study Plan",
+                    content: `Map your study to the official AIF-C01 domains.
+
+<strong>Fundamentals of AI & ML:</strong> Module 1 (AI/ML/DL hierarchy, learning types, lifecycle).
+<strong>Fundamentals of Generative AI:</strong> Module 2 plus Module 6 (foundation models, Bedrock).
+<strong>Applications of foundation models:</strong> Modules 3 and 6 (prompting, RAG, agents, model selection).
+<strong>Guidelines for responsible AI:</strong> Module 4 plus Guardrails lab.
+<strong>Security, compliance & governance:</strong> Module 5 plus Module 6 (IAM, data protection, monitoring).
+
+<strong>Recommended plan:</strong>
+• Week 1: Modules 1-2 + Bedrock playground lab
+• Week 2: Modules 3 + 6 + Knowledge Bases lab
+• Week 3: Modules 4-5 + Guardrails lab + AWS Skill Builder practice
+• Week 4: Review + official practice question set
+
+<strong>Pair with:</strong> the free AWS Skill Builder AIF-C01 course and official practice questions.`
+                },
+                {
+                    title: "Exam-Day Strategy",
+                    content: `AIF-C01 is conceptual and scenario-based - no coding required.
+
+<strong>During the exam:</strong>
+• Map each scenario to the right layer (managed AI service, Bedrock, or SageMaker)
+• Choose the managed service that matches the task before custom ML
+• For generative AI apps, think Bedrock (+ Knowledge Bases/Agents/Guardrails)
+• When responsible AI or PII is mentioned, think Guardrails and governance
+• Watch for "least effort," "no ML expertise," or "fully managed" qualifiers
+
+<strong>Mindset:</strong> you are selecting the right AWS AI capability for a business need, not writing code.`
+                }
+            ]
         }
     ],
 
@@ -10751,6 +12108,173 @@ estimator = Estimator(
     use_spot_instances=True,
     max_run=3600, max_wait=7200,   # required with spot
 )`
+                }
+            ]
+        },
+        {
+            number: "MLA-C01 · Module 6",
+            title: "SageMaker MLOps: Pipelines, CI/CD & Monitoring",
+            description: "Operationalize ML on AWS with SageMaker Pipelines, model registry, CI/CD, and Model Monitor for production reliability.",
+            duration: "55 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "SageMaker Pipelines",
+                "Model Registry & approval",
+                "CI/CD for ML on AWS",
+                "SageMaker Model Monitor",
+                "Cost & deployment options"
+            ],
+            detailedDescription: "MLA-C01 is heavily focused on operationalizing ML. This module covers SageMaker Pipelines, the model registry and approval workflow, CI/CD, and Model Monitor for drift and quality in production.",
+            detailedContent: [
+                {
+                    title: "SageMaker Pipelines",
+                    content: `<strong>SageMaker Pipelines</strong> define repeatable, CI/CD-style ML workflows.
+
+<strong>Steps can include:</strong>
+• Processing (data prep)
+• Training and tuning
+• Evaluation with conditions
+• Model registration
+
+<strong>Exam tip:</strong> Pipelines provide reproducibility and lineage - the backbone of SageMaker MLOps.`,
+                    code: `# A minimal SageMaker Pipeline (concept)
+from sagemaker.workflow.pipeline import Pipeline
+from sagemaker.workflow.steps import TrainingStep
+
+pipeline = Pipeline(
+    name="churn-pipeline",
+    steps=[TrainingStep(name="Train", estimator=est, inputs=train_input)])
+pipeline.upsert(role_arn="arn:aws:iam::111122223333:role/SageMakerRole")
+pipeline.start()`
+                },
+                {
+                    title: "Model Registry & Approval",
+                    content: `The <strong>SageMaker Model Registry</strong> versions models and gates deployment.
+
+<strong>Workflow:</strong>
+• Register model versions in a model package group
+• Set approval status (Pending / Approved)
+• Deploy only approved versions via CI/CD
+
+<strong>Exam tip:</strong> the approval workflow is how you govern what reaches production.`
+                },
+                {
+                    title: "CI/CD for ML on AWS",
+                    content: `Automate build, test, and deploy of ML.
+
+<strong>Tools:</strong>
+• <strong>SageMaker Projects</strong> provision CI/CD templates
+• <strong>CodePipeline / CodeBuild</strong> (or GitHub Actions) run the stages
+• Approvals gate production deployment
+
+<strong>Exam tip:</strong> SageMaker Projects + CodePipeline is the native MLOps CI/CD path on AWS.`
+                },
+                {
+                    title: "SageMaker Model Monitor",
+                    content: `<strong>Model Monitor</strong> watches deployed models for problems.
+
+<strong>Detects:</strong>
+• Data quality issues
+• Data and model quality drift
+• Bias drift and feature attribution drift (with Clarify)
+
+<strong>Action:</strong> alert and trigger retraining when drift crosses thresholds - closing the loop.`
+                },
+                {
+                    title: "Cost & Deployment Options",
+                    content: `Choose the right serving and cost strategy.
+
+<strong>Deployment options:</strong>
+• Real-time endpoints (low latency)
+• Serverless inference (spiky traffic)
+• Asynchronous inference (large payloads)
+• Batch transform (bulk, offline)
+
+<strong>Cost levers:</strong> right-size instances, use spot for training, and pick serverless/batch to avoid idle endpoints.`
+                }
+            ]
+        },
+        {
+            number: "MLA-C01 · Module 7",
+            title: "Hands-On Labs & Exam Readiness",
+            description: "Guided SageMaker labs plus a domain-mapped study plan and exam-day strategy for MLA-C01.",
+            duration: "55 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Lab: Train & deploy in SageMaker",
+                "Lab: Pipeline & registry",
+                "Lab: Model Monitor",
+                "Exam domain study plan",
+                "Exam-day strategy"
+            ],
+            detailedDescription: "Turn MLA-C01 skills into practice with guided SageMaker labs, then map your study to the official exam domains and apply an exam-day strategy.",
+            detailedContent: [
+                {
+                    title: "Lab: Train & Deploy in SageMaker",
+                    content: `<strong>Goal:</strong> run the core SageMaker flow.
+
+<strong>Steps:</strong>
+1. In SageMaker Studio, prepare data in S3.
+2. Train with a built-in algorithm (e.g., XGBoost).
+3. Deploy to a real-time endpoint.
+4. Invoke the endpoint with a test record.
+
+<strong>Takeaway:</strong> data in S3 → train → deploy → invoke is the SageMaker foundation.`
+                },
+                {
+                    title: "Lab: Pipeline & Registry",
+                    content: `<strong>Goal:</strong> automate and govern.
+
+<strong>Steps:</strong>
+1. Define a SageMaker Pipeline (process → train → evaluate → register).
+2. Run it and inspect lineage.
+3. Register the model and set approval status.
+
+<strong>Takeaway:</strong> pipelines + registry provide reproducibility and governed deployment.`
+                },
+                {
+                    title: "Lab: Model Monitor",
+                    content: `<strong>Goal:</strong> observe a deployed model.
+
+<strong>Steps:</strong>
+1. Enable data capture on an endpoint.
+2. Create a monitoring schedule with a baseline.
+3. Review data-quality and drift reports.
+
+<strong>Takeaway:</strong> Model Monitor detects drift so you can retrain before performance drops.`
+                },
+                {
+                    title: "Exam Domain Study Plan",
+                    content: `Map your study to the official MLA-C01 domains.
+
+<strong>Data preparation:</strong> Modules 1-2 (ingest, transform, Feature Store).
+<strong>Model development:</strong> Modules 3-4 (training, tuning, evaluation, Clarify).
+<strong>Deployment & orchestration:</strong> Module 5 + Module 6 (endpoints, pipelines, CI/CD).
+<strong>Monitoring, maintenance & security:</strong> Module 6 + Module 7 (Model Monitor, IAM).
+
+<strong>Recommended plan:</strong>
+• Weeks 1-2: Modules 1-4 + train/deploy lab
+• Week 3: Modules 5-6 + pipeline and monitor labs
+• Week 4: Module 7 + AWS Skill Builder practice
+
+<strong>Pair with:</strong> AWS Skill Builder MLA-C01 course and official practice questions.`
+                },
+                {
+                    title: "Exam-Day Strategy",
+                    content: `MLA-C01 is technical and scenario-based.
+
+<strong>During the exam:</strong>
+• Match serving to needs: real-time, serverless, async, or batch
+• For automation, think SageMaker Pipelines + Projects + CodePipeline
+• For drift/quality, think Model Monitor (and Clarify for bias)
+• For cost, think spot training, right-sizing, and avoiding idle endpoints
+• For security, think IAM least privilege and VPC/KMS
+
+<strong>Mindset:</strong> you are the ML engineer operationalizing models reliably and cost-effectively on AWS.`
                 }
             ]
         }
@@ -11361,6 +12885,169 @@ print(resp["output"]["text"])`
 <strong>Exam tip:</strong> Balance quality, latency, and cost — the cheapest model that meets requirements wins.`
                 }
             ]
+        },
+        {
+            number: "GenAI Dev · Module 6",
+            title: "Production GenAI: Evaluation, Safety & Observability",
+            description: "Ship reliable generative AI on AWS: evaluation, Guardrails, tracing, and cost/latency optimization for production apps.",
+            duration: "55 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Evaluating generative apps",
+                "Guardrails & responsible AI",
+                "Observability & tracing",
+                "Security & governance",
+                "Cost & latency optimization"
+            ],
+            detailedDescription: "The Generative AI Developer - Professional exam expects production-grade rigor. This module covers evaluating generative apps, enforcing Guardrails, observability, security/governance, and optimizing cost and latency.",
+            detailedContent: [
+                {
+                    title: "Evaluating Generative Apps",
+                    content: `Generative quality must be measured, not assumed.
+
+<strong>Dimensions:</strong>
+• Relevance, coherence, fluency
+• Groundedness (supported by retrieved context)
+• Faithfulness and citation accuracy
+
+<strong>On AWS:</strong> use evaluation datasets and automated scoring (including model-graded evaluation) to compare prompts, models, and RAG configurations.`
+                },
+                {
+                    title: "Guardrails & Responsible AI",
+                    content: `<strong>Amazon Bedrock Guardrails</strong> enforce safety policies.
+
+<strong>Controls:</strong>
+• Content filters (hate, violence, etc.)
+• Denied topics
+• PII detection and redaction
+• Word/phrase blocklists
+
+<strong>Exam tip:</strong> apply Guardrails to both input and output, and layer them consistently across your app.`
+                },
+                {
+                    title: "Observability & Tracing",
+                    content: `Production GenAI must be debuggable.
+
+<strong>Practices:</strong>
+• Log prompts, retrieved context, tool calls, and responses
+• Trace requests end to end (e.g., with CloudWatch and X-Ray)
+• Track token usage, latency, and error rates
+• Capture user feedback signals
+
+<strong>Exam tip:</strong> observability is what lets you diagnose hallucinations, latency, and cost issues in production.`
+                },
+                {
+                    title: "Security & Governance",
+                    content: `Secure the generative application end to end.
+
+<strong>Controls:</strong>
+• IAM least privilege for Bedrock and data sources
+• Encryption (KMS) and private networking (VPC endpoints)
+• Data residency and no-training guarantees
+• Audit logging with CloudTrail
+
+<strong>Exam tip:</strong> combine IAM, encryption, network isolation, and logging for a compliant GenAI app.`
+                },
+                {
+                    title: "Cost & Latency Optimization",
+                    content: `Operate generative AI economically.
+
+<strong>Levers:</strong>
+• Right-size models (smaller for simple tasks)
+• Cache frequent responses and embeddings
+• Trim prompts and context length
+• Stream responses; parallelize retrieval
+• Use provisioned throughput only when needed
+
+<strong>Exam tip:</strong> the cheapest configuration that meets quality and latency targets is the right answer.`
+                }
+            ]
+        },
+        {
+            number: "GenAI Dev · Module 7",
+            title: "Hands-On Labs & Exam Readiness",
+            description: "Guided Amazon Bedrock labs plus a domain-mapped study plan and exam-day strategy for the Generative AI Developer - Professional exam.",
+            duration: "55 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Lab: RAG with Knowledge Bases",
+                "Lab: Bedrock Agents with tools",
+                "Lab: Guardrails & evaluation",
+                "Exam domain study plan",
+                "Exam-day strategy"
+            ],
+            detailedDescription: "Turn Generative AI Developer skills into practice with guided Amazon Bedrock labs, then map your study to the exam domains and apply an exam-day strategy for this advanced, production-focused exam.",
+            detailedContent: [
+                {
+                    title: "Lab: RAG with Knowledge Bases",
+                    content: `<strong>Goal:</strong> build managed RAG.
+
+<strong>Steps:</strong>
+1. Load documents into S3.
+2. Create a Bedrock Knowledge Base over that data.
+3. Query and observe grounded answers with citations.
+4. Tune chunking and retrieval settings.
+
+<strong>Takeaway:</strong> Knowledge Bases provide managed retrieval so answers are grounded and cited.`
+                },
+                {
+                    title: "Lab: Bedrock Agents with Tools",
+                    content: `<strong>Goal:</strong> build an agent that acts.
+
+<strong>Steps:</strong>
+1. Define an action group (an API/Lambda the agent can call).
+2. Create a Bedrock Agent with instructions.
+3. Attach the action group and a Knowledge Base.
+4. Test a multi-step task.
+
+<strong>Takeaway:</strong> Agents combine reasoning, tool use, and grounding to complete tasks.`
+                },
+                {
+                    title: "Lab: Guardrails & Evaluation",
+                    content: `<strong>Goal:</strong> make the app safe and measurable.
+
+<strong>Steps:</strong>
+1. Create a Guardrail with denied topics and a PII filter.
+2. Attach it to your model calls.
+3. Run an evaluation set and score groundedness/relevance.
+
+<strong>Takeaway:</strong> Guardrails + evaluation are what make a generative app production-ready.`
+                },
+                {
+                    title: "Exam Domain Study Plan",
+                    content: `Map your study to the Generative AI Developer - Professional focus areas.
+
+<strong>Foundations & model selection:</strong> Modules 1-2 (foundation models, Bedrock, selection).
+<strong>RAG & knowledge:</strong> Modules 3 + 7 (embeddings, vector stores, Knowledge Bases).
+<strong>Agents & orchestration:</strong> Module 4 + Module 7 (Agents, tools, workflows).
+<strong>Production quality:</strong> Module 5-6 (evaluation, Guardrails, observability, security).
+<strong>Cost & performance:</strong> Module 6 (optimization).
+
+<strong>Recommended plan:</strong>
+• Weeks 1-2: Modules 1-3 + Knowledge Bases lab
+• Week 3: Modules 4-6 + Agents and Guardrails labs
+• Week 4: Module 7 + AWS practice questions
+
+<strong>Pair with:</strong> AWS Skill Builder generative AI content and hands-on Bedrock practice.`
+                },
+                {
+                    title: "Exam-Day Strategy",
+                    content: `This is an advanced, production-focused exam.
+
+<strong>During the exam:</strong>
+• For grounding, think Knowledge Bases (managed RAG) and vector stores
+• For actions, think Bedrock Agents with action groups
+• For safety, think Guardrails on input and output
+• For reliability, think evaluation, observability, and retries
+• For cost/latency, prefer the smallest model and caching that meet targets
+
+<strong>Mindset:</strong> you are the senior developer shipping a secure, reliable, cost-effective generative AI application.`
+                }
+            ]
         }
     ],
 
@@ -11669,6 +13356,273 @@ print("Vector length:", len(embeddings[0].values))`
 • Establish an AI governance/center of excellence
 
 <strong>Exam focus:</strong> Expect scenario questions on how a leader should evaluate, pilot, and scale a generative AI initiative responsibly.`
+                }
+            ]
+        },
+        {
+            number: "Gen AI Leader · Module 5",
+            title: "AI Development Approaches, Data & the ML Lifecycle",
+            description: "Choose the right build approach on Google Cloud, understand ML types and the lifecycle, and treat data as the foundation of trustworthy AI.",
+            duration: "60 min",
+            lessons: "6 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Types of machine learning",
+                "The ML lifecycle",
+                "Data quality & governance",
+                "Choosing a build approach on Google Cloud",
+                "Agents deep dive",
+                "Cost, ROI & sizing"
+            ],
+            detailedDescription: "The Generative AI Leader exam expects leaders to reason about how AI solutions are actually built and operated. This module deepens the core exam domains: the kinds of ML, the end-to-end ML lifecycle, why data quality and governance decide success, how to choose between pre-trained APIs, BigQuery ML, AutoML, custom training and Gemini, how agents work, and how to think about cost and ROI.",
+            detailedContent: [
+                {
+                    title: "Types of Machine Learning",
+                    content: `Leaders should recognize the three main learning styles and match them to business problems.
+
+<strong>Supervised learning:</strong>
+• Trained on labeled data
+• Classification (categories) and regression (numbers)
+• Example: churn prediction, demand forecasting
+
+<strong>Unsupervised learning:</strong>
+• Finds structure in unlabeled data
+• Clustering and anomaly detection
+• Example: customer segmentation
+
+<strong>Reinforcement learning:</strong>
+• Learns by trial, reward, and feedback
+• Example: robotics, recommendation tuning
+
+<strong>Exam tip:</strong> Generative AI is built on deep learning (a form of ML). Know where it sits and when a simpler ML approach is a better fit.`
+                },
+                {
+                    title: "The ML Lifecycle",
+                    content: `Every AI solution follows a lifecycle. Leaders fund and govern each stage.
+
+<strong>Stages:</strong>
+1. <strong>Business framing:</strong> Define the outcome and success metric
+2. <strong>Data collection & preparation:</strong> Source, clean, and label data
+3. <strong>Model development:</strong> Choose, train, or tune a model
+4. <strong>Evaluation:</strong> Measure quality, safety, and fairness
+5. <strong>Deployment:</strong> Serve the model (endpoint or app)
+6. <strong>Monitoring:</strong> Watch for drift, cost, and safety in production
+
+<strong>Why leaders care:</strong> Most failures come from weak framing or poor data, not the model. Budget for the full lifecycle, not just the build.`
+                },
+                {
+                    title: "Data Quality & Governance",
+                    content: `Data is the foundation of every AI outcome.
+
+<strong>Data quality dimensions:</strong>
+• Accuracy, completeness, consistency
+• Timeliness and representativeness (avoid bias)
+
+<strong>Governance on Google Cloud:</strong>
+• <strong>Dataplex</strong> for data governance and cataloging
+• <strong>BigQuery</strong> for governed analytics at scale
+• Access control with <strong>IAM</strong>, encryption with <strong>CMEK</strong>
+• Data residency and enterprise "no-training on your data" guarantees
+
+<strong>Exam focus:</strong> Poor or biased data leads to poor or biased AI. Leaders must invest in data quality and governance before scaling.`
+                },
+                {
+                    title: "Choosing a Build Approach on Google Cloud",
+                    content: `Google Cloud offers a spectrum from no-code to full custom. Choosing well controls cost and time-to-value.
+
+<strong>Options, simplest first:</strong>
+• <strong>Pre-trained APIs</strong> (Vision, Natural Language, Speech, Document AI, Translation) — common tasks, no training
+• <strong>Gemini via Vertex AI</strong> — generative and multimodal tasks with prompting/grounding
+• <strong>BigQuery ML</strong> — models in SQL where data already lives
+• <strong>AutoML</strong> — custom models with minimal code
+• <strong>Custom training</strong> — full control for specialized needs
+
+<strong>Decision rule:</strong> pick the simplest option that meets accuracy, control, and cost requirements.`,
+                    code: `# Decision helper: match a scenario to the simplest Google Cloud approach
+scenarios = {
+    "Detect objects in product photos":      "Pre-trained Vision API",
+    "Draft and summarize marketing copy":    "Gemini on Vertex AI",
+    "Predict churn from a BigQuery table":   "BigQuery ML",
+    "Custom image classifier, little code":  "Vertex AI AutoML",
+    "Novel model with special architecture": "Custom training on Vertex AI",
+}
+for scenario, approach in scenarios.items():
+    print(f"{scenario:38} -> {approach}")`
+                },
+                {
+                    title: "Agents Deep Dive",
+                    content: `Agents move generative AI from answering to <em>acting</em> toward goals — a growing exam focus.
+
+<strong>What makes an agent:</strong>
+• A model with instructions (its role)
+• Tools it can call (search, functions, APIs)
+• Memory of the interaction
+• A loop that plans, acts, and observes
+
+<strong>On Google Cloud:</strong>
+• <strong>Vertex AI Agent Builder</strong> — grounded search and conversational agents
+• <strong>Google Agentspace</strong> — enterprise agents over company knowledge
+• <strong>Gemini Enterprise</strong> — the evolving enterprise agent stack
+
+<strong>Business value:</strong> agents automate multi-step workflows (support, research, operations), not just single questions.`
+                },
+                {
+                    title: "Cost, ROI & Sizing",
+                    content: `Leaders are accountable for value, not just capability.
+
+<strong>Cost drivers:</strong>
+• Tokens processed (input + output)
+• Model choice (Flash vs Pro tiers)
+• Grounding/retrieval and storage
+• Volume and peak traffic
+
+<strong>Levers to control cost:</strong>
+• Use smaller/faster models where quality allows
+• Cache frequent responses and embeddings
+• Trim prompts and context length
+• Prefer prompting/RAG before expensive tuning
+
+<strong>ROI framing:</strong> tie each use case to a measurable outcome (time saved, deflection rate, revenue) and compare against total cost of ownership.`
+                }
+            ]
+        },
+        {
+            number: "Gen AI Leader · Module 6",
+            title: "Hands-On Labs & Exam Readiness",
+            description: "Guided hands-on labs in Vertex AI Studio plus a domain-by-domain study plan and exam-day strategy.",
+            duration: "60 min",
+            lessons: "6 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Lab: Prompting in Vertex AI Studio",
+                "Lab: Grounding a Gemini response",
+                "Lab: Gemini in Google Workspace",
+                "Lab: Embeddings & Vector Search",
+                "Exam domain study plan",
+                "Exam-day strategy"
+            ],
+            detailedDescription: "Concepts alone do not pass exams. This module turns theory into practice with four guided labs you can run in a free Google Cloud project, then maps your study to the official exam domains and gives a practical exam-day strategy.",
+            detailedContent: [
+                {
+                    title: "Lab: Prompting in Vertex AI Studio",
+                    content: `<strong>Goal:</strong> experience prompting, system instructions, and temperature firsthand.
+
+<strong>Steps:</strong>
+1. Open the Google Cloud console and go to Vertex AI Studio.
+2. Start a new prompt with the Gemini Flash model.
+3. Add a system instruction: "You are a concise business analyst."
+4. Ask the same question at temperature 0.1 and 0.9 and compare.
+5. Add a few-shot example and observe the format change.
+
+<strong>What to notice:</strong> lower temperature is more deterministic; system instructions and examples strongly shape output.`,
+                    code: `# The same prompt in code (Vertex AI, Python)
+import vertexai
+from vertexai.generative_models import GenerativeModel, GenerationConfig
+
+vertexai.init(project="my-project", location="us-central1")
+model = GenerativeModel(
+    "gemini-2.0-flash",
+    system_instruction="You are a concise business analyst.")
+
+for temp in (0.1, 0.9):
+    resp = model.generate_content(
+        "Give one risk of adopting generative AI.",
+        generation_config=GenerationConfig(temperature=temp))
+    print(temp, "->", resp.text)`
+                },
+                {
+                    title: "Lab: Grounding a Gemini Response",
+                    content: `<strong>Goal:</strong> see how grounding reduces hallucinations.
+
+<strong>Steps:</strong>
+1. Ask Gemini a question about very recent events without grounding — note any uncertainty.
+2. Enable grounding with Google Search (a tool in Vertex AI).
+3. Ask again and compare accuracy and the presence of citations.
+
+<strong>Takeaway:</strong> grounding connects the model to trusted, current data. For enterprise data, ground with Vertex AI Search over your own documents.`,
+                    code: `# Grounding with Google Search (Vertex AI, Python)
+import vertexai
+from vertexai.generative_models import GenerativeModel, Tool, grounding
+
+vertexai.init(project="my-project", location="us-central1")
+model = GenerativeModel("gemini-2.0-flash")
+tool = Tool.from_google_search_retrieval(grounding.GoogleSearchRetrieval())
+
+resp = model.generate_content(
+    "Summarize the newest Vertex AI features.", tools=[tool])
+print(resp.text)`
+                },
+                {
+                    title: "Lab: Gemini in Google Workspace",
+                    content: `<strong>Goal:</strong> connect the business value story to real productivity.
+
+<strong>Steps (with Gemini for Workspace enabled):</strong>
+1. In Gmail, use "Help me write" to draft a reply from a short prompt.
+2. In Docs, summarize a long document.
+3. In Sheets, ask Gemini to suggest a formula.
+4. In Slides, generate an image for a slide.
+
+<strong>Leadership framing:</strong> most organizations get first value from embedded AI (Workspace) before building custom solutions. This is a common exam talking point.`
+                },
+                {
+                    title: "Lab: Embeddings & Vector Search",
+                    content: `<strong>Goal:</strong> understand the retrieval engine behind RAG.
+
+<strong>Steps:</strong>
+1. Generate embeddings for a handful of sentences.
+2. Compare two similar sentences vs two unrelated ones.
+3. Observe that similar meanings produce closer vectors.
+
+<strong>Takeaway:</strong> embeddings + Vertex AI Vector Search power semantic search and grounding. This is why RAG can find relevant context even when keywords differ.`,
+                    code: `# Compare semantic similarity with Vertex AI embeddings
+from vertexai.language_models import TextEmbeddingModel
+
+model = TextEmbeddingModel.from_pretrained("text-embedding-004")
+texts = ["How do I reset my password?",
+         "I forgot my login credentials",
+         "What is the capital of France?"]
+vectors = [e.values for e in model.get_embeddings(texts)]
+
+def cosine(a, b):
+    dot = sum(x*y for x, y in zip(a, b))
+    na = sum(x*x for x in a) ** 0.5
+    nb = sum(y*y for y in b) ** 0.5
+    return dot / (na * nb)
+
+print("similar:", round(cosine(vectors[0], vectors[1]), 3))
+print("unrelated:", round(cosine(vectors[0], vectors[2]), 3))`
+                },
+                {
+                    title: "Exam Domain Study Plan",
+                    content: `Map your study to the official Generative AI Leader domains.
+
+<strong>Domain 1 - Fundamentals of Gen AI:</strong> Modules 1 and 5 (ML types, LLMs, tokens, limitations).
+<strong>Domain 2 - Google Cloud's Gen AI offerings:</strong> Module 2 and Module 5 (Gemini, Vertex AI, Model Garden, APIs, agents, Workspace).
+<strong>Domain 3 - Improving model output:</strong> Module 3 and Module 6 labs (prompting, grounding/RAG, tuning, embeddings).
+<strong>Domain 4 - Business strategy & responsible AI:</strong> Modules 4 and 5 (value, ROI, responsible AI, security, adoption).
+
+<strong>Recommended plan:</strong>
+• Week 1: Modules 1-2 + Lab 1
+• Week 2: Modules 3 + 5 + Labs 2 and 4
+• Week 3: Modules 4 + 6 + Google's official Skill Badges and practice assessment
+• Week 4: Review + full practice test
+
+<strong>Pair with:</strong> Google Cloud Skills Boost labs and the official practice assessment for full readiness.`
+                },
+                {
+                    title: "Exam-Day Strategy",
+                    content: `The Generative AI Leader exam is scenario- and business-focused.
+
+<strong>During the exam:</strong>
+• Read the scenario for the business goal and constraint first
+• Prefer the simplest Google Cloud service that meets the need
+• When unsure, choose the option that improves accuracy responsibly (grounding, human oversight)
+• Watch for "cost-effective," "fastest to value," or "least management" qualifiers - they point to the answer
+• Eliminate options that ignore responsible AI, security, or data governance
+
+<strong>Mindset:</strong> you are answering as a leader guiding responsible, valuable adoption - not as an engineer optimizing code.`
                 }
             ]
         }
@@ -12147,11 +14101,192 @@ print("Attributions:", response.explanations)`
 <strong>Cost:</strong> Right-size compute, use auto-scaling, and prefer batch prediction for bulk scoring.`
                 }
             ]
+        },
+        {
+            number: "GCP PMLE · Module 5",
+            title: "ML Pipelines, MLOps & Automation",
+            description: "Operationalize ML with Vertex AI Pipelines, CI/CD, and automated retraining for reproducible, production-grade workflows.",
+            duration: "55 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Vertex AI Pipelines",
+                "Reusable components",
+                "CI/CD for ML",
+                "Automated retraining",
+                "Metadata & lineage"
+            ],
+            detailedDescription: "MLOps is heavily weighted on the Professional ML Engineer exam. This module covers building reproducible pipelines with Vertex AI Pipelines, packaging reusable components, automating with CI/CD, triggering retraining, and tracking lineage with Vertex ML Metadata.",
+            detailedContent: [
+                {
+                    title: "Vertex AI Pipelines",
+                    content: `<strong>Vertex AI Pipelines</strong> orchestrate ML workflows as reproducible, containerized steps (built on Kubeflow Pipelines or TFX).
+
+<strong>Benefits:</strong>
+• Reproducibility and versioning
+• Step caching to skip unchanged work
+• Parameterized, schedulable runs
+• Clear lineage from data to model
+
+<strong>Exam tip:</strong> Pipelines are the standard way to make training repeatable and production-ready on Google Cloud.`,
+                    code: `# Define and run a simple Vertex AI pipeline (KFP v2)
+from kfp import dsl, compiler
+from google.cloud import aiplatform
+
+@dsl.pipeline(name="train-churn")
+def pipeline(data_uri: str):
+    prep = preprocess_op(data_uri=data_uri)
+    train_model_op(train_data=prep.outputs["out_data"])
+
+compiler.Compiler().compile(pipeline, "pipeline.json")
+aiplatform.PipelineJob(
+    display_name="train-churn",
+    template_path="pipeline.json",
+    parameter_values={"data_uri": "gs://bucket/data.csv"},
+).run()`
+                },
+                {
+                    title: "Reusable Components",
+                    content: `A <strong>component</strong> is a self-contained pipeline step (code + inputs + outputs + container).
+
+<strong>Why components:</strong>
+• Write a step once, reuse across pipelines
+• Version and test steps independently
+• Share via a components registry
+
+<strong>Exam tip:</strong> Prebuilt Google Cloud Pipeline Components exist for common Vertex AI tasks (training, batch prediction, model upload).`
+                },
+                {
+                    title: "CI/CD for ML",
+                    content: `<strong>CI/CD</strong> automates testing and deployment of ML code, pipelines, and models.
+
+<strong>Typical stages:</strong>
+• CI: lint, unit test, validate pipeline on commit
+• CD: run the pipeline, register the model, deploy to an endpoint
+
+<strong>Tools:</strong> Cloud Build (or GitHub Actions) triggers pipelines; approvals gate production. This is the backbone of reliable MLOps.`
+                },
+                {
+                    title: "Automated Retraining",
+                    content: `Models degrade as data changes, so retraining should be automated.
+
+<strong>Triggers:</strong>
+• Schedule (e.g., weekly)
+• New data arriving (event-based)
+• Drift detected by Model Monitoring
+
+<strong>Loop:</strong> monitor → detect drift → trigger pipeline → retrain → evaluate → deploy. Closing this loop is what "operationalizing ML" means on the exam.`
+                },
+                {
+                    title: "Metadata & Lineage",
+                    content: `<strong>Vertex ML Metadata</strong> records artifacts, executions, and their relationships.
+
+<strong>Why it matters:</strong>
+• Trace a deployed model back to its data and code
+• Compare runs and reproduce results
+• Support audits and governance
+
+<strong>Exam tip:</strong> lineage and reproducibility are recurring themes - know that ML Metadata underpins them.`
+                }
+            ]
+        },
+        {
+            number: "GCP PMLE · Module 6",
+            title: "Hands-On Labs & Exam Readiness",
+            description: "Guided Vertex AI labs plus a domain-mapped study plan and exam-day strategy for the Professional ML Engineer exam.",
+            duration: "55 min",
+            lessons: "5 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Lab: BigQuery ML model",
+                "Lab: Custom training & endpoint",
+                "Lab: Pipeline & monitoring",
+                "Exam domain study plan",
+                "Exam-day strategy"
+            ],
+            detailedDescription: "Turn PMLE concepts into practice with guided labs in a Google Cloud project, then map your study to the official exam domains and apply an exam-day strategy for this scenario-heavy exam.",
+            detailedContent: [
+                {
+                    title: "Lab: BigQuery ML Model",
+                    content: `<strong>Goal:</strong> train and evaluate a model with SQL.
+
+<strong>Steps:</strong>
+1. Open BigQuery and load or select a public dataset.
+2. Create a logistic regression model with CREATE MODEL.
+3. Evaluate with ML.EVALUATE and inspect metrics.
+4. Predict with ML.PREDICT.
+
+<strong>Takeaway:</strong> BigQuery ML delivers fast baselines with no data movement.`,
+                    code: `-- Train and evaluate a model in BigQuery ML
+CREATE OR REPLACE MODEL \`ds.churn\`
+OPTIONS(model_type='LOGISTIC_REG', input_label_cols=['churned']) AS
+SELECT tenure, monthly_charges, contract_type, churned
+FROM \`ds.customers\`;
+
+SELECT * FROM ML.EVALUATE(MODEL \`ds.churn\`);`
+                },
+                {
+                    title: "Lab: Custom Training & Endpoint",
+                    content: `<strong>Goal:</strong> train a custom model and serve it.
+
+<strong>Steps:</strong>
+1. Package a training script and run a Vertex AI custom training job.
+2. Register the resulting model in the Model Registry.
+3. Deploy the model to an endpoint.
+4. Send a test prediction request.
+
+<strong>Takeaway:</strong> the train → register → deploy → predict flow is the core of custom ML on Vertex AI.`
+                },
+                {
+                    title: "Lab: Pipeline & Monitoring",
+                    content: `<strong>Goal:</strong> automate and observe.
+
+<strong>Steps:</strong>
+1. Compile and run a simple Vertex AI Pipeline.
+2. Schedule it to run on a recurrence.
+3. Enable Model Monitoring on the deployed endpoint.
+4. Review drift and prediction metrics.
+
+<strong>Takeaway:</strong> pipelines + monitoring close the MLOps loop for reliable production models.`
+                },
+                {
+                    title: "Exam Domain Study Plan",
+                    content: `Map your study to the official Professional ML Engineer domains.
+
+<strong>Architecting low-code AI:</strong> Module 1 (APIs, BQML, AutoML).
+<strong>Collaborating & managing data/models:</strong> Module 2 (datasets, Feature Store, registry).
+<strong>Scaling prototypes:</strong> Module 3 (custom training, distributed, tuning).
+<strong>Serving & scaling:</strong> Module 4 (endpoints, batch, monitoring, security, cost).
+<strong>Automating & orchestrating (MLOps):</strong> Module 5 + Module 6 labs (pipelines, CI/CD, retraining).
+
+<strong>Recommended plan:</strong>
+• Weeks 1-2: Modules 1-3 + BQML and custom training labs
+• Week 3: Modules 4-5 + pipeline/monitoring lab
+• Week 4: Module 6 + Google Cloud Skills Boost labs + practice exam
+
+<strong>Pair with:</strong> Google Cloud Skills Boost hands-on labs and the official sample questions.`
+                },
+                {
+                    title: "Exam-Day Strategy",
+                    content: `PMLE is scenario-heavy and technical.
+
+<strong>During the exam:</strong>
+• Read for constraints: cost, latency, scale, team skill, and data location
+• Prefer the lowest-effort option that meets requirements (API > BQML > AutoML > custom)
+• For production ML, expect pipelines, monitoring, and retraining in the answer
+• Watch for training/serving skew, drift, and security (IAM, VPC-SC, CMEK) cues
+• Eliminate options that ignore reproducibility or monitoring
+
+<strong>Mindset:</strong> you are the ML engineer designing a reliable, cost-effective, production system.`
+                }
+            ]
         }
     ],
 
     // ==========================================================
-    // Salesforce Certified Agentforce Specialist (AI-201)
+    // Salesforce Certified Agentforce Specialist
     // ==========================================================
     salesforceAgentforce: [
         {
@@ -12219,7 +14354,7 @@ print("Attributions:", response.explanations)`
                 "Prompt template types",
                 "Testing & refining prompts"
             ],
-            detailedDescription: "The largest AI-201 domain covers prompt engineering with Prompt Builder: creating reusable prompt templates, grounding them in Salesforce data, choosing the right template type, and testing prompts for quality and safety.",
+            detailedDescription: "The largest Agentforce Specialist domain covers prompt engineering with Prompt Builder: creating reusable prompt templates, grounding them in Salesforce data, choosing the right template type, and testing prompts for quality and safety.",
             detailedContent: [
                 {
                     title: "Prompt Builder & Templates",
@@ -12384,7 +14519,7 @@ print("Attributions:", response.explanations)`
                 "Testing & Agentforce Testing Center",
                 "Monitoring & lifecycle"
             ],
-            detailedDescription: "The final AI-201 domain covers trust and operations: how the Einstein Trust Layer protects data and enforces responsible AI, how to test agents before launch, and how to monitor and maintain them in production.",
+            detailedDescription: "The final Agentforce Specialist domain covers trust and operations: how the Einstein Trust Layer protects data and enforces responsible AI, how to test agents before launch, and how to monitor and maintain them in production.",
             detailedContent: [
                 {
                     title: "Einstein Trust Layer",
@@ -12422,6 +14557,194 @@ print("Attributions:", response.explanations)`
 <strong>Tip:</strong> Treat agents as living products — measure, learn, and iterate.`
                 }
             ]
+        },
+        {
+            number: "Agentforce · Module 6",
+            title: "Building & Grounding Agents Deep Dive",
+            description: "Go deeper on topics, actions, Data Cloud grounding, retrievers, and the Einstein Trust Layer that make Agentforce accurate and safe.",
+            duration: "55 min",
+            lessons: "6 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Topics & instructions",
+                "Actions (Flow, Apex, prompt templates)",
+                "Data Cloud grounding",
+                "Retrievers & search indexes",
+                "Prompt template types",
+                "Einstein Trust Layer"
+            ],
+            detailedDescription: "The Agentforce Specialist exam is heavily weighted toward configuring agents and grounding them in trusted data. This module deepens topics and actions, Data Cloud grounding, retrievers, prompt template types, and the Einstein Trust Layer.",
+            detailedContent: [
+                {
+                    title: "Topics & Instructions",
+                    content: `A <strong>topic</strong> scopes a job an agent can handle and groups the instructions and actions that handle it.
+
+<strong>Key ideas:</strong>
+• Topics classify user requests into jobs
+• Instructions guide how the agent behaves within a topic
+• Clear, scoped topics improve accuracy and reduce wrong actions
+
+<strong>Exam tip:</strong> Good topic design (clear scope + strong instructions) is the foundation of a reliable agent.`
+                },
+                {
+                    title: "Actions (Flow, Apex, Prompt Templates)",
+                    content: `<strong>Actions</strong> are what an agent can actually do.
+
+<strong>Action sources:</strong>
+• <strong>Flow</strong> - declarative automation
+• <strong>Apex</strong> - custom code
+• <strong>Prompt templates</strong> - generative responses
+• <strong>Standard actions</strong> and external API calls
+
+<strong>Exam tip:</strong> Actions can be backed by Flows, Apex, and prompt templates - know that an agent selects and runs actions to complete a topic's job.`
+                },
+                {
+                    title: "Data Cloud Grounding",
+                    content: `<strong>Data Cloud</strong> unifies data into a real-time customer view that grounds agents and prompts.
+
+<strong>Building blocks:</strong>
+• Data streams and data lake objects
+• Data model objects (DMOs)
+• Identity resolution for unified profiles
+
+<strong>Role in Agentforce:</strong> grounding prompts and agents in Data Cloud provides trusted, current context so responses are accurate and specific.`
+                },
+                {
+                    title: "Retrievers & Search Indexes",
+                    content: `<strong>Retrievers</strong> find the most relevant content to ground a response (RAG).
+
+<strong>How it works:</strong>
+1. A retriever searches a vector/search index
+2. It returns the most relevant chunks
+3. Those chunks are added to the prompt as context
+
+<strong>Sources:</strong> Salesforce Knowledge articles and Data Cloud search indexes over structured and unstructured content.
+
+<strong>Exam tip:</strong> well-maintained knowledge plus retrievers is the key to accurate, grounded answers.`
+                },
+                {
+                    title: "Prompt Template Types",
+                    content: `<strong>Prompt Builder</strong> supports several template types for different jobs.
+
+<strong>Common types:</strong>
+• <strong>Sales/Field generation</strong> (e.g., sales emails)
+• <strong>Record summaries</strong>
+• <strong>Flex templates</strong> for flexible, multi-input prompts
+
+<strong>Grounding:</strong> templates merge CRM and Data Cloud data into the prompt so output is specific and accurate.
+
+<strong>Exam tip:</strong> choose the template type that matches the input and output you need, and always ground it in relevant data.`
+                },
+                {
+                    title: "Einstein Trust Layer",
+                    content: `The <strong>Einstein Trust Layer</strong> makes generative AI enterprise-safe.
+
+<strong>Protections:</strong>
+• Data masking of sensitive/PII fields
+• Zero data retention with LLM providers
+• Toxicity detection and scoring
+• Prompt defense and an audit trail
+
+<strong>Exam tip:</strong> the Trust Layer secures prompts and responses without the model retaining your data - a frequently tested concept.`
+                }
+            ]
+        },
+        {
+            number: "Agentforce · Module 7",
+            title: "Hands-On Labs & Exam Readiness",
+            description: "Guided Trailhead and Developer Edition labs plus a domain-mapped study plan and exam-day strategy for the Agentforce Specialist exam.",
+            duration: "55 min",
+            lessons: "6 lessons",
+            isNew: true,
+            isLocked: false,
+            topics: [
+                "Lab: Build an agent in Agent Builder",
+                "Lab: Create a grounded prompt template",
+                "Lab: Ground with Data Cloud",
+                "Lab: Test in Testing Center",
+                "Exam domain study plan",
+                "Exam-day strategy"
+            ],
+            detailedDescription: "Turn Agentforce concepts into practice using a free Salesforce Developer Edition org and Trailhead, then map your study to the exam domains and apply a practical exam-day strategy.",
+            detailedContent: [
+                {
+                    title: "Lab: Build an Agent in Agent Builder",
+                    content: `<strong>Goal:</strong> create a working agent end to end.
+
+<strong>Steps:</strong>
+1. Sign up for a free Salesforce Developer Edition org.
+2. Enable Agentforce/Einstein features.
+3. In Agent Builder, create an agent and add a topic.
+4. Add an action to the topic and test it in the preview.
+
+<strong>Takeaway:</strong> agents are assembled from topics and actions, then previewed before activation.`
+                },
+                {
+                    title: "Lab: Create a Grounded Prompt Template",
+                    content: `<strong>Goal:</strong> experience Prompt Builder and grounding.
+
+<strong>Steps:</strong>
+1. Open Prompt Builder and create a prompt template.
+2. Add merge fields from a record (e.g., an Account).
+3. Test the template and review the grounded output.
+
+<strong>Takeaway:</strong> grounding merges CRM/Data Cloud data into the prompt so responses are specific and accurate.`
+                },
+                {
+                    title: "Lab: Ground with Data Cloud",
+                    content: `<strong>Goal:</strong> connect agents to unified data.
+
+<strong>Steps (concept if Data Cloud is unavailable in your org):</strong>
+1. Review how data streams and DMOs unify customer data.
+2. Configure or inspect a search index/retriever.
+3. Observe how retrieved content grounds an answer.
+
+<strong>Takeaway:</strong> Data Cloud provides the trusted, unified context that makes agents reliable.`
+                },
+                {
+                    title: "Lab: Test in Testing Center",
+                    content: `<strong>Goal:</strong> validate agent behavior before launch.
+
+<strong>Steps:</strong>
+1. Open the Agentforce Testing Center.
+2. Run test cases across your topics and actions.
+3. Check topic classification and action selection.
+
+<strong>Takeaway:</strong> testing confirms the agent picks the right topics and actions and responds safely.`
+                },
+                {
+                    title: "Exam Domain Study Plan",
+                    content: `Map your study to the Agentforce Specialist exam areas.
+
+<strong>Agentforce concepts:</strong> Modules 1 and 6 (topics, actions, agent types).
+<strong>Prompt engineering:</strong> Module 2 plus Module 6 (Prompt Builder, template types, grounding).
+<strong>Agentforce & Data:</strong> Module 3 plus Module 6 (Data Cloud, retrievers, knowledge).
+<strong>Service & Sales applications:</strong> Module 4.
+<strong>Trust & deployment:</strong> Module 5 plus Module 7 labs (Einstein Trust Layer, testing).
+
+<strong>Recommended plan:</strong>
+• Week 1: Modules 1-2 + build an agent lab
+• Week 2: Modules 3 + 6 + prompt template and grounding labs
+• Week 3: Modules 4-5 + 7 + Testing Center + Trailhead
+• Week 4: Review + practice questions
+
+<strong>Pair with:</strong> the official Trailhead Agentforce trailmix and hands-on practice in a Developer Edition org.`
+                },
+                {
+                    title: "Exam-Day Strategy",
+                    content: `The Agentforce Specialist exam is configuration- and scenario-based.
+
+<strong>During the exam:</strong>
+• Match scenarios to the right building block (topic, action, prompt template, retriever)
+• When accuracy is the goal, think grounding in Data Cloud/Knowledge
+• When safety or PII is mentioned, think the Einstein Trust Layer
+• For "test before launch," think Testing Center
+• Prefer declarative (Flow, prompt templates) before custom Apex when both fit
+
+<strong>Mindset:</strong> you are configuring trusted, grounded agents on the Salesforce Platform.`
+                }
+            ]
         }
     ]
 };
@@ -12439,84 +14762,204 @@ const quizData = {
         { q: "A model that produces new text from a prompt is an example of which AI workload?", options: ["Computer vision", "Anomaly detection", "Generative AI", "Regression"], answer: 2, explain: "Generative AI creates new content (text, images, code) from a prompt, unlike classification or regression which predict labels or values." },
         { q: "Which Responsible AI principle focuses on ensuring a system does not discriminate against groups of people?", options: ["Reliability & safety", "Fairness", "Privacy & security", "Transparency"], answer: 1, explain: "Fairness is about treating all groups equitably and avoiding bias in AI outcomes." },
         { q: "Detecting and labelling objects within an image is part of which workload?", options: ["Natural language processing", "Computer vision", "Knowledge mining", "Conversational AI"], answer: 1, explain: "Computer vision covers image classification, object detection, and OCR." },
-        { q: "What is Azure AI Foundry (Microsoft Foundry) primarily used for?", options: ["Managing virtual networks", "Building, testing, and deploying AI solutions and agents", "Storing relational data", "Monitoring virtual machines"], answer: 1, explain: "Azure AI Foundry is the unified platform for building, evaluating, and deploying generative AI apps and agents." }
+        { q: "What is Azure AI Foundry (Microsoft Foundry) primarily used for?", options: ["Managing virtual networks", "Building, testing, and deploying AI solutions and agents", "Storing relational data", "Monitoring virtual machines"], answer: 1, explain: "Azure AI Foundry is the unified platform for building, evaluating, and deploying generative AI apps and agents." },
+        { q: "You need to extract totals and line items from scanned invoices. Which service fits best?", options: ["Azure AI Vision OCR only", "Azure AI Document Intelligence", "Azure AI Translator", "Azure AI Speech"], answer: 1, explain: "Document Intelligence extracts structured fields, tables, and key-value pairs from documents like invoices - beyond plain OCR." },
+        { q: "Which service makes large sets of company documents searchable and grounds generative AI?", options: ["Azure AI Search", "Azure Key Vault", "Azure Monitor", "Azure DNS"], answer: 0, explain: "Azure AI Search provides knowledge mining and vector/hybrid search, the retrieval layer behind RAG grounding." },
+        { q: "To detect hate, violence, sexual, and self-harm content in text and images, use:", options: ["Azure AI Content Safety", "Azure AI Vision", "Azure AI Language", "Azure Machine Learning"], answer: 0, explain: "Azure AI Content Safety screens both input and output across the four harm categories with severity levels." },
+        { q: "A solution needs several AI capabilities behind one key and endpoint. You should provision:", options: ["A single-service resource per capability", "A multi-service (Azure AI services/Foundry) resource", "A separate subscription each", "A virtual machine"], answer: 1, explain: "A multi-service resource shares one key and endpoint across capabilities, simplifying management for combined solutions." },
+        { q: "For production authentication to Azure AI services, the recommended approach is:", options: ["Hardcoded API keys", "Microsoft Entra ID with managed identities", "Keys in the URL", "A public config file"], answer: 1, explain: "Entra ID with managed identities avoids storing secrets in code and supports least-privilege RBAC." },
+        { q: "Training a model on labeled historical data to predict a category is an example of:", options: ["Unsupervised learning", "Supervised learning", "Reinforcement learning", "Clustering"], answer: 1, explain: "Supervised learning uses labeled examples; predicting a category is classification." },
+        { q: "Which capability automatically tries many algorithms to find the best model with minimal code?", options: ["Automated ML (AutoML)", "MLflow", "Content Safety", "Data drift"], answer: 0, explain: "Automated ML in Azure Machine Learning searches algorithms and hyperparameters and ranks candidate models." },
+        { q: "Converting speech in a meeting recording into text uses which service?", options: ["Azure AI Speech", "Azure AI Vision", "Azure AI Translator", "Azure AI Search"], answer: 0, explain: "Azure AI Speech provides speech-to-text (and text-to-speech) capabilities." },
+        { q: "Grounding a generative model on your own data primarily aims to:", options: ["Increase token cost", "Reduce hallucinations with trusted context", "Retrain the base model", "Disable content filters"], answer: 1, explain: "Grounding supplies relevant, trusted context (often via Azure AI Search) so answers are accurate and less prone to hallucination." },
+        { q: "Which Responsible AI principle means humans remain answerable for AI outcomes?", options: ["Transparency", "Accountability", "Inclusiveness", "Reliability & safety"], answer: 1, explain: "Accountability means people, not the AI, remain responsible for the system's outcomes." },
+        { q: "Identifying the language of incoming text so it can be routed correctly is:", options: ["Language detection", "Object detection", "Clustering", "Tokenization"], answer: 0, explain: "Language detection identifies the language of text, a prebuilt feature of Azure AI Language/Translator." },
+        { q: "A chatbot that extracts a user's intent and key details (entities) uses:", options: ["Conversational Language Understanding (CLU)", "OCR", "Anomaly detection", "Vector search"], answer: 0, explain: "CLU extracts intents and entities from utterances - the brain behind chatbots and voice assistants." }
     ],
     'panel-ab-731': [
         { q: "For AB-731, what should an AI transformation roadmap start with?", options: ["Selecting a model provider", "Buying GPU capacity", "Business outcomes and measurable value", "Building a chatbot pilot"], answer: 2, explain: "AB-731 focuses on outcome-first strategy: define business value first, then choose technology and delivery patterns." },
         { q: "Which operating model commonly balances enterprise standards with domain delivery speed?", options: ["Fully centralized", "Fully decentralized", "Hybrid model", "Vendor-managed only"], answer: 2, explain: "A hybrid model combines a shared AI platform/governance layer with domain-aligned product teams." },
         { q: "In AI governance, which control best supports auditability?", options: ["Informal approvals", "Undocumented prompt edits", "Comprehensive logging and traceability", "Disabling user feedback"], answer: 2, explain: "Auditability requires clear logs, decision trails, and evidence of policy enforcement across workflows." },
         { q: "What is the main purpose of an AI use-case portfolio rubric?", options: ["To maximize model size", "To prioritize initiatives by value, feasibility, speed, and risk", "To remove governance reviews", "To standardize job titles"], answer: 1, explain: "Portfolio rubrics help leaders consistently choose high-value, feasible use cases while managing risk." },
-        { q: "Which metric is most directly tied to transformation adoption?", options: ["Cloud region count", "Weekly active users and task success by persona", "Total lines of prompt text", "Number of data sources connected"], answer: 1, explain: "AB-731 emphasizes adoption and value realization, so usage and task-level outcomes are key indicators." }
+        { q: "Which metric is most directly tied to transformation adoption?", options: ["Cloud region count", "Weekly active users and task success by persona", "Total lines of prompt text", "Number of data sources connected"], answer: 1, explain: "AB-731 emphasizes adoption and value realization, so usage and task-level outcomes are key indicators." },
+        { q: "The recommended way to launch AI initiatives at scale is to:", options: ["Deploy org-wide on day one", "Run measured pilots, then scale based on evidence", "Avoid metrics", "Skip governance"], answer: 1, explain: "Pilot-then-scale with measurement reduces risk and builds confidence before broad rollout." },
+        { q: "An AI value case should always include:", options: ["Only the model name", "Target outcome, baseline, costs, and risks", "GPU brand", "The office location"], answer: 1, explain: "A defensible value case ties outcome and baseline to costs and risks." },
+        { q: "Pairing value metrics with guardrail metrics ensures that:", options: ["Speed erodes trust", "Delivery speed does not compromise safety and satisfaction", "Costs are ignored", "Governance is removed"], answer: 1, explain: "Guardrail metrics (safety, satisfaction, error rates) keep speed from eroding trust." },
+        { q: "A right-sized AI governance model should:", options: ["Block all initiatives", "Enable safe speed with clear decision rights and risk tiers", "Avoid documentation", "Remove approvals"], answer: 1, explain: "Good governance accelerates safe delivery via decision rights, risk tiers, and review gates." },
+        { q: "FinOps for AI primarily helps a leader:", options: ["Increase token usage", "Govern and optimize AI spend and ROI", "Remove monitoring", "Hide costs"], answer: 1, explain: "FinOps brings budgets, showback, and right-sizing to control AI cost and improve ROI." },
+        { q: "When a pilot underperforms against its metrics, a leader should:", options: ["Scale it anyway", "Pivot or stop based on evidence", "Ignore the result", "Remove the metrics"], answer: 1, explain: "Portfolio decisions (fund, scale, pivot, stop) should be evidence-based." },
+        { q: "Sustained AI adoption depends most on:", options: ["Larger models", "People: change management, enablement, and champions", "More regions", "Longer prompts"], answer: 1, explain: "Transformation is sustained by people through change management and enablement." },
+        { q: "A strong executive value update leads with:", options: ["Technical architecture diagrams", "Outcome vs target, ROI, risks controlled, and next funding", "Token counts", "Server names"], answer: 1, explain: "Outcome-first executive communication sustains sponsorship and funding." },
+        { q: "A center of excellence in an AI operating model primarily provides:", options: ["Standards, reuse, and governance support", "Cheaper GPUs", "A CDN", "A DNS zone"], answer: 0, explain: "A CoE sets standards, promotes reuse, and supports governance across teams." }
     ],
     'panel-ai-103': [
         { q: "In a Retrieval-Augmented Generation (RAG) pattern, what does the retrieval step do?", options: ["Fine-tunes the model weights", "Fetches relevant context to ground the model's response", "Deploys the model to an endpoint", "Encrypts the prompt"], answer: 1, explain: "RAG retrieves relevant documents (often via a vector search) and injects them as context so the model answers from grounded facts, reducing hallucination." },
         { q: "Which Azure service is commonly used as the knowledge/vector store for RAG?", options: ["Azure Key Vault", "Azure AI Search", "Azure Monitor", "Azure DevOps"], answer: 1, explain: "Azure AI Search provides vector and hybrid search, making it the typical retrieval layer for RAG solutions." },
         { q: "What does tool calling (function calling) allow a large language model to do?", options: ["Increase its token limit", "Invoke external functions or APIs to take actions", "Automatically reduce latency", "Encrypt its outputs"], answer: 1, explain: "Tool/function calling lets the model request that your defined functions or APIs run, enabling agents to take real actions." },
         { q: "To keep credentials out of code when authenticating to Azure AI services, you should use:", options: ["Hardcoded API keys", "Microsoft Entra ID / managed identities", "A public config file", "Keys in the query string"], answer: 1, explain: "Microsoft Entra ID with managed identities avoids storing secrets in code and is the recommended authentication approach." },
-        { q: "Which Azure AI Foundry capability helps you measure the quality and groundedness of generative responses?", options: ["Load balancing", "Evaluations", "Autoscaling", "Blob storage"], answer: 1, explain: "Foundry Evaluations score responses on metrics like groundedness, relevance, and coherence so you can compare and improve solutions." }
+        { q: "Which Azure AI Foundry capability helps you measure the quality and groundedness of generative responses?", options: ["Load balancing", "Evaluations", "Autoscaling", "Blob storage"], answer: 1, explain: "Foundry Evaluations score responses on metrics like groundedness, relevance, and coherence so you can compare and improve solutions." },
+        { q: "Which service extracts fields and tables from invoices and forms?", options: ["Azure AI Document Intelligence", "Azure AI Translator", "Azure Key Vault", "Azure Monitor"], answer: 0, explain: "Document Intelligence extracts structured data (fields, tables, key-value pairs) from documents." },
+        { q: "To transcribe large volumes of recorded call audio, use:", options: ["Batch transcription in Azure AI Speech", "Text-to-speech", "Azure AI Translator", "Azure AI Vision"], answer: 0, explain: "Batch transcription handles large volumes of recorded audio; real-time is for live scenarios." },
+        { q: "To extract transcripts, faces, and topics from recorded video, use:", options: ["Azure AI Video Indexer", "Azure AI Search", "Azure Functions", "Azure DNS"], answer: 0, explain: "Azure AI Video Indexer extracts rich insights (transcripts, faces, topics, scenes) from recorded media." },
+        { q: "The Foundry Agent Service primarily manages:", options: ["Threads, tool calls, and run state for agents", "Virtual networks", "Blob lifecycle", "DNS records"], answer: 0, explain: "The Foundry Agent Service handles conversation threads, tool invocation, and run state so you focus on agent behavior." },
+        { q: "When your generic translations miss industry terms, you should use:", options: ["Custom Translator", "Text-to-speech", "OCR", "Anomaly detection"], answer: 0, explain: "Custom Translator adapts translation to domain-specific and brand terminology." },
+        { q: "To handle Azure AI throttling (HTTP 429) gracefully, implement:", options: ["Exponential backoff and retries", "A larger font", "A public endpoint", "A second subscription only"], answer: 0, explain: "Retry with exponential backoff handles rate limiting (429) robustly." },
+        { q: "For observability of an AI solution in production, enable:", options: ["Diagnostic settings to Azure Monitor / Log Analytics", "Cloud CDN", "A static website", "A new tenant"], answer: 0, explain: "Diagnostic settings send logs/metrics to Azure Monitor and Log Analytics for monitoring and alerts." },
+        { q: "A prompt-shield guardrail primarily defends against:", options: ["Jailbreak/prompt-injection attempts", "Slow networks", "High storage cost", "DNS failures"], answer: 0, explain: "Prompt shields detect and block jailbreak and prompt-injection attempts on model input." },
+        { q: "Vector (semantic) search retrieves content by:", options: ["Exact keyword only", "Meaning via nearest-neighbor on embeddings", "File size", "Alphabetical order"], answer: 1, explain: "Vector search compares embeddings by nearest-neighbor to retrieve semantically relevant content, often combined with keywords in hybrid search." }
     ],
     'panel-dp-100': [
         { q: "Which Azure Machine Learning concept packages your training code to run on remote compute?", options: ["Endpoint", "Job (experiment run)", "Datastore", "Workspace"], answer: 1, explain: "A job submits your training script to run on a specified compute target and tracks its outputs." },
         { q: "What is MLflow primarily used for in Azure ML?", options: ["Network security", "Tracking experiments, parameters, and models", "Billing", "Provisioning virtual machines"], answer: 1, explain: "MLflow provides experiment tracking, model logging, and packaging, and is integrated into Azure ML." },
         { q: "To serve a model for low-latency, real-time inference you deploy to a:", options: ["Batch endpoint", "Online (real-time) endpoint", "Datastore", "Pipeline"], answer: 1, explain: "Online endpoints provide scalable, low-latency REST inference; batch endpoints are for asynchronous scoring of large datasets." },
         { q: "Which capability automatically tries many algorithms and hyperparameters to find the best model?", options: ["Automated ML (AutoML)", "MLflow", "ONNX", "Data drift"], answer: 0, explain: "Automated ML searches across algorithms and hyperparameters and ranks candidate models by your chosen metric." },
-        { q: "Monitoring how input data distribution changes over time is known as detecting:", options: ["Overfitting", "Data drift", "Underfitting", "Data leakage"], answer: 1, explain: "Data drift is a shift in the input distribution after deployment, which can degrade model performance and should be monitored." }
+        { q: "Monitoring how input data distribution changes over time is known as detecting:", options: ["Overfitting", "Data drift", "Underfitting", "Data leakage"], answer: 1, explain: "Data drift is a shift in the input distribution after deployment, which can degrade model performance and should be monitored." },
+        { q: "DP-100 retired in June 2026. The recommended successor certification is:", options: ["AI-900", "AI-300 (ML Operations Engineer)", "DP-203", "AZ-900"], answer: 1, explain: "AI-300 (ML Operations Engineer Associate) is the modern successor covering MLOps and GenAIOps on Azure." },
+        { q: "To tune hyperparameters natively in Azure ML, you run a:", options: ["Sweep job", "Datastore", "Workspace", "Blob container"], answer: 0, explain: "A sweep job wraps a command job to search a hyperparameter space and optimize a primary metric." },
+        { q: "To measure and mitigate model unfairness across groups, use:", options: ["Fairlearn (in the Responsible AI dashboard)", "Cloud CDN", "Key Vault", "Load Balancer"], answer: 0, explain: "Fairlearn assesses disaggregated metrics and supports mitigation for fairness." },
+        { q: "For cost-effective scoring of a large dataset that is not time-sensitive, use a:", options: ["Batch endpoint", "Real-time endpoint", "Datastore", "Notebook"], answer: 0, explain: "Batch endpoints score large datasets asynchronously and are cheaper than always-on online endpoints." },
+        { q: "A reusable, versioned pipeline step (code + inputs + outputs + environment) is a:", options: ["Component", "Datastore", "Secret", "Region"], answer: 0, explain: "Components are self-contained, reusable pipeline steps that improve reproducibility." },
+        { q: "Explaining which features drove a model's predictions is called:", options: ["Interpretability", "Sharding", "Caching", "Throttling"], answer: 0, explain: "Model interpretability produces feature-importance explanations for transparency and debugging." },
+        { q: "A model with high overall accuracy but poor results for one subgroup is best surfaced by:", options: ["Error analysis", "A bigger VM", "A CDN", "A new region"], answer: 0, explain: "Error analysis reveals cohorts with high error rates that overall accuracy hides." },
+        { q: "Safe rollout of a new model version alongside the old one uses:", options: ["Blue/green (traffic split) deployment", "A single variant only", "Manual file copy", "A DNS change"], answer: 0, explain: "Blue/green deployments route traffic gradually between versions for safe rollouts." },
+        { q: "Registering a model in Azure ML primarily enables:", options: ["Versioning and governed, repeatable deployment", "Cheaper storage", "Faster DNS", "Automatic labeling"], answer: 0, explain: "The model registry versions models with lineage and provides a governed path to deployment." }
     ],
     'panel-aif': [
         { q: "Which AWS service provides access to multiple foundation models through a single API?", options: ["Amazon SageMaker", "Amazon Bedrock", "Amazon Comprehend", "Amazon Rekognition"], answer: 1, explain: "Amazon Bedrock offers serverless access to foundation models from multiple providers via one API, plus features like Knowledge Bases and Guardrails." },
         { q: "RAG is generally preferred over fine-tuning when you want to:", options: ["Permanently change the model's weights", "Ground responses on up-to-date proprietary data cost-effectively", "Train a model from scratch", "Shrink the model size"], answer: 1, explain: "RAG grounds answers on your current data without retraining, and is usually cheaper and faster to update than fine-tuning." },
         { q: "Which AWS service extracts text and structured data from scanned documents?", options: ["Amazon Polly", "Amazon Textract", "Amazon Translate", "Amazon Lex"], answer: 1, explain: "Amazon Textract extracts text, forms, and tables from documents; Polly is text-to-speech, Lex is chatbots, Translate is language translation." },
         { q: "Amazon Bedrock Guardrails are used to:", options: ["Speed up model training", "Filter harmful content and enforce safety policies", "Reduce storage costs", "Manage IAM roles"], answer: 1, explain: "Guardrails apply content filters, denied topics, and PII controls to generative AI applications." },
-        { q: "Which of these is a generative AI use case?", options: ["Fraud classification", "Summarizing long documents", "Forecasting next month's sales", "Detecting anomalies"], answer: 1, explain: "Summarization generates new text from input, making it generative; the others are predictive/classification tasks." }
+        { q: "Which of these is a generative AI use case?", options: ["Fraud classification", "Summarizing long documents", "Forecasting next month's sales", "Detecting anomalies"], answer: 1, explain: "Summarization generates new text from input, making it generative; the others are predictive/classification tasks." },
+        { q: "To build and train a custom ML model with full control on AWS, you use:", options: ["Amazon SageMaker", "Amazon Rekognition", "Amazon Polly", "Amazon Translate"], answer: 0, explain: "Amazon SageMaker is the ML platform for building, training, and deploying custom models; the others are prebuilt AI services." },
+        { q: "A managed way to implement retrieval-augmented generation on AWS is:", options: ["Amazon Bedrock Knowledge Bases", "Amazon SQS", "AWS Glue", "Amazon Route 53"], answer: 0, explain: "Bedrock Knowledge Bases handle chunking, embeddings, and retrieval to ground foundation models on your data." },
+        { q: "Which Bedrock feature lets a model plan multi-step tasks and call APIs/tools?", options: ["Bedrock Agents", "Bedrock Guardrails", "Amazon S3", "Amazon CloudWatch"], answer: 0, explain: "Bedrock Agents orchestrate reasoning steps and invoke action groups (APIs/tools) to complete tasks." },
+        { q: "For image and video analysis or content moderation, the managed service is:", options: ["Amazon Rekognition", "Amazon Comprehend", "Amazon Transcribe", "Amazon Kendra"], answer: 0, explain: "Amazon Rekognition analyzes images and video, including labels, faces, and moderation." },
+        { q: "To convert customer-call audio into text, use:", options: ["Amazon Transcribe", "Amazon Polly", "Amazon Lex", "Amazon Personalize"], answer: 0, explain: "Amazon Transcribe is speech-to-text; Polly is text-to-speech, Lex builds chatbots, Personalize does recommendations." },
+        { q: "Intelligent enterprise search across company documents is provided by:", options: ["Amazon Kendra", "Amazon SQS", "Amazon EC2", "Amazon VPC"], answer: 0, explain: "Amazon Kendra provides ML-powered intelligent search over enterprise content." },
+        { q: "When choosing a foundation model, a key cost driver is:", options: ["The AWS Region name", "Tokens processed (input + output)", "The IAM role name", "The bucket name"], answer: 1, explain: "Generative AI cost is largely driven by tokens processed; smaller models are cheaper and faster." },
+        { q: "Which is a limitation of large language models to plan for?", options: ["They never make mistakes", "They can hallucinate confident but wrong answers", "They have unlimited context", "They cost nothing to run"], answer: 1, explain: "LLMs can hallucinate, so grounding (RAG), guardrails, and human oversight matter." },
+        { q: "The AWS shared responsibility model means, for AI services, AWS is responsible for:", options: ["Your prompt content", "Security of the underlying cloud infrastructure", "Your IAM policy design choices", "Your data classification"], answer: 1, explain: "AWS secures the cloud infrastructure; customers remain responsible for how they configure access, data, and usage." },
+        { q: "To control who can call Bedrock or other AWS AI services, you primarily use:", options: ["AWS IAM", "Amazon CloudFront", "Amazon SNS", "AWS Batch"], answer: 0, explain: "AWS IAM controls authentication and least-privilege authorization for AWS services." },
+        { q: "Providing a few examples inside the prompt to guide output is called:", options: ["Few-shot prompting", "Fine-tuning", "Distillation", "Sharding"], answer: 0, explain: "Few-shot prompting includes examples in the prompt to steer format and behavior without training." }
     ],
     'panel-mla': [
         { q: "Which SageMaker feature stores and serves curated ML features for training and inference?", options: ["SageMaker Feature Store", "SageMaker Ground Truth", "SageMaker Clarify", "SageMaker Neo"], answer: 0, explain: "Feature Store centralizes features so the same definitions are used consistently in training and serving, avoiding skew." },
         { q: "To detect bias and explain model predictions in SageMaker, you use:", options: ["SageMaker Clarify", "SageMaker Pipelines", "SageMaker Edge", "SageMaker Canvas"], answer: 0, explain: "SageMaker Clarify measures bias and produces feature-importance explanations for models." },
         { q: "Which service orchestrates repeatable, CI/CD-style ML workflows in SageMaker?", options: ["SageMaker Pipelines", "SageMaker Studio Lab", "Amazon Q", "SageMaker JumpStart"], answer: 0, explain: "SageMaker Pipelines defines and automates end-to-end ML workflows for reproducibility and CI/CD." },
         { q: "For cost-effective inference over a large dataset that is not time-sensitive, use:", options: ["A real-time endpoint", "Batch transform", "A serverless websocket", "Edge deployment"], answer: 1, explain: "Batch transform processes large datasets asynchronously and is more cost-effective than keeping a real-time endpoint running." },
-        { q: "Large-scale data labeling for supervised learning is provided by:", options: ["SageMaker Ground Truth", "SageMaker Neo", "Feature Store", "Model Monitor"], answer: 0, explain: "SageMaker Ground Truth manages human and automated data labeling workflows." }
+        { q: "Large-scale data labeling for supervised learning is provided by:", options: ["SageMaker Ground Truth", "SageMaker Neo", "Feature Store", "Model Monitor"], answer: 0, explain: "SageMaker Ground Truth manages human and automated data labeling workflows." },
+        { q: "To detect data and quality drift on a deployed SageMaker endpoint, use:", options: ["SageMaker Model Monitor", "SageMaker Neo", "SageMaker Canvas", "Amazon Q"], answer: 0, explain: "Model Monitor watches for data quality and drift so you can retrain before performance drops." },
+        { q: "To govern which model versions can be deployed, use:", options: ["SageMaker Model Registry with approval status", "An S3 bucket policy only", "A CloudFront distribution", "A Route 53 record"], answer: 0, explain: "The Model Registry versions models and gates deployment via approval status." },
+        { q: "To reduce training cost for interruptible jobs, use:", options: ["Spot (managed spot) training", "Always on-demand only", "A bigger endpoint", "A CDN"], answer: 0, explain: "Managed spot training uses spare capacity at lower cost for interruptible training jobs." },
+        { q: "For spiky, unpredictable inference traffic with no idle cost, choose:", options: ["Serverless inference", "A 24/7 real-time endpoint", "Batch only", "Edge only"], answer: 0, explain: "Serverless inference scales to zero and suits spiky traffic without paying for idle endpoints." },
+        { q: "Native CI/CD templates for ML on AWS are provided by:", options: ["SageMaker Projects (+ CodePipeline)", "Amazon Route 53", "Amazon CloudFront", "AWS Shield"], answer: 0, explain: "SageMaker Projects provision CI/CD (often with CodePipeline/CodeBuild) for MLOps." },
+        { q: "For very large inference payloads processed asynchronously, use:", options: ["Asynchronous inference", "A websocket", "A CDN", "A DNS record"], answer: 0, explain: "Asynchronous inference handles large payloads and long processing without blocking." },
+        { q: "Consistent features in training and serving are ensured by:", options: ["SageMaker Feature Store", "Amazon SQS", "Amazon SNS", "AWS Batch"], answer: 0, explain: "Feature Store centralizes feature definitions, preventing training-serving skew." },
+        { q: "To control access to SageMaker resources with least privilege, use:", options: ["AWS IAM roles and policies", "A public S3 bucket", "A CDN", "A DNS zone"], answer: 0, explain: "IAM enforces least-privilege access to SageMaker and related resources." },
+        { q: "A pipeline step that only registers a model if accuracy exceeds a threshold uses a:", options: ["Condition step", "DNS step", "CDN step", "Cache step"], answer: 0, explain: "A condition step gates registration/deployment on evaluation metrics." }
     ],
     'panel-genai-leader': [
         { q: "Google Cloud's unified platform for building and deploying ML and generative AI is:", options: ["BigQuery", "Vertex AI", "Cloud Spanner", "Dataproc"], answer: 1, explain: "Vertex AI is Google Cloud's end-to-end platform for training, tuning, and deploying models, including Gemini." },
         { q: "Grounding a Gemini model on your enterprise data primarily helps to:", options: ["Increase token cost", "Reduce hallucinations by supplying factual context", "Retrain the model from scratch", "Bypass safety filters"], answer: 1, explain: "Grounding supplies trusted, current data as context so responses are more accurate and less prone to hallucination." },
         { q: "Which is a key limitation of large language models that leaders should plan for?", options: ["Guaranteed factual accuracy", "The potential to hallucinate", "Unlimited context length", "Zero operating cost"], answer: 1, explain: "LLMs can generate confident but incorrect answers (hallucinations), so grounding and human oversight matter." },
         { q: "Converting text into numeric vectors that capture meaning for search and similarity uses:", options: ["Embeddings", "Tokenizers only", "Quantization", "Sharding"], answer: 0, explain: "Embeddings map text to vectors so semantically similar items are close together, powering semantic search and RAG." },
-        { q: "From a governance standpoint, responsible use of generative AI on Google Cloud is supported by:", options: ["Cloud CDN", "Vertex AI safety filters and Responsible AI tooling", "Cloud NAT", "Pub/Sub"], answer: 1, explain: "Vertex AI provides safety filters and Responsible AI tooling to help enforce policies and reduce harmful outputs." }
+        { q: "From a governance standpoint, responsible use of generative AI on Google Cloud is supported by:", options: ["Cloud CDN", "Vertex AI safety filters and Responsible AI tooling", "Cloud NAT", "Pub/Sub"], answer: 1, explain: "Vertex AI provides safety filters and Responsible AI tooling to help enforce policies and reduce harmful outputs." },
+        { q: "Google's flagship multimodal foundation model family is:", options: ["BERT", "Gemini", "PaLM 1", "ResNet"], answer: 1, explain: "Gemini is Google's multimodal model family, handling text, images, audio, and video." },
+        { q: "A team needs image labeling for a common use case with no ML expertise. The best first choice is:", options: ["Custom training on Vertex AI", "The pre-trained Cloud Vision API", "Training a model in BigQuery ML", "Building a new neural network"], answer: 1, explain: "Pre-trained APIs like Cloud Vision solve common tasks instantly with no training - always prefer the simplest option that meets the need." },
+        { q: "An analyst wants to build a churn model using data already in BigQuery, with SQL. Recommend:", options: ["BigQuery ML", "Dataproc", "Cloud Spanner", "Cloud CDN"], answer: 0, explain: "BigQuery ML lets you train and run models with SQL directly where the data lives, ideal for analysts and fast baselines." },
+        { q: "In Vertex AI, the interface for designing and testing prompts without writing code is:", options: ["Cloud Shell", "Vertex AI Studio", "Cloud Build", "Artifact Registry"], answer: 1, explain: "Vertex AI Studio is where you design, test, and iterate on prompts before moving to code." },
+        { q: "A catalog of Google, partner, and open models to discover and deploy is called:", options: ["Model Garden", "Cloud Storage", "Looker", "Firestore"], answer: 0, explain: "Model Garden in Vertex AI is the catalog for discovering, testing, and deploying models." },
+        { q: "The prompting technique of asking the model to reason step by step is:", options: ["Zero-shot", "Chain-of-thought", "Quantization", "Sharding"], answer: 1, explain: "Chain-of-thought prompting asks the model to show step-by-step reasoning, improving results on complex tasks." },
+        { q: "Providing a few input/output examples inside the prompt is known as:", options: ["Fine-tuning", "Few-shot prompting", "Distillation", "Grounding"], answer: 1, explain: "Few-shot prompting includes examples in the prompt to steer the model's format and behavior - no training required." },
+        { q: "Which parameter most directly controls how random or creative model output is?", options: ["Temperature", "Replica count", "Region", "IAM role"], answer: 0, explain: "Temperature controls randomness: lower is more deterministic/factual, higher is more creative." },
+        { q: "To let one small model learn from a larger model to cut cost and latency, you use:", options: ["Distillation", "Sharding", "Quantized indexing", "Federation"], answer: 0, explain: "Distillation trains a smaller, cheaper model to mimic a larger one, reducing cost and latency." },
+        { q: "For fast semantic retrieval behind RAG on Google Cloud, use:", options: ["Vertex AI Vector Search", "Cloud NAT", "Cloud DNS", "Cloud Armor"], answer: 0, explain: "Vertex AI Vector Search performs fast nearest-neighbor lookups over embeddings, powering RAG retrieval." },
+        { q: "To prevent data exfiltration around AI services, a leader should apply:", options: ["VPC Service Controls", "Cloud CDN", "Pub/Sub", "Cloud Scheduler"], answer: 0, explain: "VPC Service Controls create a security perimeter that helps prevent data exfiltration from Google Cloud services." },
+        { q: "Enterprise customers often require that their prompts and data are NOT used to train models. On Vertex AI this is:", options: ["Impossible", "Provided via enterprise data governance and no-training guarantees", "Only on the free tier", "Handled by Cloud CDN"], answer: 1, explain: "Vertex AI offers enterprise data governance, including data residency and guarantees that customer data is not used to train foundation models." },
+        { q: "Which is a Google AI Principle a leader should uphold?", options: ["Maximize engagement at all costs", "Avoid creating or reinforcing unfair bias", "Hide model limitations", "Skip human oversight"], answer: 1, explain: "Google's AI Principles include avoiding unfair bias, safety, accountability, and privacy." },
+        { q: "When prioritizing generative AI use cases, a common leadership framework weighs:", options: ["Color scheme vs font", "Business value vs feasibility", "Region vs zone", "CPU vs GPU only"], answer: 1, explain: "Leaders prioritize use cases by business value against feasibility, then define clear success metrics." },
+        { q: "The recommended way to scale a new generative AI initiative is to:", options: ["Deploy org-wide on day one", "Start with a measured pilot, then scale", "Avoid measuring outcomes", "Skip change management"], answer: 1, explain: "Start with pilots, measure outcomes, then scale - paired with executive sponsorship and change management." },
+        { q: "To embed generative AI into everyday productivity apps with no build effort, an organization can use:", options: ["Gemini for Google Workspace", "Cloud Functions", "Bigtable", "Cloud Interconnect"], answer: 0, explain: "Gemini for Google Workspace adds AI directly into Gmail, Docs, Sheets, Slides, and Meet - fast value with nothing to build." }
     ],
     'panel-gcp-mle': [
         { q: "Which Vertex AI feature manages features for training/serving consistency?", options: ["Vertex AI Feature Store", "Cloud Armor", "Dataflow", "Looker"], answer: 0, explain: "Vertex AI Feature Store centralizes feature definitions to keep training and serving consistent." },
         { q: "To serve a model as an autoscaling REST endpoint on Vertex AI, you deploy it to a:", options: ["BigQuery table", "Vertex AI Endpoint", "Cloud Storage bucket", "Pub/Sub topic"], answer: 1, explain: "A Vertex AI Endpoint hosts a deployed model for online predictions with autoscaling." },
         { q: "Which managed service runs large-scale Apache Beam data pipelines on Google Cloud?", options: ["Dataflow", "Cloud SQL", "Firestore", "Memorystore"], answer: 0, explain: "Dataflow runs Apache Beam pipelines for scalable batch and streaming data processing." },
         { q: "Vertex AI Pipelines are used to:", options: ["Manage DNS", "Orchestrate reproducible ML workflows", "Host static websites", "Store secrets"], answer: 1, explain: "Vertex AI Pipelines orchestrate and track reproducible, containerized ML workflows." },
-        { q: "To detect training-serving skew and data drift on a deployed model, use:", options: ["Vertex AI Model Monitoring", "Cloud Trace", "Cloud Build", "Artifact Registry"], answer: 0, explain: "Vertex AI Model Monitoring watches for skew and drift so you can retrain before performance degrades." }
+        { q: "To detect training-serving skew and data drift on a deployed model, use:", options: ["Vertex AI Model Monitoring", "Cloud Trace", "Cloud Build", "Artifact Registry"], answer: 0, explain: "Vertex AI Model Monitoring watches for skew and drift so you can retrain before performance degrades." },
+        { q: "An analyst wants a model with SQL on data already in BigQuery. Recommend:", options: ["BigQuery ML", "Custom training containers", "Dataproc Spark", "Compute Engine VMs"], answer: 0, explain: "BigQuery ML trains models with SQL where the data lives - ideal for analysts and fast baselines." },
+        { q: "For cost-effective scoring of millions of records that is not time-sensitive, use:", options: ["A real-time endpoint", "Vertex AI batch prediction", "A websocket", "Edge deployment"], answer: 1, explain: "Batch prediction processes large datasets asynchronously and is cheaper than keeping an online endpoint running." },
+        { q: "Google's custom accelerators optimized for large-scale training are:", options: ["TPUs", "HDDs", "CDNs", "NICs"], answer: 0, explain: "TPUs (Tensor Processing Units) are Google's accelerators for large-scale ML training and inference." },
+        { q: "To automate build-test-deploy of ML pipelines on Google Cloud, you typically use:", options: ["Cloud Build (or GitHub Actions)", "Cloud CDN", "Cloud NAT", "Cloud DNS"], answer: 0, explain: "Cloud Build (or GitHub Actions) triggers Vertex AI Pipelines for CI/CD in MLOps." },
+        { q: "Choosing the simplest build approach that meets requirements usually means preferring:", options: ["Custom training first", "Pre-trained APIs / BQML / AutoML before full custom", "Always the largest model", "Manual notebooks only"], answer: 1, explain: "Prefer the lowest-effort option (APIs, BQML, AutoML) before custom training to reduce cost and effort." },
+        { q: "To reproduce a deployed model's exact data and code lineage, rely on:", options: ["Vertex ML Metadata", "Cloud Armor", "Memorystore", "Cloud Interconnect"], answer: 0, explain: "Vertex ML Metadata records artifacts and executions, enabling lineage and reproducibility." },
+        { q: "Applying the same feature transformations in training and serving prevents:", options: ["Training-serving skew", "Cold starts", "DNS caching", "Sharding"], answer: 0, explain: "Consistent transformations (e.g., via Feature Store) prevent training-serving skew." },
+        { q: "Native hyperparameter tuning on Vertex AI is done with:", options: ["Vertex AI hyperparameter tuning (sweep) jobs", "Cloud DNS", "Pub/Sub", "Cloud CDN"], answer: 0, explain: "Vertex AI runs automated hyperparameter search over defined ranges to optimize a metric." },
+        { q: "To secure ML workloads and prevent data exfiltration, a strong control is:", options: ["VPC Service Controls", "Cloud CDN", "Cloud Scheduler", "Cloud Tasks"], answer: 0, explain: "VPC Service Controls create a security perimeter that helps prevent data exfiltration." }
     ],
     'panel-agentforce': [
         { q: "In Agentforce, a topic primarily defines:", options: ["The UI colour theme", "A job the agent can handle, grouping related actions", "The billing tier", "The data center region"], answer: 1, explain: "A topic scopes a set of jobs the agent can do and groups the instructions and actions that handle them." },
         { q: "Agentforce actions can be built from:", options: ["Only Apex", "Flows, Apex, and prompt templates", "Only external REST APIs", "Only reports"], answer: 1, explain: "Actions can be backed by Flows, Apex, prompt templates, and other invocable capabilities." },
         { q: "The Einstein Trust Layer is designed to:", options: ["Speed up flows", "Provide data masking, grounding, and toxicity/audit controls", "Store files", "Manage user licenses"], answer: 1, explain: "The Einstein Trust Layer adds security and trust features such as data masking, secure grounding, zero data retention, and toxicity/audit logging." },
         { q: "Grounding a prompt template in Salesforce means:", options: ["Deploying it to production", "Injecting CRM or Data Cloud data into the prompt for context", "Deleting related records", "Scheduling a batch job"], answer: 1, explain: "Grounding merges relevant Salesforce/Data Cloud data into the prompt so the response is specific and accurate." },
-        { q: "Which tool do you use to build and test prompt templates in Salesforce?", options: ["Flow Builder", "Prompt Builder", "Schema Builder", "Report Builder"], answer: 1, explain: "Prompt Builder is where you create, ground, and test reusable prompt templates." }
+        { q: "Which tool do you use to build and test prompt templates in Salesforce?", options: ["Flow Builder", "Prompt Builder", "Schema Builder", "Report Builder"], answer: 1, explain: "Prompt Builder is where you create, ground, and test reusable prompt templates." },
+        { q: "Which Salesforce product unifies data into a real-time customer profile for grounding?", options: ["Data Cloud", "Experience Cloud", "Commerce Cloud", "Marketing Cloud"], answer: 0, explain: "Data Cloud unifies data via data streams, DMOs, and identity resolution to ground agents and prompts." },
+        { q: "A retriever in Agentforce is used to:", options: ["Deploy code", "Find the most relevant content to ground a response", "Manage user permissions", "Schedule jobs"], answer: 1, explain: "Retrievers search a vector/search index and return relevant chunks that ground the model's answer (RAG)." },
+        { q: "The Einstein Trust Layer feature that prevents the LLM provider from keeping your data is:", options: ["Data masking", "Zero data retention", "Toxicity scoring", "Prompt defense"], answer: 1, explain: "Zero data retention ensures the LLM provider does not store your prompts or responses." },
+        { q: "To validate an agent's topic classification and action selection before launch, use:", options: ["Report Builder", "Agentforce Testing Center", "Schema Builder", "Data Loader"], answer: 1, explain: "The Agentforce Testing Center runs test cases to confirm the agent picks the right topics and actions." },
+        { q: "When both fit a requirement, Salesforce best practice generally prefers:", options: ["Custom Apex over everything", "Declarative tools (Flow, prompt templates) before custom code", "External APIs only", "Manual processes"], answer: 1, explain: "Declarative building blocks are preferred before custom Apex when both can meet the requirement." },
+        { q: "The Agentforce Service Agent is designed primarily to:", options: ["Write Apex triggers", "Resolve customer service cases autonomously", "Manage sandboxes", "Build dashboards"], answer: 1, explain: "The Agentforce Service Agent handles customer service interactions, grounded in Knowledge and case data, escalating to humans when needed." },
+        { q: "Instructions within a topic are used to:", options: ["Set the org's currency", "Guide how the agent behaves for that job", "Define page layouts", "Control license counts"], answer: 1, explain: "Instructions guide the agent's behavior within a topic, improving accuracy and appropriate action selection." },
+        { q: "Sensitive fields being hidden before a prompt reaches the LLM is an example of:", options: ["Data masking", "Sharding", "Indexing", "Caching"], answer: 0, explain: "Data masking in the Einstein Trust Layer protects sensitive/PII fields before content reaches the model." },
+        { q: "Grounding an agent in Salesforce Knowledge articles primarily improves:", options: ["Deployment speed", "Answer accuracy and relevance", "License usage", "Report formatting"], answer: 1, explain: "Grounding in curated Knowledge (via retrievers) makes agent responses accurate and relevant." }
     ],
     'panel-ai-300': [
         { q: "What is the primary goal of MLOps?", options: ["To build more models faster only", "To standardize and automate the ML lifecycle: build, deploy, and monitor", "To replace data scientists", "To reduce the number of cloud regions"], answer: 1, explain: "MLOps applies DevOps practices to machine learning so models are reproducibly built, deployed, monitored, and retrained." },
         { q: "Which tool would you use to automate build-test-deploy (CI/CD) workflows for Azure Machine Learning?", options: ["Power BI", "GitHub Actions", "Azure Monitor alone", "Microsoft Excel"], answer: 1, explain: "GitHub Actions (or Azure Pipelines) can trigger Azure ML jobs to automate training and deployment as part of CI/CD." },
         { q: "After a model is deployed, detecting data drift primarily tells you when to:", options: ["Delete the endpoint", "Retrain or update the model", "Raise the price", "Change the Azure region"], answer: 1, explain: "Drift signals that incoming data no longer matches the training data, so the model should be retrained to stay accurate." },
         { q: "In GenAIOps, evaluating a generative model for 'groundedness' measures whether:", options: ["Responses are fast", "Responses are supported by the provided source data", "The model is small", "Tokens are cheap"], answer: 1, explain: "Groundedness checks that the model's answer is backed by the supplied context rather than fabricated." },
-        { q: "Registering a model in the Azure ML model registry mainly enables:", options: ["Faster GPUs", "Versioning and governed, repeatable deployment", "Cheaper blob storage", "Automatic data labeling"], answer: 1, explain: "The model registry versions models and provides a governed path to deploy a specific, tracked version." }
+        { q: "Registering a model in the Azure ML model registry mainly enables:", options: ["Faster GPUs", "Versioning and governed, repeatable deployment", "Cheaper blob storage", "Automatic data labeling"], answer: 1, explain: "The model registry versions models and provides a governed path to deploy a specific, tracked version." },
+        { q: "To provision repeatable dev/test/prod ML environments, AI-300 emphasizes:", options: ["Manual portal clicks", "Infrastructure as code with Bicep and the Azure CLI", "Copying VMs by hand", "Editing DNS"], answer: 1, explain: "IaC (Bicep + Azure CLI) gives repeatable, reviewable environments - a core AI-300 practice." },
+        { q: "For keyless, least-privilege access between Azure services, use:", options: ["Managed identities with RBAC", "Shared passwords", "Public keys in code", "A single admin account"], answer: 0, explain: "Managed identities plus RBAC avoid secrets and enforce least privilege." },
+        { q: "To isolate an ML workspace from the public internet, use:", options: ["Private endpoints and VNet integration", "A larger VM", "A CDN", "A new subscription"], answer: 0, explain: "Private endpoints and VNet isolation restrict network access for sensitive workloads." },
+        { q: "GenAIOps orchestration of prompts, retrieval, and post-processing uses:", options: ["Prompt flow in Microsoft Foundry", "Cloud CDN", "Blob lifecycle rules", "DNS zones"], answer: 0, explain: "Prompt flow orchestrates and evaluates the steps of a generative AI application." },
+        { q: "When compliance requires you to control encryption keys, choose:", options: ["Customer-managed keys (CMEK)", "No encryption", "Keys in source control", "Plaintext storage"], answer: 0, explain: "CMEK lets you control encryption keys to meet regulatory requirements." },
+        { q: "To catch harmful generative output in production, apply:", options: ["Azure AI Content Safety filters", "A bigger context window", "More tokens", "A CDN"], answer: 0, explain: "Content Safety screens input and output; combined with monitoring it enforces guardrails." },
+        { q: "Tracing a generative request end to end for debugging uses:", options: ["Foundry tracing + Application Insights", "Cloud NAT", "Blob storage", "Pub/Sub"], answer: 0, explain: "Foundry tracing (OpenTelemetry) with Application Insights makes generative systems observable." },
+        { q: "Automated retraining should typically be triggered by:", options: ["Drift detection or new data", "A manual email", "Changing the region", "A larger font"], answer: 0, explain: "Retraining is triggered by drift, new data, or schedules - closing the MLOps loop." },
+        { q: "To reduce generative AI cost in production, a leader/engineer should:", options: ["Right-size models, cache, and trim prompts", "Always use the largest model", "Disable monitoring", "Ignore token usage"], answer: 0, explain: "Right-sizing models, caching, and trimming prompts/context reduce token cost and latency." }
     ],
     'panel-ai-200': [
         { q: "Which Azure service is a serverless container platform well-suited to hosting microservices and AI apps?", options: ["Azure Container Apps", "Azure Blob Storage", "Azure Monitor", "Azure Key Vault"], answer: 0, explain: "Azure Container Apps runs containerized microservices serverlessly with built-in scaling, ideal for AI back-ends." },
         { q: "For a globally distributed, low-latency NoSQL data store for your app, you would use:", options: ["Azure Cosmos DB", "Azure Files", "Azure Queue Storage", "Azure DevOps"], answer: 0, explain: "Azure Cosmos DB is a globally distributed, low-latency NoSQL database with multiple APIs." },
         { q: "Which architectural pattern decouples services so they communicate through messages/events?", options: ["A single monolith", "Event-driven architecture", "Synchronous-only calls", "Batch-only processing"], answer: 1, explain: "Event-driven architectures use events/messages (e.g., via Event Grid or Service Bus) to loosely couple and scale services independently." },
         { q: "To store vector embeddings for RAG inside a relational database on Azure, you can use:", options: ["Azure Database for PostgreSQL with the pgvector extension", "Azure Table Storage", "Azure Queue Storage", "Azure CDN"], answer: 0, explain: "Azure Database for PostgreSQL supports the pgvector extension for storing and searching embeddings." },
-        { q: "Which service securely stores secrets, keys, and connection strings for a cloud app?", options: ["Azure Key Vault", "Azure Container Registry", "Azure Monitor", "Azure Front Door"], answer: 0, explain: "Azure Key Vault centrally and securely stores secrets, keys, and certificates, keeping them out of code." }
+        { q: "Which service securely stores secrets, keys, and connection strings for a cloud app?", options: ["Azure Key Vault", "Azure Container Registry", "Azure Monitor", "Azure Front Door"], answer: 0, explain: "Azure Key Vault centrally and securely stores secrets, keys, and certificates, keeping them out of code." },
+        { q: "When calling Azure OpenAI from an app, you invoke the:", options: ["Raw model name", "Deployment name and endpoint", "Storage account", "Resource group"], answer: 1, explain: "Applications call the deployment name at the resource endpoint, secured with managed identity in production." },
+        { q: "To handle throttling (HTTP 429) from an AI endpoint under load, implement:", options: ["Exponential backoff and retries", "A larger font", "A public bucket", "A DNS change"], answer: 0, explain: "Retry with exponential backoff (and queue-based load leveling) keeps AI apps reliable under load." },
+        { q: "To smooth traffic spikes and decouple slow AI processing, use:", options: ["Azure Service Bus queues", "Azure CDN", "Azure DNS", "Azure Policy"], answer: 0, explain: "Service Bus queues buffer work and decouple producers from slower consumers." },
+        { q: "To react automatically when a document is uploaded to Blob Storage, use:", options: ["Azure Event Grid", "Azure Key Vault", "Azure Monitor", "Azure Front Door"], answer: 0, explain: "Event Grid routes events (like blob-created) to handlers such as Functions for reactive processing." },
+        { q: "Streaming an LLM response to the client mainly improves:", options: ["Perceived latency for chat UIs", "Storage cost", "DNS resolution", "Disk IO"], answer: 0, explain: "Streaming tokens as they arrive improves perceived responsiveness in conversational apps." },
+        { q: "For very complex, large-scale orchestration with GPUs, the best host is:", options: ["Azure Kubernetes Service (AKS)", "Azure Table Storage", "Azure DNS", "Azure CDN"], answer: 0, explain: "AKS provides full orchestration and GPU support for complex, large-scale workloads." },
+        { q: "To cache frequent model responses/embeddings and cut cost/latency, use:", options: ["Azure Managed Redis", "Azure DNS", "Azure Policy", "Azure Front Door"], answer: 0, explain: "Azure Managed Redis caches responses/embeddings and provides fast lookups." },
+        { q: "To keep AI credentials out of code, an app should use:", options: ["Managed identity + Key Vault references", "Hardcoded keys", "A public config file", "Keys in the URL"], answer: 0, explain: "Managed identities with Key Vault references eliminate secrets in code." },
+        { q: "To instrument an AI app for latency, dependencies, and token usage, use:", options: ["Application Insights (Azure Monitor)", "Azure CDN", "Azure DNS", "Azure Policy"], answer: 0, explain: "Application Insights captures requests, dependencies, exceptions, and custom metrics for observability." }
     ],
     'panel-genai-dev': [
         { q: "Amazon Bedrock Knowledge Bases are primarily used to implement:", options: ["Model pre-training", "Retrieval-Augmented Generation (RAG)", "Billing reports", "IAM policies"], answer: 1, explain: "Knowledge Bases connect foundation models to your data sources to power managed RAG workflows." },
         { q: "Which Bedrock feature lets a model plan multi-step tasks and call tools/APIs to complete them?", options: ["Bedrock Agents", "Bedrock Guardrails", "Amazon S3", "Amazon CloudWatch"], answer: 0, explain: "Bedrock Agents orchestrate reasoning steps and invoke actions/APIs to complete tasks." },
         { q: "To store and query vector embeddings on AWS for semantic search, you could use:", options: ["Amazon OpenSearch Service vector engine", "Amazon SQS", "AWS Glue only", "Amazon Route 53"], answer: 0, explain: "Amazon OpenSearch Service supports vector search, a common vector store for RAG on AWS." },
         { q: "Fine-tuning is more appropriate than RAG when you need to:", options: ["Add frequently-changing facts", "Adapt the model's style or behavior to a domain using labeled examples", "Avoid any training entirely", "Only shorten prompts"], answer: 1, explain: "Fine-tuning adjusts model weights to specialize tone/behavior; RAG is better for injecting current, changing knowledge." },
-        { q: "Amazon Bedrock Guardrails help a generative application by:", options: ["Increasing token limits", "Blocking disallowed topics and filtering harmful content and PII", "Speeding up GPUs", "Managing VPC networking"], answer: 1, explain: "Guardrails enforce content policies, denied topics, and PII redaction on inputs and outputs." }
+        { q: "Amazon Bedrock Guardrails help a generative application by:", options: ["Increasing token limits", "Blocking disallowed topics and filtering harmful content and PII", "Speeding up GPUs", "Managing VPC networking"], answer: 1, explain: "Guardrails enforce content policies, denied topics, and PII redaction on inputs and outputs." },
+        { q: "To let a Bedrock Agent call your own API or Lambda, you configure a(n):", options: ["Action group", "Route table", "Security group", "Placement group"], answer: 0, explain: "Action groups define the APIs/Lambdas an agent can invoke to take actions." },
+        { q: "To measure whether generated answers are supported by retrieved context, evaluate:", options: ["Groundedness", "CPU usage", "Disk IO", "DNS latency"], answer: 0, explain: "Groundedness measures whether the response is backed by the provided context, not fabricated." },
+        { q: "For end-to-end tracing and metrics of a GenAI app on AWS, use:", options: ["CloudWatch and X-Ray", "Route 53", "CloudFront", "Shield"], answer: 0, explain: "CloudWatch (logs/metrics) and X-Ray (tracing) provide observability for production apps." },
+        { q: "To audit who invoked Bedrock and when, use:", options: ["AWS CloudTrail", "Amazon SQS", "Amazon SNS", "AWS Batch"], answer: 0, explain: "CloudTrail records API activity for auditing and governance." },
+        { q: "A cost-effective default when a smaller model meets quality targets is to:", options: ["Use the smaller/cheaper model and cache results", "Always use the largest model", "Disable monitoring", "Increase max tokens"], answer: 0, explain: "Right-sizing models and caching reduce cost and latency while meeting quality targets." },
+        { q: "To protect data and restrict access for a Bedrock app, apply:", options: ["IAM least privilege, KMS encryption, and VPC endpoints", "A public S3 bucket", "A CDN only", "A DNS record"], answer: 0, explain: "IAM, KMS, and private networking (VPC endpoints) secure the generative application." },
+        { q: "Streaming responses in a chat app primarily improves:", options: ["Perceived latency", "Storage cost", "IAM policy size", "DNS caching"], answer: 0, explain: "Streaming tokens as they generate improves perceived responsiveness." },
+        { q: "To compare two prompts or models objectively, you should:", options: ["Run an evaluation set with scored metrics", "Guess", "Pick the newer one", "Choose at random"], answer: 0, explain: "Evaluation datasets with metrics (relevance, groundedness) enable objective comparison." },
+        { q: "Provisioned throughput on Bedrock is best used when:", options: ["You need guaranteed capacity/latency at scale", "Traffic is near zero", "Only for testing", "To reduce security"], answer: 0, explain: "Provisioned throughput guarantees capacity for high, steady workloads; on-demand suits variable traffic." }
     ],
     'panel-mls': [
         { q: "Which SageMaker built-in algorithm is well-suited to classification and regression on tabular data?", options: ["XGBoost", "BlazingText", "Seq2Seq", "Object2Vec"], answer: 0, explain: "XGBoost is a gradient-boosted tree algorithm that excels on structured/tabular problems." },
@@ -12800,12 +15243,10 @@ function loadModules() {
     loadModulesIntoGrid('ai-fundamentals-grid', courseData.aiFundamentals);
     loadModulesIntoGrid('azure-ai-transformation-leader-grid', courseData.azureAiTransformationLeader);
     loadModulesIntoGrid('ai-apps-agents-grid', courseData.aiAppsAgents);
-    loadModulesIntoGrid('azure-data-scientist-grid', courseData.azureDataScientist);
     loadModulesIntoGrid('azure-mlops-grid', courseData.azureMlOps);
     loadModulesIntoGrid('azure-ai-clouddev-grid', courseData.azureAiCloudDev);
     loadModulesIntoGrid('aws-ai-practitioner-grid', courseData.awsAiPractitioner);
     loadModulesIntoGrid('aws-ml-engineer-grid', courseData.awsMlEngineer);
-    loadModulesIntoGrid('aws-ml-specialty-grid', courseData.awsMlSpecialty);
     loadModulesIntoGrid('aws-genai-developer-grid', courseData.awsGenAiDeveloper);
     loadModulesIntoGrid('gcp-genai-leader-grid', courseData.gcpGenAiLeader);
     loadModulesIntoGrid('gcp-mle-grid', courseData.gcpMlEngineer);

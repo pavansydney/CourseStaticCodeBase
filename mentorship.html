@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mentorship Program - Cloudvana</title>
-    <meta name="description" content="Cloudvana mentorship programs for AI learners. Start with free mentorship tracks or enroll in paid mentorship at 49 INR per course.">
+    <meta name="description" content="Cloudvana mentorship programs for AI learners. Start with a free mentorship track or enroll in paid mentorship at 49 INR per course.">
     <meta name="author" content="Chilakalapalli Pavan Kalyan">
     <meta name="theme-color" content="#4285f4">
     <link rel="icon" type="image/jpeg" href="assets/Cloudvana%20logo.jpg">
@@ -19,7 +19,7 @@
         <div class="container">
             <span class="mentorship-kicker">Cloudvana Mentorship</span>
             <h1 class="mentorship-title">Learn Faster With Structured Guidance</h1>
-            <p class="mentorship-subtitle">Only currently active plans are shown below: free options for beginners and a paid plan at 49 INR per course for focused support.</p>
+            <p class="mentorship-subtitle">Only currently active plans are shown below: a free plan for beginners and a paid plan at 49 INR per course for focused support.</p>
             <div class="mentorship-hero-cta">
                 <a class="btn btn-primary" href="#plans">View Active Plans</a>
                 <a class="btn btn-secondary" href="#apply">Apply Now</a>
@@ -35,37 +35,23 @@
             <div class="mentorship-plans-grid">
                 <article class="mentorship-plan free-plan">
                     <span class="plan-badge plan-badge-free">Free</span>
-                    <h3>Community Guidance</h3>
+                    <h3>Free Guidance</h3>
                     <p class="plan-price">0 INR</p>
-                    <p class="plan-blurb">Best for learners who want direction, checkpoints, and peer accountability.</p>
+                    <p class="plan-blurb">Best for beginners who want a clear starting plan and direction at no cost.</p>
                     <ul class="plan-list">
-                        <li>Weekly study roadmap suggestions</li>
-                        <li>Beginner-friendly Q&A support</li>
-                        <li>Recommended next modules</li>
-                        <li>Access to free cert prep path</li>
+                        <li>Starter study roadmap &amp; checklist</li>
+                        <li>High-priority topics to focus on</li>
+                        <li>Practice quiz recommendations</li>
+                        <li>Beginner-friendly Q&amp;A support</li>
                     </ul>
                     <a class="btn btn-secondary" href="#apply">Start Free</a>
-                </article>
-
-                <article class="mentorship-plan free-plan">
-                    <span class="plan-badge plan-badge-free">Free</span>
-                    <h3>Starter Cert Sprint</h3>
-                    <p class="plan-price">0 INR</p>
-                    <p class="plan-blurb">Best for first-time exam takers preparing for foundational certifications.</p>
-                    <ul class="plan-list">
-                        <li>14-day starter study checklist</li>
-                        <li>High-priority topics only</li>
-                        <li>Practice quiz recommendations</li>
-                        <li>Exam readiness self-review template</li>
-                    </ul>
-                    <a class="btn btn-secondary" href="#apply">Join Free Sprint</a>
                 </article>
 
                 <article class="mentorship-plan paid-plan featured-plan">
                     <span class="plan-badge plan-badge-featured">Most Chosen</span>
                     <h3>Focused Mentorship</h3>
                     <p class="plan-price">49 INR <span>/ course</span></p>
-                    <p class="plan-blurb">Best for learners who want direct feedback and structured weekly momentum.</p>
+                    <p class="plan-blurb">Best for learners who want direct feedback and structured guidance until they are exam-ready.</p>
                     <ul class="plan-list">
                         <li>Personalized study sequence per course</li>
                         <li>Doubt-clearing and learning checkpoints</li>
@@ -76,7 +62,7 @@
                 </article>
             </div>
 
-            <p class="plans-footnote"><i class="fas fa-circle-info"></i> Advanced mentorship tiers are intentionally hidden until they are production-ready.</p>
+            <p class="plans-footnote"><i class="fas fa-circle-info"></i> Two simple options: start free for guidance, or choose Focused Mentorship for hands-on support.</p>
         </div>
     </section>
 
@@ -122,8 +108,7 @@
                         Plan
                         <select name="plan" required>
                             <option value="">Select plan</option>
-                            <option value="community-free">Community Guidance - Free</option>
-                            <option value="starter-sprint-free">Starter Cert Sprint - Free</option>
+                            <option value="free-guidance">Free Guidance - Free</option>
                             <option value="focused-49">Focused Mentorship - 49 INR per course</option>
                         </select>
                     </label>
@@ -136,6 +121,19 @@
                     Your Goal
                     <textarea name="goal" rows="4" placeholder="Tell us what you want to achieve in the next 4-8 weeks"></textarea>
                 </label>
+
+                <!-- Honeypot: hidden from humans; bots that fill it are ignored server-side -->
+                <div class="hp-field" aria-hidden="true">
+                    <label>Company
+                        <input type="text" name="company" tabindex="-1" autocomplete="off">
+                    </label>
+                </div>
+
+                <label class="consent-row">
+                    <input type="checkbox" id="mentorshipConsent" required>
+                    <span>I agree to be contacted about this mentorship request.</span>
+                </label>
+
                 <button class="btn btn-primary" type="submit">Submit Application</button>
                 <p class="form-note" id="mentorshipFormMsg" aria-live="polite"></p>
             </form>
@@ -148,14 +146,75 @@
     <script src="script.js"></script>
     <script>
         (function () {
+            var ENDPOINT = 'https://script.google.com/macros/s/AKfycbxMrq29SzR5HNh9pWGJIDDy8KnmSvbJkC1s1b1Rqf_zHdTgXiYDdyO8FocCaSRMhCLm/exec';
+
             var form = document.getElementById('mentorshipForm');
             var msg = document.getElementById('mentorshipFormMsg');
+            var consent = document.getElementById('mentorshipConsent');
             if (!form || !msg) return;
+
+            var submitBtn = form.querySelector('button[type="submit"]');
+            var emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+            function setMsg(text, ok) {
+                msg.textContent = text;
+                msg.style.color = ok ? '#0f7d3c' : '#c5221f';
+            }
 
             form.addEventListener('submit', function (event) {
                 event.preventDefault();
-                msg.textContent = 'Thanks. Your mentorship request is recorded. We will contact you soon.';
-                form.reset();
+
+                var name = (form.name.value || '').trim();
+                var email = (form.email.value || '').trim();
+                var plan = (form.plan.value || '').trim();
+                var course = (form.course.value || '').trim();
+                var goal = (form.goal.value || '').trim();
+                var company = (form.company.value || '').trim(); // honeypot
+
+                // Basic client-side validation
+                if (!name || !email || !plan || !course) {
+                    setMsg('Please fill in your name, email, plan, and target course.', false);
+                    return;
+                }
+                if (!emailPattern.test(email)) {
+                    setMsg('Please enter a valid email address.', false);
+                    return;
+                }
+                if (consent && !consent.checked) {
+                    setMsg('Please confirm you agree to be contacted.', false);
+                    return;
+                }
+
+                var params = new URLSearchParams();
+                params.set('name', name);
+                params.set('email', email);
+                params.set('plan', plan);
+                params.set('course', course);
+                params.set('goal', goal);
+                params.set('company', company);
+                params.set('sourcePage', 'mentorship');
+
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Submitting...';
+                }
+                setMsg('Submitting your request...', true);
+
+                // Static-site friendly POST (form-encoded avoids a CORS preflight).
+                fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', body: params })
+                    .then(function () {
+                        setMsg('Thanks! Your mentorship request has been submitted. We will contact you soon.', true);
+                        form.reset();
+                    })
+                    .catch(function () {
+                        setMsg('Sorry, something went wrong. Please try again in a moment.', false);
+                    })
+                    .then(function () {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Submit Application';
+                        }
+                    });
             });
         })();
     </script>

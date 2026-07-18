@@ -2,17 +2,14 @@
 // single source of truth (no duplicated markup). Set the current page with
 // <body data-page="home"> etc. Runs synchronously (scripts sit at end of body).
 (function () {
-    // Apply the saved (or system) theme as early as possible to reduce flicker.
+    // Apply the saved theme as early as possible to reduce flicker.
+    // New visitors default to light; a manual choice is remembered afterwards.
     try {
-        var savedTheme = localStorage.getItem('cloudvana-theme');
-        if (!savedTheme) {
-            savedTheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
-                ? 'dark'
-                : 'light';
-        }
+        var savedTheme = localStorage.getItem('cloudvana-theme-v2') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
     } catch (e) {
         /* localStorage unavailable — default to light */
+        document.documentElement.setAttribute('data-theme', 'light');
     }
 
     var navHTML =
@@ -125,7 +122,7 @@
             var next = currentTheme() === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', next);
             try {
-                localStorage.setItem('cloudvana-theme', next);
+                localStorage.setItem('cloudvana-theme-v2', next);
             } catch (e) {
                 /* preference just won't persist */
             }
