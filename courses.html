@@ -7,6 +7,17 @@
         <meta name="description" content="Learn machine learning, AI engineering, DSA, system design, and OS &amp; networking through structured, self-contained modules with practical code examples and real-world applications.">
         <meta name="author" content="Chilakalapalli Pavan Kalyan">
         <meta name="theme-color" content="#4285f4">
+        <meta name="robots" content="index, follow, max-image-preview:large">
+        <link rel="canonical" href="https://cloudvana.vercel.app/courses.html">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Courses - Cloudvana">
+        <meta property="og:description" content="Explore Cloudvana courses in machine learning, AI engineering, DSA, system design, OS and networking.">
+        <meta property="og:url" content="https://cloudvana.vercel.app/courses.html">
+        <meta property="og:image" content="https://cloudvana.vercel.app/assets/Cloudvana%20logo.jpg">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Courses - Cloudvana">
+        <meta name="twitter:description" content="Structured AI and computer science learning tracks with practical examples.">
+        <meta name="twitter:image" content="https://cloudvana.vercel.app/assets/Cloudvana%20logo.jpg">
         <meta name="google-site-verification" content="okR4wrh-4aH5RLFmJPOSof5rAZKjbeRNU5VB0J33UYk" />
         <link rel="icon" type="image/jpeg" href="assets/Cloudvana%20logo.jpg">    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
         <link rel="stylesheet" href="styles.css">
@@ -17,7 +28,7 @@
         <!-- Course track selector -->
         <section class="course-tracks page-section">
             <div class="container">
-                <h2 class="section-title">Explore Learning Tracks</h2>
+                <h1 class="section-title">Explore Learning Tracks</h1>
                 <p class="section-subtitle">Pick a track to jump straight to it. Every track is self-contained, so you can start anywhere and learn at your own pace.</p>
 
                 <div class="course-tracks-grid">
@@ -45,6 +56,12 @@
                         <p>How computers run programs and communicate across networks.</p>
                         <span class="track-level track-level-beginner">Beginner friendly</span>
                     </button>
+                    <button type="button" class="track-card" data-track="track-programming-languages" onclick="showTrack('track-programming-languages')">
+                        <span class="track-card-icon"><i class="fas fa-laptop-code"></i></span>
+                        <h3>Programming Languages</h3>
+                        <p>Learn Java, Python, C#, and C++ through language-specific foundations and project-ready practice.</p>
+                        <span class="track-level track-level-beginner">Language-wise certificates</span>
+                    </button>
                 </div>
 
                 <div class="course-start-here">
@@ -66,6 +83,7 @@
                 <button type="button" class="track-switch-link" data-track="track-ai-eng" onclick="showTrack('track-ai-eng')">AI Engineering</button>
                 <button type="button" class="track-switch-link" data-track="track-dsa-sd" onclick="showTrack('track-dsa-sd')">DSA &amp; System Design</button>
                 <button type="button" class="track-switch-link" data-track="track-os-net" onclick="showTrack('track-os-net')">OS &amp; Networking</button>
+                <button type="button" class="track-switch-link" data-track="track-programming-languages" onclick="showTrack('track-programming-languages')">Programming</button>
             </div>
         </div>
 
@@ -281,6 +299,52 @@
             </div>
         </section>
 
+        <section id="track-programming-languages" class="courses-section">
+            <div class="container">
+                <h2 class="section-title">Programming Languages</h2>
+                <p class="section-subtitle">Build practical fluency in Java, Python, C#, and C++ through structured modules focused on syntax, core concepts, and real-world coding habits.</p>
+
+                <div class="section-tabs">
+                    <button class="section-tab active" data-target="panel-java-programming">Java</button>
+                    <button class="section-tab" data-target="panel-python-programming">Python</button>
+                    <button class="section-tab" data-target="panel-csharp-programming">C#</button>
+                    <button class="section-tab" data-target="panel-cpp-programming">C++</button>
+                </div>
+
+                <div class="category-section tab-panel active" id="panel-java-programming">
+                    <div class="category-header">
+                        <h3 class="category-title"><span class="category-icon"><i class="fab fa-java"></i></span> Java Programming</h3>
+                        <p class="category-description">Master Java syntax, OOP, collections, and modern backend-oriented coding fundamentals.</p>
+                    </div>
+                    <div class="modules-grid" id="java-programming-grid"></div>
+                </div>
+
+                <div class="category-section tab-panel" id="panel-python-programming">
+                    <div class="category-header">
+                        <h3 class="category-title"><span class="category-icon"><i class="fab fa-python"></i></span> Python Programming</h3>
+                        <p class="category-description">Learn Python fundamentals, scripting, functions, data structures, and practical automation patterns.</p>
+                    </div>
+                    <div class="modules-grid" id="python-programming-grid"></div>
+                </div>
+
+                <div class="category-section tab-panel" id="panel-csharp-programming">
+                    <div class="category-header">
+                        <h3 class="category-title"><span class="category-icon"><i class="fas fa-hashtag"></i></span> C# Programming</h3>
+                        <p class="category-description">Understand C# syntax, .NET thinking, OOP, LINQ, and enterprise coding practices.</p>
+                    </div>
+                    <div class="modules-grid" id="csharp-programming-grid"></div>
+                </div>
+
+                <div class="category-section tab-panel" id="panel-cpp-programming">
+                    <div class="category-header">
+                        <h3 class="category-title"><span class="category-icon"><i class="fas fa-code"></i></span> C++ Programming</h3>
+                        <p class="category-description">Learn C++ fundamentals, memory-aware programming, STL, and performance-oriented problem solving.</p>
+                    </div>
+                    <div class="modules-grid" id="cpp-programming-grid"></div>
+                </div>
+            </div>
+        </section>
+
         <div id="site-footer"></div>
 
         <!-- Module Modal -->
@@ -298,11 +362,12 @@
         <script src="js/ai-courses.js"></script>
         <script src="js/dsa-system-design.js"></script>
         <script src="js/os-networking.js"></script>
+        <script src="js/programming-languages.js"></script>
         <script>
             // Top-level track switching: show one track at a time to keep the
             // page short and focused, instead of stacking every track.
             (function () {
-                var TRACK_IDS = ['courses', 'track-ai-eng', 'track-dsa-sd', 'track-os-net'];
+                var TRACK_IDS = ['courses', 'track-ai-eng', 'track-dsa-sd', 'track-os-net', 'track-programming-languages'];
 
                 function showTrack(id, doScroll) {
                     if (TRACK_IDS.indexOf(id) === -1) return;

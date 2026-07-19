@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Hiring Procedures - Cloudvana</title>
+    <meta name="description" content="Company-wise hiring procedures and interview-clearing guidance for freshers and experienced candidates across top product, consulting, and enterprise MNCs.">
+    <meta name="author" content="Chilakalapalli Pavan Kalyan">
+    <meta name="theme-color" content="#4285f4">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://cloudvana.vercel.app/hiring-procedures.html">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Company Hiring Procedures - Cloudvana">
+    <meta property="og:description" content="Company-wise hiring procedures and interview strategy for freshers and experienced candidates.">
+    <meta property="og:url" content="https://cloudvana.vercel.app/hiring-procedures.html">
+    <meta property="og:image" content="https://cloudvana.vercel.app/assets/Cloudvana%20logo.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Company Hiring Procedures - Cloudvana">
+    <meta name="twitter:description" content="Interview strategy and hiring process guidance across top companies.">
+    <meta name="twitter:image" content="https://cloudvana.vercel.app/assets/Cloudvana%20logo.jpg">
+    <meta name="google-site-verification" content="okR4wrh-4aH5RLFmJPOSof5rAZKjbeRNU5VB0J33UYk" />
+    <link rel="icon" type="image/jpeg" href="assets/Cloudvana%20logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="hiring-procedures">
+    <div id="site-nav"></div>
+
+    <section class="hiring-hero page-section">
+        <div class="container">
+            <span class="hiring-kicker">Interview Readiness Hub</span>
+            <h1 class="hiring-title">Company-Wise Hiring Procedures and Interview Strategy</h1>
+            <p class="hiring-subtitle">A practical, company-by-company guide for both freshers and experienced engineers across product MNCs, consulting firms, and enterprise tech companies.</p>
+            <div class="hiring-hero-stats">
+                <div class="hiring-stat"><strong>15</strong><span>Companies Covered</span></div>
+                <div class="hiring-stat"><strong>2</strong><span>Audience Tracks</span></div>
+                <div class="hiring-stat"><strong>100%</strong><span>Actionable Steps</span></div>
+            </div>
+            <div class="hiring-hero-rail">
+                <span><i class="fas fa-check-circle"></i> Process Maps</span>
+                <span><i class="fas fa-bullseye"></i> Round Strategy</span>
+                <span><i class="fas fa-briefcase"></i> Application Playbook</span>
+                <span><i class="fas fa-triangle-exclamation"></i> Rejection Risk Alerts</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="hiring-hub courses-section">
+        <div class="container">
+            <h2 class="section-title">Find Your Target Company's Process</h2>
+            <p class="section-subtitle">Switch audience mode, filter company type, and use the playbook to improve your interview conversion rate.</p>
+
+            <div class="hiring-update-banner" role="note">
+                <i class="fas fa-circle-info"></i>
+                <span>Hiring rounds can change quarter-to-quarter. Use this as a structured baseline, then validate the latest process from official job postings and recent candidate experiences.</span>
+            </div>
+
+            <div class="hiring-controls">
+                <div class="hiring-control-block">
+                    <p class="hiring-control-title">Audience</p>
+                    <div class="section-tabs hiring-audience-tabs" id="audienceTabs">
+                        <button class="section-tab active" type="button" data-audience="fresher">Freshers</button>
+                        <button class="section-tab" type="button" data-audience="experienced">Experienced</button>
+                    </div>
+                </div>
+
+                <div class="hiring-control-block">
+                    <p class="hiring-control-title">Company Group</p>
+                    <div class="provider-filter hiring-group-filter" id="companyGroupFilter">
+                        <button class="filter-btn active" type="button" data-group="all">All</button>
+                        <button class="filter-btn" type="button" data-group="product">Product MNCs</button>
+                        <button class="filter-btn" type="button" data-group="consulting">Consulting & Services</button>
+                        <button class="filter-btn" type="button" data-group="enterprise">Enterprise Tech</button>
+                    </div>
+                </div>
+
+                <label class="hiring-search" for="companySearch">
+                    <span class="hiring-control-title">Search Company</span>
+                    <span class="hiring-search-field">
+                        <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
+                        <input id="companySearch" type="text" placeholder="Search Microsoft, TCS, SAP..." autocomplete="off">
+                    </span>
+                </label>
+            </div>
+
+            <div id="hiringResultsBar" class="hiring-results-bar" aria-live="polite"></div>
+
+            <div id="companyHiringGrid" class="hiring-company-grid" aria-live="polite"></div>
+        </div>
+    </section>
+
+    <section class="hiring-playbook">
+        <div class="container">
+            <h2 class="section-title">Universal Interview-Clearing Framework</h2>
+            <p class="section-subtitle">Use this regardless of company. Company cards tell you what to emphasize.</p>
+            <div class="hiring-framework-grid">
+                <article class="hiring-framework-card">
+                    <h3><i class="fas fa-file-alt"></i> Application Stage</h3>
+                    <ul>
+                        <li>Tailor resume for each role using job-description keywords and quantified impact.</li>
+                        <li>Prioritize employee referrals and targeted outreach over blind mass applications.</li>
+                        <li>Prepare an OA strategy by role: DSA for SDE, SQL/case for consulting-tech roles.</li>
+                    </ul>
+                </article>
+                <article class="hiring-framework-card">
+                    <h3><i class="fas fa-laptop-code"></i> Technical Rounds</h3>
+                    <ul>
+                        <li>Start with problem clarification, then state brute force, then optimize with trade-offs.</li>
+                        <li>Demonstrate test mindset: edge cases, complexity, failure modes, and debugging approach.</li>
+                        <li>For experienced roles, connect solution to production concerns: scale, cost, reliability.</li>
+                    </ul>
+                </article>
+                <article class="hiring-framework-card">
+                    <h3><i class="fas fa-comments"></i> Behavioral and Managerial</h3>
+                    <ul>
+                        <li>Prepare STAR stories on ownership, conflict resolution, delivery under pressure, and learning speed.</li>
+                        <li>Use business language: customer impact, metrics improved, and trade-offs made.</li>
+                        <li>Show collaboration maturity for cross-team and ambiguous problem spaces.</li>
+                    </ul>
+                </article>
+                <article class="hiring-framework-card">
+                    <h3><i class="fas fa-flag-checkered"></i> Post-Interview Conversion</h3>
+                    <ul>
+                        <li>Send concise follow-up with role fit, strongest round, and enthusiasm for business context.</li>
+                        <li>Track round feedback patterns and adjust preparation weekly.</li>
+                        <li>Maintain interview journal to reduce repeated mistakes in future rounds.</li>
+                    </ul>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="hiring-howto">
+        <div class="container">
+            <h2 class="section-title">How to Use This Page</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <span class="step-number">1</span>
+                    <h3>Select audience mode</h3>
+                    <p>Switch between Fresher and Experienced to get the right strategy depth.</p>
+                </div>
+                <div class="step-card">
+                    <span class="step-number">2</span>
+                    <h3>Filter target companies</h3>
+                    <p>Focus on your shortlist and avoid scattered preparation.</p>
+                </div>
+                <div class="step-card">
+                    <span class="step-number">3</span>
+                    <h3>Execute company playbook</h3>
+                    <p>Follow the 30/60-day roadmap, fix pitfalls, and run mock rounds weekly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="site-footer"></div>
+
+    <script src="js/layout.js"></script>
+    <script src="script.js"></script>
+    <script src="js/hiring-procedures.js"></script>
+</body>
+</html>

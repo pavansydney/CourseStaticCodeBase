@@ -40,6 +40,7 @@
                         '<ul class="nav-dropdown-menu">' +
                             '<li><a href="prerequisites.html" class="nav-link" data-nav="prerequisites">Prerequisites</a></li>' +
                             '<li><a href="find-your-path.html" class="nav-link" data-nav="find-your-path">Find Your Path</a></li>' +
+                            '<li><a href="hiring-procedures.html" class="nav-link" data-nav="hiring-procedures">Hiring Procedures</a></li>' +
                             '<li><a href="about.html" class="nav-link" data-nav="about">About</a></li>' +
                         '</ul>' +
                     '</li>' +
@@ -59,6 +60,7 @@
                     '<div class="footer-section">' +
                         '<h4>Links</h4>' +
                         '<ul>' +
+                            '<li><a href="hiring-procedures.html">Hiring Procedures</a></li>' +
                             '<li><a href="mentorship.html">Mentorship Program</a></li>' +
                             '<li><a href="https://developers.google.com/machine-learning/crash-course" target="_blank">Original ML Course</a></li>' +
                             '<li><a href="https://learn.microsoft.com/credentials/certifications/browse/?products=azure&subjects=artificial-intelligence" target="_blank">Azure AI Certifications</a></li>' +

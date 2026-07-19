@@ -15419,8 +15419,411 @@ const quizData = {
         { q: "Content filtering in the Generative AI Hub is applied to:", options: ["Only outputs", "Only inputs", "Both inputs and outputs", "Neither"], answer: 2, explain: "Content filtering can screen both prompts (inputs) and generated responses (outputs) for harmful content." },
         { q: "Which developer option lets you switch models with minimal code changes?", options: ["The harmonized API/SDK of the Generative AI Hub", "Hard-coding one provider's SDK", "Editing ABAP reports", "Rewriting the app per model"], answer: 0, explain: "The harmonized interface abstracts providers, so changing models requires little code change." },
         { q: "SAP's responsible AI principles emphasize:", options: ["Maximum automation with no oversight", "Human oversight, transparency, fairness, and data privacy", "Ignoring bias", "Removing audit logs"], answer: 1, explain: "SAP's ethical AI principles stress human agency, transparency, fairness/bias mitigation, and privacy." }
+    ],
+    'panel-java-programming': [
+        { q: "In Java, which keyword is used to define behavior shared by implementing classes?", options: ["extends", "interface", "package", "record"], answer: 1, explain: "An interface defines a contract that classes implement." },
+        { q: "Which collection preserves insertion order and allows duplicates?", options: ["HashSet", "ArrayList", "TreeSet", "HashMap"], answer: 1, explain: "ArrayList keeps insertion order and allows duplicates." },
+        { q: "What is the primary purpose of try-catch in Java?", options: ["Increase compilation speed", "Handle runtime exceptions safely", "Create threads", "Define generics"], answer: 1, explain: "try-catch handles exceptional runtime conditions." },
+        { q: "In stream processing, filter is typically used to:", options: ["Transform each element", "Sort a collection", "Keep elements matching a condition", "Convert to Optional"], answer: 2, explain: "filter retains only elements that satisfy a predicate." },
+        { q: "Which executor utility is preferred over manual thread creation for task management?", options: ["Thread.sleep", "ExecutorService", "System.gc", "StringBuilder"], answer: 1, explain: "ExecutorService manages thread pools and task execution." },
+        { q: "For production backend Java, what is usually the safest default for shared data?", options: ["Global mutable state", "Immutability where possible", "Public fields everywhere", "Single giant class"], answer: 1, explain: "Immutability reduces concurrency and state bugs." },
+        { q: "What does JVM bytecode enable?", options: ["Direct SQL execution", "Platform portability", "No compilation", "Automatic UI rendering"], answer: 1, explain: "Bytecode runs on any platform with a compatible JVM." },
+        { q: "Which design choice improves maintainability most in large Java systems?", options: ["Long methods with many branches", "Clear package boundaries and small cohesive classes", "No interfaces", "All logic in main()"], answer: 1, explain: "Separation of concerns and cohesion improve maintainability." }
+    ],
+    'panel-python-programming': [
+        { q: "Why is indentation important in Python?", options: ["Only for style", "It defines code blocks syntactically", "It improves runtime speed", "It replaces imports"], answer: 1, explain: "Python uses indentation to define block structure." },
+        { q: "Which structure is best for key-value pairs?", options: ["list", "tuple", "dict", "set"], answer: 2, explain: "dict is Python's key-value mapping type." },
+        { q: "What is a major advantage of using with open(...) as f:?", options: ["Automatic file cleanup", "Faster CPU execution", "Skips encoding", "Disables exceptions"], answer: 0, explain: "with ensures resources are released safely." },
+        { q: "Which statement about exceptions is most professional?", options: ["Catch every exception silently", "Use precise exceptions and clear handling", "Avoid exceptions entirely", "Use print instead of errors"], answer: 1, explain: "Specific and meaningful exception handling improves reliability." },
+        { q: "Virtual environments are used primarily to:", options: ["Increase internet speed", "Isolate dependencies per project", "Replace testing", "Compile Python to C automatically"], answer: 1, explain: "Virtual environments prevent dependency conflicts across projects." },
+        { q: "In API-heavy Python work, which pattern is essential?", options: ["Ignore status codes", "Parse JSON and handle failures explicitly", "Always retry forever", "Disable logging"], answer: 1, explain: "Reliable API integrations require response validation and failure handling." },
+        { q: "Comprehensions are best used when:", options: ["Readability remains clear", "You want maximum nesting", "You need side effects", "You avoid functions"], answer: 0, explain: "Comprehensions should remain readable and focused." },
+        { q: "What separates production Python from casual scripting?", options: ["Longer file names", "Testing, logging, structure, and validation", "Only using classes", "Avoiding libraries"], answer: 1, explain: "Professional code emphasizes reliability, observability, and maintainability." }
+    ],
+    'panel-csharp-programming': [
+        { q: "C# code typically runs under which runtime component?", options: ["JVM", "CLR", "V8", "CPython"], answer: 1, explain: "C# runs on the .NET Common Language Runtime (CLR)." },
+        { q: "What is a common purpose of interfaces in C#?", options: ["Store files", "Define contracts for implementations", "Replace constructors", "Disable dependency injection"], answer: 1, explain: "Interfaces define behavior contracts and support abstraction." },
+        { q: "LINQ mainly helps by:", options: ["Creating DNS records", "Querying collections declaratively", "Compiling C# faster", "Managing NuGet packages"], answer: 1, explain: "LINQ provides expressive querying and transformations over data." },
+        { q: "Which async pattern is preferred in modern C#?", options: ["Thread.Abort", "async/await with Task", "Blocking on .Result everywhere", "Polling loops"], answer: 1, explain: "async/await with Task is the recommended asynchronous model." },
+        { q: "Dependency injection primarily reduces:", options: ["Typing speed", "Coupling between components", "Need for tests", "Compilation errors"], answer: 1, explain: "DI decouples dependencies and improves testability." },
+        { q: "A strong habit for API development in C# is:", options: ["Use DTOs and validation boundaries", "Return raw database entities always", "Keep all logic in controllers", "Avoid service layers"], answer: 0, explain: "DTOs and layered boundaries keep APIs stable and maintainable." },
+        { q: "What is a key risk of using blocking calls in async flows?", options: ["Better scalability", "Deadlocks and thread starvation", "Automatic retries", "Lower memory usage"], answer: 1, explain: "Blocking in async code can cause deadlocks and reduce throughput." },
+        { q: "Which approach aligns with maintainable .NET architecture?", options: ["Single-file monolith logic", "Clear layers with focused responsibilities", "No interfaces", "Public mutable state everywhere"], answer: 1, explain: "Layered architecture with explicit responsibilities is easier to evolve." }
+    ],
+    'panel-cpp-programming': [
+        { q: "Why is C++ often chosen for systems programming?", options: ["Automatic scaling", "High performance and low-level control", "Built-in cloud APIs", "No compilation required"], answer: 1, explain: "C++ offers strong performance with direct control over resources." },
+        { q: "What does a pointer store?", options: ["A function body", "A memory address", "A namespace", "A thread handle only"], answer: 1, explain: "Pointers store memory addresses." },
+        { q: "RAII helps primarily by:", options: ["Skipping destructors", "Binding resource cleanup to object lifetime", "Avoiding classes", "Removing templates"], answer: 1, explain: "RAII ensures deterministic cleanup through object scope/lifetime." },
+        { q: "Which STL container is a dynamic array-like sequence?", options: ["std::vector", "std::map", "std::set", "std::stack only"], answer: 0, explain: "std::vector is the standard dynamic contiguous sequence container." },
+        { q: "When possible, which allocation style is safer in modern C++?", options: ["Manual new/delete everywhere", "Smart pointers and value semantics", "Global raw pointers", "malloc in classes"], answer: 1, explain: "Modern C++ favors smart pointers and value-based ownership." },
+        { q: "What is a major concurrency concern in C++?", options: ["Only syntax errors", "Shared mutable state race conditions", "Header guards", "Linker flags"], answer: 1, explain: "Race conditions arise when shared state is mutated across threads." },
+        { q: "Why reserve vector capacity in performance-critical loops?", options: ["To increase recursion", "To reduce reallocations", "To disable iterators", "To force heap fragmentation"], answer: 1, explain: "reserve avoids repeated reallocations and copies." },
+        { q: "What best defines professional C++ optimization practice?", options: ["Guess first", "Profile, measure, then optimize", "Inline everything", "Avoid STL"], answer: 1, explain: "Evidence-driven optimization prevents premature complexity." }
     ]
 };
+
+const CERTIFICATE_PASS_RATIO = 0.7;
+const CERTIFICATE_STORAGE_KEY = 'cloudvana-issued-certificates-v1';
+const CERTIFICATE_NAME_KEY = 'cloudvana-learner-name-v1';
+const COURSE_CREDENTIAL_SECTIONS = [
+    'courses',
+    'track-ai-eng',
+    'track-dsa-sd',
+    'track-os-net'
+];
+const COURSE_CREDENTIAL_PANELS = [
+    'panel-java-programming',
+    'panel-python-programming',
+    'panel-csharp-programming',
+    'panel-cpp-programming'
+];
+
+function getIssuedCertificates() {
+    try {
+        return JSON.parse(localStorage.getItem(CERTIFICATE_STORAGE_KEY) || '{}') || {};
+    } catch (e) {
+        return {};
+    }
+}
+
+function getIssuedCertificate(panelId) {
+    return getIssuedCertificates()[panelId] || null;
+}
+
+function setIssuedCertificate(panelId, certificate) {
+    const issued = getIssuedCertificates();
+    issued[panelId] = certificate;
+    try {
+        localStorage.setItem(CERTIFICATE_STORAGE_KEY, JSON.stringify(issued));
+    } catch (e) {
+        /* localStorage unavailable — certificate state will not persist */
+    }
+}
+
+function getSavedLearnerName() {
+    try {
+        return localStorage.getItem(CERTIFICATE_NAME_KEY) || '';
+    } catch (e) {
+        return '';
+    }
+}
+
+function setSavedLearnerName(name) {
+    try {
+        localStorage.setItem(CERTIFICATE_NAME_KEY, name);
+    } catch (e) {
+        /* localStorage unavailable — learner name will not persist */
+    }
+}
+
+function getCertificatePanel(panelId) {
+    return document.getElementById(panelId);
+}
+
+function getCertificateTitle(panel) {
+    if (!panel) return 'Certification Track';
+    const sectionTitle = panel.querySelector(':scope > .container > .section-title, :scope > .section-title');
+    if (sectionTitle) {
+        return sectionTitle.textContent.replace(/\s+/g, ' ').trim();
+    }
+    const title = panel.querySelector('.category-title');
+    return title ? title.textContent.replace(/\s+/g, ' ').trim() : 'Certification Track';
+}
+
+function getCertificateProvider(panel) {
+    const section = panel ? panel.closest('section[data-provider]') : null;
+    return section ? (section.getAttribute('data-provider') || '').toLowerCase() : '';
+}
+
+function getCredentialKind(panelId) {
+    // Keep language panels as course certificates even when quizzes exist.
+    if (isCoursePanelCredential(panelId)) {
+        return 'certificate';
+    }
+    return quizData[panelId] ? 'readiness' : 'certificate';
+}
+
+function requiresQuizForCredential(panelId) {
+    return !!quizData[panelId];
+}
+
+function isCoursePanelCredential(panelId) {
+    return COURSE_CREDENTIAL_PANELS.indexOf(panelId) >= 0;
+}
+
+function getAllCredentialPanelIds() {
+    return Array.from(new Set(Object.keys(quizData).concat(COURSE_CREDENTIAL_SECTIONS, COURSE_CREDENTIAL_PANELS)));
+}
+
+function getCredentialTarget(panelId) {
+    if (isCoursePanelCredential(panelId) || quizData[panelId]) {
+        return document.getElementById(panelId);
+    }
+    return document.getElementById(panelId);
+}
+
+function getCertificateBadgeText(panelId, title, provider, kind) {
+    var normalizedTitle = String(title || '').toLowerCase();
+    var byProvider = {
+        azure: 'Azure AI Track',
+        aws: 'AWS AI Track',
+        gcp: 'Google Cloud AI Track',
+        salesforce: 'Salesforce AI Track',
+        sap: 'SAP AI Track'
+    };
+
+    if (kind === 'readiness') {
+        if (/fundamentals|practitioner|leader|foundational|beginner/.test(normalizedTitle)) {
+            return 'Foundation Readiness';
+        }
+        return byProvider[provider] || 'Exam Readiness';
+    }
+
+    if (/foundation|fundamentals|beginner/.test(normalizedTitle)) {
+        return 'Course Completion';
+    }
+    if (/java|python|c#|c\+\+/.test(normalizedTitle)) {
+        return 'Language Certificate';
+    }
+    if (/advanced|professional|system design|agents|frameworks|engineering/.test(normalizedTitle)) {
+        return 'Advanced Course';
+    }
+    if (/dsa|networking|operating systems|os|machine learning|data/.test(normalizedTitle)) {
+        return 'Learning Track';
+    }
+
+    if (/fundamentals|practitioner|leader|foundational|beginner/.test(normalizedTitle)) {
+        return 'Foundation Credential';
+    }
+    if (/professional|expert|ml engineer|engineer|developer|associate|specialist/.test(normalizedTitle)) {
+        return byProvider[provider] || 'Professional Credential';
+    }
+    return byProvider[provider] || 'Cloud Credential';
+}
+
+function getCertificateSummary(panelId) {
+    const panel = getCredentialTarget(panelId);
+    const moduleCards = panel ? Array.from(panel.querySelectorAll('.module-card')) : [];
+    const completedModules = moduleCards.filter(card => isModuleRead(card.dataset.moduleId)).length;
+    const totalModules = moduleCards.length;
+    const kind = getCredentialKind(panelId);
+    const totalQuestions = (quizData[panelId] || []).length;
+    const bestScore = getQuizBest(panelId);
+    const passScore = totalQuestions ? Math.ceil(totalQuestions * CERTIFICATE_PASS_RATIO) : 0;
+    const provider = getCertificateProvider(panel);
+    const title = getCertificateTitle(panel);
+    const requiresQuiz = requiresQuizForCredential(panelId);
+    const eligible = totalModules > 0 && completedModules === totalModules && (!requiresQuiz || bestScore >= passScore);
+
+    return {
+        panel: panel,
+        kind: kind,
+        title: title,
+        provider: provider,
+        badgeText: getCertificateBadgeText(panelId, title, provider, kind),
+        completedModules: completedModules,
+        totalModules: totalModules,
+        bestScore: bestScore,
+        totalQuestions: totalQuestions,
+        passScore: passScore,
+        requiresQuiz: requiresQuiz,
+        eligible: eligible
+    };
+}
+
+function buildCertificateId(panelId) {
+    const panelCode = panelId.replace('panel-', '').replace(/[^a-z0-9]+/gi, '').toUpperCase();
+    return 'CV-' + panelCode + '-' + Date.now().toString(36).toUpperCase();
+}
+
+function formatCertificateDate(isoString) {
+    const date = new Date(isoString);
+    if (Number.isNaN(date.getTime())) return isoString;
+    return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function getLearnerNameForIssue(kind) {
+    const saved = getSavedLearnerName();
+    const label = kind === 'readiness' ? 'readiness badge' : 'certificate';
+    const entered = window.prompt('Enter the learner name for this ' + label + ':', saved);
+    if (!entered) return '';
+    const name = entered.trim();
+    if (!name) return '';
+    setSavedLearnerName(name);
+    return name;
+}
+
+function renderCertificateSection(panelId) {
+    const summary = getCertificateSummary(panelId);
+    const panel = summary.panel;
+    if (!panel) return;
+
+    const sectionContainer = summary.kind === 'readiness' || isCoursePanelCredential(panelId)
+        ? panel
+        : (panel.querySelector('.container') || panel);
+
+    let section = sectionContainer.querySelector(':scope > .cert-issue-section');
+    if (!section) {
+        section = document.createElement('div');
+        section.className = 'cert-issue-section';
+        if (summary.kind === 'readiness' || isCoursePanelCredential(panelId)) {
+            panel.appendChild(section);
+        } else {
+            const tabs = sectionContainer.querySelector('.section-tabs');
+            if (tabs && tabs.nextSibling) {
+                sectionContainer.insertBefore(section, tabs.nextSibling);
+            } else if (tabs) {
+                sectionContainer.appendChild(section);
+            } else {
+                sectionContainer.appendChild(section);
+            }
+        }
+    }
+
+    const issued = getIssuedCertificate(panelId);
+    const moduleState = summary.totalModules
+        ? summary.completedModules + '/' + summary.totalModules + ' modules completed'
+        : 'No modules found';
+    const quizState = summary.requiresQuiz
+        ? 'Best quiz score ' + summary.bestScore + '/' + summary.totalQuestions + ' (need ' + summary.passScore + '+' + ')'
+        : 'All modules must be completed to unlock the certificate';
+    const artifactName = summary.kind === 'readiness' ? 'Readiness Badge' : 'Certificate';
+    const artifactHeading = summary.kind === 'readiness' ? 'Exam Readiness Badge' : 'Course Completion Certificate';
+    const issuedStateText = summary.kind === 'readiness' ? 'Badge already claimed on this device' : 'Certificate already issued on this device';
+    const readyStateText = summary.kind === 'readiness' ? 'Eligible to claim readiness badge' : 'Eligible to issue certificate';
+    const lockedStateText = summary.kind === 'readiness'
+        ? 'Complete the prep track to unlock your readiness badge'
+        : (summary.requiresQuiz
+            ? 'Complete the course track and pass the quiz to unlock certificate issuance'
+            : 'Complete the course track to unlock certificate issuance');
+    const statusText = issued
+        ? issuedStateText
+        : summary.eligible
+            ? readyStateText
+            : lockedStateText;
+    const buttonText = issued
+        ? 'View Issued ' + artifactName
+        : (summary.kind === 'readiness' ? 'Claim Readiness Badge' : 'Issue Certificate');
+    const buttonDisabled = issued || summary.eligible ? '' : 'disabled';
+    const storageNoteHtml = issued
+        ? '<p class="cert-storage-note">Saved on this device. This ' + artifactName.toLowerCase() + ' will be reused after refresh or browser restart unless local storage is cleared.</p>'
+        : '';
+    const issuedHtml = issued ? `
+        <div class="cert-issued-card">
+            <div class="cert-issued-ornament cert-issued-ornament--tl" aria-hidden="true"></div>
+            <div class="cert-issued-ornament cert-issued-ornament--tr" aria-hidden="true"></div>
+            <div class="cert-issued-ornament cert-issued-ornament--bl" aria-hidden="true"></div>
+            <div class="cert-issued-ornament cert-issued-ornament--br" aria-hidden="true"></div>
+            <div class="cert-issued-watermark" aria-hidden="true">
+                <span class="cert-issued-watermark-mark">CV</span>
+                <span class="cert-issued-watermark-text">Cloudvana</span>
+            </div>
+            <div class="cert-issued-topline">
+                <span class="cert-issued-kicker">${summary.kind === 'readiness' ? 'Cloudvana Readiness Validation' : 'Cloudvana Verified Credential'}</span>
+                <span class="cert-issued-badge">${escapeHtml(summary.badgeText)}</span>
+            </div>
+            <div class="cert-issued-body">
+                <span class="cert-issued-caption">${summary.kind === 'readiness' ? 'Readiness Badge' : 'Certificate of Completion'}</span>
+                <h4 class="cert-issued-recipient">${escapeHtml(issued.learnerName)}</h4>
+                <p class="cert-issued-copy">${summary.kind === 'readiness' ? 'has successfully completed the exam readiness requirements for' : 'has successfully completed the Cloudvana course track'}</p>
+                <p class="cert-issued-track">${escapeHtml(summary.title)}</p>
+                <div class="cert-issued-divider" aria-hidden="true"></div>
+            </div>
+            <div class="cert-issued-grid">
+                <div>
+                    <span class="cert-issued-label">Certificate ID</span>
+                    <strong class="cert-issued-value cert-issued-id">${escapeHtml(issued.certificateId)}</strong>
+                </div>
+                <div>
+                    <span class="cert-issued-label">Issued On</span>
+                    <strong class="cert-issued-value">${escapeHtml(formatCertificateDate(issued.issuedAt))}</strong>
+                </div>
+            </div>
+            <div class="cert-issued-footer">
+                <div class="cert-issued-signature">
+                    <span class="cert-issued-signature-mark">Cloudvana</span>
+                    <span class="cert-issued-signature-role">${summary.kind === 'readiness' ? 'Validated by Cloudvana Learning' : 'Issued by Cloudvana Learning'}</span>
+                </div>
+                <div class="cert-issued-seal" aria-hidden="true">
+                    <span class="cert-issued-seal-ring"></span>
+                    <span class="cert-issued-seal-text">Verified</span>
+                </div>
+            </div>
+        </div>` : '';
+
+    section.innerHTML = `
+        <div class="cert-issue-head">
+            <div>
+                <h3 class="cert-issue-title"><i class="fas fa-award"></i> ${artifactHeading}</h3>
+                <p class="cert-issue-sub">${statusText}</p>
+            </div>
+            <span class="cert-issue-pill ${issued ? 'is-issued' : summary.eligible ? 'is-ready' : 'is-locked'}">${issued ? 'Issued' : summary.eligible ? 'Ready' : 'Locked'}</span>
+        </div>
+        <div class="cert-issue-progress">
+            <span>${moduleState}</span>
+            <span>${quizState}</span>
+        </div>
+        <div class="cert-issue-actions">
+            <button type="button" class="btn btn-primary cert-issue-btn" data-panel-id="${escapeHtml(panelId)}" ${buttonDisabled}>${buttonText}</button>
+        </div>
+        ${issuedHtml}
+        ${storageNoteHtml}
+    `;
+
+    const button = section.querySelector('.cert-issue-btn');
+    if (!button) return;
+
+    button.addEventListener('click', function () {
+        const existing = getIssuedCertificate(panelId);
+        if (existing) {
+            const issuedCard = section.querySelector('.cert-issued-card');
+            if (issuedCard) issuedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            return;
+        }
+
+        const current = getCertificateSummary(panelId);
+        if (!current.eligible) {
+            window.alert(summary.kind === 'readiness'
+                ? 'Complete all modules and reach the minimum quiz score before claiming the readiness badge.'
+                : (summary.requiresQuiz
+                    ? 'Complete all modules and reach the minimum quiz score before issuing the certificate.'
+                    : 'Complete all modules in this course track before issuing the certificate.'));
+            return;
+        }
+
+        const learnerName = getLearnerNameForIssue(summary.kind);
+        if (!learnerName) return;
+
+        setIssuedCertificate(panelId, {
+            learnerName: learnerName,
+            certificateId: buildCertificateId(panelId),
+            issuedAt: new Date().toISOString()
+        });
+
+        renderCertificateSection(panelId);
+    });
+}
+
+function renderAllCertificateSections() {
+    getAllCredentialPanelIds().forEach(renderCertificateSection);
+}
+
+function refreshCertificateSectionForModule(moduleId) {
+    const card = document.querySelector('.module-card[data-module-id="' + moduleId.replace(/"/g, '\\"') + '"]');
+    const panel = card ? card.closest('.tab-panel') : null;
+    const section = card ? card.closest('section') : null;
+    if (panel && panel.id && quizData[panel.id]) {
+        renderCertificateSection(panel.id);
+        return;
+    }
+    if (panel && panel.id && isCoursePanelCredential(panel.id)) {
+        renderCertificateSection(panel.id);
+        return;
+    }
+    if (section && section.id && COURSE_CREDENTIAL_SECTIONS.indexOf(section.id) >= 0) {
+        renderCertificateSection(section.id);
+    }
+}
 
 function loadQuizzes() {
     Object.keys(quizData).forEach(panelId => {
@@ -15459,6 +15862,8 @@ function loadQuizzes() {
         panel.appendChild(section);
         setupQuizSection(section, panelId, questions.length);
     });
+
+    renderAllCertificateSections();
 }
 
 function setupQuizSection(section, panelId, total) {
@@ -15496,6 +15901,8 @@ function updateQuizScore(section, panelId, total) {
             ? `Score: ${correct}/${total} · Best: ${best}/${total}`
             : `Best: ${best}/${total}`;
     }
+
+    renderCertificateSection(panelId);
 }
 
 function getQuizBest(panelId) {
@@ -15541,7 +15948,7 @@ function setupProviderMarquee() {
 
     const build = () => {
         const originals = track._originals;
-        const speed = 70; // pixels per second
+        const speed = 45; // pixels per second (calmer homepage motion)
 
         // Reset to a single clean set
         track.innerHTML = '';
@@ -15718,6 +16125,10 @@ function loadModules() {
     loadModulesIntoGrid('os-processes-memory-grid', courseData.osProcessesMemory);
     loadModulesIntoGrid('networking-fundamentals-grid', courseData.networkingFundamentals);
     loadModulesIntoGrid('networking-protocols-grid', courseData.networkingProtocols);
+    loadModulesIntoGrid('java-programming-grid', courseData.javaProgramming);
+    loadModulesIntoGrid('python-programming-grid', courseData.pythonProgramming);
+    loadModulesIntoGrid('csharp-programming-grid', courseData.csharpProgramming);
+    loadModulesIntoGrid('cpp-programming-grid', courseData.cppProgramming);
 }
 
 // Load modules into a specific grid
@@ -15772,6 +16183,8 @@ function toggleModuleRead(id, btn) {
             ? '<i class="fas fa-circle-check"></i> Completed'
             : '<i class="far fa-circle"></i> Mark as complete';
     }
+
+    refreshCertificateSectionForModule(id);
 }
 
 // AI Engineering track grids: show the real lesson count (number of content
@@ -15788,7 +16201,11 @@ const AI_COURSE_GRIDS = [
     'os-fundamentals-grid',
     'os-processes-memory-grid',
     'networking-fundamentals-grid',
-    'networking-protocols-grid'
+    'networking-protocols-grid',
+    'java-programming-grid',
+    'python-programming-grid',
+    'csharp-programming-grid',
+    'cpp-programming-grid'
 ];
 
 const DEEP_DIVE_GRIDS = [
@@ -15803,7 +16220,11 @@ const DEEP_DIVE_GRIDS = [
     'os-fundamentals-grid',
     'os-processes-memory-grid',
     'networking-fundamentals-grid',
-    'networking-protocols-grid'
+    'networking-protocols-grid',
+    'java-programming-grid',
+    'python-programming-grid',
+    'csharp-programming-grid',
+    'cpp-programming-grid'
 ];
 
 function getAutoDeepDiveSections(module, gridId) {
@@ -15818,7 +16239,8 @@ function getAutoDeepDiveSections(module, gridId) {
     const isSystemDesign = gridId.indexOf('system-design-') === 0;
     const isOs = gridId.indexOf('os-') === 0;
     const isNetworking = gridId.indexOf('networking-') === 0;
-    const isAiEngineering = !isDsa && !isSystemDesign && !isOs && !isNetworking;
+    const isProgrammingLanguage = /^(java|python|csharp|cpp)-/.test(gridId);
+    const isAiEngineering = !isDsa && !isSystemDesign && !isOs && !isNetworking && !isProgrammingLanguage;
 
     let practiceTitle;
     let practiceContent;
@@ -15912,6 +16334,28 @@ Checkpoint:
 
 Understanding signal:
 you can trace a request end-to-end and justify protocol choices.`;
+    } else if (isProgrammingLanguage) {
+        practiceTitle = 'Hands-On Coding Lab';
+        practiceContent = `Turn this module into a 75-minute coding lab:
+
+1. 15 min: restate the concept in your own words.
+2. 20 min: type the example code from scratch without copy-paste.
+3. 20 min: modify the example to support one new requirement.
+4. 20 min: explain the design, edge cases, and one improvement you would make.
+
+Checkpoint:
+• you can write the code from memory
+• you can explain why the language feature exists
+• you can adapt it to a new use case`;
+        pitfallsTitle = 'Professional Coding Pitfalls to Avoid';
+        pitfallsContent = `Avoid these common language-learning mistakes:
+• memorizing syntax without understanding the runtime model
+• copying examples without rewriting them yourself
+• ignoring error handling and edge cases
+• learning isolated features without building complete programs
+
+Pro signal:
+you can design, code, debug, and explain a small solution independently.`;
     } else {
         // AI Engineering (deep learning, generative AI, agents, frameworks)
         practiceTitle = 'Hands-On AI Build Sprint';
@@ -17281,6 +17725,23 @@ function moduleLessonsLabel(module, gridId) {
     return module.lessons;
 }
 
+function getModuleDifficulty(gridId, moduleNumberLabel) {
+    if (!/-programming-grid$/.test(gridId)) {
+        return '';
+    }
+    const number = parseInt(String(moduleNumberLabel || '').replace(/[^0-9]/g, ''), 10);
+    if (!number || Number.isNaN(number)) {
+        return '';
+    }
+    if (number <= 2) {
+        return 'Beginner';
+    }
+    if (number <= 4) {
+        return 'Intermediate';
+    }
+    return 'Advanced';
+}
+
 // Create a module card element
 function createModuleCard(module, gridId) {
     const card = document.createElement('div');
@@ -17298,17 +17759,27 @@ function createModuleCard(module, gridId) {
     const codeMeta = hasCode
         ? '<span class="meta-item meta-code"><i class="fas fa-code"></i> Code examples</span>'
         : '';
+    const difficulty = getModuleDifficulty(gridId, module.number);
+    const difficultyClass = difficulty ? ' module-difficulty-' + difficulty.toLowerCase() : '';
+    const difficultyTag = difficulty
+        ? `<span class="module-difficulty${difficultyClass}">${difficulty}</span>`
+        : '';
+    const projectMeta = /project|capstone/i.test(String(module.title || ''))
+        ? '<span class="meta-item meta-project"><i class="fas fa-diagram-project"></i> Mini project</span>'
+        : '';
 
     card.innerHTML = `
         ${lockIcon}
         <span class="read-check" title="Completed"><i class="fas fa-circle-check"></i></span>
         <div class="module-number">${module.number}</div>
+        ${difficultyTag}
         <h4 class="module-title">${module.title}</h4>
         <p class="module-description">${module.description}</p>
         <div class="module-meta">
             <span class="meta-item"><i class="fas fa-book-open"></i> ${moduleLessonsLabel(module, gridId)}</span>
             ${durationMeta}
             ${codeMeta}
+            ${projectMeta}
         </div>
     `;
 
