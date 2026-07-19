@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
 
+Sitemap: https://cloudvana.vercel.app/sitemap-main.xml
 Sitemap: https://cloudvana.vercel.app/sitemap_index.xml
 Sitemap: https://cloudvana.vercel.app/sitemap.xml
