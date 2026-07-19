@@ -1,51 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Home Page -->
   <url>
     <loc>https://cloudvana.vercel.app/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.00</priority>
   </url>
-  <!-- About Page -->
   <url>
     <loc>https://cloudvana.vercel.app/about.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
   </url>
-  <!-- Courses Page -->
   <url>
     <loc>https://cloudvana.vercel.app/courses.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.90</priority>
   </url>
-  <!-- Certifications Page -->
   <url>
     <loc>https://cloudvana.vercel.app/certifications.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
   </url>
-  <!-- Mentorship Page -->
   <url>
     <loc>https://cloudvana.vercel.app/mentorship.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
   </url>
-  <!-- Find Your Path Page -->
   <url>
     <loc>https://cloudvana.vercel.app/find-your-path.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.70</priority>
   </url>
-  <!-- Prerequisites Page -->
   <url>
     <loc>https://cloudvana.vercel.app/prerequisites.html</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
   </url>
-  <!-- Hiring Procedures Page -->
   <url>
     <loc>https://cloudvana.vercel.app/hiring-procedures.html</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
   </url>
 </urlset>
