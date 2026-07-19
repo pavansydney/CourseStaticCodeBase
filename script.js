@@ -16230,6 +16230,17 @@ const DEEP_DIVE_GRIDS = [
 function getAutoDeepDiveSections(module, gridId) {
     if (DEEP_DIVE_GRIDS.indexOf(gridId) === -1) return [];
 
+    // Keep programming-language courses focused on authored curriculum content only.
+    if (/-programming-grid$/.test(String(gridId || ''))) {
+        return [];
+    }
+
+    // Rich modules already include a full structured lesson flow,
+    // so avoid appending generic checklist/lab/pitfall sections.
+    if (Array.isArray(module.detailedContent) && module.detailedContent.length >= 12) {
+        return [];
+    }
+
     const topics = Array.isArray(module.topics) ? module.topics : [];
     const topicLines = topics.length
         ? topics.map(function (t) { return '- ' + t; }).join('\n')
@@ -17786,6 +17797,499 @@ function createModuleCard(module, gridId) {
     return card;
 }
 
+function formatSectionContent(rawContent, sectionTitle) {
+    if (!rawContent) return '';
+
+    const lines = String(rawContent).split('\n');
+    const labeledLinePattern = /^(Learning Objective|Learning Objectives|Estimated Reading Time|Estimated Completion Time|Difficulty|Theory Content|Real World Analogy|Visual Diagram(?: \(Markdown\))?|Code Example|Expected Output|Common Mistakes|Best Practices|Mini Exercise|Key Takeaways|Skills Gained|Prerequisites|Module Number|Module Name|Module Description|Module Quiz|Interview Preparation|Module Summary|Final Assessment|Project Deliverables|Suggested Project Options|Mini Challenge|Course Completion Path|Next Module Bridge|Next Lesson Connection):\s*(.*)$/;
+
+    const fieldMap = {};
+    const genericLines = [];
+    let currentLabel = null;
+
+    lines.forEach(function (line) {
+        const text = line.trim();
+        if (!text) {
+            currentLabel = null;
+            genericLines.push('');
+            return;
+        }
+
+        const labeled = text.match(labeledLinePattern);
+        if (labeled) {
+            currentLabel = labeled[1];
+            fieldMap[currentLabel] = fieldMap[currentLabel] ? fieldMap[currentLabel] + '\n' + labeled[2] : labeled[2];
+            return;
+        }
+
+        if (currentLabel) {
+            fieldMap[currentLabel] += '\n' + text;
+            return;
+        }
+
+        genericLines.push(text);
+    });
+
+    function renderValue(value) {
+        if (!value) return '';
+        const valueLines = String(value).split('\n').map(function (v) { return v.trim(); }).filter(Boolean);
+        const hasBullets = valueLines.some(function (v) { return v.startsWith('• ') || v.startsWith('- '); });
+        if (hasBullets) {
+            return '<ul class="content-list">' + valueLines.map(function (v) {
+                if (v.startsWith('• ') || v.startsWith('- ')) return '<li>' + v.substring(2) + '</li>';
+                return '<li>' + v + '</li>';
+            }).join('') + '</ul>';
+        }
+        return '<p class="content-paragraph">' + valueLines.join('<br>') + '</p>';
+    }
+
+    const normalizedTitle = String(sectionTitle || '').trim().toLowerCase();
+
+    const isModuleBlueprint = /module blueprint/i.test(String(sectionTitle || '')) ||
+        !!(fieldMap['Module Number'] && fieldMap['Module Name'] && fieldMap['Difficulty']);
+
+    if (isModuleBlueprint) {
+        return `
+            <div class="blueprint-card">
+                <div class="blueprint-head">
+                    <h4>Module At A Glance</h4>
+                </div>
+                <div class="blueprint-meta-grid">
+                    ${fieldMap['Module Number'] ? `<div class="blueprint-meta-item"><span class="content-label">Module</span><span>${fieldMap['Module Number']}</span></div>` : ''}
+                    ${fieldMap['Module Name'] ? `<div class="blueprint-meta-item"><span class="content-label">Name</span><span>${fieldMap['Module Name']}</span></div>` : ''}
+                    ${fieldMap['Difficulty'] ? `<div class="blueprint-meta-item"><span class="content-label">Difficulty</span><span>${fieldMap['Difficulty']}</span></div>` : ''}
+                    ${fieldMap['Estimated Reading Time'] ? `<div class="blueprint-meta-item"><span class="content-label">Reading Time</span><span>${fieldMap['Estimated Reading Time']}</span></div>` : ''}
+                    ${fieldMap['Estimated Completion Time'] ? `<div class="blueprint-meta-item"><span class="content-label">Completion Time</span><span>${fieldMap['Estimated Completion Time']}</span></div>` : ''}
+                    ${fieldMap['Prerequisites'] ? `<div class="blueprint-meta-item"><span class="content-label">Prerequisites</span><span>${fieldMap['Prerequisites']}</span></div>` : ''}
+                </div>
+                <div class="blueprint-panels">
+                    ${fieldMap['Learning Objectives'] || fieldMap['Learning Objective']
+                        ? `<div class="blueprint-panel"><h5>Learning Objectives</h5>${renderValue(fieldMap['Learning Objectives'] || fieldMap['Learning Objective'])}</div>`
+                        : ''}
+                    ${fieldMap['Skills Gained']
+                        ? `<div class="blueprint-panel"><h5>Skills Gained</h5>${renderValue(fieldMap['Skills Gained'])}</div>`
+                        : ''}
+                </div>
+            </div>
+        `;
+    }
+
+    const isLessonLike = !!(fieldMap['Learning Objective'] || fieldMap['Learning Objectives']) &&
+        !!(fieldMap['Theory Content'] || fieldMap['Mini Exercise'] || fieldMap['Key Takeaways']);
+
+    if (isLessonLike) {
+        const objective = fieldMap['Learning Objective'] || fieldMap['Learning Objectives'] || '';
+        const readingTime = fieldMap['Estimated Reading Time'] || '';
+        const difficulty = fieldMap['Difficulty'] || '';
+        const theory = fieldMap['Theory Content'] || '';
+        const analogy = fieldMap['Real World Analogy'] || '';
+        const diagram = fieldMap['Visual Diagram (Markdown)'] || fieldMap['Visual Diagram'] || '';
+        const output = fieldMap['Expected Output'] || '';
+        const mistakes = fieldMap['Common Mistakes'] || '';
+        const bestPractices = fieldMap['Best Practices'] || '';
+        const miniExercise = fieldMap['Mini Exercise'] || '';
+        const takeaways = fieldMap['Key Takeaways'] || '';
+
+        return `
+            <div class="learning-flow">
+                <div class="learning-meta">
+                    ${readingTime ? `<span class="learning-chip"><i class="fas fa-clock"></i> ${readingTime}</span>` : ''}
+                    ${difficulty ? `<span class="learning-chip"><i class="fas fa-signal"></i> ${difficulty}</span>` : ''}
+                    ${sectionTitle ? `<span class="learning-chip"><i class="fas fa-graduation-cap"></i> Lesson Flow</span>` : ''}
+                </div>
+                <div class="learning-block learning-block-understand">
+                    <h4>Understand</h4>
+                    ${objective ? `<p class="content-row"><span class="content-label">Goal:</span> ${objective}</p>` : ''}
+                    ${theory ? `<p class="content-row"><span class="content-label">Concept:</span> ${theory}</p>` : ''}
+                    ${analogy ? `<p class="content-row"><span class="content-label">Analogy:</span> ${analogy}</p>` : ''}
+                    ${diagram ? `<div class="learning-diagram"><span class="content-label">Visual:</span> ${diagram}</div>` : ''}
+                </div>
+                <div class="learning-grid">
+                    <div class="learning-block learning-block-try">
+                        <h4>Try</h4>
+                        ${output ? `<p class="content-row"><span class="content-label">Expected Output:</span> ${output}</p>` : ''}
+                        ${miniExercise ? `<p class="content-row"><span class="content-label">Mini Exercise:</span> ${miniExercise}</p>` : ''}
+                    </div>
+                    <div class="learning-block learning-block-remember">
+                        <h4>Remember</h4>
+                        ${mistakes ? `<p class="content-row"><span class="content-label">Mistake Alert:</span> ${mistakes}</p>` : ''}
+                        ${bestPractices ? `<p class="content-row"><span class="content-label">Best Practice:</span> ${bestPractices}</p>` : ''}
+                        ${takeaways ? `<p class="content-row"><span class="content-label">Takeaway:</span> ${takeaways}</p>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    const isMiniProject = normalizedTitle.indexOf('mini project') === 0;
+    if (isMiniProject) {
+        const lines = String(rawContent).split('\n').map(function (l) { return l.trim(); });
+        const groups = [];
+        let intro = '';
+        let current = null;
+
+        lines.forEach(function (line) {
+            if (!line) return;
+
+            if (/^[^:]+:\s*(.+)$/.test(line) && !/^[•-]\s+/.test(line)) {
+                const singleLine = line.match(/^([^:]+):\s*(.+)$/);
+                if (singleLine) {
+                    if (!intro) {
+                        intro = singleLine[2].trim();
+                    } else {
+                        current = { title: singleLine[1].trim(), items: [singleLine[2].trim()] };
+                        groups.push(current);
+                    }
+                }
+                return;
+            }
+
+            const heading = line.match(/^([^:]+):\s*$/);
+            if (heading) {
+                current = { title: heading[1].trim(), items: [] };
+                groups.push(current);
+                return;
+            }
+
+            if (/^[•-]\s+/.test(line)) {
+                const item = line.replace(/^[•-]\s+/, '');
+                if (!current) {
+                    current = { title: 'Plan', items: [] };
+                    groups.push(current);
+                }
+                current.items.push(item);
+                return;
+            }
+
+            if (!intro) {
+                intro = line;
+            } else if (current) {
+                current.items.push(line);
+            }
+        });
+
+        const projectTitle = String(sectionTitle || '').replace(/^mini project:\s*/i, '').trim() || 'Mini Project';
+
+        return `
+            <div class="section-focus section-focus-project">
+                <div class="section-focus-head">
+                    <h4>${projectTitle}</h4>
+                    <span class="section-focus-tag">Build Brief</span>
+                </div>
+                ${intro ? `<p class="section-focus-intro">${intro}</p>` : ''}
+                <div class="mini-project-grid">
+                    ${groups.map(function (group) {
+                        return `
+                            <article class="mini-project-card">
+                                <h5>${group.title}</h5>
+                                <ul>
+                                    ${group.items.map(function (item) { return `<li>${item}</li>`; }).join('')}
+                                </ul>
+                            </article>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    const isSuggestedProjects = normalizedTitle === 'suggested project options';
+    if (isSuggestedProjects) {
+        const blocks = String(rawContent)
+            .split(/\n\s*\n/)
+            .map(function (b) { return b.trim(); })
+            .filter(Boolean);
+
+        const intro = blocks.shift() || 'Choose one project and execute it deeply.';
+        const cards = blocks.map(function (block) {
+            const rows = block.split('\n').map(function (r) { return r.trim(); }).filter(Boolean);
+            const title = (rows[0] || '').replace(/^[-•]\s*/, '');
+            const points = rows.slice(1).map(function (p) {
+                return p.replace(/^[•-]\s*/, '');
+            });
+            return { title: title, points: points };
+        }).filter(function (card) { return card.title; });
+
+        return `
+            <div class="section-focus section-focus-projects">
+                <div class="section-focus-head">
+                    <h4>Pick Your Capstone</h4>
+                    <span class="section-focus-tag">Choose One</span>
+                </div>
+                <p class="section-focus-intro">${intro}</p>
+                <div class="project-options-grid">
+                    ${cards.map(function (card) {
+                        return `
+                            <article class="project-option-card">
+                                <h5>${card.title}</h5>
+                                <ul>
+                                    ${card.points.map(function (point) { return `<li>${point}</li>`; }).join('')}
+                                </ul>
+                            </article>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    const isProjectDeliverables = normalizedTitle === 'project deliverables';
+    if (isProjectDeliverables) {
+        const lines = String(rawContent).split('\n').map(function (l) { return l.trim(); });
+        const intro = (lines.find(function (l) { return l && !/^[•-]/.test(l) && !/:$/.test(l) && l.indexOf(':') === -1; }) || '').trim();
+        const groups = [];
+        let current = null;
+
+        lines.forEach(function (line) {
+            if (!line || line === intro) return;
+            const headingMatch = line.match(/^([^:]+):\s*$/);
+            if (headingMatch) {
+                current = { title: headingMatch[1].trim(), items: [] };
+                groups.push(current);
+                return;
+            }
+            if (/^[•-]\s+/.test(line) && current) {
+                current.items.push(line.replace(/^[•-]\s+/, ''));
+                return;
+            }
+            if (current) {
+                current.items.push(line);
+            }
+        });
+
+        return `
+            <div class="section-focus section-focus-deliverables">
+                <div class="section-focus-head">
+                    <h4>Delivery Checklist</h4>
+                    <span class="section-focus-tag">Must Have</span>
+                </div>
+                ${intro ? `<p class="section-focus-intro">${intro}</p>` : ''}
+                <div class="deliverables-grid">
+                    ${groups.map(function (group) {
+                        return `
+                            <article class="deliverable-card">
+                                <h5>${group.title}</h5>
+                                <ul>
+                                    ${group.items.map(function (item) { return `<li>${item}</li>`; }).join('')}
+                                </ul>
+                            </article>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    const isFinalAssessment = normalizedTitle === 'final assessment';
+    if (isFinalAssessment) {
+        const rows = String(rawContent).split('\n').map(function (r) { return r.trim(); }).filter(Boolean);
+        const keyInfo = [];
+        let formatItems = [];
+        let passItems = [];
+        let bucket = null;
+
+        rows.forEach(function (row) {
+            if (/^Assessment Format:/i.test(row)) {
+                bucket = 'format';
+                return;
+            }
+            if (/^Pass Criteria:/i.test(row)) {
+                bucket = 'pass';
+                return;
+            }
+            if (/^[•-]\s+/.test(row)) {
+                if (bucket === 'format') {
+                    formatItems.push(row.replace(/^[•-]\s+/, ''));
+                } else if (bucket === 'pass') {
+                    passItems.push(row.replace(/^[•-]\s+/, ''));
+                }
+                return;
+            }
+            bucket = null;
+            keyInfo.push(row);
+        });
+
+        const purpose = keyInfo.find(function (line) { return /^Purpose:/i.test(line); }) || '';
+        const why = keyInfo.find(function (line) { return /^Why it exists:/i.test(line); }) || '';
+
+        return `
+            <div class="section-focus section-focus-assessment">
+                <div class="section-focus-head">
+                    <h4>Final Assessment Guide</h4>
+                    <span class="section-focus-tag">Readiness Gate</span>
+                </div>
+                ${purpose ? `<p class="content-row"><span class="content-label">Purpose:</span> ${purpose.replace(/^Purpose:\s*/i, '')}</p>` : ''}
+                ${why ? `<p class="content-row"><span class="content-label">Why This Tab:</span> ${why.replace(/^Why it exists:\s*/i, '')}</p>` : ''}
+                <div class="assessment-grid">
+                    <article class="assessment-card">
+                        <h5>What You Will Be Evaluated On</h5>
+                        <ul>
+                            ${formatItems.map(function (item) { return `<li>${item}</li>`; }).join('')}
+                        </ul>
+                    </article>
+                    <article class="assessment-card">
+                        <h5>How You Pass</h5>
+                        <ul>
+                            ${passItems.map(function (item) { return `<li>${item}</li>`; }).join('')}
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        `;
+    }
+
+    const isMiniChallenge = normalizedTitle === 'mini challenge';
+    if (isMiniChallenge) {
+        return `
+            <div class="section-focus section-focus-challenge">
+                <div class="section-focus-head">
+                    <h4>Hands-On Challenge</h4>
+                    <span class="section-focus-tag">Do This Now</span>
+                </div>
+                <p class="section-focus-intro">Apply the module concepts in a practical task before moving forward.</p>
+                ${renderValue(rawContent)}
+            </div>
+        `;
+    }
+
+    const isModuleQuiz = normalizedTitle === 'module quiz' || normalizedTitle === 'mini assessment';
+    if (isModuleQuiz) {
+        const quizLines = String(rawContent)
+            .split('\n')
+            .map(function (l) { return l.trim(); })
+            .filter(Boolean);
+
+        const quizItems = quizLines.map(function (line) {
+            // Remove leading numbering like "1) " to avoid duplicate numbering in ordered list.
+            const cleaned = line.replace(/^\d+\)\s*/, '');
+            const parts = cleaned.split(':');
+            if (parts.length < 2) {
+                return { question: cleaned, options: [] };
+            }
+
+            const question = parts[0].trim();
+            const optionsPart = parts.slice(1).join(':').trim();
+            const options = [];
+            const optionRegex = /([A-D])\)\s*([^A-D]+?)(?=\s+[A-D]\)|$)/g;
+            let match;
+            while ((match = optionRegex.exec(optionsPart)) !== null) {
+                options.push({ label: match[1], text: match[2].trim() });
+            }
+
+            if (!options.length) {
+                return { question: cleaned, options: [] };
+            }
+            return { question: question, options: options };
+        });
+
+        return `
+            <div class="section-focus section-focus-quiz">
+                <div class="section-focus-head">
+                    <h4>Knowledge Check</h4>
+                    <span class="section-focus-tag">Self-Test</span>
+                </div>
+                <p class="section-focus-intro">Use this quiz to verify understanding before interviews and projects.</p>
+                <ol class="quiz-list quiz-list-cards">
+                    ${quizItems.map(function (item) {
+                        return `
+                            <li class="quiz-item">
+                                <p class="quiz-question">${item.question}</p>
+                                ${item.options.length
+                                    ? `<div class="quiz-options">${item.options.map(function (opt) {
+                                        return `<span class="quiz-option"><strong>${opt.label})</strong> ${opt.text}</span>`;
+                                    }).join('')}</div>`
+                                    : ''}
+                            </li>
+                        `;
+                    }).join('')}
+                </ol>
+            </div>
+        `;
+    }
+
+    const isInterviewPrep = normalizedTitle === 'interview preparation';
+    if (isInterviewPrep) {
+        return `
+            <div class="section-focus section-focus-interview">
+                <div class="section-focus-head">
+                    <h4>Interview Readiness</h4>
+                    <span class="section-focus-tag">Job Focus</span>
+                </div>
+                <p class="section-focus-intro">Practice these prompts out loud as if you are in a real interview round.</p>
+                ${renderValue(rawContent)}
+            </div>
+        `;
+    }
+
+    const isModuleSummary = normalizedTitle === 'module summary';
+    if (isModuleSummary) {
+        return `
+            <div class="section-focus section-focus-summary">
+                <div class="section-focus-head">
+                    <h4>What You Can Do Now</h4>
+                    <span class="section-focus-tag">Checkpoint</span>
+                </div>
+                ${renderValue(rawContent)}
+            </div>
+        `;
+    }
+
+    const isNextBridge = normalizedTitle === 'next module bridge' || normalizedTitle === 'next lesson connection';
+    if (isNextBridge) {
+        return `
+            <div class="section-focus section-focus-next">
+                <div class="section-focus-head">
+                    <h4>What Comes Next</h4>
+                    <span class="section-focus-tag">Transition</span>
+                </div>
+                ${renderValue(rawContent)}
+            </div>
+        `;
+    }
+
+    let html = '';
+    let listOpen = false;
+
+    function closeList() {
+        if (listOpen) {
+            html += '</ul>';
+            listOpen = false;
+        }
+    }
+
+    lines.forEach(function (line) {
+        const text = line.trim();
+
+        if (!text) {
+            closeList();
+            html += '<div class="content-gap"></div>';
+            return;
+        }
+
+        if (text.startsWith('• ') || text.startsWith('- ')) {
+            if (!listOpen) {
+                html += '<ul class="content-list">';
+                listOpen = true;
+            }
+            html += `<li>${text.substring(2)}</li>`;
+            return;
+        }
+
+        const labeled = text.match(labeledLinePattern);
+        if (labeled) {
+            closeList();
+            html += `<p class="content-row"><span class="content-label">${labeled[1]}:</span> ${labeled[2]}</p>`;
+            return;
+        }
+
+        closeList();
+        html += `<p class="content-paragraph">${text}</p>`;
+    });
+
+    closeList();
+    return html;
+}
+
 // Open module details in modal
 function openModuleModal(module, moduleId) {
     const modal = document.getElementById('moduleModal');
@@ -17833,7 +18337,7 @@ function openModuleModal(module, moduleId) {
                     <span class="expand-icon" id="icon-${index}">▼</span>
                 </div>
                 <div class="content-body" id="content-${index}" style="display: none;">
-                    <div class="content-text">${section.content.replace(/\n/g, '<br>')}</div>
+                    <div class="content-text">${formatSectionContent(section.content, section.title)}</div>
                     ${section.code ? `
                         <div class="code-section">
                             <div class="code-header">
