@@ -17797,11 +17797,148 @@ function createModuleCard(module, gridId) {
     return card;
 }
 
+function extractMermaidDefinition(diagramText) {
+    if (!diagramText) return '';
+
+    const raw = String(diagramText).trim();
+    if (!raw) return '';
+
+    const fenced = raw.match(/```mermaid\s*([\s\S]*?)```/i);
+    if (fenced && fenced[1]) {
+        return fenced[1].trim();
+    }
+
+    const startsLikeMermaid = /^(flowchart|sequenceDiagram|classDiagram|stateDiagram|erDiagram|journey|gantt|mindmap|timeline|gitGraph|pie)\b/i.test(raw);
+    if (startsLikeMermaid) {
+        const lines = raw
+            .split('\n')
+            .map(function (line) { return line.trimEnd(); });
+
+        const stopPattern = /^(Practice|Worked Example|Common Mistakes|Best Practices|Recap|Mini Exercise|Key Takeaways|Expected Output|Code Example)\s*:/i;
+
+        const diagramLines = [];
+        for (let i = 0; i < lines.length; i += 1) {
+            const line = lines[i].trim();
+            if (!line) {
+                diagramLines.push('');
+                continue;
+            }
+            if (i > 0 && stopPattern.test(line)) {
+                break;
+            }
+            diagramLines.push(lines[i]);
+        }
+
+        let cleaned = diagramLines.join('\n').trim();
+        // Normalize node labels so Mermaid doesn't choke on punctuation-heavy labels.
+        cleaned = cleaned.replace(/\b([A-Za-z][A-Za-z0-9_]*)\[([^\]]+)\]/g, function (_, nodeId, label) {
+            const trimmed = String(label).trim();
+            const alreadyQuoted = trimmed.startsWith('"') && trimmed.endsWith('"');
+            if (alreadyQuoted) {
+                return nodeId + '[' + trimmed + ']';
+            }
+
+            const safe = trimmed.replace(/"/g, '\\"');
+            return nodeId + '["' + safe + '"]';
+        });
+
+        return cleaned;
+    }
+
+    return '';
+}
+
+function renderVisualDiagram(diagramText) {
+    const mermaidDefinition = extractMermaidDefinition(diagramText);
+    if (mermaidDefinition) {
+        const encoded = encodeURIComponent(mermaidDefinition);
+        return `
+            <div class="learning-diagram learning-diagram-mermaid" data-mermaid-source="${encoded}">
+                <span class="content-label">Visual:</span>
+                <div class="mermaid-host">
+                    <pre class="mermaid-fallback"><code>${escapeHtml(mermaidDefinition)}</code></pre>
+                </div>
+            </div>
+        `;
+    }
+
+    return `<div class="learning-diagram"><span class="content-label">Visual:</span> ${escapeHtml(String(diagramText || ''))}</div>`;
+}
+
+let mermaidLoaderPromise = null;
+
+function ensureMermaidLoaded() {
+    if (window.mermaid) {
+        return Promise.resolve(window.mermaid);
+    }
+
+    if (mermaidLoaderPromise) {
+        return mermaidLoaderPromise;
+    }
+
+    mermaidLoaderPromise = new Promise(function (resolve, reject) {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js';
+        script.async = true;
+        script.onload = function () { resolve(window.mermaid); };
+        script.onerror = function () { reject(new Error('Failed to load Mermaid library')); };
+        document.head.appendChild(script);
+    });
+
+    return mermaidLoaderPromise;
+}
+
+function renderMermaidDiagrams(container) {
+    if (!container) return;
+
+    const nodes = Array.from(container.querySelectorAll('.learning-diagram-mermaid[data-mermaid-source]:not([data-mermaid-rendered])'));
+    if (!nodes.length) return;
+
+    ensureMermaidLoaded().then(function (mermaid) {
+        if (!mermaid) return;
+
+        mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'loose',
+            theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+        });
+
+        nodes.forEach(function (node, idx) {
+            const host = node.querySelector('.mermaid-host');
+            const encoded = node.getAttribute('data-mermaid-source') || '';
+            const source = decodeURIComponent(encoded);
+            if (!host || !source) return;
+
+            const renderId = 'mermaid-' + Date.now() + '-' + idx;
+            mermaid.render(renderId, source).then(function (result) {
+                host.innerHTML = result.svg;
+                node.setAttribute('data-mermaid-rendered', 'true');
+            }).catch(function () {
+                node.setAttribute('data-mermaid-rendered', 'error');
+            });
+        });
+    }).catch(function () {
+        // Keep fallback code block if Mermaid cannot be loaded.
+    });
+}
+
 function formatSectionContent(rawContent, sectionTitle) {
     if (!rawContent) return '';
 
     const lines = String(rawContent).split('\n');
-    const labeledLinePattern = /^(Learning Objective|Learning Objectives|Estimated Reading Time|Estimated Completion Time|Difficulty|Theory Content|Real World Analogy|Visual Diagram(?: \(Markdown\))?|Code Example|Expected Output|Common Mistakes|Best Practices|Mini Exercise|Key Takeaways|Skills Gained|Prerequisites|Module Number|Module Name|Module Description|Module Quiz|Interview Preparation|Module Summary|Final Assessment|Project Deliverables|Suggested Project Options|Mini Challenge|Course Completion Path|Next Module Bridge|Next Lesson Connection):\s*(.*)$/;
+    const labeledLinePattern = /^(Learning Objective|Learning Objectives|Estimated Reading Time|Estimated Completion Time|Difficulty|Theory Content|Core Theory|Real World Analogy|Visual Diagram(?: \(Markdown\))?|Diagram \(Mermaid\)|Code Example|Expected Output|Common Mistakes|Best Practices|Mini Exercise|Worked Example|Practice|Key Takeaways|Recap|Skills Gained|Prerequisites|Module Number|Module Name|Module Description|Module Quiz|Interview Preparation|Module Summary|Final Assessment|Project Deliverables|Suggested Project Options|Mini Challenge|Course Completion Path|Next Module Bridge|Next Lesson Connection):\s*(.*)$/;
+
+    const labelAliases = {
+        'Core Theory': 'Theory Content',
+        'Diagram (Mermaid)': 'Visual Diagram',
+        'Worked Example': 'Mini Exercise',
+        'Practice': 'Mini Exercise',
+        'Recap': 'Key Takeaways'
+    };
+
+    const normalizeLabel = function (label) {
+        return labelAliases[label] || label;
+    };
 
     const fieldMap = {};
     const genericLines = [];
@@ -17810,14 +17947,17 @@ function formatSectionContent(rawContent, sectionTitle) {
     lines.forEach(function (line) {
         const text = line.trim();
         if (!text) {
-            currentLabel = null;
-            genericLines.push('');
+            if (currentLabel && fieldMap[currentLabel]) {
+                fieldMap[currentLabel] += '\n';
+            } else {
+                genericLines.push('');
+            }
             return;
         }
 
         const labeled = text.match(labeledLinePattern);
         if (labeled) {
-            currentLabel = labeled[1];
+            currentLabel = normalizeLabel(labeled[1]);
             fieldMap[currentLabel] = fieldMap[currentLabel] ? fieldMap[currentLabel] + '\n' + labeled[2] : labeled[2];
             return;
         }
@@ -17889,6 +18029,8 @@ function formatSectionContent(rawContent, sectionTitle) {
         const bestPractices = fieldMap['Best Practices'] || '';
         const miniExercise = fieldMap['Mini Exercise'] || '';
         const takeaways = fieldMap['Key Takeaways'] || '';
+        const hasTryContent = !!(output || miniExercise);
+        const hasRememberContent = !!(mistakes || bestPractices || takeaways);
 
         return `
             <div class="learning-flow">
@@ -17902,20 +18044,20 @@ function formatSectionContent(rawContent, sectionTitle) {
                     ${objective ? `<p class="content-row"><span class="content-label">Goal:</span> ${objective}</p>` : ''}
                     ${theory ? `<p class="content-row"><span class="content-label">Concept:</span> ${theory}</p>` : ''}
                     ${analogy ? `<p class="content-row"><span class="content-label">Analogy:</span> ${analogy}</p>` : ''}
-                    ${diagram ? `<div class="learning-diagram"><span class="content-label">Visual:</span> ${diagram}</div>` : ''}
+                    ${diagram ? renderVisualDiagram(diagram) : ''}
                 </div>
                 <div class="learning-grid">
-                    <div class="learning-block learning-block-try">
+                    ${hasTryContent ? `<div class="learning-block learning-block-try">
                         <h4>Try</h4>
                         ${output ? `<p class="content-row"><span class="content-label">Expected Output:</span> ${output}</p>` : ''}
                         ${miniExercise ? `<p class="content-row"><span class="content-label">Mini Exercise:</span> ${miniExercise}</p>` : ''}
-                    </div>
-                    <div class="learning-block learning-block-remember">
+                    </div>` : ''}
+                    ${hasRememberContent ? `<div class="learning-block learning-block-remember">
                         <h4>Remember</h4>
                         ${mistakes ? `<p class="content-row"><span class="content-label">Mistake Alert:</span> ${mistakes}</p>` : ''}
                         ${bestPractices ? `<p class="content-row"><span class="content-label">Best Practice:</span> ${bestPractices}</p>` : ''}
                         ${takeaways ? `<p class="content-row"><span class="content-label">Takeaway:</span> ${takeaways}</p>` : ''}
-                    </div>
+                    </div>` : ''}
                 </div>
             </div>
         `;
@@ -18361,6 +18503,10 @@ function openModuleModal(module, moduleId) {
                 </div>
             </div>
             <div class="detailed-content">
+                <div class="content-toolbar">
+                    <button class="btn btn-secondary btn-sm" onclick="expandAllContentSections()">Expand All</button>
+                    <button class="btn btn-secondary btn-sm" onclick="collapseAllContentSections()">Collapse All</button>
+                </div>
                 ${contentSections}
             </div>
             <div class="modal-actions">
@@ -18396,6 +18542,25 @@ function openModuleModal(module, moduleId) {
     
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
+
+    if (!modalBody.querySelector('.modal-back-to-top')) {
+        modalBody.insertAdjacentHTML('beforeend', `
+            <button class="modal-back-to-top" onclick="scrollModalToTop()" aria-label="Back to top">
+                <i class="fas fa-arrow-up"></i>
+                <span>Top</span>
+            </button>
+        `);
+    }
+
+    setupModalBackToTop();
+
+    // Auto-open the first section for better discoverability.
+    const firstSection = document.getElementById('content-0');
+    if (firstSection && firstSection.style.display === 'none') {
+        toggleContent(0);
+    }
+
+    renderMermaidDiagrams(modalBody);
 }
 
 // Close modal
@@ -18403,6 +18568,29 @@ function closeModal() {
     const modal = document.getElementById('moduleModal');
     modal.style.display = 'none';
     document.body.style.overflow = 'auto';
+}
+
+function setupModalBackToTop() {
+    const modal = document.getElementById('moduleModal');
+    const modalContent = modal ? modal.querySelector('.modal-content') : null;
+    const backToTopButton = document.querySelector('.modal-back-to-top');
+    if (!modalContent || !backToTopButton) return;
+
+    const updateVisibility = function () {
+        const shouldShow = modalContent.scrollTop > 320;
+        backToTopButton.classList.toggle('visible', shouldShow);
+    };
+
+    modalContent.onscroll = updateVisibility;
+    updateVisibility();
+}
+
+function scrollModalToTop() {
+    const modal = document.getElementById('moduleModal');
+    const modalContent = modal ? modal.querySelector('.modal-content') : null;
+    if (!modalContent) return;
+
+    modalContent.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // Close modal when clicking outside
@@ -18682,11 +18870,32 @@ function toggleContent(index) {
         content.style.display = 'block';
         icon.textContent = '▲';
         icon.style.transform = 'rotate(180deg)';
+        renderMermaidDiagrams(content);
     } else {
         content.style.display = 'none';
         icon.textContent = '▼';
         icon.style.transform = 'rotate(0deg)';
     }
+}
+
+function expandAllContentSections() {
+    const sections = document.querySelectorAll('.content-body[id^="content-"]');
+    sections.forEach(function (section) {
+        if (section.style.display === 'none') {
+            const index = section.id.replace('content-', '');
+            toggleContent(index);
+        }
+    });
+}
+
+function collapseAllContentSections() {
+    const sections = document.querySelectorAll('.content-body[id^="content-"]');
+    sections.forEach(function (section) {
+        if (section.style.display !== 'none') {
+            const index = section.id.replace('content-', '');
+            toggleContent(index);
+        }
+    });
 }
 
 // Copy code to clipboard

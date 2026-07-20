@@ -9,1067 +9,1094 @@
 courseData.javaProgramming = [
     {
         number: "Module 1",
-        title: "Java Fundamentals",
-        description: "Start from zero and build strong Java foundations with syntax, control flow, arrays, strings, and practical coding habits.",
-        duration: "60 min",
-        lessons: "12 lessons",
+        title: "Java Core and Toolchain",
+        description: "Build deep Java fundamentals across runtime internals, type-safe coding, classpath setup, and command-line workflow.",
+        duration: "80 min",
+        lessons: "15 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Java Introduction", "JDK vs JRE vs JVM", "Installing Java", "Hello World", "Variables", "Data Types", "Operators", "User Input", "Type Casting", "Control Flow", "Loops", "Methods", "Arrays", "Strings", "Wrapper Classes", "Math Utilities", "Mini Assessment"],
-        detailedDescription: "Beginner-first module that establishes Java runtime understanding and coding basics required for all later modules.",
+        topics: ["Introduction and History", "Java Language Evolution", "JDK/JRE/JVM", "Classpath and Packages", "Compilation and Bytecode", "Project Structure", "Variables and Types", "Operators", "Control Flow", "Methods", "Arrays", "Strings", "Enums", "Wrapper Types", "Command Line Build", "Debugging Basics"],
+        detailedDescription: "Beginner-first module with stronger depth on runtime model, program structure, and practical coding discipline.",
         detailedContent: [
             {
                 title: "Module Blueprint",
                 content: `Module Number: Module 1
-Module Name: Java Fundamentals
+Module Name: Java Foundations and Tooling
 Difficulty: Beginner
-Estimated Reading Time: 60 min
-Estimated Completion Time: 5-6 hours
+Estimated Reading Time: 80 min
+Estimated Completion Time: 7-8 hours
 Prerequisites: None
 Learning Objectives:
-• understand Java runtime model and tooling
-• write correct Java syntax with confidence
-• use core language constructs in small programs
+• explain how source code becomes JVM execution
+• write predictable Java logic with strong type awareness
+• use CLI tooling to compile, run, and debug small programs
 Skills Gained:
-• setup and execute Java programs
-• use variables, data types, and operators
-• apply control flow, loops, methods, arrays, and strings`
+• runtime and toolchain literacy
+• clean syntax and control-flow implementation
+• starter-level debugging and troubleshooting`
             },
+                        {
+                                title: "Lesson 0: Java Introduction and History",
+                                content: `Why this matters: language history explains why Java emphasizes portability, backward compatibility, and enterprise stability.
+Learning Objective: understand where Java came from and why it remains widely used.
+Core Theory: Java began at Sun Microsystems (mid-1990s) with a "write once, run anywhere" model. Over time it evolved from applets/desktop-heavy usage to backend, cloud, Android, and large-scale enterprise systems.
+Diagram (Mermaid):
+timeline
+    1995 : Java public release
+    2004 : Java 5 generics and annotations
+    2014 : Java 8 lambdas and streams
+    2023 : Java 21 LTS
+Common Mistakes: learning syntax without runtime/tooling context; assuming Java is only legacy enterprise tech.
+Recap:
+• Java prioritized portability from day one
+• Major releases modernized syntax and APIs
+• Current Java remains strong for backend and platform ecosystems
+Practice:
+• map one Java release feature to a real project benefit`
+                        },
             {
-                title: "Lesson 1: Java Introduction and Runtime Setup",
-                content: `Learning Objective: Understand Java ecosystem and run first program.
-Estimated Reading Time: 8 min
-Difficulty: Beginner
-Theory Content: Java source is compiled to bytecode and executed by JVM. JDK includes compiler tools, JRE includes runtime libraries.
-Real World Analogy: Recipe (source), prepped kit (bytecode), chef station (JVM).
-Visual Diagram (Markdown): Write .java -> javac -> .class -> java -> output
-Expected Output: Hello, Java
-Common Mistakes: wrong class/file names, missing main method signature.
-Best Practices: install latest LTS JDK and verify PATH.
-Mini Exercise: create and run HelloWorld.java.
-Key Takeaways: JDK builds, JVM runs, Java is platform independent.`,
+                title: "Lesson 1: Why Java, and How the Runtime Actually Works",
+                content: `Why this matters: Java jobs expect runtime understanding, not just syntax memorization. Knowing bytecode and JVM responsibilities helps you debug startup and compatibility issues quickly.
+Learning Objective: understand the Java execution pipeline end-to-end.
+Core Theory: Java source (.java) is compiled by javac into bytecode (.class). The JVM loads classes through class loaders, verifies bytecode safety, and executes with interpreter + JIT compilation. JDK is a development kit (compiler + tools), while JRE is runtime components.
+Diagram (Mermaid):
+flowchart LR
+    A[input] --> B[validate]
+    B --> C[transform]
+    C --> D[format result]
+  D --> E[Bytecode Verifier]
+  E --> F[JVM Execution + JIT]
+Worked Example: run a HelloWorld class and inspect bytecode using javap -c.
+Common Mistakes: confusing JDK and JRE; incorrect classpath; class name/file mismatch.
+Recap:
+• JDK builds programs
+• JVM runs bytecode
+• bytecode is portable, JVM implementations are platform specific
+Practice:
+• compile and run HelloWorld from terminal
+• run javap -c and identify main method instructions`,
                 code: `public class HelloWorld {
     public static void main(String[] args) {
-        System.out.println("Hello, Java");
+        System.out.println("Hello, Java runtime!");
     }
 }`
             },
             {
-                title: "Lesson 2: Variables, Data Types, and Operators",
-                content: `Learning Objective: Store and manipulate data safely.
-Estimated Reading Time: 10 min
-Difficulty: Beginner
-Theory Content: Primitive types define value ranges and memory behavior; operators perform arithmetic and logic.
-Real World Analogy: Labeled containers holding specific material types.
-Visual Diagram (Markdown): int/double/boolean/String -> operations -> result
-Expected Output: computed totals and boolean checks.
-Common Mistakes: implicit narrowing, integer division confusion.
-Best Practices: choose the smallest safe numeric type and keep expressions readable.
-Mini Exercise: compute simple bill with tax and discount.
-Key Takeaways: type choice affects correctness and output.`,
-                code: `int qty = 3;
-double price = 199.99;
-double total = qty * price;
-boolean highValue = total > 500;
-System.out.println(total);
-System.out.println(highValue);`
+                title: "Lesson 2: Variables, Primitive Types, and Numeric Correctness",
+                content: `Why this matters: Many production defects are data-type bugs: truncation, overflow, and wrong numeric representation.
+Learning Objective: choose types intentionally and avoid hidden conversions.
+Core Theory: primitives have fixed range/precision; widening conversion is safe, narrowing may lose data. int division truncates toward zero. Use BigDecimal for money calculations instead of float/double.
+Diagram (Mermaid):
+flowchart TD
+  A[byte] --> B[short] --> C[int] --> D[long]
+  C --> E[float] --> F[double]
+Worked Example: bill total with tax using BigDecimal.
+Common Mistakes: using double for currency; implicit cast assumptions.
+Recap:
+• type decisions affect correctness
+• numeric operations follow strict conversion rules
+• currency needs decimal-safe representation
+Practice:
+• rewrite an invoice calculator from double to BigDecimal`,
+                code: `import java.math.BigDecimal;
+
+BigDecimal price = new BigDecimal("199.99");
+BigDecimal qty = new BigDecimal("3");
+BigDecimal taxRate = new BigDecimal("0.18");
+BigDecimal subtotal = price.multiply(qty);
+BigDecimal total = subtotal.add(subtotal.multiply(taxRate));
+System.out.println("Total: " + total);`
             },
             {
-                title: "Lesson 3: User Input and Type Casting",
-                content: `Learning Objective: Read external input and cast values correctly.
-Estimated Reading Time: 8 min
-Difficulty: Beginner
-Theory Content: Scanner reads typed input, explicit casting controls conversion precision.
-Real World Analogy: translating numbers between currencies with rounding rules.
-Visual Diagram (Markdown): input text -> parse -> cast -> compute
-Expected Output: personalized and computed values.
-Common Mistakes: leaving newline in Scanner buffer.
-Best Practices: validate input before casting.
-Mini Exercise: read age and print age in months.
-Key Takeaways: conversion and validation are core runtime skills.`,
+                title: "Lesson 3: Input, Validation, and Control Flow Patterns",
+                content: `Why this matters: Real programs deal with noisy user input, not ideal values.
+Learning Objective: build validation-first control flow.
+Core Theory: guard clauses reduce nesting and improve readability. Use scanner input with explicit parsing and failure handling.
+Diagram (Mermaid):
+flowchart LR
+  A[Read Input] --> B{Valid?}
+  B -- No --> C[Show Error]
+  B -- Yes --> D[Process]
+Worked Example: grade calculator with boundary validation.
+Common Mistakes: skipping input checks; Scanner newline issues.
+Recap:
+• validate before processing
+• guard clauses simplify branching
+• failure paths should be explicit
+Practice:
+• accept 5 scores, reject values outside 0..100, then compute average`,
                 code: `import java.util.Scanner;
 
 Scanner sc = new Scanner(System.in);
-System.out.print("Enter score: ");
-double score = sc.nextDouble();
-int rounded = (int) score;
-System.out.println("Rounded score: " + rounded);`
-            },
-            {
-                title: "Lesson 4: Control Flow and Loops",
-                content: `Learning Objective: Control decision paths and repetition.
-Estimated Reading Time: 10 min
-Difficulty: Beginner
-Theory Content: if-else routes logic; for/while repeat work until condition changes.
-Real World Analogy: traffic signals deciding which lane moves and for how long.
-Visual Diagram (Markdown): condition -> branch A/B -> loop -> stop
-Expected Output: branch-specific messages and loop sequences.
-Common Mistakes: infinite loops and wrong condition order.
-Best Practices: keep loop logic minimal and predictable.
-Mini Exercise: print even numbers from 1 to 20.
-Key Takeaways: flow control drives program behavior.`,
-                code: `for (int i = 1; i <= 10; i++) {
-    if (i % 2 == 0) {
-        System.out.println(i + " is even");
-    }
-}`
-            },
-            {
-                title: "Lesson 5: Methods, Arrays, and Strings",
-                content: `Learning Objective: Write reusable logic and process collections/text.
-Estimated Reading Time: 12 min
-Difficulty: Beginner
-Theory Content: methods encapsulate behavior; arrays store indexed values; String APIs handle text tasks.
-Real World Analogy: reusable machine tool applied to multiple items on a conveyor.
-Visual Diagram (Markdown): method(input) -> process array -> string output
-Expected Output: transformed values and formatted text.
-Common Mistakes: off-by-one index errors.
-Best Practices: create focused methods with clear names.
-Mini Exercise: write method that finds max value in an int array.
-Key Takeaways: modularity and data traversal form coding foundation.`,
-                code: `static String buildMessage(String name, int[] marks) {
-    int sum = 0;
-    for (int m : marks) sum += m;
-    return name + " average = " + (sum / marks.length);
+System.out.print("Enter marks (0-100): ");
+int marks = Integer.parseInt(sc.nextLine());
+if (marks < 0 || marks > 100) {
+    System.out.println("Invalid marks");
+    return;
 }
-
-System.out.println(buildMessage("Ravi", new int[]{80, 90, 70}));`
+String grade = marks >= 90 ? "A" : marks >= 75 ? "B" : marks >= 60 ? "C" : "D";
+System.out.println("Grade: " + grade);`
             },
             {
-                title: "Lesson 6: Wrapper Classes and Math Utilities",
-                content: `Learning Objective: Use utility classes for robust numeric logic.
-Estimated Reading Time: 7 min
-Difficulty: Beginner
-Theory Content: wrappers bridge primitives and objects; Math offers common numeric operations.
-Real World Analogy: toolkit add-ons for precise measurement and conversion.
-Visual Diagram (Markdown): primitive <-> wrapper -> Math operations
-Expected Output: parsed and rounded values.
-Common Mistakes: NullPointerException from unboxing null wrappers.
-Best Practices: parse safely and validate before conversion.
-Mini Exercise: parse string prices and round totals.
-Key Takeaways: wrappers and Math utilities appear in real business logic.`,
-                code: `String amount = "199.75";
-double value = Double.parseDouble(amount);
-long rounded = Math.round(value);
-System.out.println(rounded);`
+                title: "Lesson 4: Methods, Scope, and Reusability",
+                content: `Why this matters: maintainable systems are composed of small, testable methods.
+Learning Objective: design method signatures around responsibilities.
+Core Theory: parameter list defines contract; return types communicate outcomes; local scope prevents accidental coupling.
+Diagram (Mermaid):
+flowchart TD
+  A[input] --> B[validateMarks]
+  B --> C[calculateAverage]
+  C --> D[formatReport]
+Worked Example: split one long method into three focused helpers.
+Common Mistakes: god methods; hidden side effects through mutable shared state.
+Recap:
+• one method = one primary responsibility
+• return useful values instead of printing from deep logic
+• keep method names verb-focused
+Practice:
+• refactor a 60-line main method into 4-6 cohesive methods`
+            },
+            {
+                title: "Lesson 5: Arrays, Strings, Enums, and Wrapper Utilities",
+                content: `Why this matters: these are the building blocks for most early and interview coding tasks.
+Learning Objective: use core APIs safely and efficiently.
+Core Theory: arrays are fixed-size contiguous storage; String is immutable; enums encode finite domain values; wrappers enable parsing and null-aware object use.
+Diagram (Mermaid):
+flowchart LR
+  A[raw input] --> B[String parse]
+  B --> C[Wrapper conversion]
+  C --> D[Enum mapping]
+  D --> E[array processing]
+Worked Example: parse status values and count by enum type.
+Common Mistakes: off-by-one indexing; assuming String mutation; enum conversion without fallback.
+Recap:
+• arrays are efficient for index-based access
+• strings are immutable by design
+• enums increase domain safety
+Practice:
+• build a parser that maps "NEW/PROCESSING/DONE" into an enum and summarizes counts`,
+                code: `enum Status { NEW, PROCESSING, DONE }
+
+String[] raw = {"NEW", "DONE", "NEW"};
+int done = 0;
+for (String value : raw) {
+    Status s = Status.valueOf(value);
+    if (s == Status.DONE) done++;
+}
+System.out.println("Done count: " + done);`
+            },
+            {
+                title: "Lesson 6: CLI Tooling, Build Hygiene, and Debugging Basics",
+                content: `Why this matters: teams evaluate engineers by how quickly they can reproduce and diagnose issues.
+Learning Objective: compile and run projects predictably from command line.
+Core Theory: separate source and output folders, use deterministic commands, and inspect stack traces from top frame to root cause.
+Diagram (Mermaid):
+flowchart LR
+  A[src] --> B[javac -d out]
+  B --> C[java -cp out Main]
+  C --> D[stack trace analysis]
+Worked Example: intentionally trigger NumberFormatException and trace failure path.
+Common Mistakes: running stale class files; ignoring first useful stack frame.
+Recap:
+• reproducible build steps reduce confusion
+• stack traces are structured diagnostics
+• command-line fluency accelerates troubleshooting
+Practice:
+• break and fix two runtime errors in a sample CLI app`
+            },
+            {
+                title: "Mini Project: Student Result Analyzer",
+                content: `Project Goal: build a console app that reads students and marks, validates input, computes analytics, and prints a clean report.
+
+Minimum Features:
+• accept N students with 3-5 subject scores each
+• reject invalid marks with clear messages
+• compute average, highest scorer, and grade distribution
+
+Quality Expectations:
+• methods should be small and reusable
+• enum-based grade model
+• zero duplicated validation logic`
             },
             {
                 title: "Mini Challenge",
                 content: `Stretch Goal:
-• build StudentResultConsole to read student name and 3 marks
-• calculate average and grade using reusable grading methods
+• add CSV import support from a local file
+• include malformed row reporting without stopping entire import
 
 Success Check:
-• output shows correct grade boundaries for sample inputs
-• final result card is clean, readable, and consistently formatted`
+• valid rows are processed correctly
+• invalid rows are counted with reasons`
             },
             {
                 title: "Module Quiz",
-                content: `1) JVM executes: A) source B) bytecode C) docs D) jar metadata
-2) Which input class is common in console apps? A) Scanner B) StringBuilder C) FileWriter D) Thread
-3) int division 5/2 gives: A) 2.5 B) 2 C) 3 D) error
-4) Array index starts at: A) 1 B) 0 C) -1 D) depends
-5) Math.round returns closest: A) int B) long C) double D) float`
+                content: `1) JVM executes: A) source B) bytecode C) markdown D) jar manifest
+2) Best numeric type for currency: A) double B) float C) BigDecimal D) long always
+3) String in Java is: A) mutable B) immutable C) numeric D) enum
+4) Enum is useful for: A) random values B) finite named constants C) map key only D) file access
+5) First step in stack trace debugging: A) guess fix B) read top relevant frame C) restart system D) delete cache`
             },
             {
                 title: "Interview Preparation",
-                content: `Common interview prompts:
-• Explain JDK vs JRE vs JVM.
-• Why is Java platform independent?
-• Difference between primitive and wrapper types.
-• Predict output questions using loops and conditions.
-Follow-up: optimize readability and avoid edge-case bugs.`
+                content: `Common prompts:
+• explain JDK vs JRE vs JVM clearly
+• why BigDecimal for money
+• difference between == and equals for String
+• debug this stack trace live`
             },
             {
                 title: "Module Summary",
-                content: `You can now:
-• set up and run Java programs
-• write core syntax with confidence
-• solve small logic problems using methods, arrays, and strings
-• prepare for OOP transition`
+                content: `You can now write stable Java basics with runtime awareness, strong typing discipline, and reproducible CLI workflows.`
             },
             {
                 title: "Next Module Bridge",
-                content: `Next module introduces Object-Oriented Programming where you model real entities using classes, objects, and reusable contracts.`
+                content: `Next module builds object-oriented design depth and covers composition, contracts, and maintainable class architecture.`
             }
         ]
     },
     {
         number: "Module 2",
-        title: "Object-Oriented Programming",
-        description: "Learn complete Java OOP from class design to object contracts and build a Library Management mini project.",
-        duration: "65 min",
-        lessons: "12 lessons",
+        title: "Object-Oriented Design and Architecture",
+        description: "Master class modeling, composition, interfaces, dependency inversion, and object contracts used in production Java systems.",
+        duration: "85 min",
+        lessons: "15 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Classes", "Objects", "Constructors", "Encapsulation", "Inheritance", "Polymorphism", "Abstraction", "Interfaces", "Packages", "Access Modifiers", "Static", "Final", "Object Class", "equals()", "hashCode()", "toString()", "Mini Project: Library Management System"],
-        detailedDescription: "Industry-style OOP progression focused on maintainability, extensibility, and interview-ready reasoning.",
+        topics: ["Classes and Constructors", "Encapsulation", "Immutability", "Inheritance", "Composition Over Inheritance", "Polymorphism", "Interfaces", "Abstract Classes", "Packages", "Access Modifiers", "Object Contracts", "SOLID Basics", "Dependency Injection Basics", "Domain Modeling", "Design Trade-offs"],
+        detailedDescription: "Practical OOP module focused on correctness, readability, and extension safety.",
         detailedContent: [
             {
                 title: "Module Blueprint",
                 content: `Module Number: Module 2
-Module Name: Object-Oriented Programming
+Module Name: Object-Oriented Design in Java
 Difficulty: Beginner to Intermediate
-Estimated Reading Time: 65 min
-Estimated Completion Time: 6-7 hours
+Estimated Reading Time: 85 min
+Estimated Completion Time: 8-9 hours
 Prerequisites: Module 1
 Learning Objectives:
-• model software entities with classes and objects
-• apply encapsulation, inheritance, polymorphism, abstraction
-• implement robust object contracts with equals/hashCode/toString
+• model real-world domains with cohesive classes
+• apply composition, interfaces, and abstraction appropriately
+• implement equals/hashCode/toString contracts correctly
 Skills Gained:
-• OOP design thinking
-• reusable class architecture
-• object identity and consistency handling`
+• maintainable object design
+• contract-driven architecture
+• interview-ready OOP reasoning`
             },
             {
-                title: "Lesson 1: Classes, Objects, Constructors",
-                content: `Learning Objective: Build valid object state through constructors.
-Estimated Reading Time: 9 min
-Difficulty: Beginner
-Theory Content: class defines blueprint, object is instance, constructor initializes mandatory state.
-Real World Analogy: apartment blueprint vs actual apartment unit.
-Visual Diagram (Markdown): Class -> new -> Object(state)
-Expected Output: object fields initialized predictably.
-Common Mistakes: forgetting constructor arguments or shadowing fields.
-Best Practices: validate constructor inputs.
-Mini Exercise: create Book class with title and isbn.
-Key Takeaways: object integrity starts at construction.`,
-                code: `class Book {
-    private final String title;
-    Book(String title) { this.title = title; }
-    String getTitle() { return title; }
-}`
+                title: "Lesson 1: Class Design, Constructors, and Invariants",
+                content: `Why this matters: object bugs usually begin at construction time when invalid state is allowed.
+Learning Objective: enforce invariants early.
+Core Theory: constructors define required state; invariants are rules that must always hold after object creation.
+Diagram (Mermaid):
+flowchart LR
+  A[new Account] --> B{valid input?}
+  B -- No --> C[throw exception]
+  B -- Yes --> D[store immutable state]
+Worked Example: Account with non-negative opening balance.
+Common Mistakes: public fields and post-construction patching.
+Recap:
+• enforce rules at boundaries
+• protect state using private fields
+• make invalid states unrepresentable`
             },
             {
-                title: "Lesson 2: Encapsulation and Access Modifiers",
-                content: `Learning Objective: Protect state and expose behavior safely.
-Estimated Reading Time: 8 min
-Difficulty: Beginner
-Theory Content: private/protected/public control visibility and maintain invariants.
-Real World Analogy: locker with controlled key access.
-Visual Diagram (Markdown): private field -> public method -> validated update
-Expected Output: only valid updates allowed.
-Common Mistakes: making all fields public.
-Best Practices: prefer private fields with intent-revealing methods.
-Mini Exercise: add deposit() validation in Account class.
-Key Takeaways: encapsulation reduces fragile code.`
+                title: "Lesson 2: Encapsulation, Immutability, and API Intent",
+                content: `Why this matters: mutable shared state is a major source of defects.
+Learning Objective: expose behavior, hide state.
+Core Theory: encapsulation controls access; immutability simplifies reasoning and concurrency.
+Diagram (Mermaid):
+flowchart TD
+  A[private state] --> B[behavior methods]
+  B --> C[validated updates]
+Worked Example: immutable value object for Money.
+Common Mistakes: leaking internal collections via getters.
+Recap:
+• return defensive copies when needed
+• prefer immutable value types for shared data
+• name methods by domain intent`
             },
             {
-                title: "Lesson 3: Inheritance and Polymorphism",
-                content: `Learning Objective: Reuse behavior correctly via subtype contracts.
-Estimated Reading Time: 10 min
-Difficulty: Intermediate
-Theory Content: subclass extends base behavior; polymorphism enables runtime method dispatch.
-Real World Analogy: general vehicle rules specialized by car and bike.
-Visual Diagram (Markdown): BaseType ref -> Child override at runtime
-Expected Output: overridden method is invoked.
-Common Mistakes: deep inheritance trees without need.
-Best Practices: prefer composition if inheritance is weak.
-Mini Exercise: create Notification base and Email/SMS subtypes.
-Key Takeaways: polymorphism enables extensible systems.`,
-                code: `class Animal { void speak() { System.out.println("..."); } }
-class Dog extends Animal { @Override void speak() { System.out.println("Bark"); } }
-Animal a = new Dog();
-a.speak();`
+                title: "Lesson 3: Inheritance, Polymorphism, and Composition Trade-offs",
+                content: `Why this matters: misuse of inheritance creates rigid systems.
+Learning Objective: decide between inheritance and composition.
+Core Theory: inheritance models "is-a" relation; composition models "has-a" and is usually easier to evolve.
+Diagram (Mermaid):
+flowchart LR
+  A[Service] --> B[depends on PaymentGateway interface]
+  B --> C[CardGateway]
+  B --> D[UpiGateway]
+Worked Example: NotificationService using strategy interface rather than subclass branching.
+Common Mistakes: deep inheritance for code reuse only.
+Recap:
+• default to composition
+• keep polymorphic contracts minimal and clear
+• avoid inheritance when behavior is optional`
             },
             {
-                title: "Lesson 4: Abstraction and Interfaces",
-                content: `Learning Objective: Separate contract from implementation.
-Estimated Reading Time: 9 min
-Difficulty: Intermediate
-Theory Content: abstraction hides complexity, interfaces define behavior contracts.
-Real World Analogy: power socket standard with different appliance designs.
-Visual Diagram (Markdown): Interface -> multiple implementations
-Expected Output: interchangeable implementations.
-Common Mistakes: putting heavy state logic in interfaces.
-Best Practices: design stable interfaces around behavior.
-Mini Exercise: create Payment interface with CardPayment and UpiPayment.
-Key Takeaways: interfaces improve testability and flexibility.`
+                title: "Lesson 4: Interfaces, Abstract Classes, and SOLID Basics",
+                content: `Why this matters: interview and production design both require explicit trade-off decisions.
+Learning Objective: choose abstraction style correctly.
+Core Theory: interfaces define capability contracts; abstract classes share base implementation; SOLID principles guide maintainability.
+Diagram (Mermaid):
+flowchart TD
+  A[Interface: PaymentGateway] --> B[CardPayment]
+  A --> C[WalletPayment]
+  D[CheckoutService] --> A
+Worked Example: Dependency inversion using interface injection.
+Common Mistakes: over-abstracting too early; one implementation with unnecessary interface.
+Recap:
+• abstractions should solve present variation needs
+• DIP improves testability
+• SRP keeps classes focused`
             },
             {
-                title: "Lesson 5: Packages, Static, and Final",
-                content: `Learning Objective: Organize codebase and use class-level semantics.
-Estimated Reading Time: 8 min
-Difficulty: Intermediate
-Theory Content: packages provide namespace and modularity; static is class-level; final locks variable/method/class semantics.
-Real World Analogy: city -> district -> building addressing.
-Visual Diagram (Markdown): package -> class -> static member
-Expected Output: stable constants and utility access.
-Common Mistakes: overusing static mutable state.
-Best Practices: use static for stateless helpers/constants.
-Mini Exercise: move utility methods into dedicated package.
-Key Takeaways: structure and intent improve maintainability.`
-            },
-            {
-                title: "Lesson 6: Object Class, equals(), hashCode(), toString()",
-                content: `Learning Objective: Implement object contracts correctly.
-Estimated Reading Time: 11 min
-Difficulty: Intermediate
-Theory Content: equals/hashCode consistency is mandatory for map/set behavior; toString aids debugging.
-Real World Analogy: identity card rules in a registry system.
-Visual Diagram (Markdown): equals true => same hashCode
-Expected Output: duplicate detection works in HashSet.
-Common Mistakes: overriding equals without hashCode.
-Best Practices: use immutable key fields in contract methods.
-Mini Exercise: create Member class and test HashSet behavior.
-Key Takeaways: object contracts are interview-critical.`,
+                title: "Lesson 5: Object Contracts and Collection Compatibility",
+                content: `Why this matters: broken equals/hashCode causes silent data corruption in HashMap/HashSet use cases.
+Learning Objective: implement value equality safely.
+Core Theory: if equals returns true, hashCode must match; toString should support diagnostics not business logic.
+Diagram (Mermaid):
+flowchart LR
+  A[equal objects] --> B[same hash code]
+  B --> C[stable map/set behavior]
+Worked Example: Member identity by immutable memberId.
+Common Mistakes: mutable fields in hashCode calculation.
+Recap:
+• define equality on stable identity
+• override equals and hashCode together
+• use toString for debugging clarity`,
                 code: `class Member {
-    private final String id;
-    Member(String id) { this.id = id; }
-    @Override public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Member)) return false;
-        return id.equals(((Member) o).id);
+    private final String memberId;
+
+    Member(String memberId) {
+        this.memberId = memberId;
     }
-    @Override public int hashCode() { return id.hashCode(); }
-    @Override public String toString() { return "Member(" + id + ")"; }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Member)) return false;
+        Member other = (Member) obj;
+        return memberId.equals(other.memberId);
+    }
+
+    @Override
+    public int hashCode() {
+        return memberId.hashCode();
+    }
 }`
             },
             {
-                title: "Mini Project: Library Management System",
-                content: `Project Goal: build a clean OOP-based console app that manages books, members, and loans reliably.
+                title: "Lesson 6: Packages, Layering, and Clean Dependency Direction",
+                content: `Why this matters: package structure determines how easily a codebase can evolve.
+Learning Objective: organize code by responsibility, not randomness.
+Core Theory: common layers are api/app, service, domain/model, repository, and infrastructure. Dependencies should point inward to core business logic.
+Diagram (Mermaid):
+flowchart TD
+  A[app/cli] --> B[service]
+  B --> C[domain]
+  B --> D[repository interface]
+  E[file/sql repository impl] --> D
+Worked Example: library management package map.
+Common Mistakes: circular package dependencies.
+Recap:
+• package by feature or responsibility consistently
+• keep domain independent from IO details
+• clear boundaries reduce rewrites`
+            },
+            {
+                title: "Mini Project: Library Domain Redesign",
+                content: `Project Goal: redesign a Library app with strong OOP boundaries and testable service logic.
 
-Domain Modeling:
-• define entities: Book, Member, Loan
-• design class responsibilities with encapsulated state
-• enforce identity rules using equals/hashCode where needed
+Required Entities:
+• Book, Member, Loan, Catalog
 
-Core Workflow:
-• add and search books
-• register members
-• issue and return books with validation checks
+Required Rules:
+• cannot issue unavailable book
+• cannot exceed member issue limit
+• cannot return non-issued book
 
-Architecture Expectations:
-• package separation: model, service, app
-• no business logic in CLI/UI layer
-• readable method names and cohesive classes
-
-Evaluation Signals:
-• clear OOP design and class interaction
-• correct issue/return constraints
-• maintainable package structure for future features`
+Quality Bar:
+• constructor invariant checks
+• equals/hashCode correctness for identity types
+• no business logic in CLI classes`
             },
             {
                 title: "Mini Challenge",
                 content: `Stretch Goal:
-• add overdue fee calculation and member borrowing limit rules
-• enforce these rules in issue/return workflows without API breakage
-
-Success Check:
-• invalid issue requests are blocked with clear reason
-• existing add/search/issue/return flows still work as expected`
+• add reservation queue and cancellation support
+• preserve existing issue/return behavior without regressions`
             },
             {
                 title: "Module Quiz",
-                content: `1) Polymorphism means: A) one class B) one interface only C) one reference, many forms D) no inheritance
-2) Best encapsulation choice: A) public fields B) private fields + methods C) static globals D) package-private everything
-3) equals/hashCode relation: A) unrelated B) must be consistent C) hashCode optional always D) toString decides
-4) final class can be: A) extended B) not extended C) abstract only D) interface
-5) static member belongs to: A) object instance B) class C) JVM thread D) package`
+                content: `1) Prefer composition when relation is: A) is-a B) has-a C) static D) final
+2) equals/hashCode mismatch mostly breaks: A) loops B) hash-based collections C) arrays D) streams only
+3) SRP means: A) one class one responsibility B) single repo policy C) static return policy D) synchronous runtime processing
+4) Best constructor practice: A) allow null then fix later B) validate required fields immediately C) public mutable fields D) no parameters ever
+5) Package design should minimize: A) comments B) cohesion C) coupling D) constructors`
             },
             {
                 title: "Interview Preparation",
-                content: `Interview focus areas:
-• explain four OOP pillars with examples
-• interface vs abstract class trade-offs
-• equals/hashCode contract scenarios
-• design a small domain model live`
+                content: `Interview prompts:
+• composition vs inheritance with example
+• interface vs abstract class
+• design small library or payment model in 10 minutes
+• explain equals/hashCode pitfalls`
             },
             {
                 title: "Module Summary",
-                content: `You can now design Java classes with production-safe contracts and package-level organization.`
+                content: `You can now model domains with clean contracts, clear package boundaries, and extensible object-oriented design.`
             },
             {
                 title: "Next Module Bridge",
-                content: `Next module expands into collections, generics, and exception handling for scalable data-heavy logic.`
+                content: `Next module deepens collection internals, generic variance, and robust exception strategies for data-heavy workflows.`
             }
         ]
     },
     {
         number: "Module 3",
-        title: "Collections, Generics & Exception Handling",
-        description: "Master Java data structures, type-safe abstractions, and robust failure handling with a Student Record mini project.",
-        duration: "70 min",
-        lessons: "12 lessons",
+        title: "Data Structures, Generics, and Reliability",
+        description: "Choose the right collection for performance, design type-safe APIs, and model failures with explicit reliability contracts.",
+        duration: "90 min",
+        lessons: "14 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["List", "Set", "Queue", "Map", "Generic Classes", "Generic Methods", "Wildcards", "try", "catch", "finally", "throw", "throws", "Custom Exceptions", "Mini Project: Student Record Manager"],
-        detailedDescription: "Structured module for handling collections at scale and writing resilient Java code.",
+        topics: ["ArrayList vs LinkedList", "HashMap/TreeMap", "HashSet/TreeSet", "Queue/Deque", "Comparable and Comparator", "Big-O Trade-offs", "Generic Classes", "PECS", "Type Erasure", "Exception Hierarchy", "Checked vs Unchecked", "Custom Exceptions", "Validation Patterns", "Error Propagation", "Resilient Pipelines"],
+        detailedDescription: "Intermediate module for scalable in-memory data handling and production-safe failure semantics.",
         detailedContent: [
             {
                 title: "Module Blueprint",
                 content: `Module Number: Module 3
-Module Name: Collections, Generics & Exception Handling
+Module Name: Collections, Generics, and Error Handling
 Difficulty: Intermediate
-Estimated Reading Time: 70 min
-Estimated Completion Time: 7-8 hours
+Estimated Reading Time: 90 min
+Estimated Completion Time: 9-10 hours
 Prerequisites: Modules 1-2
 Learning Objectives:
-• choose right collection for each access pattern
-• design generic reusable components
-• handle and propagate exceptions correctly
+• choose data structures by operation profile
+• build generic APIs with bounded wildcards
+• design clear exception and validation strategy
 Skills Gained:
-• collection performance trade-offs
-• compile-time type safety
-• production-grade error handling`
+• algorithmic trade-off reasoning
+• compile-time type safety patterns
+• resilient error handling architecture`
             },
             {
-                title: "Lesson 1: Collections Framework (List, Set, Queue, Map)",
-                content: `Learning Objective: Choose data structures intentionally.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: List preserves order, Set enforces uniqueness, Queue supports FIFO workflows, Map handles key lookup.
-Real World Analogy: line queue, unique guest list, address book.
-Visual Diagram (Markdown): Input -> choose structure -> operations
-Expected Output: predictable lookup/update behavior.
-Common Mistakes: using wrong structure then compensating with extra code.
-Best Practices: optimize by operation frequency, not habit.
-Mini Exercise: refactor one problem using two different structures.
-Key Takeaways: structure choice drives performance.`
+                title: "Lesson 1: Choosing Collections with Complexity Trade-offs",
+                content: `Why this matters: performance issues often come from wrong collection choice, not CPU speed.
+Learning Objective: map operations to suitable structures.
+Core Theory: HashMap offers expected O(1) lookup, TreeMap offers O(log n) sorted lookup, ArrayList has O(1) random access and O(n) middle insert.
+Complexity / Trade-offs:
+• ArrayList: great reads, expensive middle inserts
+• LinkedList: fast edge inserts, slow random access
+• HashSet: uniqueness with expected O(1) operations
+• TreeSet: ordered uniqueness with O(log n)
+Diagram (Mermaid):
+flowchart LR
+  A[Operation Pattern] --> B{Need ordering?}
+  B -- Yes --> C[TreeMap/TreeSet]
+  B -- No --> D{Need key lookup?}
+  D -- Yes --> E[HashMap]
+  D -- No --> F[List/Queue]
+Practice:
+• redesign a student leaderboard from list scan to map-based indexing`
             },
             {
-                title: "Lesson 2: Generic Classes, Methods, and Wildcards",
-                content: `Learning Objective: Write reusable type-safe APIs.
-Estimated Reading Time: 10 min
-Difficulty: Intermediate
-Theory Content: Generics prevent unsafe casts; wildcards define variance flexibility.
-Real World Analogy: container labels that restrict what may be stored.
-Visual Diagram (Markdown): Box<T> / method<T> / List<? extends Number>
-Expected Output: compile-time safety without casting noise.
-Common Mistakes: raw types and wildcard misuse.
-Best Practices: prefer bounded generics for expressive APIs.
-Mini Exercise: build generic Pair<K,V> class.
-Key Takeaways: generics improve correctness and readability.`,
-                code: `class Box<T> {
-    private T value;
-    void set(T value) { this.value = value; }
-    T get() { return value; }
+                title: "Lesson 2: Generics, PECS, and Type Erasure",
+                content: `Why this matters: generic misuse leads to brittle APIs and unsafe casts.
+Learning Objective: apply variance rules correctly.
+Core Theory: PECS means Producer Extends, Consumer Super. Generics are erased at runtime; type checks happen mostly at compile time.
+Diagram (Mermaid):
+flowchart TD
+  A[List<? extends Number>] --> B[read as Number]
+  C[List<? super Integer>] --> D[write Integer]
+Worked Example: sum producer list and append to consumer list.
+Common Mistakes: raw types; wildcard overuse in public APIs.
+Practice:
+• define copyNumbers(List<? extends Number>, List<? super Number>)`,
+                code: `static double sumNumbers(java.util.List<? extends Number> values) {
+    double sum = 0.0;
+    for (Number n : values) sum += n.doubleValue();
+    return sum;
 }`
             },
             {
-                title: "Lesson 3: try, catch, finally",
-                content: `Learning Objective: Recover safely from known failure cases.
-Estimated Reading Time: 8 min
-Difficulty: Intermediate
-Theory Content: try encloses risk, catch handles known failures, finally ensures cleanup.
-Real World Analogy: safety protocol after machine fault.
-Visual Diagram (Markdown): try -> catch? -> finally always
-Expected Output: graceful failure handling.
-Common Mistakes: swallowing exceptions silently.
-Best Practices: catch specific exceptions first.
-Mini Exercise: handle division and parsing errors in one workflow.
-Key Takeaways: predictable failure handling is a quality signal.`
+                title: "Lesson 3: Exception Hierarchy and Error Strategy",
+                content: `Why this matters: random exception handling makes systems hard to debug and support.
+Learning Objective: classify failures and propagate context.
+Core Theory: checked exceptions model recoverable scenarios; unchecked exceptions model programming or invariant violations. Wrap low-level exceptions with domain context where necessary.
+Diagram (Mermaid):
+flowchart LR
+  A[IO/DB failure] --> B[Repository Exception]
+  B --> C[Service-level Domain Exception]
+  C --> D[User-friendly message + log details]
+Common Mistakes: catch(Exception) everywhere; swallowing stack traces.
+Practice:
+• convert generic RuntimeException usage into domain-specific exceptions`
             },
             {
-                title: "Lesson 4: throw, throws, and Custom Exceptions",
-                content: `Learning Objective: Model business errors explicitly.
-Estimated Reading Time: 8 min
-Difficulty: Intermediate
-Theory Content: throw emits exception now; throws declares contract; custom exceptions convey domain context.
-Real World Analogy: structured incident ticket with clear category.
-Visual Diagram (Markdown): validation fail -> throw DomainException
-Expected Output: meaningful error messages.
-Common Mistakes: generic RuntimeException with no context.
-Best Practices: custom exception names should explain business rule breach.
-Mini Exercise: create InvalidScoreException.
-Key Takeaways: domain exceptions improve debugging and API clarity.`,
-                code: `class InvalidScoreException extends RuntimeException {
-    InvalidScoreException(String msg) { super(msg); }
-}`
+                title: "Lesson 4: Validation Pipelines and Partial Failure Handling",
+                content: `Why this matters: batch imports and integration tasks must survive bad records.
+Learning Objective: process valid and invalid records deterministically.
+Core Theory: split pipeline into parse, validate, transform, persist. Track rejected records separately with reason codes.
+Diagram (Mermaid):
+flowchart LR
+  A[Raw rows] --> B[Parse]
+  B --> C{Valid?}
+  C -- Yes --> D[Persist]
+  C -- No --> E[Reject bucket]
+  D --> F[Summary]
+  E --> F
+Practice:
+• implement import that does not stop on malformed rows`
             },
             {
-                title: "Lesson 5: Integrated Data Pipeline with Collections + Exceptions",
-                content: `Learning Objective: Combine collections and exception logic in one cohesive flow.
-Estimated Reading Time: 10 min
-Difficulty: Intermediate
-Theory Content: parse, validate, store, and query records through robust steps.
-Real World Analogy: warehouse intake with quality checks and categorized bins.
-Visual Diagram (Markdown): read -> validate -> map/list -> report
-Expected Output: valid records processed, invalid records reported.
-Common Mistakes: partial updates without rollback strategy.
-Best Practices: separate parse, validate, and store responsibilities.
-Mini Exercise: collect invalid rows separately.
-Key Takeaways: composable pipelines are production-friendly.`
+                title: "Lesson 5: Map-Centric Design for Fast Domain Queries",
+                content: `Why this matters: product features like search and analytics rely on indexing patterns.
+Learning Objective: design in-memory indexes with map + set combinations.
+Core Theory: maintain primary map by ID and derived indexes by secondary keys. Keep index updates atomic inside service methods.
+Diagram (Mermaid):
+flowchart TD
+  A[create student] --> B[byId map]
+  A --> C[byGrade index]
+  A --> D[byCourse index]
+Practice:
+• create two secondary indexes and keep them synchronized on update`
             },
             {
-                title: "Mini Project: Student Record Manager",
-                content: `Project Goal: build a resilient student performance manager with structured data and explicit error handling.
+                title: "Mini Project: Student Record Manager v2",
+                content: `Project Goal: build a high-integrity student record manager with indexed queries and robust error reporting.
 
-Data Design:
-• maintain score history using Map<String, List<Integer>>
-• keep add/update/query flows predictable
-• prevent invalid or partial updates
-
-Reliability Requirements:
-• create custom exceptions for invalid marks, missing students, and malformed input
-• separate validation from storage logic
-• preserve consistent state after failures
-
-Analytics Output:
-• generate class summary (average, topper, low performer)
-• produce per-student progress snapshot
-• report invalid rows with clear reason codes
+Required Features:
+• primary storage using Map<String, Student>
+• grade and course secondary indexes
+• import pipeline with reject report
+• domain exceptions for missing student, invalid score, duplicate roll number
 
 Evaluation Signals:
-• right collection choices for operations
-• meaningful exception messages
-• accurate report generation across edge cases`
+• correct collection decisions
+• predictable error contracts
+• stable output under mixed valid/invalid input`
             },
             {
                 title: "Mini Challenge",
                 content: `Stretch Goal:
-• add CSV import for student marks and metadata
-• handle malformed rows without stopping the full import run
-
-Success Check:
-• rejected rows are counted with explicit error reasons
-• valid rows are imported and reflected in summary reports`
+• add undo support for last mutation command
+• preserve index correctness after undo operations`
             },
             {
                 title: "Module Quiz",
-                content: `1) Which structure guarantees unique elements? A) List B) Set C) Queue D) Map
-2) Generics primarily improve: A) syntax color B) type safety C) disk size D) startup speed
-3) finally block executes: A) only on success B) only on error C) always (except JVM halt) D) never
-4) throws keyword is used to: A) throw now B) declare propagation C) catch error D) log message
-5) Best for key-value lookup: A) Queue B) Map C) Set D) Array`
+                content: `1) Expected average lookup complexity of HashMap: A) O(n) B) O(log n) C) O(1) D) O(n log n)
+2) PECS stands for: A) Parse, Execute, Compile, Store B) Producer Extends Consumer Super C) Private Encapsulation Class Scope D) none
+3) Type erasure happens at: A) runtime only B) compile stage C) JVM GC D) linker phase
+4) Checked exceptions usually represent: A) unrecoverable bugs B) recoverable conditions C) syntax errors D) generics issues
+5) Best import strategy for bad rows: A) fail fast on first error B) ignore all errors C) track rejects with reasons D) retry forever`
             },
             {
                 title: "Interview Preparation",
-                content: `Interview themes:
-• compare List/Set/Map by complexity and use-case
-• explain PECS (producer extends, consumer super)
-• checked vs unchecked exception strategy
-• design record manager with validation and error handling`
+                content: `Interview prompts:
+• ArrayList vs LinkedList with real workload example
+• explain PECS with code
+• checked vs unchecked exception policy
+• design import pipeline with partial failure`
             },
             {
                 title: "Module Summary",
-                content: `You can now build data-centric Java logic with correct structure choices, generic APIs, and explicit failure contracts.`
+                content: `You can now design data-heavy Java workflows using correct collection trade-offs, safe generic APIs, and explicit error contracts.`
             },
             {
                 title: "Next Module Bridge",
-                content: `Next module introduces modern Java features that make data processing concise and expressive.`
+                content: `Next module introduces modern Java syntax and functional patterns to write concise, expressive, and testable business logic.`
             }
         ]
     },
     {
         number: "Module 4",
-        title: "Modern Java Programming",
-        description: "Adopt modern Java with functional style, stream processing, Optional, records, and Java 21-aligned features.",
-        duration: "65 min",
-        lessons: "12 lessons",
+        title: "Modern Java: Streams to Pattern Matching",
+        description: "Use Streams, Optional, records, and pattern matching to write concise modern Java without sacrificing readability.",
+        duration: "85 min",
+        lessons: "13 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Functional Interfaces", "Lambda Expressions", "Method References", "Streams API", "Optional", "Date & Time API", "Records", "Sealed Classes", "Pattern Matching (Java 21 if applicable)", "Mini Project: Employee Analytics using Streams"],
-        detailedDescription: "Intermediate module focused on concise, expressive, and modern Java coding patterns.",
+        topics: ["Functional Interfaces", "Lambdas", "Method References", "Stream Pipelines", "Collectors", "Advanced Collectors", "Optional Patterns", "java.time", "Records", "Sealed Classes", "Pattern Matching", "Switch Expressions", "Text Blocks", "Refactoring Legacy Loops"],
+        detailedDescription: "Intermediate module for expressive Java coding with clear data transformation pipelines.",
         detailedContent: [
             {
                 title: "Module Blueprint",
                 content: `Module Number: Module 4
-Module Name: Modern Java Programming
+Module Name: Modern Java and Functional Style
 Difficulty: Intermediate
-Estimated Reading Time: 65 min
-Estimated Completion Time: 6-7 hours
+Estimated Reading Time: 85 min
+Estimated Completion Time: 8-9 hours
 Prerequisites: Modules 1-3
 Learning Objectives:
-• write functional-style Java code
-• process collections with Streams API
-• model optionality and modern data carriers
+• build readable stream and collector pipelines
+• model absence and domain data safely using Optional and records
+• apply modern Java language features responsibly
 Skills Gained:
-• lambda fluency
-• stream pipeline design
-• modern language feature adoption`
+• concise transformation logic
+• immutable data modeling
+• modernization refactoring strategy`
             },
             {
-                title: "Lesson 1: Functional Interfaces, Lambdas, Method References",
-                content: `Learning Objective: Pass behavior as data cleanly.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: functional interfaces support single abstract method; lambdas and method references provide concise implementations.
-Real World Analogy: plug different tools into one machine port.
-Visual Diagram (Markdown): Function contract -> lambda -> execute
-Expected Output: transformed values via function pipeline.
-Common Mistakes: verbose lambdas where method reference is clearer.
-Best Practices: favor readability over compactness.
-Mini Exercise: convert anonymous class to lambda.
-Key Takeaways: behavior abstraction reduces boilerplate.`,
-                code: `List<String> names = Arrays.asList("ravi", "asha");
-names.stream().map(String::toUpperCase).forEach(System.out::println);`
+                title: "Lesson 1: Streams Deep Dive (map/filter/reduce/collect)",
+                content: `Why this matters: stream pipelines are common in enterprise Java and interview problems.
+Learning Objective: compose deterministic pipelines.
+Core Theory: intermediate operations are lazy; terminal operations trigger execution; avoid side effects to preserve predictability.
+Diagram (Mermaid):
+flowchart LR
+  A[source] --> B[filter]
+  B --> C[map]
+  C --> D[groupingBy]
+  D --> E[result]
+Worked Example: department-wise salary aggregates with collectors.
+Common Mistakes: mutating external state inside stream operations.
+Practice:
+• refactor nested loops into groupingBy + mapping`,
+                code: `java.util.Map<String, Double> avgByDept = employees.stream()
+    .collect(java.util.stream.Collectors.groupingBy(
+        Employee::department,
+        java.util.stream.Collectors.averagingDouble(Employee::salary)
+    ));`
             },
             {
-                title: "Lesson 2: Streams API and Optional",
-                content: `Learning Objective: Build readable transformation pipelines and null-safe flows.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: stream stages (filter/map/reduce/collect), Optional for absent values.
-Real World Analogy: assembly line with quality gate and packaging.
-Visual Diagram (Markdown): source -> filter -> map -> collect
-Expected Output: selected and transformed dataset.
-Common Mistakes: side effects inside stream operations.
-Best Practices: keep pipelines short and composable.
-Mini Exercise: filter top scores and map names.
-Key Takeaways: modern data processing should be explicit and safe.`,
-                code: `List<Integer> top = Arrays.asList(50, 90, 82, 97).stream()
-    .filter(v -> v >= 85)
-    .sorted()
-    .collect(java.util.stream.Collectors.toList());
-System.out.println(top);`
+                title: "Lesson 2: Optional Done Right",
+                content: `Why this matters: Optional prevents null bugs only when used with discipline.
+Learning Objective: use Optional in return types and flow composition.
+Core Theory: Optional is for absent values, not for fields in domain entities in most cases.
+Diagram (Mermaid):
+flowchart TD
+  A[lookup] --> B{found?}
+  B -- Yes --> C[Optional.of(value)]
+  B -- No --> D[Optional.empty]
+Worked Example: manager lookup with fallback and custom exception.
+Common Mistakes: Optional.get() without checks; Optional parameters.
+Practice:
+• replace null checks with map/filter/orElseThrow chain`
             },
             {
-                title: "Lesson 3: Date & Time API",
-                content: `Learning Objective: Use immutable date-time types correctly.
-Estimated Reading Time: 8 min
-Difficulty: Intermediate
-Theory Content: LocalDate/LocalDateTime/Duration provide safer handling than legacy Date.
-Real World Analogy: standardized calendar rules instead of handwritten date math.
-Visual Diagram (Markdown): parse -> calculate -> format
-Expected Output: accurate date operations.
-Common Mistakes: mixing timezone assumptions.
-Best Practices: store explicit timezone where needed.
-Mini Exercise: compute days between two dates.
-Key Takeaways: java.time is the default for modern systems.`
-            },
-            {
-                title: "Lesson 4: Records, Sealed Classes, Pattern Matching",
-                content: `Learning Objective: Model domain types with less boilerplate and safer branching.
-Estimated Reading Time: 10 min
-Difficulty: Intermediate
-Theory Content: records provide immutable data carriers; sealed classes restrict hierarchies; pattern matching improves type checks.
-Real World Analogy: approved role list with enforced access boundaries.
-Visual Diagram (Markdown): sealed hierarchy -> exhaustive branching
-Expected Output: concise immutable models and clear branch logic.
-Common Mistakes: forcing records where mutable behavior is required.
-Best Practices: use records for DTO/value objects.
-Mini Exercise: create record EmployeeSummary.
-Key Takeaways: modern Java improves clarity and correctness.`
-            },
-            {
-                title: "Lesson 5: End-to-End Functional Refactor",
-                content: `Learning Objective: Refactor imperative code to modern style responsibly.
-Estimated Reading Time: 9 min
-Difficulty: Intermediate
-Theory Content: identify loop-heavy hotspots and convert incrementally to streams.
-Real World Analogy: replacing manual assembly with semi-automated stations.
-Visual Diagram (Markdown): old loop -> extraction -> stream pipeline
-Expected Output: same behavior with cleaner implementation.
-Common Mistakes: rewriting everything at once.
-Best Practices: validate output parity before and after refactor.
-Mini Exercise: refactor one report method.
-Key Takeaways: modernization should preserve behavior.`
-            },
-            {
-                title: "Mini Project: Employee Analytics using Streams",
-                content: `Project Goal: build a modern analytics console using streams, Optional, and record-based output models.
+                title: "Lesson 3: Records, Sealed Types, and Pattern Matching",
+                content: `Why this matters: modern Java can reduce boilerplate while increasing type safety.
+Learning Objective: model closed domain hierarchies.
+Core Theory: records are immutable carriers; sealed classes constrain inheritance; pattern matching reduces instanceof noise.
+Diagram (Mermaid):
+flowchart TD
+  A[sealed PaymentResult] --> B[Success]
+  A --> C[Failure]
+  A --> D[Pending]
+Worked Example: exhaustive switch over payment outcomes.
+Common Mistakes: using records for mutable entities.
+Practice:
+• convert DTO class hierarchy to sealed + record structure`,
+                code: `sealed interface PaymentResult permits Success, Failure {}
+record Success(String txnId) implements PaymentResult {}
+record Failure(String reason) implements PaymentResult {}
 
-Data Pipeline:
-• group employees by department
-• compute average salary, max salary, and top performer per group
-• filter and rank insights with readable stream pipelines
+static String message(PaymentResult result) {
+    return switch (result) {
+        case Success s -> "Paid: " + s.txnId();
+        case Failure f -> "Failed: " + f.reason();
+    };
+}`
+            },
+            {
+                title: "Lesson 4: java.time and Time-Zone Correctness",
+                content: `Why this matters: date-time bugs are expensive in global systems.
+Learning Objective: represent instants and local business times correctly.
+Core Theory: use Instant for timeline events, ZonedDateTime for user-facing time zones, LocalDate for date-only business logic.
+Diagram (Mermaid):
+flowchart LR
+  A[Instant UTC] --> B[Zone conversion]
+  B --> C[Local display]
+Practice:
+• implement monthly report boundaries for two different time zones`
+            },
+            {
+                title: "Lesson 5: Refactoring Imperative Legacy Code",
+                content: `Why this matters: real projects require incremental modernization, not rewrites.
+Learning Objective: transform legacy loops safely with tests first.
+Core Theory: establish behavior baseline, refactor in small steps, keep readability over one-liners.
+Diagram (Mermaid):
+flowchart LR
+  A[legacy method] --> B[characterization test]
+  B --> C[incremental refactor]
+  C --> D[parity check]
+Practice:
+• modernize one report method without changing output format`
+            },
+            {
+                title: "Mini Project: Employee Analytics Modernization",
+                content: `Project Goal: migrate an imperative employee analytics module to modern Java.
 
-Null-Safety and Correctness:
-• use Optional for missing manager relationships
-• avoid unsafe null checks and side effects inside streams
-• keep transformations deterministic and testable
-
-Reporting Layer:
-• expose report rows as record-based DTOs
-• generate concise terminal summary for stakeholders
-• include one anomaly section (missing manager, outlier salary, or empty team)
+Required Features:
+• stream-based department analytics
+• Optional-based manager lookup
+• record DTO output
+• switch expression for category classification
 
 Evaluation Signals:
-• stream pipeline clarity over clever one-liners
-• correct aggregate calculations
-• strong explanation of map/filter/reduce decisions`
+• unchanged functional behavior
+• improved readability and maintainability
+• no stream side effects`
             },
             {
                 title: "Mini Challenge",
                 content: `Stretch Goal:
-• add monthly hiring trend analysis using java.time and stream grouping
-• include trend output by department and overall totals
-
-Success Check:
-• trend calculations match raw data sample checks
-• output remains readable with no stream side-effect bugs`
+• add rolling 3-month trend using java.time and collectors
+• include anomaly detection for missing managers or outlier salaries`
             },
             {
                 title: "Module Quiz",
-                content: `1) Functional interface has: A) many abstract methods B) one abstract method C) none D) only default methods
-2) Optional helps avoid: A) syntax errors B) NullPointerException patterns C) compile warnings only D) memory leaks
-3) Stream terminal op example: A) map B) filter C) collect D) sorted
-4) Record is best for: A) mutable entities B) immutable data carriers C) threads D) interfaces only
-5) Sealed classes primarily control: A) package imports B) subclassing scope C) JVM heap D) logging`
+                content: `1) Stream intermediate operations are: A) eager B) lazy C) optional D) mutable
+2) Optional best used for: A) every field B) return values with absence C) primitive math D) logging levels
+3) Record is ideal for: A) mutable aggregate roots B) immutable DTO/value data C) thread pools D) annotations
+4) switch expression improves: A) disk usage B) exhaustive branching clarity C) package loading D) JVM startup
+5) Best modernization approach: A) full rewrite B) incremental refactor with tests C) no tests D) random edits`
             },
             {
                 title: "Interview Preparation",
                 content: `Interview prompts:
-• map vs flatMap
-• reduce vs collect
-• Optional anti-patterns
-• when to use records/sealed classes
-• convert legacy loop to stream with explanation`
+• map vs flatMap with Optional and Stream
+• reduce vs collect trade-offs
+• record vs class decision criteria
+• refactor this loop into stream and explain complexity`
             },
             {
                 title: "Module Summary",
-                content: `You can now write modern Java with functional constructs and concise domain modeling techniques.`
+                content: `You can now apply modern Java features with clear reasoning, balancing conciseness, readability, and correctness.`
             },
             {
                 title: "Next Module Bridge",
-                content: `Next module brings multithreading and production runtime concerns to make your Java systems scale safely.`
+                content: `Next module moves into concurrency, JVM behavior, IO/NIO, and performance tuning for production-scale systems.`
             }
         ]
     },
     {
         number: "Module 5",
-        title: "Multithreading & Production Java",
-        description: "Learn concurrency, runtime behavior, and production engineering basics for stable Java systems.",
-        duration: "75 min",
-        lessons: "12 lessons",
+        title: "Concurrency, IO, and JVM Internals",
+        description: "Build reliable concurrent workflows, handle file processing efficiently, and reason about JVM behavior under load.",
+        duration: "95 min",
+        lessons: "14 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Threads", "Runnable", "Synchronization", "Executors", "CompletableFuture", "JVM Memory", "Garbage Collection", "File Handling", "Serialization", "Logging", "Configuration", "Performance Basics", "Mini Project: Multithreaded File Processor"],
-        detailedDescription: "Advanced-intermediate module focused on reliability and performance under realistic workloads.",
+        topics: ["Thread Lifecycle", "ExecutorService", "Callable and Future", "CompletableFuture", "Locks and Synchronization", "Concurrent Collections", "Java Memory Model", "IO vs NIO", "File Channels", "Serialization Risks", "JVM Memory Areas", "Garbage Collection", "Profiling Basics", "Logging Strategy", "Configuration and Tuning"],
+        detailedDescription: "Advanced-intermediate module for operationally safe Java services and batch systems.",
         detailedContent: [
             {
                 title: "Module Blueprint",
                 content: `Module Number: Module 5
-Module Name: Multithreading & Production Java
+Module Name: Concurrency, IO, and JVM Performance
 Difficulty: Intermediate to Advanced
-Estimated Reading Time: 75 min
-Estimated Completion Time: 8-9 hours
+Estimated Reading Time: 95 min
+Estimated Completion Time: 10-11 hours
 Prerequisites: Modules 1-4
 Learning Objectives:
-• run concurrent tasks safely
-• understand JVM memory and GC basics
-• apply logging, configuration, and performance fundamentals
+• design thread-safe logic with bounded concurrency
+• use modern file APIs for robust data processing
+• diagnose memory/performance behavior using JVM fundamentals
 Skills Gained:
-• thread-safe design
-• async processing patterns
-• production troubleshooting mindset`
+• race-condition prevention
+• async composition patterns
+• runtime observability and tuning mindset`
             },
             {
-                title: "Lesson 1: Threads, Runnable, Synchronization",
-                content: `Learning Objective: coordinate shared state safely.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: thread lifecycle, Runnable task model, synchronized critical sections.
-Real World Analogy: multiple clerks writing to one ledger.
-Visual Diagram (Markdown): thread A/B -> shared resource -> synchronized lock
-Expected Output: deterministic counter updates.
-Common Mistakes: unsynchronized shared mutation.
-Best Practices: keep synchronized blocks minimal.
-Mini Exercise: thread-safe counter increment.
-Key Takeaways: correctness before concurrency speed.`
+                title: "Lesson 1: Thread Safety Fundamentals and Shared-State Hazards",
+                content: `Why this matters: race conditions are difficult to reproduce and expensive in production.
+Learning Objective: reason about critical sections and visibility.
+Core Theory: synchronization provides mutual exclusion and happens-before guarantees; atomic classes avoid lock-heavy counters.
+Diagram (Mermaid):
+sequenceDiagram
+  participant T1 as Thread A
+  participant C as Counter
+  participant T2 as Thread B
+  T1->>C: read value
+  T2->>C: read value
+  T1->>C: write value+1
+  T2->>C: write value+1 (lost update)
+Practice:
+• implement counter with synchronized and AtomicInteger, compare behavior`
             },
             {
-                title: "Lesson 2: Executors and CompletableFuture",
-                content: `Learning Objective: manage async tasks with scalable abstractions.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: ExecutorService controls pools; CompletableFuture composes async pipelines.
-Real World Analogy: dispatch center assigning jobs to workers.
-Visual Diagram (Markdown): submit -> future -> combine -> result
-Expected Output: composed async results.
-Common Mistakes: blocking immediately after async submit.
-Best Practices: use timeouts and explicit error stages.
-Mini Exercise: combine two async API simulations.
-Key Takeaways: managed concurrency beats manual threads.`,
-                code: `java.util.concurrent.CompletableFuture<Integer> a =
-    java.util.concurrent.CompletableFuture.supplyAsync(() -> 40);
-java.util.concurrent.CompletableFuture<Integer> b =
-    java.util.concurrent.CompletableFuture.supplyAsync(() -> 2);
-System.out.println(a.thenCombine(b, Integer::sum).join());`
-            },
-            {
-                title: "Lesson 3: JVM Memory and Garbage Collection",
-                content: `Learning Objective: reason about memory usage and GC behavior.
-Estimated Reading Time: 10 min
-Difficulty: Intermediate
-Theory Content: heap vs stack, object lifetime, young/old generation concepts.
-Real World Analogy: short-stay and long-stay storage rooms.
-Visual Diagram (Markdown): allocation -> survivor -> old gen -> GC cycle
-Expected Output: reduced memory pressure with better object lifecycle.
-Common Mistakes: retaining references accidentally.
-Best Practices: avoid unnecessary object churn in hot loops.
-Mini Exercise: identify leak-like retention pattern.
-Key Takeaways: memory literacy improves stability.`
-            },
-            {
-                title: "Lesson 4: File Handling and Serialization",
-                content: `Learning Objective: persist and restore data safely.
-Estimated Reading Time: 10 min
-Difficulty: Intermediate
-Theory Content: stream/file APIs for text and object persistence; serialization caveats.
-Real World Analogy: filing cabinet with strict format rules.
-Visual Diagram (Markdown): object -> stream -> file -> stream -> object
-Expected Output: stored and reloaded records.
-Common Mistakes: missing version compatibility handling.
-Best Practices: prefer explicit data formats for long-lived storage.
-Mini Exercise: save and reload list of records.
-Key Takeaways: persistence requires format discipline.`
-            },
-            {
-                title: "Lesson 5: Logging, Configuration, Performance Basics",
-                content: `Learning Objective: make applications observable and tunable.
-Estimated Reading Time: 10 min
-Difficulty: Intermediate
-Theory Content: structured logs, environment-driven config, basic profiling mindset.
-Real World Analogy: cockpit dashboard for flight monitoring.
-Visual Diagram (Markdown): app events -> logger -> file/console -> analysis
-Expected Output: actionable logs and configurable behavior.
-Common Mistakes: logging secrets or noisy debug output in production.
-Best Practices: log context-rich events with levels.
-Mini Exercise: externalize one config value and log startup config.
-Key Takeaways: observability is non-negotiable in production.`
-            },
-            {
-                title: "Mini Project: Multithreaded File Processor",
-                content: `Project Goal: build a production-style file processor that handles batch input safely and fast.
+                title: "Lesson 2: Executors, Futures, and Backpressure Awareness",
+                content: `Why this matters: unbounded thread creation crashes services.
+Learning Objective: choose bounded pools and task queues.
+Core Theory: fixed thread pool protects resources; queue policy controls load; Future/CompletableFuture model async result and error paths.
+Diagram (Mermaid):
+flowchart LR
+  A[tasks] --> B[bounded queue]
+  B --> C[fixed pool workers]
+  C --> D[future results]
+Practice:
+• configure fixed pool and timeout strategy for slow tasks`,
+                code: `java.util.concurrent.ExecutorService pool = java.util.concurrent.Executors.newFixedThreadPool(4);
 
-Core Workflow:
-• read multiple files concurrently using ExecutorService
-• validate each line against expected format rules
-• collect valid records and reject invalid entries
+java.util.concurrent.CompletableFuture<String> first =
+    java.util.concurrent.CompletableFuture.supplyAsync(() -> "A", pool);
+java.util.concurrent.CompletableFuture<String> second =
+    java.util.concurrent.CompletableFuture.supplyAsync(() -> "B", pool);
 
-Concurrency Requirements:
-• isolate per-file processing to avoid shared-state bugs
-• capture failures without stopping full batch
-• keep final counters thread-safe
+String combined = first.thenCombine(second, (a, b) -> a + b).join();
+System.out.println(combined);
+pool.shutdown();`
+            },
+            {
+                title: "Lesson 3: Concurrent Collections and Locking Strategies",
+                content: `Why this matters: synchronized blocks alone do not scale for all workloads.
+Learning Objective: use ConcurrentHashMap and read/write lock patterns.
+Core Theory: concurrent collections reduce contention; locks should be as narrow as possible.
+Diagram (Mermaid):
+flowchart TD
+  A[updates] --> B[ConcurrentHashMap]
+  C[reads] --> B
+  D[critical write section] --> E[Lock]
+Practice:
+• migrate shared HashMap to ConcurrentHashMap with computeIfAbsent`
+            },
+            {
+                title: "Lesson 4: File IO, NIO.2, and Data Integrity",
+                content: `Why this matters: file systems fail in partial and unpredictable ways.
+Learning Objective: build resilient file processing flows.
+Core Theory: java.nio.file APIs support path operations, buffered streaming, and safer file handling; use temp files + atomic move for integrity-sensitive writes.
+Diagram (Mermaid):
+flowchart LR
+  A[input file] --> B[validate line]
+  B --> C[write temp output]
+  C --> D[atomic move]
+Practice:
+• implement import that writes to temp file and promotes on success`
+            },
+            {
+                title: "Lesson 5: JVM Memory, GC, and Profiling Basics",
+                content: `Why this matters: performance incidents often stem from allocation and retention patterns.
+Learning Objective: connect code behavior to memory pressure.
+Core Theory: stack stores frames; heap stores objects; GC reclaims unreachable objects. Allocation rate, object lifetime, and large retained graphs influence pause patterns.
+Diagram (Mermaid):
+flowchart LR
+  A[new objects] --> B[young generation]
+  B --> C[survivor]
+  C --> D[old generation]
+  D --> E[major GC]
+Practice:
+• identify one avoidable allocation hotspot and refactor`
+            },
+            {
+                title: "Lesson 6: Logging, Metrics, and Runtime Configuration",
+                content: `Why this matters: debugging production issues without observability is guesswork.
+Learning Objective: log meaningful events and expose actionable metrics.
+Core Theory: include correlation IDs, operation duration, and outcome status; externalize config via environment or properties.
+Diagram (Mermaid):
+flowchart LR
+  A[event] --> B[structured log]
+  B --> C[centralized analysis]
+  A --> D[metrics counter/timer]
+Practice:
+• add latency logging + success/failure counters around batch job processing`
+            },
+            {
+                title: "Mini Project: Multithreaded File Processor v2",
+                content: `Project Goal: process large file batches concurrently with deterministic summaries and robust diagnostics.
 
-Output Requirements:
-• aggregated summary (total files, processed lines, valid lines, invalid lines)
-• error log with file name, line number, and reason
-• end-of-run report ready for operations review
+Required Features:
+• bounded ExecutorService with retry for transient read failures
+• per-file validation and reject report
+• thread-safe aggregate counters
+• structured logs with file, line, and reason context
 
 Evaluation Signals:
-• handles bad files gracefully
-• produces deterministic summary across runs
-• clear logs and readable report for debugging`
+• no race conditions in summary counts
+• resilient behavior under malformed input and partial failures
+• reproducible performance profile on repeated runs`
             },
             {
                 title: "Mini Challenge",
                 content: `Stretch Goal:
-• add retry strategy for transient file read failures
-• capture processing time per file and include it in summary report
-
-Success Check:
-• transient failures recover within retry limit
-• per-file timing and aggregate timing are logged accurately`
+• add cancellation support and graceful shutdown
+• emit top-5 slowest files report at end of run`
             },
             {
                 title: "Module Quiz",
-                content: `1) Runnable represents: A) thread pool B) task without return C) JVM process D) exception handler
-2) CompletableFuture is best for: A) static config B) async composition C) serialization only D) package imports
-3) GC primarily manages: A) CPU threads B) memory reclamation C) classpath D) network sockets
-4) Production logging should avoid: A) context B) sensitive data exposure C) levels D) timestamps
-5) Synchronization prevents: A) compile errors B) race conditions C) package conflicts D) class loading`
+                content: `1) Preferred thread management for most apps: A) new Thread everywhere B) ExecutorService C) Timer only D) static global loop
+2) Race condition means: A) compile failure B) order-dependent incorrect results C) memory leak always D) no logs
+3) ConcurrentHashMap helps with: A) immutable values B) safe concurrent key-value access C) SQL joins D) serialization only
+4) NIO.2 primarily improves: A) GUI rendering B) modern file/path handling C) generic variance D) annotations
+5) Useful production logs include: A) random print statements B) context + level + outcome C) stack traces only D) no timestamps`
             },
             {
                 title: "Interview Preparation",
-                content: `Interview areas:
-• explain race condition with practical example
-• Runnable vs Callable vs CompletableFuture
-• heap/stack and GC basics
-• diagnose slow program using logs and simple profiling`
+                content: `Interview prompts:
+• explain happens-before in practical terms
+• thread pool sizing considerations
+• how to debug intermittent race bug
+• IO vs NIO trade-offs`
             },
             {
                 title: "Module Summary",
-                content: `You can now build reliable concurrent Java workflows with production-oriented diagnostics and runtime awareness.`
+                content: `You can now design concurrent Java workflows with stronger reliability, better observability, and informed JVM-performance decisions.`
             },
             {
                 title: "Next Module Bridge",
-                content: `Final module combines all learning in one complete real-world capstone and final assessment.`
+                content: `Final module integrates testing, persistence, build tooling, and architectural delivery through a full capstone.`
             }
         ]
     },
     {
         number: "Module 6",
-        title: "Real-World Java Capstone Project",
-        description: "Build a complete console-based Java application with architecture, persistence, validation, and interview-ready documentation.",
-        duration: "90 min",
-        lessons: "12 lessons",
+        title: "Production Java Capstone and Testing",
+        description: "Ship a complete Java project with layered architecture, automated tests, persistence design, and interview-grade documentation.",
+        duration: "110 min",
+        lessons: "15 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Build a complete console app", "Clean architecture", "OOP", "Collections", "Exception Handling", "File Storage", "Modular Code", "Documentation", "Suggested Projects: Banking", "Suggested Projects: Library", "Suggested Projects: Inventory", "Suggested Projects: Expense Tracker", "Suggested Projects: Student Management", "Final Assessment"],
-        detailedDescription: "Capstone module to transition from learner to job-ready builder with complete project delivery and assessment.",
+        topics: ["Maven and Gradle Basics", "Dependency Management", "JUnit 5", "Mockito", "Test Pyramid", "JDBC Basics", "Transactions", "Repository Pattern", "Configuration Profiles", "Packaging and Deployment", "README and ADR", "Architecture Review", "CI Test Workflow", "Capstone Build", "Final Assessment", "Interview Walkthrough"],
+        detailedDescription: "Capstone module that transforms learning into portfolio-ready implementation and communication.",
         detailedContent: [
             {
                 title: "Module Blueprint",
                 content: `Module Number: Module 6
-Module Name: Real-World Java Capstone Project
+Module Name: Testing, Persistence, and Real-World Capstone
 Difficulty: Advanced
-Estimated Reading Time: 90 min
-Estimated Completion Time: 10-12 hours
+Estimated Reading Time: 110 min
+Estimated Completion Time: 12-14 hours
 Prerequisites: Modules 1-5
 Learning Objectives:
-• architect and ship complete console project
-• integrate OOP, collections, exception handling, and file storage
-• present solution with documentation and interview narrative
+• build and test maintainable Java applications end-to-end
+• integrate persistence with explicit error and transaction handling
+• present architecture and trade-offs confidently in interviews
 Skills Gained:
-• end-to-end implementation
-• project decomposition and modular code
-• job-ready communication of technical decisions`
+• test-first quality habits
+• persistence and repository design
+• project storytelling and technical communication`
             },
             {
-                title: "Lesson 1: Requirements and Scope Definition",
-                content: `Learning Objective: define realistic project boundaries.
-Estimated Reading Time: 10 min
-Difficulty: Advanced
-Theory Content: identify core entities, actions, constraints, and success criteria.
-Real World Analogy: writing architectural brief before constructing a building.
-Visual Diagram (Markdown): requirements -> modules -> milestones
-Expected Output: clear project scope document.
-Common Mistakes: over-scoping first version.
-Best Practices: prioritize MVP features first.
-Mini Exercise: define MVP for one suggested project.
-Key Takeaways: scope controls delivery quality.`
+                title: "Lesson 1: Build Tooling with Maven/Gradle",
+                content: `Why this matters: professional Java projects are built, tested, and packaged through standardized build tools.
+Learning Objective: understand lifecycle phases and dependency scopes.
+Core Theory: compile, test, package phases; test dependencies isolated from runtime; reproducible builds rely on locked versions.
+Diagram (Mermaid):
+flowchart LR
+  A[source] --> B[compile]
+  B --> C[test]
+  C --> D[package]
+  D --> E[artifact]
+Practice:
+• create minimal build file with JUnit dependency and run tests`
             },
             {
-                title: "Lesson 2: Clean Architecture and Modular Code",
-                content: `Learning Objective: separate concerns into stable layers.
-Estimated Reading Time: 10 min
-Difficulty: Advanced
-Theory Content: app/service/repository/model layering for maintainability.
-Real World Analogy: specialized departments in a company.
-Visual Diagram (Markdown): CLI -> Service -> Repository -> Storage
-Expected Output: maintainable package structure.
-Common Mistakes: business logic in UI layer.
-Best Practices: one responsibility per class.
-Mini Exercise: draft package map before coding.
-Key Takeaways: architecture reduces rewrite pain.`
+                title: "Lesson 2: Unit Testing with JUnit 5 and Mockito",
+                content: `Why this matters: without tests, refactoring becomes risky and slow.
+Learning Objective: test service logic with mock dependencies.
+Core Theory: unit tests isolate one behavior; mocks verify interaction contracts; assertions should be specific and intention-revealing.
+Diagram (Mermaid):
+sequenceDiagram
+  participant T as Test
+  participant S as Service
+  participant R as MockRepo
+  T->>S: createMember(cmd)
+  S->>R: save(member)
+  R-->>S: success
+  S-->>T: result
+Practice:
+• write tests for success and failure path of one service method`,
+                code: `@org.junit.jupiter.api.Test
+void createMember_rejectsDuplicateId() {
+    MemberRepository repo = org.mockito.Mockito.mock(MemberRepository.class);
+    org.mockito.Mockito.when(repo.existsById("M-1")).thenReturn(true);
+
+    MemberService service = new MemberService(repo);
+
+    org.junit.jupiter.api.Assertions.assertThrows(
+        DuplicateMemberException.class,
+        () -> service.createMember("M-1", "Asha")
+    );
+}`
             },
             {
-                title: "Lesson 3: Integrating OOP, Collections, and Exceptions",
-                content: `Learning Objective: unify previous modules in cohesive flows.
-Estimated Reading Time: 12 min
-Difficulty: Advanced
-Theory Content: model entities, store data with collections, enforce business rules with exceptions.
-Real World Analogy: operations center with validation checkpoints.
-Visual Diagram (Markdown): entity -> service rule -> collection store -> response
-Expected Output: safe business operations.
-Common Mistakes: bypassing validation path.
-Best Practices: centralize validation rules.
-Mini Exercise: add duplicate-prevention rule using map/set.
-Key Takeaways: integration quality is capstone core.`
+                title: "Lesson 3: Persistence Design with JDBC and Repository Pattern",
+                content: `Why this matters: many backend interviews expect at least conceptual JDBC and transaction understanding.
+Learning Objective: separate domain logic from data access concerns.
+Core Theory: repository interfaces define domain operations; JDBC implementations translate operations into SQL; transactions ensure consistency across multi-step updates.
+Diagram (Mermaid):
+flowchart TD
+  A[Service] --> B[Repository Interface]
+  B --> C[JDBC Implementation]
+  C --> D[Database]
+Practice:
+• model two repository methods and map result set to domain objects`
             },
             {
-                title: "Lesson 4: File Storage and Data Lifecycle",
-                content: `Learning Objective: persist and reload application state.
-Estimated Reading Time: 9 min
-Difficulty: Advanced
-Theory Content: serialize/write/read records with recovery paths for corrupt data.
-Real World Analogy: ledger books with backup copies.
-Visual Diagram (Markdown): in-memory state <-> file persistence
-Expected Output: restart-safe application state.
-Common Mistakes: no backup or invalid format handling.
-Best Practices: version storage format and validate on load.
-Mini Exercise: write import/export commands.
-Key Takeaways: persistence defines real-world usability.`
+                title: "Lesson 4: Test Strategy and Quality Gates",
+                content: `Why this matters: quality is a process, not a final checklist.
+Learning Objective: create practical test plans across levels.
+Core Theory: test pyramid favors many unit tests, fewer integration tests, and selective end-to-end tests. Include edge and failure cases.
+Diagram (Mermaid):
+flowchart TD
+  A[Unit Tests] --> B[Integration Tests]
+  B --> C[End-to-End Tests]
+Practice:
+• define 10-case test matrix covering happy path, edge case, and invalid input`
             },
             {
-                title: "Lesson 5: Testing, Documentation, and Demo Readiness",
-                content: `Learning Objective: prepare project for evaluation and interviews.
-Estimated Reading Time: 9 min
-Difficulty: Advanced
-Theory Content: test scenarios, usage docs, and demo script improve project credibility.
-Real World Analogy: final rehearsal before product launch.
-Visual Diagram (Markdown): test plan -> fixes -> demo -> review
-Expected Output: stable and explainable project.
-Common Mistakes: skipping edge case tests.
-Best Practices: include setup, run, and assumptions in README.
-Mini Exercise: write 5 test scenarios including failure case.
-Key Takeaways: communication quality matters as much as code.`
+                title: "Lesson 5: Architecture Decision Records and Documentation",
+                content: `Why this matters: strong engineers explain trade-offs, not just code.
+Learning Objective: document architecture choices with consequences.
+Core Theory: ADR captures context, decision, options considered, and consequences. README should include setup, run, assumptions, and limitations.
+Diagram (Mermaid):
+flowchart LR
+  A[Requirement] --> B[Option Analysis]
+  B --> C[Decision]
+  C --> D[Consequences]
+Practice:
+• write one ADR explaining file-based persistence vs database`
             },
             {
-                title: "Suggested Project Options",
-                content: `Pick one capstone based on your target role.
+                title: "Capstone Project: Job-Ready Java System",
+                content: `Project Goal: deliver a complete Java application with clean architecture, automated tests, and persistence.
 
-Banking System
-• Best for: backend and transaction-heavy logic practice.
-• Build core: create account, deposit/withdraw, transfer, transaction history.
-• Add one stretch: monthly statement export or fraud alert rules.
+Project Options:
+• Banking Ledger
+• Library Operations Hub
+• Inventory and Reorder Platform
+• Expense Intelligence Console
+• Student Lifecycle Manager
 
-Library Management System
-• Best for: CRUD workflows and data lifecycle handling.
-• Build core: add books, issue/return flow, member records, overdue tracking.
-• Add one stretch: fine calculator or waitlist queue.
-
-Inventory Management System
-• Best for: operations and reporting scenarios.
-• Build core: item catalog, stock in/out, low-stock alerts, supplier info.
-• Add one stretch: reorder recommendation or CSV import/export.
-
-Expense Tracker
-• Best for: clean UX flow and analytics basics.
-• Build core: add expense, category filter, monthly summary, budget warnings.
-• Add one stretch: trend report or recurring expense automation.
-
-Student Management System
-• Best for: object modeling and validation-heavy rules.
-• Build core: student profile, attendance, marks, grade report.
-• Add one stretch: top-performer ranking or parent progress snapshot.`
-            },
-            {
-                title: "Project Deliverables",
-                content: `Your final submission must include these 4 deliverable packs.
-
-Code Pack:
-• clean layered architecture (CLI -> service -> repository -> storage)
-• OOP models with clear responsibilities
-• collections used intentionally (List/Map/Set)
-• robust exception handling with user-friendly messages
-
-Persistence Pack:
-• file-based save/load for app state
-• invalid/corrupt data handling path
-• no data loss on normal restart flow
-
-Quality Pack:
-• at least 10 manual test scenarios (including edge/failure cases)
-• modular methods with readable names
-• no repeated logic blocks across services
-
-Documentation Pack:
-• README with setup, run steps, and feature list
-• architecture explanation with trade-offs
-• 5-minute demo script for interview walkthrough`
+Mandatory Deliverables:
+• layered codebase (app/service/domain/repository)
+• build tool config with repeatable test command
+• at least 15 tests (unit + integration)
+• persistence layer with failure handling
+• README + one ADR + demo walkthrough script`
             },
             {
                 title: "Final Assessment",
-                content: `Purpose: this tab is your job-readiness checkpoint, not just another quiz.
-Why it exists: it verifies that you can explain, build, and defend your capstone like in real interviews.
-
-Assessment Format:
-• Concept Check: MCQs from Modules 1-6 (syntax, OOP, collections, exceptions, file handling, concurrency basics)
-• Build Check: timed coding challenges using your capstone patterns
-• Debug Check: identify and fix bugs in a broken Java workflow
-• Interview Check: answer architecture and trade-off questions verbally/in writing
+                content: `Assessment Format:
+• Concept Check: JVM, OOP, collections, generics, concurrency, testing, persistence
+• Build Check: implement one feature in existing codebase under constraints
+• Debug Check: analyze failing tests and fix root cause
+• Architecture Check: defend one design decision and trade-off
 
 Pass Criteria:
-• concept clarity and correct reasoning
-• working and modular code submission
-• clear explanation of design decisions
-• confidence in project walkthrough`
+• correctness and maintainability
+• test coverage for changed behavior
+• clear explanation of technical decisions`
             },
             {
                 title: "Mini Challenge",
-                content: `Implement one stretch feature (search, report export, role permissions, or analytics) without breaking existing flow.`
+                content: `Implement one extension feature (role-based access, export module, or analytics dashboard layer) without breaking existing tests.`
             },
             {
                 title: "Interview Preparation",
                 content: `Prepare to answer:
-• why this architecture?
-• trade-offs made and why
-• how errors are handled end-to-end
-• scaling plan for persistence and multi-user support
-• demo walkthrough in under 5 minutes`
+• why this architecture and module split?
+• where would you add caching or async processing?
+• how do tests protect future refactors?
+• what would change when moving from file storage to SQL?`
             },
             {
                 title: "Module Summary",
-                content: `You now have a complete Java project and assessment path aligned to job-ready expectations.`
+                content: `You now have a portfolio-grade Java implementation path with modern engineering practices and interview-ready articulation.`
             },
             {
                 title: "Course Completion Path",
-                content: `Complete final assessment, polish capstone README, and prepare project walkthrough for interview portfolio.`
+                content: `Complete final assessment, polish capstone artifacts, and prepare a 5-minute architecture walkthrough for interviews.`
             }
         ]
     }
@@ -1078,1553 +1105,2504 @@ Pass Criteria:
 courseData.pythonProgramming = [
     {
         number: "Module 1",
-        title: "Python Fundamentals",
-        description: "Build strong Python foundations from setup to core syntax, control flow, functions, and built-in collections.",
-        duration: "60 min",
-        lessons: "12 lessons",
+        title: "Python Core and Runtime Foundations",
+        description: "Build strong Python fundamentals with interpreter internals, syntax discipline, functions, collections, and debugging workflow.",
+        duration: "85 min",
+        lessons: "14 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Introduction to Python", "Installing Python & IDE Setup", "Running Python Programs", "Python Syntax", "Variables", "Data Types", "Operators", "User Input", "Type Casting", "Conditional Statements", "Loops", "Functions", "Modules", "Packages", "Strings", "Lists", "Tuples", "Sets", "Dictionaries"],
-        detailedDescription: "Foundational module for writing clean Python code and understanding core language constructs used in every track.",
+        topics: ["Introduction and History", "Python Execution Model", "Interpreter and Bytecode", "Variables and Dynamic Typing", "Operators and Expressions", "Control Flow", "Functions", "Scope Rules", "Strings", "Lists", "Tuples", "Sets", "Dictionaries", "CLI and Debugging Basics", "Code Style"],
+        detailedDescription: "Beginner-first module that goes beyond syntax and builds practical understanding of how Python code executes and fails.",
         detailedContent: [
             {
                 title: "Module Blueprint",
                 content: `Module Number: Module 1
-Module Name: Python Fundamentals
+Module Name: Python Core and Runtime Foundations
 Difficulty: Beginner
-Estimated Reading Time: 60 min
-Estimated Completion Time: 6-8 hours
+Estimated Reading Time: 85 min
+Estimated Completion Time: 7-8 hours
 Prerequisites: None
 Learning Objectives:
-• set up Python environment and run scripts confidently
-• write syntax-correct programs using variables, conditions, loops, and functions
-• use Python core collections for real data manipulation
+- explain how Python source executes through the interpreter
+- write reliable control flow and function-based programs
+- use core data structures with correct mutability decisions
 Skills Gained:
-• Python execution model and syntax confidence
-• control flow and reusable function design
-• practical data structure usage`
+- runtime and debugging literacy
+- clean function and data-structure usage
+- stronger coding discipline for later modules`
+            },
+                        {
+                                title: "Lesson 0: Python Introduction and History",
+                                content: `Why this matters: understanding Python's design goals helps you write idiomatic code instead of treating it like another C-style language.
+Learning Objective: understand Python's origins and major ecosystem evolution.
+Core Theory: Python was created by Guido van Rossum (early 1990s) with emphasis on readability and developer productivity. Python 3 standardized modern semantics and enabled broad growth across web, automation, data science, and AI.
+Diagram (Mermaid):
+timeline
+    1991 : Python initial release
+    2000 : Python 2.x mainstream era
+    2008 : Python 3.0 release
+    2020 : Python 2 end-of-life
+Common Mistakes: writing Python with over-verbose patterns; ignoring Python 3-first ecosystem assumptions.
+Recap:
+- Python was built for readability and speed of development
+- Python 3 is the modern standard
+- Ecosystem strength spans scripting, backend, data, and AI
+Practice:
+- explain one Python design principle and show it in a small code example`
+                        },
+            {
+                title: "Lesson 1: How Python Executes Code",
+                content: `Why this matters: strong engineers debug with a runtime mental model, not guesswork.
+Learning Objective: understand source -> bytecode -> execution flow.
+Core Theory: CPython compiles .py to bytecode and executes via the Python virtual machine. __pycache__ stores cached bytecode artifacts.
+Diagram (Mermaid):
+flowchart LR
+  A[.py source] --> B[compile]
+  B --> C[bytecode]
+  C --> D[PVM execution]
+Worked Example: inspect disassembly of a simple function with dis module.
+Common Mistakes: assuming Python is interpreted line-by-line without compilation stage.
+Recap:
+- Python has a compile step to bytecode
+- runtime behavior depends on interpreter implementation
+- stack traces map failures to source paths
+Practice:
+- run dis.dis on one function and explain two opcodes`
             },
             {
-                title: "Lesson 1: Setup, Installation, and Running Python",
-                content: `Learning Objective: set up a stable Python development environment.
-Estimated Reading Time: 10 min
-Difficulty: Beginner
-Theory Content: install Python, configure IDE, and run scripts from terminal and editor.
-Real World Analogy: setting up a workshop before building products.
-Visual Diagram (Markdown): install -> interpreter -> script run -> output
-Expected Output: successful first Python run on local machine.
-Common Mistakes: version mismatch and PATH issues.
-Best Practices: verify with python --version and isolate projects early.
-Mini Exercise: run hello script from IDE and terminal.
-Key Takeaways: reliable setup prevents avoidable learning friction.`
+                title: "Lesson 2: Variables, Types, and Mutability",
+                content: `Why this matters: mutability bugs are among the most common Python pitfalls.
+Learning Objective: choose data types and mutation patterns intentionally.
+Core Theory: Python names bind to objects; assignment does not copy data by default. Mutable: list/dict/set. Immutable: int/str/tuple/frozenset.
+Diagram (Mermaid):
+flowchart TD
+  A[name a] --> B[object]
+  C[name b] --> B
+Worked Example: demonstrate shared list reference side effect.
+Common Mistakes: using mutable default arguments.
+Recap:
+- names reference objects
+- copying and mutation are separate operations
+- immutability simplifies reasoning
+Practice:
+- fix a function that uses a mutable default list`
             },
             {
-                title: "Lesson 2: Syntax, Variables, Data Types, and Operators",
-                content: `Learning Objective: write syntactically correct expressions and variable logic.
-Estimated Reading Time: 12 min
-Difficulty: Beginner
-Theory Content: Python indentation, naming rules, primitive types, and arithmetic/logical operators.
-Real World Analogy: grammar and vocabulary rules in a language.
-Visual Diagram (Markdown): input values -> operators -> computed result
-Expected Output: correct expressions and type-aware assignments.
-Common Mistakes: mixing incompatible types and indentation errors.
-Best Practices: keep expressions explicit and readable.
-Mini Exercise: calculate invoice totals with tax and discount.
-Key Takeaways: syntax discipline is the base of all later modules.`
+                title: "Lesson 3: Control Flow, Guard Clauses, and Exceptions",
+                content: `Why this matters: branching quality determines readability and bug rate.
+Learning Objective: write explicit decision logic with clean failure paths.
+Core Theory: guard clauses reduce nested complexity. Use exceptions for truly exceptional states; use condition checks for expected validation.
+Diagram (Mermaid):
+flowchart LR
+  A[input] --> B{valid?}
+  B -- no --> C[return error]
+  B -- yes --> D[process]
+Common Mistakes: deeply nested if blocks and broad except clauses.
+Recap:
+- validate early
+- keep branches shallow
+- separate expected invalid input from unexpected failures`
             },
             {
-                title: "Lesson 3: Input, Type Casting, Conditionals, and Loops",
-                content: `Learning Objective: build interactive and decision-driven Python programs.
-Estimated Reading Time: 12 min
-Difficulty: Beginner
-Theory Content: user input handling, safe type conversion, branching, and iterative processing.
-Real World Analogy: form intake and rule engine for approvals.
-Visual Diagram (Markdown): input -> cast -> condition -> loop -> result
-Expected Output: validated input flow and branch logic.
-Common Mistakes: unsafe casting and infinite loops.
-Best Practices: validate user input before conversion.
-Mini Exercise: build grade evaluator from entered marks.
-Key Takeaways: data validation and flow control improve reliability.`
+                title: "Lesson 4: Functions, Scope, and Reusability",
+                content: `Why this matters: maintainability depends on small, composable functions.
+Learning Objective: design function signatures for clarity and testability.
+Core Theory: LEGB scope rules govern name lookup. Prefer pure functions when possible and isolate side effects.
+Diagram (Mermaid):
+flowchart TD
+    A[input] --> B[validate]
+    B --> C[transform]
+    C --> D[format result]
+Common Mistakes: giant functions and hidden global dependencies.
+Practice:
+- refactor one long script into 4 focused functions`,
+                code: `def compute_grade(score: int) -> str:
+    if not 0 <= score <= 100:
+        raise ValueError("score must be between 0 and 100")
+    if score >= 90:
+        return "A"
+    if score >= 75:
+        return "B"
+    if score >= 60:
+        return "C"
+    return "D"`
             },
             {
-                title: "Lesson 4: Functions, Modules, and Packages",
-                content: `Learning Objective: organize code into reusable components.
-Estimated Reading Time: 12 min
-Difficulty: Beginner
-Theory Content: function arguments/returns, import system, and package structure basics.
-Real World Analogy: reusable tools organized in labeled drawers.
-Visual Diagram (Markdown): function -> module -> package -> app
-Expected Output: split code across modules and call imported functions.
-Common Mistakes: circular imports and oversized functions.
-Best Practices: keep modules focused on one responsibility.
-Mini Exercise: create utility module and import from main script.
-Key Takeaways: modular structure supports scale and testing.`
+                title: "Lesson 5: Core Collections and Access Patterns",
+                content: `Why this matters: the right container can simplify code and improve runtime behavior.
+Learning Objective: map operations to proper collection types.
+Core Theory: list for ordered sequence, dict for key lookup, set for uniqueness, tuple for fixed immutable grouping.
+Complexity / Trade-offs:
+- dict/set average O(1) membership and lookup
+- list O(n) membership scan
+- tuple immutable and hashable (if contents are hashable)
+Practice:
+- redesign a lookup-heavy task from list scan to dict index`
             },
             {
-                title: "Lesson 5: Strings and Core Collections",
-                content: `Learning Objective: solve data tasks with strings, lists, tuples, sets, and dictionaries.
-Estimated Reading Time: 14 min
-Difficulty: Beginner
-Theory Content: each collection's strengths for ordering, uniqueness, and lookup.
-Real World Analogy: toolbox where each compartment serves a specific need.
-Visual Diagram (Markdown): raw text -> split -> collection transform -> output
-Expected Output: cleaner data transformation logic.
-Common Mistakes: using wrong collection for lookup-heavy tasks.
-Best Practices: choose data structures by operation cost.
-Mini Exercise: parse sentence and output word frequency map.
-Key Takeaways: collection choice directly affects code quality.`
+                title: "Lesson 6: CLI Workflow, Tracebacks, and Debugging Basics",
+                content: `Why this matters: reproducible command-line runs accelerate troubleshooting.
+Learning Objective: run scripts and diagnose errors from tracebacks.
+Core Theory: read traceback from last line for error type, then upward for source call path.
+Diagram (Mermaid):
+flowchart LR
+  A[python app.py] --> B[traceback]
+  B --> C[identify frame]
+  C --> D[fix root cause]
+Practice:
+- intentionally trigger TypeError and ValueError, then explain traceback frames`
+            },
+            {
+                title: "Mini Project: Student Result Analyzer",
+                content: `Project Goal: build a CLI tool that validates marks, computes analytics, and prints report cards.
+Required Features:
+- read N students and subject scores
+- reject invalid rows with clear errors
+- output average, grade distribution, and topper
+Quality Signals:
+- reusable functions
+- meaningful variable names
+- robust input validation`
             },
             {
                 title: "Mini Challenge",
                 content: `Stretch Goal:
-• build StudentResultConsole using input, casting, conditionals, loops, and functions
-• include collection-based storage for subject marks and average calculation
-
+- support both interactive input and CSV input mode
+- keep validation behavior identical for both modes
 Success Check:
-• grade logic is correct for all boundary values
-• output summary is clear, readable, and formatted consistently`
+- output parity across modes
+- invalid rows include exact reason`
             },
             {
-                title: "Mini Assessment",
-                content: `1) Python blocks are identified by: A) braces B) indentation C) semicolon D) compiler flags
-2) Best way to reuse logic is: A) copy-paste B) function C) global variable D) recursion only
-3) Which is mutable? A) tuple B) str C) list D) int
-4) Type casting is used to: A) import module B) convert data type C) run loop D) raise exception
-5) Best structure for key lookup: A) list B) dict C) tuple D) set`
+                title: "Module Quiz",
+                content: `1) Python name binding means: A) names copy values B) names reference objects C) names are types D) names are immutable
+2) Mutable type: A) tuple B) str C) list D) int
+3) Best structure for fast key lookup: A) list B) dict C) tuple D) range
+4) LEGB stands for: A) Load Execute Guard Break B) Local Enclosed Global Builtins C) Local Eval Guard Base D) none
+5) Traceback bottom line usually shows: A) warning only B) exception type/message C) import path D) formatter`
             },
             {
                 title: "Interview Preparation",
                 content: `Interview focus:
-• explain Python execution flow from script to output
-• mutable vs immutable with practical examples
-• loops vs comprehensions trade-off
-• function design for readability and testability`
+- mutable vs immutable with examples
+- common runtime errors and fixes
+- function design for readability
+- list vs dict trade-offs`
             },
             {
                 title: "Module Summary",
-                content: `You can now read, write, and run Python confidently with clean syntax, control flow, reusable functions, and core collections.`
+                content: `You can now write and debug reliable Python fundamentals with stronger runtime understanding and data-structure choices.`
             },
             {
                 title: "Next Module Bridge",
-                content: `Next module moves from procedural coding to object-oriented design with classes, inheritance, and abstraction.`
+                content: `Next module moves into advanced function patterns, comprehensions, iterators, generators, and robust file/data handling.`
             }
         ]
     },
     {
         number: "Module 2",
-        title: "Object-Oriented Programming in Python",
-        description: "Master OOP foundations in Python and apply them in a practical Library Management System mini project.",
-        duration: "70 min",
-        lessons: "12 lessons",
+        title: "Functions, Comprehensions, and Data Pipelines",
+        description: "Develop expressive Python using comprehensions, iterators, generators, and validation-first data pipeline patterns.",
+        duration: "90 min",
+        lessons: "15 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Classes", "Objects", "Constructors (__init__)", "Instance vs Class Variables", "Instance vs Static Methods", "Encapsulation", "Inheritance", "Polymorphism", "Abstraction", "Magic (Dunder) Methods", "Properties", "Dataclasses", "Packages & Imports"],
-        detailedDescription: "Core OOP module for writing maintainable Python applications with clear class design and object collaboration.",
+        topics: ["Advanced Functions", "*args and **kwargs", "Comprehensions", "Iterator Protocol", "Generators", "Generator Expressions", "Sorting with key", "Collections Module", "CSV and JSON Parsing", "Data Validation", "Error Bucketing", "Functional Helpers", "Pipeline Composition", "Memory-Aware Processing"],
+        detailedDescription: "Intermediate module for high-signal data manipulation and memory-efficient processing.",
         detailedContent: [
             {
                 title: "Module Blueprint",
                 content: `Module Number: Module 2
-Module Name: Object-Oriented Programming in Python
+Module Name: Functions, Comprehensions, and Data Pipelines
 Difficulty: Intermediate
-Estimated Reading Time: 70 min
-Estimated Completion Time: 7-9 hours
+Estimated Reading Time: 90 min
+Estimated Completion Time: 8-9 hours
 Prerequisites: Module 1
 Learning Objectives:
-• model real entities using classes and objects
-• apply inheritance, polymorphism, and abstraction responsibly
-• design clean OOP architecture with imports and packages
+- design reusable functions with explicit contracts
+- build readable transformations with comprehensions and generators
+- process CSV/JSON flows with deterministic validation
 Skills Gained:
-• class and object lifecycle design
-• reusable OOP patterns in Python
-• maintainable project structure for medium systems`
+- functional decomposition
+- memory-efficient data traversal
+- robust parsing and transformation patterns`
             },
             {
-                title: "Lesson 1: Classes, Objects, and Constructors",
-                content: `Learning Objective: create reliable object blueprints with __init__.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: class design, object instantiation, and constructor-based state setup.
-Real World Analogy: blueprint-to-building process.
-Visual Diagram (Markdown): class -> object instances -> method calls
-Expected Output: predictable object state and behavior.
-Common Mistakes: missing initialization and unclear attributes.
-Best Practices: keep constructors explicit and focused.
-Mini Exercise: create Book class with constructor and display method.
-Key Takeaways: constructor quality sets design quality.`
+                title: "Lesson 1: Advanced Function Contracts",
+                content: `Why this matters: clear contracts reduce integration bugs.
+Learning Objective: use positional-only, keyword-only, defaults, and unpacking safely.
+Core Theory: function signatures document intent and prevent misuse.
+Common Mistakes: ambiguous parameters and mutable defaults.
+Practice:
+- redesign a weak API using keyword-only arguments`
             },
             {
-                title: "Lesson 2: Variables, Methods, and Encapsulation",
-                content: `Learning Objective: choose between instance/class state and method types correctly.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: instance vs class variables, instance vs static methods, private/protected conventions.
-Real World Analogy: personal account data vs company-wide policy.
-Visual Diagram (Markdown): object state + class state + method access
-Expected Output: cleaner class behavior boundaries.
-Common Mistakes: overusing class variables for mutable state.
-Best Practices: use static methods for stateless utility logic.
-Mini Exercise: add class-level ID counter to Member class.
-Key Takeaways: state placement affects correctness and maintainability.`
+                title: "Lesson 2: Comprehensions without Readability Loss",
+                content: `Why this matters: concise code should still be maintainable.
+Learning Objective: write single-purpose comprehensions and avoid nesting overload.
+Core Theory: list/dict/set comprehensions are best for simple map/filter logic.
+Diagram (Mermaid):
+flowchart LR
+  A[input] --> B[filter]
+  B --> C[map]
+  C --> D[output]
+Practice:
+- rewrite loop-based transforms into clean comprehensions`,
+                code: `scores = [72, 91, 88, 45, 99]
+passed = [s for s in scores if s >= 60]
+grade_map = {s: ("A" if s >= 90 else "B" if s >= 75 else "C") for s in passed}`
             },
             {
-                title: "Lesson 3: Inheritance, Polymorphism, and Abstraction",
-                content: `Learning Objective: extend behavior without duplication.
-Estimated Reading Time: 14 min
-Difficulty: Intermediate
-Theory Content: base classes, overrides, abstract contracts, and dynamic dispatch.
-Real World Analogy: shared company policy with role-specific behavior.
-Visual Diagram (Markdown): base class -> child classes -> polymorphic call
-Expected Output: extensible object hierarchies.
-Common Mistakes: inheritance where composition is better.
-Best Practices: keep base classes minimal and meaningful.
-Mini Exercise: create LoanPolicy base class with child rules.
-Key Takeaways: polymorphism enables flexible scaling.`
+                title: "Lesson 3: Iterators and Generators for Large Inputs",
+                content: `Why this matters: loading everything into memory does not scale.
+Learning Objective: process streams lazily.
+Core Theory: iterators implement __iter__ and __next__; generators suspend state at yield.
+Practice:
+- create a generator that yields validated records only`,
+                code: `def valid_rows(rows):
+    for row in rows:
+        if 0 <= row["score"] <= 100:
+            yield row`
             },
             {
-                title: "Lesson 4: Dunder Methods, Properties, and Dataclasses",
-                content: `Learning Objective: improve class usability and readability.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: __str__, __repr__, comparison dunders, @property, and dataclass usage.
-Real World Analogy: adding clear labels and auto-generated forms to records.
-Visual Diagram (Markdown): raw class -> dunders/properties -> cleaner API
-Expected Output: more maintainable and expressive class interfaces.
-Common Mistakes: exposing mutable internals directly.
-Best Practices: use dataclass for data carriers and property for controlled access.
-Mini Exercise: convert DTO class into dataclass.
-Key Takeaways: Pythonic classes reduce boilerplate and bugs.`
+                title: "Lesson 4: Sorting, Grouping, and Aggregation Patterns",
+                content: `Why this matters: analytics tasks require stable and explainable transforms.
+Learning Objective: use sorted, key functions, and defaultdict/Counter effectively.
+Core Theory: sorting with key avoids custom compare complexity; Counter simplifies frequency stats.
+Practice:
+- build a ranked leaderboard with tie handling`
             },
             {
-                title: "Lesson 5: Packages and Imports for OOP Projects",
-                content: `Learning Objective: structure OOP codebase for growth.
-Estimated Reading Time: 10 min
-Difficulty: Intermediate
-Theory Content: package hierarchy, absolute/relative imports, and modular organization.
-Real World Analogy: organizing departments in a company directory.
-Visual Diagram (Markdown): package -> module -> class -> usage
-Expected Output: import-safe, maintainable project layout.
-Common Mistakes: circular imports and flat monolithic files.
-Best Practices: split model/service/repository layers.
-Mini Exercise: refactor class files into package modules.
-Key Takeaways: structure quality determines long-term speed.`
+                title: "Lesson 5: CSV and JSON Pipelines with Reject Reports",
+                content: `Why this matters: production ingestion pipelines must handle imperfect data.
+Learning Objective: separate parse, validate, transform, and report stages.
+Core Theory: keep a reject bucket with reason codes; never silently drop rows.
+Diagram (Mermaid):
+flowchart LR
+  A[file] --> B[parse]
+  B --> C{valid?}
+  C -- yes --> D[transform]
+  C -- no --> E[reject]
+  D --> F[summary]
+  E --> F
+Practice:
+- produce summary and reject CSV in one run`
             },
             {
-                title: "Mini Project: Library Management System",
-                content: `Project Goal: build an OOP-first library system using classes, inheritance, and modular design.
-
-Domain Modeling:
-• entities: Book, Member, Loan, Librarian
-• constructor-based initialization and validation
-• dataclass for read-only view models where helpful
-
-Core Workflow:
-• add/search books and register members
-• issue/return books with rule checks
-• maintain borrowing history and availability state
-
-Architecture Expectations:
-• package structure for model/service/app modules
-• encapsulated class behavior with clean interfaces
-• use dunder methods/properties for better readability
-
+                title: "Mini Project: Student Record Manager v2",
+                content: `Project Goal: build a pipeline-driven student record manager with strong validation and export behavior.
+Required Features:
+- ingest CSV input
+- produce class analytics and error report
+- export clean JSON summary
 Evaluation Signals:
-• clear OOP responsibilities and low coupling
-• correct issue/return constraints
-• maintainable class hierarchy and imports`
+- deterministic output
+- clean stage separation
+- accurate reject reasons`
             },
             {
                 title: "Mini Challenge",
                 content: `Stretch Goal:
-• add overdue fee strategy and reservation queue without breaking existing interfaces
-• expose member summary with active loans and pending reservations
-
-Success Check:
-• new features integrate cleanly with existing class design
-• issue/return behavior remains correct for old and new scenarios`
+- add chunked processing for very large files
+- include progress logs every N records`
             },
             {
                 title: "Module Quiz",
-                content: `1) __init__ is used for: A) import B) object initialization C) loop D) type conversion
-2) Best use of @property is: A) random print B) controlled attribute access C) threading D) package install
-3) Polymorphism means: A) one class only B) same interface, different implementations C) no inheritance D) no methods
-4) Dataclass is ideal for: A) heavy business service B) data carrier model C) network socket D) CLI parser
-5) Good package design emphasizes: A) circular imports B) cohesive modules C) giant file D) duplicated logic`
+                content: `1) Generator execution is: A) eager B) lazy C) compiled-only D) random
+2) Counter is best for: A) object inheritance B) frequency counting C) network retries D) package installs
+3) Key benefit of stage-based pipelines: A) fewer files B) testable isolation C) no loops D) less memory always
+4) Preferred handling for invalid rows: A) silent ignore B) reject with reason C) crash immediately D) retry forever
+5) Comprehensions are best for: A) deeply nested business logic B) short map/filter transforms C) DB schema D) threading`
             },
             {
                 title: "Interview Preparation",
                 content: `Interview focus:
-• composition vs inheritance trade-offs
-• class vs static method decision-making
-• abstraction in Python without overengineering
-• debugging circular imports and class design smells`
+- iterator vs generator trade-offs
+- CSV ingestion design with partial failures
+- readability boundaries for comprehensions
+- deterministic data processing principles`
             },
             {
                 title: "Module Summary",
-                content: `You can now design Python OOP systems with maintainable classes, clear abstractions, and package-level organization.`
+                content: `You can now build memory-aware Python data pipelines with strong validation and transformation clarity.`
             },
             {
                 title: "Next Module Bridge",
-                content: `Next module deepens Python with comprehensions, iterators, generators, robust exceptions, and file handling.`
+                content: `Next module introduces object-oriented modeling, dataclasses, protocols, and architecture-level design patterns in Python.`
             }
         ]
     },
     {
         number: "Module 3",
-        title: "Advanced Python & Error Handling",
-        description: "Master advanced data handling, comprehensions, generators, exception patterns, and file processing with a Student Record Manager mini project.",
-        duration: "75 min",
-        lessons: "12 lessons",
+        title: "Object-Oriented Python and Design Patterns",
+        description: "Build maintainable Python systems using OOP, dataclasses, protocols, composition, and architecture-oriented class design.",
+        duration: "95 min",
+        lessons: "14 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Collections & Advanced Data Structures", "List Comprehensions", "Dictionary Comprehensions", "Set Comprehensions", "Iterators", "Generators", "try", "except", "else", "finally", "raise", "Custom Exceptions", "Reading Files", "Writing Files", "CSV Files", "JSON Files"],
-        detailedDescription: "Advanced Python module focused on expressive data pipelines and resilient exception handling for real workloads.",
+        topics: ["Class Design", "Dataclasses", "Properties", "Inheritance", "Composition", "Abstract Base Classes", "Protocols", "Dunder Methods", "Class and Static Methods", "Dependency Injection", "Repository Pattern", "Service Layer", "Packaging Layout", "Design Smells"],
+        detailedDescription: "Strong OOP and design module that emphasizes extensibility, contracts, and low-coupling architecture.",
         detailedContent: [
             {
                 title: "Module Blueprint",
                 content: `Module Number: Module 3
-Module Name: Advanced Python & Error Handling
+Module Name: Object-Oriented Python and Design Patterns
 Difficulty: Intermediate
-Estimated Reading Time: 75 min
-Estimated Completion Time: 8-10 hours
+Estimated Reading Time: 95 min
+Estimated Completion Time: 9-10 hours
 Prerequisites: Modules 1-2
 Learning Objectives:
-• write expressive transforms with comprehensions and generators
-• design reliable error handling with custom exceptions
-• process CSV/JSON/files safely for practical workflows
+- model domains with cohesive classes and clear invariants
+- apply composition, abstraction, and protocol-based contracts
+- organize code into maintainable architecture layers
 Skills Gained:
-• advanced iteration and memory-aware processing
-• structured exception design and recovery
-• robust file and data pipeline handling`
+- practical OOP for real systems
+- low-coupling class collaboration
+- scalable package structure decisions`
             },
             {
-                title: "Lesson 1: Advanced Collections and Comprehensions",
-                content: `Learning Objective: transform datasets concisely with comprehensions.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: list/dict/set comprehensions with conditions and mapping logic.
-Real World Analogy: assembly line sorting and reshaping products.
-Visual Diagram (Markdown): input collection -> filter/map -> output collection
-Expected Output: concise, readable transforms.
-Common Mistakes: nested comprehensions that reduce readability.
-Best Practices: prefer explicit loops when complexity grows.
-Mini Exercise: build summary dict from student score list.
-Key Takeaways: concise code must remain understandable.`
-            },
-            {
-                title: "Lesson 2: Iterators and Generators",
-                content: `Learning Objective: process large data streams efficiently.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: iterator protocol, lazy generator execution, and yield-based pipelines.
-Real World Analogy: on-demand conveyor instead of storing all items in warehouse.
-Visual Diagram (Markdown): source -> iterator -> generator -> consumer
-Expected Output: lower memory usage for large input flows.
-Common Mistakes: exhausting iterators unintentionally.
-Best Practices: document one-pass consumption behavior.
-Mini Exercise: create generator for streaming valid rows only.
-Key Takeaways: laziness improves scalability.`
-            },
-            {
-                title: "Lesson 3: Exception Handling Patterns",
-                content: `Learning Objective: handle failure scenarios predictably.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: try/except/else/finally, raise, and domain-specific custom exceptions.
-Real World Analogy: incident handling workflow with categorized tickets.
-Visual Diagram (Markdown): risky operation -> exception mapping -> recovery/log
-Expected Output: safer and debuggable error paths.
-Common Mistakes: broad except that hides root cause.
-Best Practices: catch specific exceptions and enrich context.
-Mini Exercise: create InvalidRecordError with source metadata.
-Key Takeaways: explicit errors improve maintainability.`
-            },
-            {
-                title: "Lesson 4: File Handling with CSV and JSON",
-                content: `Learning Objective: read and write structured files safely.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: text file operations, csv module, json load/dump, and encoding practices.
-Real World Analogy: receiving forms, validating, and archiving with standard format.
-Visual Diagram (Markdown): file input -> parse -> validate -> write output
-Expected Output: robust import/export flow.
-Common Mistakes: ignoring encoding and malformed rows.
-Best Practices: use context managers and schema validation.
-Mini Exercise: parse CSV and emit JSON summary.
-Key Takeaways: file discipline is essential in production scripts.`
-            },
-            {
-                title: "Lesson 5: Integrated Processing Pipeline",
-                content: `Learning Objective: combine generators, exceptions, and file handlers into one workflow.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: staged pipeline design for parse, validate, transform, and report.
-Real World Analogy: warehouse intake with quality gates and exception bins.
-Visual Diagram (Markdown): source file -> parser -> validator -> aggregator -> report
-Expected Output: deterministic output with reject tracking.
-Common Mistakes: mixed concerns and silent failure.
-Best Practices: isolate each stage in testable functions.
-Mini Exercise: add rejected row summary to final report.
-Key Takeaways: composable pipelines are scalable and testable.`
-            },
-            {
-                title: "Mini Project: Student Record Manager",
-                content: `Project Goal: build a reliable record manager with advanced collections and robust exception handling.
+                title: "Lesson 1: Dataclasses, Validation, and Invariants",
+                content: `Why this matters: data models must remain valid through lifecycle operations.
+Learning Objective: use dataclass with post-init validation.
+Core Theory: dataclass reduces boilerplate but invariants still need explicit checks.
+Practice:
+- create immutable value object with validation`,
+                code: `from dataclasses import dataclass
 
-Data Design:
-• maintain score history and metadata with nested structures
-• use comprehensions for fast summary generation
-• stream large input with generators where useful
+@dataclass(frozen=True)
+class Money:
+    amount: float
+    currency: str
 
-Reliability Requirements:
-• custom exceptions for invalid marks and malformed rows
-• explicit try/except/else/finally paths for file operations
-• no partial corruption when errors occur
-
-File Handling:
-• import CSV records and export JSON/CSV summary reports
-• log rejected records with clear reason code
-• keep parsing and validation as separate layers
-
-Evaluation Signals:
-• accurate summaries across edge cases
-• clear error categorization and recovery
-• maintainable function-level pipeline structure`
+    def __post_init__(self):
+        if self.amount < 0:
+            raise ValueError("amount cannot be negative")`
+            },
+            {
+                title: "Lesson 2: Composition over Inheritance",
+                content: `Why this matters: inheritance misuse creates rigid class hierarchies.
+Learning Objective: identify when composition is safer and easier to evolve.
+Core Theory: favor has-a relationships for behavior assembly.
+Practice:
+- refactor inheritance-heavy design into strategy composition`
+            },
+            {
+                title: "Lesson 3: Abstract Base Classes and Protocols",
+                content: `Why this matters: interfaces improve substitutability and testing.
+Learning Objective: model capability contracts with ABC and Protocol.
+Core Theory: Protocol enables structural typing and duck-typed contracts.
+Practice:
+- define repository protocol and two interchangeable implementations`
+            },
+            {
+                title: "Lesson 4: Dunder Methods and Object Contracts",
+                content: `Why this matters: domain objects should behave predictably in containers and logs.
+Learning Objective: implement __repr__, __eq__, and hashing safely.
+Core Theory: equality and hashing must align for set/dict behavior.
+Practice:
+- create entity identity semantics and verify set behavior`
+            },
+            {
+                title: "Lesson 5: Layered Architecture in Python",
+                content: `Why this matters: architecture quality controls change cost.
+Learning Objective: separate app, service, repository, and domain layers.
+Core Theory: dependency direction should keep domain independent of IO/infrastructure.
+Diagram (Mermaid):
+flowchart TD
+  A[cli/api] --> B[service]
+  B --> C[domain]
+  B --> D[repository protocol]
+  E[file/sql impl] --> D
+Practice:
+- reorganize flat module into layered package structure`
+            },
+            {
+                title: "Mini Project: Library Domain Redesign",
+                content: `Project Goal: redesign a library system with clear OOP boundaries and protocol-driven repositories.
+Required Features:
+- Book, Member, Loan domain objects
+- service rules for issue/return/reservation
+- file-backed repository implementation
+Quality Signals:
+- low coupling between layers
+- testable service methods
+- clear class responsibilities`
             },
             {
                 title: "Mini Challenge",
                 content: `Stretch Goal:
-• add iterator-based chunk processing for very large files
-• include retry-safe read path for transient file access issues
-
-Success Check:
-• pipeline processes valid rows even when malformed rows exist
-• summary report includes processed, rejected, and retried counts`
+- add fine policy strategies without changing service API
+- add in-memory repository for fast test runs`
             },
             {
                 title: "Module Quiz",
-                content: `1) Generator advantage is: A) eager load B) lazy processing C) no iteration D) fixed memory spike
-2) finally block is used for: A) optional comment B) guaranteed cleanup C) import D) cast
-3) Best response to malformed row is: A) crash always B) reject with reason C) ignore silently D) overwrite
-4) Custom exception helps with: A) syntax color B) domain clarity C) package install D) speed only
-5) JSON module is used for: A) threading B) serialization C) encryption D) plotting`
+                content: `1) Better default for extensibility: A) deep inheritance B) composition C) globals D) metaclasses
+2) Protocol primarily supports: A) runtime speed B) structural contracts C) GUI widgets D) SQL joins
+3) dataclass(frozen=True) implies: A) mutable fields B) immutable instances C) no constructor D) no typing
+4) Layered architecture should minimize: A) cohesion B) boundaries C) coupling D) tests
+5) __repr__ is most useful for: A) encryption B) debugging representation C) package install D) API auth`
             },
             {
                 title: "Interview Preparation",
                 content: `Interview focus:
-• iterators vs generators with memory trade-offs
-• exception boundary design (raise vs catch)
-• designing robust CSV/JSON ingestion pipeline
-• ensuring deterministic behavior under bad input`
+- composition vs inheritance examples
+- protocol vs abstract base class
+- designing testable service layers
+- spotting OOP code smells`
             },
             {
                 title: "Module Summary",
-                content: `You can now build advanced Python pipelines with expressive transforms, resilient exceptions, and robust file workflows.`
+                content: `You can now design maintainable Python systems with strong domain models, clear contracts, and scalable architecture boundaries.`
             },
             {
                 title: "Next Module Bridge",
-                content: `Next module introduces modern Python techniques like lambda pipelines, decorators, context managers, and packaging workflows.`
+                content: `Next module adds robust error handling, context managers, logging, and production-grade configuration patterns.`
             }
         ]
     },
     {
         number: "Module 4",
-        title: "Modern Python Programming",
-        description: "Adopt modern Python patterns for functional transforms, decorators, context managers, typing, logging, and packaging.",
-        duration: "70 min",
-        lessons: "12 lessons",
+        title: "Error Handling, Context, and Production Practices",
+        description: "Strengthen production readiness with structured exceptions, context managers, logging, configuration, and packaging discipline.",
+        duration: "90 min",
+        lessons: "13 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Lambda Functions", "map()", "filter()", "reduce()", "Decorators", "Closures", "Context Managers", "Type Hints", "Enums", "Named Tuples", "Virtual Environments", "pip", "Python Packaging", "Logging", "Configuration Management"],
-        detailedDescription: "Modern Python module focused on readable functional patterns, stronger typing, and production-friendly tooling.",
+        topics: ["Exception Hierarchy", "Custom Exceptions", "Context Managers", "with Statement", "Decorators", "Logging Levels", "Structured Logging", "Configuration Loading", "Environment Variables", "Secrets Hygiene", "Type Hints", "Static Analysis", "Packaging Basics"],
+        detailedDescription: "Production engineering module that focuses on reliability, observability, and maintainable deployment patterns.",
         detailedContent: [
             {
                 title: "Module Blueprint",
                 content: `Module Number: Module 4
-Module Name: Modern Python Programming
+Module Name: Error Handling, Context, and Production Practices
 Difficulty: Intermediate
-Estimated Reading Time: 70 min
-Estimated Completion Time: 7-9 hours
+Estimated Reading Time: 90 min
+Estimated Completion Time: 8-9 hours
 Prerequisites: Modules 1-3
 Learning Objectives:
-• write concise but readable functional Python code
-• use decorators, context managers, and type hints effectively
-• package and configure Python applications for repeatable delivery
+- design explicit exception and recovery boundaries
+- use context managers and decorators for safe cross-cutting behavior
+- implement logging and configuration patterns used in production
 Skills Gained:
-• functional and declarative coding fluency
-• observability with logging and config management
-• environment and packaging hygiene`
+- resilient failure modeling
+- observability-first coding habits
+- safer runtime configuration management`
             },
             {
-                title: "Lesson 1: Lambda, map, filter, reduce",
-                content: `Learning Objective: build concise transformation pipelines.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: anonymous functions and functional helpers for map/filter/reduce operations.
-Real World Analogy: assembly line operations with staged transformations.
-Visual Diagram (Markdown): data -> map -> filter -> reduce -> result
-Expected Output: concise aggregation and transformation logic.
-Common Mistakes: overusing lambda where named function is clearer.
-Best Practices: prioritize readability over compactness.
-Mini Exercise: compute department-wise salary totals with reduce.
-Key Takeaways: functional tools are powerful when used intentionally.`
+                title: "Lesson 1: Exception Taxonomy and Recovery Strategy",
+                content: `Why this matters: broad catch blocks hide failures and increase MTTR.
+Learning Objective: classify errors and attach actionable context.
+Core Theory: distinguish validation, dependency, and system failures; map each to clear handling strategy.
+Practice:
+- convert generic except to targeted exception mapping`
             },
             {
-                title: "Lesson 2: Decorators, Closures, and Context Managers",
-                content: `Learning Objective: manage cross-cutting behavior and resources cleanly.
-Estimated Reading Time: 14 min
-Difficulty: Intermediate
-Theory Content: decorator patterns, closure scopes, and context-managed resource safety.
-Real World Analogy: automated checkpoints before and after every operation.
-Visual Diagram (Markdown): call -> decorator wrapper -> function -> cleanup
-Expected Output: reusable timing/logging wrappers and safe file/resource handling.
-Common Mistakes: hidden side effects in decorators.
-Best Practices: keep wrappers transparent and testable.
-Mini Exercise: add execution-time decorator to analytics function.
-Key Takeaways: abstraction should improve clarity, not hide behavior.`
-            },
-            {
-                title: "Lesson 3: Type Hints, Enums, and Named Tuples",
-                content: `Learning Objective: improve code contracts and model clarity.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: static type hints, constrained values with Enum, lightweight records with named tuples.
-Real World Analogy: standardized labels and forms for consistent data handling.
-Visual Diagram (Markdown): typed inputs -> validated model -> safer function use
-Expected Output: clearer function signatures and safer domain modeling.
-Common Mistakes: type hints with inaccurate contracts.
-Best Practices: annotate public interfaces first.
-Mini Exercise: define typed analytics result model.
-Key Takeaways: explicit contracts reduce integration bugs.`
-            },
-            {
-                title: "Lesson 4: Virtual Environments, pip, and Packaging",
-                content: `Learning Objective: package Python projects for repeatable execution.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: environment isolation, dependency pinning, and package metadata basics.
-Real World Analogy: shipping kit with exact parts list.
-Visual Diagram (Markdown): source -> venv -> requirements -> package install
-Expected Output: reproducible setup for any contributor.
-Common Mistakes: global installs and unpinned dependencies.
-Best Practices: document install/run commands in README.
-Mini Exercise: create venv and export dependency file.
-Key Takeaways: reproducibility is a production requirement.`
-            },
-            {
-                title: "Lesson 5: Logging and Configuration Management",
-                content: `Learning Objective: make Python applications observable and configurable.
-Estimated Reading Time: 10 min
-Difficulty: Intermediate
-Theory Content: logging levels, structured logs, and environment/config-driven behavior.
-Real World Analogy: control room dashboard and operating playbook.
-Visual Diagram (Markdown): runtime events -> logger -> file/console -> diagnostics
-Expected Output: context-rich logs and environment-aware behavior.
-Common Mistakes: logging secrets and hardcoded constants.
-Best Practices: centralize config loading and redact sensitive values.
-Mini Exercise: add env-based config for log level.
-Key Takeaways: observability and config control speed up debugging.`
-            },
-            {
-                title: "Mini Project: Employee Analytics Dashboard",
-                content: `Project Goal: build a modern analytics dashboard backend/CLI with functional transforms and typed outputs.
+                title: "Lesson 2: Context Managers and Resource Safety",
+                content: `Why this matters: leaked resources cause subtle production failures.
+Learning Objective: use with and custom context managers for deterministic cleanup.
+Core Theory: __enter__/__exit__ define setup and teardown guarantees.
+Practice:
+- build a custom timer context manager`,
+                code: `import time
+from contextlib import contextmanager
 
-Data Pipeline:
-• ingest employee records and normalize fields
-• transform datasets with map/filter/reduce workflows
-• generate grouped analytics with clear KPI summaries
-
-Engineering Requirements:
-• add type hints for core services
-• enforce constrained states using Enum models
-• use context managers for file/report lifecycle safety
-
-Operations Requirements:
-• structured logging for each pipeline stage
-• config-driven thresholds and output paths
-• package-ready project layout with dependency file
-
+@contextmanager
+def timed(label: str):
+    start = time.perf_counter()
+    try:
+        yield
+    finally:
+        elapsed = time.perf_counter() - start
+        print(f"{label}: {elapsed:.4f}s")`
+            },
+            {
+                title: "Lesson 3: Logging for Debuggability and Operations",
+                content: `Why this matters: print debugging does not scale in distributed environments.
+Learning Objective: log structured, contextual events.
+Core Theory: include operation name, ids, duration, and outcome; avoid sensitive data leakage.
+Practice:
+- instrument one workflow with info/warn/error and correlation id`
+            },
+            {
+                title: "Lesson 4: Configuration and Secrets Discipline",
+                content: `Why this matters: hardcoded settings create deployment and security risks.
+Learning Objective: centralize config loading and validation.
+Core Theory: read env vars + config file, validate required keys at startup, fail fast for critical settings.
+Practice:
+- implement typed config object and required-key validation`
+            },
+            {
+                title: "Lesson 5: Typing and Static Quality Checks",
+                content: `Why this matters: type hints prevent class of integration bugs before runtime.
+Learning Objective: annotate interfaces and enforce checks.
+Core Theory: annotate public APIs first; use Optional, Union, and TypedDict where appropriate.
+Practice:
+- add type hints to service module and resolve static checker warnings`
+            },
+            {
+                title: "Mini Project: Order Processing Service Hardening",
+                content: `Project Goal: harden an order processing script into production-safe service module.
+Required Features:
+- domain-specific exceptions
+- context-managed IO and timers
+- structured logging with operation ids
+- startup config validation
 Evaluation Signals:
-• readable transform logic and typed interfaces
-• stable output across sample datasets
-• strong logging and configurable behavior`
+- predictable error messages
+- actionable logs
+- clear separation of concerns`
             },
             {
                 title: "Mini Challenge",
                 content: `Stretch Goal:
-• add anomaly detection layer with decorator-based performance tracing
-• export dashboard summary to both JSON and CSV formats
-
-Success Check:
-• anomaly flags match expected sample scenarios
-• logs and output files remain consistent across reruns`
+- add retry policy for transient failures with capped attempts
+- emit metrics summary at end of run`
             },
             {
                 title: "Module Quiz",
-                content: `1) reduce() is mainly for: A) sorting B) aggregation C) threading D) packaging
-2) Decorator is used to: A) replace imports B) wrap behavior C) cast types D) create package
-3) Context manager ensures: A) no loops B) deterministic setup/cleanup C) no errors D) API call
-4) Type hints primarily improve: A) runtime speed only B) readability and tooling checks C) syntax coloring D) packaging size
-5) venv helps with: A) global state sharing B) dependency isolation C) logging format D) class inheritance`
+                content: `1) with statement guarantees: A) syntax highlighting B) cleanup execution C) no exceptions D) faster loops
+2) Best logging approach: A) print everything B) structured context logs C) no logs D) only stack traces
+3) Config best practice: A) hardcode values B) centralized validated loading C) per-function globals D) random defaults
+4) Custom exceptions help with: A) color theme B) domain clarity C) package naming D) runtime speed
+5) Type hints primarily support: A) readability and tooling checks B) threading C) serialization D) plotting`
             },
             {
                 title: "Interview Preparation",
                 content: `Interview focus:
-• lambda vs named function trade-offs
-• decorator design for logging and timing
-• config management in multi-environment deployments
-• packaging and dependency reproducibility practices`
+- designing exception boundaries
+- context manager implementation use-cases
+- logging strategy in production systems
+- config and secrets management approach`
             },
             {
                 title: "Module Summary",
-                content: `You can now write modern Python with functional tools, stronger typing, robust configuration, and packaging discipline.`
+                content: `You can now engineer Python services with stronger reliability, cleaner operational diagnostics, and safer runtime configuration.`
             },
             {
                 title: "Next Module Bridge",
-                content: `Next module adds concurrency, automation tooling, API integration, testing, and production optimization.`
+                content: `Next module focuses on concurrency, API integration, testing strategy, and performance profiling for scale-oriented systems.`
             }
         ]
     },
     {
         number: "Module 5",
-        title: "Concurrency, Automation & Production Python",
-        description: "Learn concurrency models, automation tooling, API integration, testing, and performance optimization for production Python.",
-        duration: "80 min",
-        lessons: "12 lessons",
+        title: "Concurrency, APIs, Testing, and Performance",
+        description: "Choose the right concurrency model, build resilient API clients, and apply disciplined testing and profiling.",
+        duration: "95 min",
+        lessons: "14 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Threads", "Multiprocessing", "Async Programming", "asyncio", "OS Module", "shutil", "pathlib", "subprocess", "Requests Library", "REST API Consumption", "Environment Variables", "Configuration Files", "Unit Testing", "Debugging", "Performance Optimization"],
-        detailedDescription: "Production-focused module combining scalable execution, automation scripts, external APIs, and quality practices.",
+        topics: ["GIL and Concurrency Models", "threading", "multiprocessing", "asyncio", "Task Scheduling", "HTTP Clients", "Retries and Timeouts", "Rate Limits", "unittest and pytest Concepts", "Mocking", "Integration Tests", "Profiling", "Benchmarking", "Optimization Trade-offs"],
+        detailedDescription: "Advanced module for high-throughput, reliable Python services with measurable quality and performance.",
         detailedContent: [
             {
                 title: "Module Blueprint",
                 content: `Module Number: Module 5
-Module Name: Concurrency, Automation & Production Python
+Module Name: Concurrency, APIs, Testing, and Performance
 Difficulty: Intermediate to Advanced
-Estimated Reading Time: 80 min
-Estimated Completion Time: 8-10 hours
+Estimated Reading Time: 95 min
+Estimated Completion Time: 9-11 hours
 Prerequisites: Modules 1-4
 Learning Objectives:
-• choose the right concurrency model for workloads
-• automate file/system tasks with Python stdlib tools
-• ship production-ready code with tests, debugging, and performance tuning
+- select concurrency model based on workload profile
+- design fault-tolerant API integrations with clear retry policies
+- build confidence with tests and profile-driven optimization
 Skills Gained:
-• thread/process/async decision-making
-• automation workflows with OS and subprocess tooling
-• resilient API integration and test coverage`
+- thread/process/async decision making
+- resilient integration patterns
+- test and performance engineering mindset`
             },
             {
-                title: "Lesson 1: Threads, Multiprocessing, and asyncio",
-                content: `Learning Objective: select concurrency approach based on CPU/IO profile.
-Estimated Reading Time: 14 min
-Difficulty: Intermediate to Advanced
-Theory Content: threading for I/O, multiprocessing for CPU work, and asyncio for async orchestration.
-Real World Analogy: assigning workers, machines, and dispatch lines by task type.
-Visual Diagram (Markdown): workload type -> concurrency model -> executor loop
-Expected Output: improved throughput with controlled complexity.
-Common Mistakes: using threads for heavy CPU tasks under GIL constraints.
-Best Practices: benchmark before and after concurrency changes.
-Mini Exercise: compare threaded vs async download workflow.
-Key Takeaways: model selection matters more than premature optimization.`
+                title: "Lesson 1: Threads, Processes, and asyncio Trade-offs",
+                content: `Why this matters: wrong concurrency model can hurt performance and complexity.
+Learning Objective: map IO-bound and CPU-bound tasks correctly.
+Core Theory: GIL affects CPU-bound threads; multiprocessing bypasses GIL with process isolation; asyncio excels at IO orchestration.
+Diagram (Mermaid):
+flowchart LR
+  A[Workload] --> B{CPU bound?}
+  B -- yes --> C[multiprocessing]
+  B -- no --> D{high IO concurrency?}
+  D -- yes --> E[asyncio]
+  D -- no --> F[threading]
+Practice:
+- benchmark same task in two concurrency models`
             },
             {
-                title: "Lesson 2: Automation with os, shutil, pathlib, subprocess",
-                content: `Learning Objective: automate filesystem and command workflows safely.
-Estimated Reading Time: 14 min
-Difficulty: Intermediate
-Theory Content: path abstraction, file movement, process invocation, and script orchestration.
-Real World Analogy: warehouse conveyor and routing automation.
-Visual Diagram (Markdown): input folder -> classify -> move -> external command -> report
-Expected Output: reproducible automation script.
-Common Mistakes: string path manipulation and unsafe shell calls.
-Best Practices: use pathlib and validate command exit statuses.
-Mini Exercise: organize files by extension and generate summary.
-Key Takeaways: automation scripts need safety and observability.`
+                title: "Lesson 2: Resilient API Client Design",
+                content: `Why this matters: external APIs are failure-prone and latency-variable.
+Learning Objective: implement timeout, retry, and status-aware handling.
+Core Theory: retries should be bounded and applied only to retriable failures; use backoff to reduce thundering herd.
+Practice:
+- implement client with timeout, retry budget, and reasoned error mapping`
             },
             {
-                title: "Lesson 3: Requests and REST API Consumption",
-                content: `Learning Objective: consume external APIs reliably.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: request lifecycle, timeout/retry strategy, status handling, and response validation.
-Real World Analogy: supplier communication with response verification.
-Visual Diagram (Markdown): request -> response -> validate -> transform -> store
-Expected Output: fault-tolerant API client behavior.
-Common Mistakes: no timeout and unchecked JSON schema assumptions.
-Best Practices: isolate API client and handle retriable/non-retriable errors separately.
-Mini Exercise: build API client with timeout and fallback response.
-Key Takeaways: reliable integrations require defensive coding.`
-            },
-            {
-                title: "Lesson 4: Environment, Config, and Quality Tooling",
-                content: `Learning Objective: manage environment-specific runtime behavior safely.
-Estimated Reading Time: 10 min
-Difficulty: Intermediate
-Theory Content: environment variables, config files, and runtime validation of required settings.
-Real World Analogy: machine operating modes for different factories.
-Visual Diagram (Markdown): env vars + config file -> validator -> runtime settings
-Expected Output: predictable multi-environment execution.
-Common Mistakes: hardcoded secrets and missing config defaults.
-Best Practices: centralize config loading and fail fast on critical gaps.
-Mini Exercise: add settings loader with required-key checks.
-Key Takeaways: config discipline prevents deployment incidents.`
-            },
-            {
-                title: "Lesson 5: Unit Testing, Debugging, and Performance",
-                content: `Learning Objective: verify correctness and optimize bottlenecks responsibly.
-Estimated Reading Time: 12 min
-Difficulty: Intermediate
-Theory Content: unit testing strategy, debugger workflow, profiling basics, and optimization checkpoints.
-Real World Analogy: quality lab and diagnostic station for production line.
-Visual Diagram (Markdown): code -> test -> debug -> profile -> optimize
-Expected Output: stable logic with measurable performance improvements.
-Common Mistakes: optimization before baseline measurement.
-Best Practices: test first, then optimize hotspots.
-Mini Exercise: profile and optimize one slow function.
-Key Takeaways: disciplined iteration beats guesswork.`
-            },
-            {
-                title: "Mini Project: Automated File Organizer",
-                content: `Project Goal: build an automation utility that classifies, organizes, and reports on files reliably.
+                title: "Lesson 3: Testing Pyramid and Mocking Strategy",
+                content: `Why this matters: without tests, refactors become risky.
+Learning Objective: split tests into unit, integration, and end-to-end purposefully.
+Core Theory: unit tests cover core logic fast; integration tests verify external boundaries; mocks isolate unstable dependencies.
+Practice:
+- add tests for both success and failure path of API service`,
+                code: `import unittest
+from unittest.mock import Mock
 
-Automation Workflow:
-• scan directories with pathlib
-• classify/move files using rules with shutil and os
-• execute optional post-actions through subprocess hooks
-
-Production Requirements:
-• add concurrency for large directory processing
-• call external metadata API for enrichment where configured
-• configure behavior through env vars/config file
-
-Quality Requirements:
-• unit tests for routing rules and conflict handling
-• debug logs for each move decision
-• performance metrics for large batch runs
-
+class TestService(unittest.TestCase):
+    def test_retries_on_timeout(self):
+        client = Mock()
+        client.fetch.side_effect = [TimeoutError(), {"ok": True}]
+        service = DataService(client, max_retries=1)
+        result = service.load()
+        self.assertTrue(result["ok"])`
+            },
+            {
+                title: "Lesson 4: Profiling and Optimization Discipline",
+                content: `Why this matters: optimization without measurement often wastes effort.
+Learning Objective: locate hotspots with profiling before changing algorithms.
+Core Theory: use cProfile and timing metrics; optimize bottlenecks, not every function.
+Practice:
+- profile one slow pipeline and remove top hotspot`
+            },
+            {
+                title: "Lesson 5: Operational Safeguards for Concurrent Jobs",
+                content: `Why this matters: production jobs need cancellation, backpressure, and safe shutdown.
+Learning Objective: handle task cancellation and partial failures.
+Core Theory: use bounded queues, explicit shutdown paths, and idempotent retry operations.
+Practice:
+- add graceful cancellation to an async batch worker`
+            },
+            {
+                title: "Mini Project: Async Data Sync Service",
+                content: `Project Goal: build a concurrent sync service that fetches remote data, validates it, and stores summarized output.
+Required Features:
+- asyncio or thread pool based fetch workers
+- bounded retry and timeout policy
+- unit tests for critical logic paths
+- profiling report for one optimization decision
 Evaluation Signals:
-• deterministic organization output
-• safe handling of collisions and errors
-• test-backed and observable workflow`
+- stable behavior under intermittent failures
+- deterministic retries and logs
+- measurable performance improvement`
             },
             {
                 title: "Mini Challenge",
                 content: `Stretch Goal:
-• add async API enrichment stage with retry and timeout control
-• include dry-run mode and rollback report for moved files
-
-Success Check:
-• dry-run predicts actions accurately before execution
-• rollback log is sufficient to restore moved files safely`
+- add rate-limit aware request scheduler
+- include dead-letter report for permanently failed records`
             },
             {
                 title: "Module Quiz",
-                content: `1) Best fit for CPU-bound tasks: A) threading B) multiprocessing C) asyncio only D) no concurrency
-2) pathlib mainly improves: A) GUI B) path handling readability and safety C) JSON parsing D) unit tests
-3) requests timeout should be: A) omitted B) explicitly set C) randomized D) infinite
-4) Unit tests should cover: A) happy path only B) edge and failure cases too C) imports only D) comments
-5) Performance optimization should start after: A) guess B) profiling baseline C) deployment D) refactor all code`
+                content: `1) Best for CPU-bound work in Python: A) threading B) multiprocessing C) asyncio D) recursion
+2) Retry policy should be: A) infinite B) bounded and selective C) disabled always D) random
+3) Unit tests are best for: A) full deployment checks B) isolated logic behavior C) network latency D) package publishing
+4) Profiling should happen: A) after random rewrites B) before optimization C) only in production incidents D) never
+5) asyncio is strongest for: A) heavy numeric loops B) high-IO concurrency C) SQL schema design D) static typing`
             },
             {
                 title: "Interview Preparation",
                 content: `Interview focus:
-• threads vs async vs multiprocessing use-cases
-• resilient API client design patterns
-• environment config and secrets handling
-• test strategy for automation workflows`
+- GIL implications and model selection
+- retry/backoff design patterns
+- mocking strategy in tests
+- profiling-driven optimization examples`
             },
             {
                 title: "Module Summary",
-                content: `You can now build production-minded Python automation with concurrency, API safety, testing rigor, and measurable performance.`
+                content: `You can now build scalable Python integrations with concurrency-aware design, resilient API handling, and measurement-based optimization.`
             },
             {
                 title: "Next Module Bridge",
-                content: `Final module combines all prior learning into one complete real-world Python capstone project.`
+                content: `Final module integrates architecture, persistence, testing, and documentation into a portfolio-ready Python capstone.`
             }
         ]
     },
     {
         number: "Module 6",
-        title: "Real-World Python Capstone Project",
-        description: "Build and present a complete real-world Python application with architecture, testing, documentation, and interview readiness.",
-        duration: "90 min",
-        lessons: "12 lessons",
+        title: "Production Python Capstone",
+        description: "Deliver a complete Python system with architecture, persistence, testing, observability, and interview-ready documentation.",
+        duration: "115 min",
+        lessons: "15 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Capstone architecture", "OOP integration", "File handling", "Exception handling", "Modular code", "Logging", "Configuration management", "Documentation", "Unit tests", "Suggested projects", "Project deliverables", "Final assessment"],
-        detailedDescription: "Capstone module to consolidate all Python learning into a portfolio-grade project with assessment-driven job readiness.",
+        topics: ["Requirement Scoping", "Architecture Blueprint", "Domain Modeling", "Persistence Strategy", "Repository Layer", "Service Layer", "Error Contracts", "Config and Logging", "Automated Tests", "Performance Baseline", "Documentation", "ADR Basics", "Final Assessment", "Code Review Checklist", "Demo Narrative"],
+        detailedDescription: "Capstone module focused on shipping quality, maintainability, and interview-level articulation.",
         detailedContent: [
             {
                 title: "Module Blueprint",
                 content: `Module Number: Module 6
-Module Name: Real-World Python Capstone Project
+Module Name: Production Python Capstone
 Difficulty: Advanced
-Estimated Reading Time: 90 min
-Estimated Completion Time: 10-12 hours
+Estimated Reading Time: 115 min
+Estimated Completion Time: 12-14 hours
 Prerequisites: Modules 1-5
 Learning Objectives:
-• architect and deliver a complete Python application
-• integrate OOP, robust error handling, file processing, logging, and config
-• present project with tests and documentation for interviews
+- architect and implement an end-to-end Python application
+- enforce quality through tests, logging, and structured error handling
+- communicate design trade-offs clearly in interview settings
 Skills Gained:
-• end-to-end project execution
-• production-ready coding standards
-• interview-ready project communication`
+- full-project delivery discipline
+- production engineering practices
+- technical storytelling and review readiness`
             },
             {
-                title: "Lesson 1: Project Scoping and Requirements",
-                content: `Learning Objective: define realistic capstone scope and milestones.
-Estimated Reading Time: 12 min
-Difficulty: Advanced
-Theory Content: identify core entities, workflows, constraints, and MVP boundaries.
-Real World Analogy: creating a product blueprint before build.
-Visual Diagram (Markdown): requirements -> modules -> milestones
-Expected Output: crisp capstone scope document.
-Common Mistakes: overscoping first version.
-Best Practices: prioritize MVP and defer nice-to-have features.
-Mini Exercise: define acceptance criteria for one suggested project.
-Key Takeaways: scope quality controls delivery quality.`
+                title: "Lesson 1: Scope and Architecture Decisions",
+                content: `Why this matters: unmanaged scope is the fastest way to fail capstone delivery.
+Learning Objective: define MVP boundaries and architecture choices.
+Core Theory: identify entities, workflows, constraints, and non-functional requirements before coding.
+Practice:
+- write one-page architecture plan with trade-offs`
             },
             {
-                title: "Lesson 2: Architecture and Modular Implementation",
-                content: `Learning Objective: organize code into maintainable layers.
-Estimated Reading Time: 12 min
-Difficulty: Advanced
-Theory Content: app/service/repository/model layering and dependency boundaries.
-Real World Analogy: specialized teams with clear responsibilities.
-Visual Diagram (Markdown): CLI/API -> Service -> Repository -> Storage
-Expected Output: maintainable and test-friendly project structure.
-Common Mistakes: business logic mixed with UI/CLI concerns.
-Best Practices: one responsibility per module.
-Mini Exercise: draft module map before coding.
-Key Takeaways: architecture clarity lowers maintenance cost.`
+                title: "Lesson 2: Persistence and Data Integrity",
+                content: `Why this matters: persistent state requires consistency guarantees.
+Learning Objective: choose file/sql strategy and implement safe write flows.
+Core Theory: repository abstraction isolates storage changes; validate-before-write prevents corruption.
+Practice:
+- implement repository interface with file-backed and in-memory adapter`
             },
             {
-                title: "Lesson 3: Validation, Exceptions, and Persistence",
-                content: `Learning Objective: build resilient workflows under imperfect input.
-Estimated Reading Time: 12 min
-Difficulty: Advanced
-Theory Content: validation gates, custom exceptions, and file/data persistence strategy.
-Real World Analogy: quality control and audit logging in operations.
-Visual Diagram (Markdown): input -> validate -> process -> persist -> report
-Expected Output: stable behavior with meaningful failures.
-Common Mistakes: silent exception handling.
-Best Practices: include context-rich error messages.
-Mini Exercise: implement reject log with reason codes.
-Key Takeaways: resilient systems fail gracefully.`
+                title: "Lesson 3: Test Strategy and Failure Injection",
+                content: `Why this matters: robust systems are validated against failure, not just happy paths.
+Learning Objective: design test matrix with edge and failure scenarios.
+Core Theory: include invalid input, dependency timeout, and partial failure tests.
+Practice:
+- create 12-case test plan and automate at least 8 cases`
             },
             {
-                title: "Lesson 4: Testing, Logging, and Configuration",
-                content: `Learning Objective: ensure quality and observability.
-Estimated Reading Time: 12 min
-Difficulty: Advanced
-Theory Content: unit testing strategy, logging standards, and environment-configured behavior.
-Real World Analogy: QA lab and control panel for operations.
-Visual Diagram (Markdown): tests + logs + config -> stable deployment
-Expected Output: predictable and diagnosable application behavior.
-Common Mistakes: no failure-path test coverage.
-Best Practices: cover happy, edge, and failure scenarios.
-Mini Exercise: write tests for one critical service path.
-Key Takeaways: quality tooling increases delivery confidence.`
+                title: "Lesson 4: Observability and Operational Readiness",
+                content: `Why this matters: production support depends on logs and diagnostics quality.
+Learning Objective: instrument critical flows with contextual logs and summaries.
+Core Theory: log start/end/failure events with ids and duration; avoid sensitive data.
+Practice:
+- add operation-level logging and run summary metrics`
             },
             {
-                title: "Lesson 5: Documentation and Demo Readiness",
-                content: `Learning Objective: present capstone effectively for evaluation.
-Estimated Reading Time: 10 min
-Difficulty: Advanced
-Theory Content: README structure, run guide, architecture notes, and demo walkthrough script.
-Real World Analogy: launch-day runbook and stakeholder demo prep.
-Visual Diagram (Markdown): docs -> demo flow -> interview narrative
-Expected Output: interview-ready project presentation artifacts.
-Common Mistakes: undocumented assumptions and setup gaps.
-Best Practices: include sample input/output and quick-start steps.
-Mini Exercise: draft 5-minute demo narrative.
-Key Takeaways: communication is part of engineering quality.`
+                title: "Lesson 5: Documentation and Architecture Narrative",
+                content: `Why this matters: interviewers evaluate reasoning, not only code output.
+Learning Objective: produce clear README, runbook, and ADR-style decision notes.
+Core Theory: document alternatives considered, decision rationale, and consequences.
+Practice:
+- prepare 5-minute architecture walkthrough script`
             },
             {
-                title: "Suggested Project Options",
-                content: `Choose one capstone aligned to your career goals.
-
-Expense Tracker
-• Build core: transaction entry, category breakdown, monthly summary.
-• Stretch idea: budget alerts and trend analytics.
-
-Inventory Management System
-• Build core: product catalog, stock in/out, low inventory alerts.
-• Stretch idea: reorder recommendation engine.
-
-Student Management System
-• Build core: student profiles, marks, attendance, reports.
-• Stretch idea: parent-friendly progress snapshots.
-
-Task Management CLI
-• Build core: task create/update/status/priority workflows.
-• Stretch idea: due-date reminders and tag-based filters.
-
-Weather Dashboard
-• Build core: city search, current weather, forecast summaries.
-• Stretch idea: cached offline report exports.
-
-REST API Client
-• Build core: authenticated API calls, response parsing, retries.
-• Stretch idea: response caching and pagination helper.
-
-Personal Finance Manager
-• Build core: income/expense tracking, savings summary, goals.
-• Stretch idea: recommendation insights from spending patterns.`
-            },
-            {
-                title: "Project Deliverables",
-                content: `Your final submission must include these deliverable packs.
-
-Architecture Pack:
-• clean layered architecture and modular code boundaries
-• OOP model design with clear responsibilities
-
-Reliability Pack:
-• robust file handling and exception management
-• logging and configuration management integrated into runtime
-
-Quality Pack:
-• unit tests for core features and failure scenarios
-• deterministic behavior under valid and invalid input
-
-Documentation Pack:
-• README with setup, run steps, and feature walkthrough
-• architecture rationale and trade-off explanation
-• short demo guide for interview presentation`
+                title: "Capstone Project Options",
+                content: `Choose one project for full delivery.
+- Inventory and Reorder Platform
+- Student Lifecycle Manager
+- Personal Finance Analyzer
+- Task Workflow Engine
+- API Data Synchronizer
+Minimum Delivery Pack:
+- layered architecture (app/service/domain/repository)
+- automated tests for core behaviors
+- persistence with validation
+- logs, config, and documentation artifacts`
             },
             {
                 title: "Final Assessment",
-                content: `Purpose: this tab is the final job-readiness checkpoint, not just another quiz.
-Why it exists: it validates your ability to build, debug, explain, and review production-grade Python code.
-
-Assessment Format:
-• 50 MCQs covering Python fundamentals through production practices
-• coding challenges for real implementation scenarios
-• debugging exercises with broken workflows
-• interview questions and practical assignments
-• Python best-practices and code-review checklist evaluation
-• course completion summary reflection
-
+                content: `Assessment Format:
+- concept check across modules 1-6
+- implementation challenge with constraints
+- debugging exercise on broken workflow
+- architecture Q&A and trade-off defense
 Pass Criteria:
-• concept clarity and correct reasoning
-• working modular implementation quality
-• effective debugging and code review communication
-• strong project walkthrough confidence`
+- correctness and maintainability
+- test-backed behavior
+- clear technical communication`
             },
             {
                 title: "Mini Challenge",
                 content: `Stretch Goal:
-• implement one advanced capstone feature (analytics, export, permissions, or optimization)
-• maintain architecture boundaries and test coverage while adding feature
-
-Success Check:
-• new feature integrates without regressions
-• documentation and tests are updated with clear examples`
+- add one advanced feature (analytics export, role permissions, or caching)
+- maintain architectural boundaries and test stability`
             },
             {
                 title: "Interview Preparation",
                 content: `Interview focus:
-• architecture decisions and trade-offs in your capstone
-• validation and exception flow explanation
-• logging/config/test strategy in production context
-• concise 5-minute end-to-end demo narrative`
+- explain architecture and dependency flow
+- justify persistence and error strategy
+- describe testing scope and gaps
+- deliver concise end-to-end demo narrative`
             },
             {
                 title: "Module Summary",
-                content: `You now have a complete Python capstone path with clear project options, deliverables, and assessment-driven interview readiness.`
+                content: `You now have a production-grade Python capstone path that mirrors real delivery expectations and interview workflows.`
             },
             {
                 title: "Course Completion Path",
-                content: `Complete final assessment, polish capstone documentation, and prepare your project walkthrough for portfolio and interviews.`
+                content: `Complete final assessment, polish documentation, and prepare your capstone walkthrough for portfolio and interviews.`
             }
         ]
     },
     {
         number: "Module 7",
-        title: "Python for Real-World Development (Optional)",
-        description: "Choose one specialization track to align Python skills with your career goal: Backend, Automation, or Data & AI Foundations.",
-        duration: "75 min",
+        title: "Career Specialization Tracks (Optional)",
+        description: "Pick one focused track to align Python skills with backend, automation, or data/AI career paths.",
+        duration: "80 min",
         lessons: "10 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Backend Development Track", "Automation & Scripting Track", "Data & AI Foundations Track", "Career Track Selection"],
-        detailedDescription: "Optional specialization module that personalizes learning toward practical career outcomes after core Python mastery.",
+        topics: ["Backend Track", "Automation Track", "Data and AI Foundations Track", "Portfolio Positioning"],
+        detailedDescription: "Optional module that tailors post-capstone learning to specific role goals.",
         detailedContent: [
             {
                 title: "Module Blueprint",
                 content: `Module Number: Module 7
-Module Name: Python for Real-World Development (Optional)
+Module Name: Career Specialization Tracks (Optional)
 Difficulty: Intermediate to Advanced
-Estimated Reading Time: 75 min
+Estimated Reading Time: 80 min
 Estimated Completion Time: 8-10 hours
 Prerequisites: Modules 1-6
 Learning Objectives:
-• choose specialization based on career direction
-• gain applied skills in a focused Python domain
-• build a track-specific portfolio artifact
+- choose a specialization aligned to target role
+- build one focused artifact for portfolio depth
+- define a 60-day post-course roadmap
 Skills Gained:
-• focused domain implementation depth
-• stronger career positioning
-• personalized learning pathway`
+- role-specific implementation depth
+- stronger interview positioning
+- personalized upskilling plan`
             },
             {
-                title: "Specialization Tracks",
-                content: `Choose one track based on your target role.
-
-Backend Development Track
-• Flask
-• FastAPI
-• REST APIs
-• Authentication
-• SQLAlchemy
-• PostgreSQL
-
-Automation & Scripting Track
-• Web Scraping
-• Excel Automation
-• Email Automation
-• PDF Processing
-• Scheduling Jobs
-
-Data & AI Foundations Track
-• NumPy
-• Pandas
-• Matplotlib
-• Basic Machine Learning
-• Jupyter Notebooks`
+                title: "Backend Track",
+                content: `Core Topics:
+- FastAPI or Flask service design
+- authentication and authorization basics
+- ORM patterns and relational modeling
+- async request handling
+Artifact: production-style REST API with tests and OpenAPI docs`
+            },
+            {
+                title: "Automation Track",
+                content: `Core Topics:
+- filesystem and office workflow automation
+- schedule-based job execution
+- scraping and structured extraction ethics
+- operational logging and retry patterns
+Artifact: automation suite with dry-run and rollback support`
+            },
+            {
+                title: "Data and AI Foundations Track",
+                content: `Core Topics:
+- NumPy and Pandas transformations
+- exploratory visualization with Matplotlib/Seaborn
+- feature preparation basics
+- notebook to script production handoff
+Artifact: reproducible EDA + model baseline package`
             },
             {
                 title: "Mini Challenge",
                 content: `Stretch Goal:
-• select one specialization track and implement a focused proof-of-concept
-• include README with track rationale and next-learning roadmap
-
+- deliver one specialization artifact with README, architecture notes, and demo script
 Success Check:
-• project clearly demonstrates chosen track outcomes
-• implementation aligns with career goal and extends capstone skills`
+- artifact demonstrates role-relevant depth
+- roadmap includes measurable next milestones`
             },
             {
                 title: "Module Summary",
-                content: `This optional module makes the course more personalized and career-oriented by letting learners branch into practical specialization tracks.`
+                content: `This optional module helps you convert core Python competency into a targeted career signal.`
             },
             {
                 title: "Course Completion Path",
-                content: `Complete one specialization artifact and add it to your portfolio alongside the capstone project for stronger job positioning.`
+                content: `Finalize one specialization artifact and add it to your portfolio with your capstone for stronger recruiter visibility.`
             }
         ]
     }
 ];
-
 courseData.csharpProgramming = [
     {
         number: "Module 1",
-        title: "C# Fundamentals and .NET Basics",
-        description: "Understand C# syntax, types, methods, and how C# fits into the .NET ecosystem.",
-        duration: "50 min",
-        lessons: "5 lessons",
+        title: "C# and .NET Foundations",
+        description: "Build strong C# fundamentals with CLR execution model, type system depth, control flow, and debugging discipline.",
+        duration: "85 min",
+        lessons: "14 lessons",
         isNew: true,
         isLocked: false,
-        topics: [".NET and CLR", "Types", "Methods", "Conditionals and loops", "Console apps"],
-        detailedDescription: "C# is a modern, strongly typed language widely used for backend systems, enterprise applications, and tooling in the .NET ecosystem.",
+        topics: ["Introduction and History", "CLR and IL", "JIT Compilation", "Value vs Reference Types", "Variables and Operators", "Control Flow", "Methods", "Parameter Modifiers", "Strings", "Arrays", "Collections Basics", "Namespaces", "Project and Build Basics", "Exception Basics", "Debugging with Stack Traces"],
+        detailedDescription: "Beginner-first module that explains how C# actually runs, not just how to write syntax.",
         detailedContent: [
             {
-                title: "C# and the .NET runtime",
-                content: `C# code compiles into Intermediate Language (IL), which runs on the Common Language Runtime (CLR). The runtime handles memory, exceptions, and execution rules.
-
-This gives C# a safe and structured environment for enterprise software.`,
+                title: "Module Blueprint",
+                content: `Module Number: Module 1
+Module Name: C# and .NET Foundations
+Difficulty: Beginner
+Estimated Reading Time: 85 min
+Estimated Completion Time: 7-8 hours
+Prerequisites: None
+Learning Objectives:
+- explain source-to-execution flow in .NET
+- write type-safe C# logic with predictable behavior
+- compile, run, and debug console apps confidently
+Skills Gained:
+- runtime and toolchain literacy
+- C# syntax and type-system confidence
+- early debugging and troubleshooting habits`
+            },
+                        {
+                                title: "Lesson 0: C# Introduction and History",
+                                content: `Why this matters: C# history explains its balance of productivity, strong typing, and enterprise tooling.
+Learning Objective: understand C# evolution and where it fits in modern development.
+Core Theory: C# emerged in the early 2000s with .NET to provide modern language features and managed runtime safety. It evolved through generics, LINQ, async/await, records, and cloud-native .NET development.
+Diagram (Mermaid):
+timeline
+    2002 : C# and .NET 1.0
+    2005 : Generics in C# 2.0
+    2007 : LINQ in C# 3.0
+    2012 : async/await in C# 5.0
+    2020 : C# 9 records
+Common Mistakes: viewing C# as Windows-only legacy stack; overlooking modern cross-platform .NET.
+Recap:
+- C# evolved continuously with strong language ergonomics
+- .NET now supports cross-platform backend and cloud workloads
+- Modern C# includes strong async and functional-style tooling
+Practice:
+- connect one C# feature evolution (for example LINQ or async) to a practical use case`
+                        },
+            {
+                title: "Lesson 1: How C# Runs on .NET",
+                content: `Why this matters: runtime understanding helps you diagnose build and execution issues faster.
+Learning Objective: understand C# -> IL -> CLR/JIT execution flow.
+Core Theory: C# compiles to Intermediate Language (IL). CLR loads assemblies and JIT-compiles IL to machine code at runtime.
+Diagram (Mermaid):
+flowchart LR
+  A[C# source] --> B[compiler]
+  B --> C[IL assembly]
+  C --> D[CLR loader]
+  D --> E[JIT]
+  E --> F[native execution]
+Worked Example: run a console app and inspect generated assembly metadata.
+Common Mistakes: mixing runtime and SDK concepts; targeting wrong framework version.
+Recap:
+- C# compiles to IL, not machine code directly
+- CLR provides execution services
+- JIT compiles methods on demand
+Practice:
+- create, build, and run a new console app from CLI`,
                 code: `using System;
 
 class Program
 {
-    static void Main()
+    static void Main(string[] args)
     {
-        Console.WriteLine("Hello from C#");
+        Console.WriteLine("Hello from C# runtime");
     }
 }`
             },
             {
-                title: "Types and flow control",
-                content: `C# combines strong typing with familiar control structures. Start by mastering variables, loops, branches, and method definitions before moving into architecture.`,
-                code: `int age = 25;
-string name = "Kiran";
-
-if (age >= 18)
+                title: "Lesson 2: Value Types, Reference Types, and Nullability",
+                content: `Why this matters: many C# bugs come from misunderstanding copy behavior and null handling.
+Learning Objective: distinguish value vs reference semantics and use nullable annotations correctly.
+Core Theory: structs and primitives are value types; class instances are reference types. Nullable reference types help express null contracts.
+Diagram (Mermaid):
+flowchart TD
+  A[value copy] --> B[independent data]
+  C[reference copy] --> D[same object]
+Worked Example: compare struct copy and class reference behavior.
+Common Mistakes: accidental shared mutation through references.
+Recap:
+- value assignment copies data
+- reference assignment copies pointer to object
+- nullability annotations improve API clarity`
+            },
+            {
+                title: "Lesson 3: Methods, Parameter Passing, and Scope",
+                content: `Why this matters: method contract quality directly affects maintainability.
+Learning Objective: design clear signatures using value, ref, out, and optional parameters responsibly.
+Core Theory: default passing is by value; ref/out modify caller-visible variables and should be used intentionally.
+Practice:
+- refactor a method with too many responsibilities into smaller methods`,
+                code: `static bool TryParseScore(string input, out int score)
 {
-    Console.WriteLine(name + " is eligible.");
+    if (int.TryParse(input, out score) && score >= 0 && score <= 100)
+    {
+        return true;
+    }
+
+    score = 0;
+    return false;
 }`
             },
             {
-                title: "Readable method-based code",
-                content: `Professional C# code tends to be explicit, well-structured, and easy to maintain. Good method boundaries are one of the earliest habits worth building.`,
-                code: `static int Add(int a, int b)
-{
-    return a + b;
-}
-
-Console.WriteLine(Add(10, 15));`
+                title: "Lesson 4: Strings, Arrays, and Basic Collections",
+                content: `Why this matters: most business workflows use string processing and collection traversal.
+Learning Objective: apply string APIs and choose list/array/dictionary intentionally.
+Core Theory: string is immutable; arrays have fixed size; List<T> is dynamic; Dictionary<TKey, TValue> is lookup-focused.
+Complexity / Trade-offs:
+- Dictionary lookup is expected O(1)
+- List index access is O(1), membership scan O(n)
+Practice:
+- redesign a membership-heavy task from list scan to dictionary`
+            },
+            {
+                title: "Lesson 5: Build Workflow and Debugging Basics",
+                content: `Why this matters: reproducible build commands and stack trace literacy save hours.
+Learning Objective: compile, run, and diagnose failures predictably.
+Core Theory: read exception type and message first, then call stack frames to locate root cause.
+Diagram (Mermaid):
+flowchart LR
+  A[dotnet run] --> B[exception]
+  B --> C[stack trace]
+  C --> D[root cause fix]
+Practice:
+- trigger and resolve InvalidOperationException in sample code`
+            },
+            {
+                title: "Mini Project: Student Score Console",
+                content: `Project Goal: build a console app that validates marks and prints class analytics.
+Required Features:
+- input parsing with validation
+- grade calculation and summary distribution
+- clean method decomposition
+Quality Signals:
+- clear variable naming
+- explicit error messages
+- no duplicated logic blocks`
+            },
+            {
+                title: "Mini Challenge",
+                content: `Stretch Goal:
+- support batch input from CSV and interactive mode
+- preserve same validation rules for both modes`
+            },
+            {
+                title: "Module Quiz",
+                content: `1) C# compiles to: A) native always B) IL C) byte arrays only D) XML
+2) Class instances are usually: A) value types B) reference types C) enums D) tuples
+3) string in C# is: A) mutable B) immutable C) numeric D) collection only
+4) ref/out are mainly for: A) namespace alias B) caller-visible modifications C) async only D) logging
+5) First traceback step: A) ignore message B) inspect exception type and frame C) clear bin D) rebuild blindly`
+            },
+            {
+                title: "Interview Preparation",
+                content: `Interview focus:
+- CLR vs JIT explanation
+- value vs reference type examples
+- ref vs out differences
+- debugging common runtime exceptions`
+            },
+            {
+                title: "Module Summary",
+                content: `You can now write and debug core C# applications with stronger runtime understanding and type-system confidence.`
+            },
+            {
+                title: "Next Module Bridge",
+                content: `Next module deepens OOP, interfaces, records, and architecture boundaries used in production C# codebases.`
             }
         ]
     },
     {
         number: "Module 2",
-        title: "Classes, OOP, and Collections",
-        description: "Learn classes, properties, constructors, inheritance, interfaces, and C# collections.",
-        duration: "55 min",
-        lessons: "5 lessons",
+        title: "Object-Oriented C# and Design Principles",
+        description: "Master class design, encapsulation, inheritance trade-offs, interfaces, records, and dependency boundaries.",
+        duration: "95 min",
+        lessons: "15 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Classes and properties", "Constructors", "Interfaces", "Lists and dictionaries", "Encapsulation"],
-        detailedDescription: "This module covers the building blocks of maintainable C# applications and the object-oriented patterns common in .NET projects.",
+        topics: ["Classes and Constructors", "Properties", "Access Modifiers", "Records", "Inheritance", "Composition", "Interfaces", "Abstract Classes", "Polymorphism", "Object Equality", "SOLID Basics", "Dependency Injection Basics", "Namespaces and Assemblies", "Layered Design"],
+        detailedDescription: "Core OOP module focused on clean contracts, maintainability, and extension safety.",
         detailedContent: [
             {
-                title: "Properties and constructors",
-                content: `C# often exposes data through properties rather than public fields. This keeps access controlled while preserving clean syntax.`,
-                code: `class Employee
-{
-    public string Name { get; set; }
-    public int Experience { get; set; }
-
-    public Employee(string name, int experience)
-    {
-        Name = name;
-        Experience = experience;
-    }
-}`
+                title: "Module Blueprint",
+                content: `Module Number: Module 2
+Module Name: Object-Oriented C# and Design Principles
+Difficulty: Beginner to Intermediate
+Estimated Reading Time: 95 min
+Estimated Completion Time: 9-10 hours
+Prerequisites: Module 1
+Learning Objectives:
+- model domains with cohesive classes and invariants
+- apply composition and interfaces for flexible design
+- build maintainable dependency boundaries
+Skills Gained:
+- production-oriented OOP design
+- contract-driven architecture
+- improved testability mindset`
             },
             {
-                title: "Interfaces and abstraction",
-                content: `Interfaces define contracts. In real systems, they make substitution, testing, and layered design significantly easier.`,
-                code: `interface INotifier
+                title: "Lesson 1: Class Design, Properties, and Invariants",
+                content: `Why this matters: invalid object state causes downstream bugs.
+Learning Objective: enforce invariants through constructors and controlled setters.
+Core Theory: expose behavior, not raw mutable fields. Use properties for validation and intent.
+Practice:
+- implement Account class that blocks invalid balance updates`
+            },
+            {
+                title: "Lesson 2: Interfaces, Abstraction, and Dependency Inversion",
+                content: `Why this matters: interfaces enable substitution and easier testing.
+Learning Objective: depend on abstractions, not concrete classes.
+Core Theory: high-level modules should not depend directly on low-level details.
+Diagram (Mermaid):
+flowchart LR
+  A[OrderService] --> B[IPaymentGateway]
+  B --> C[CardGateway]
+  B --> D[WalletGateway]
+Practice:
+- extract interface from concrete notifier implementation`,
+                code: `public interface INotifier
 {
-    void Send(string message);
+    Task SendAsync(string message, CancellationToken ct);
 }
 
-class EmailNotifier : INotifier
+public sealed class EmailNotifier : INotifier
 {
-    public void Send(string message)
+    public Task SendAsync(string message, CancellationToken ct)
     {
-        Console.WriteLine("Email: " + message);
+        Console.WriteLine($"Email: {message}");
+        return Task.CompletedTask;
     }
 }`
             },
             {
-                title: "Collections in C#",
-                content: `Generic collections like List<T> and Dictionary<TKey, TValue> provide type-safe data handling and are used constantly in .NET codebases.`,
-                code: `var names = new List<string> { "A", "B", "C" };
-var scores = new Dictionary<string, int>
-{
-    ["math"] = 92,
-    ["cs"] = 97
-};`
+                title: "Lesson 3: Composition over Inheritance in C#",
+                content: `Why this matters: inheritance is powerful but can over-couple behavior.
+Learning Objective: choose composition when behavior should be assembled.
+Core Theory: use strategy-like interfaces to swap behavior without deep class hierarchies.
+Practice:
+- refactor inheritance-heavy flow into composed services`
+            },
+            {
+                title: "Lesson 4: Records, Equality, and Domain Modeling",
+                content: `Why this matters: value semantics simplify DTO and immutable data handling.
+Learning Objective: use record and class types intentionally.
+Core Theory: records provide value-based equality by default; classes usually represent identity-based entities.
+Practice:
+- convert DTO class set to records and compare behavior`
+            },
+            {
+                title: "Lesson 5: Layered Design and Project Structure",
+                content: `Why this matters: architecture determines change cost and testability.
+Learning Objective: split app into API, service, domain, and infrastructure layers.
+Core Theory: dependency direction should point inward to domain logic.
+Diagram (Mermaid):
+flowchart TD
+  A[API] --> B[Application]
+  B --> C[Domain]
+  B --> D[Infrastructure Abstractions]
+  E[Infrastructure Implementations] --> D
+Practice:
+- reorganize flat solution into layered folders/projects`
+            },
+            {
+                title: "Mini Project: Library Domain Redesign",
+                content: `Project Goal: redesign a library workflow using interface-driven architecture.
+Required Features:
+- Book, Member, Loan models
+- service rules for issue/return
+- repository interface with simple in-memory implementation
+Evaluation Signals:
+- clear boundaries and contracts
+- no business logic in presentation layer
+- maintainable class responsibilities`
+            },
+            {
+                title: "Mini Challenge",
+                content: `Stretch Goal:
+- add reservation queue and overdue fee strategy
+- keep existing issue/return API stable`
+            },
+            {
+                title: "Module Quiz",
+                content: `1) Dependency inversion encourages: A) concrete coupling B) interface-driven design C) global state D) inheritance only
+2) Records are ideal for: A) mutable entities B) value-centric DTOs C) thread pooling D) reflection only
+3) Preferred default for flexibility: A) deep inheritance B) composition C) static classes everywhere D) partial classes
+4) Good architecture minimizes: A) cohesion B) coupling C) tests D) interfaces
+5) Encapsulation primarily protects: A) package size B) invariants and behavior integrity C) build speed D) syntax`
+            },
+            {
+                title: "Interview Preparation",
+                content: `Interview focus:
+- class vs record decisions
+- interface and DI benefits
+- composition vs inheritance trade-offs
+- layered architecture explanation`
+            },
+            {
+                title: "Module Summary",
+                content: `You can now design object-oriented C# systems with cleaner boundaries, explicit contracts, and better extension safety.`
+            },
+            {
+                title: "Next Module Bridge",
+                content: `Next module covers collections, generics, LINQ, and exception strategy for real data-heavy workflows.`
             }
         ]
     },
     {
         number: "Module 3",
-        title: "LINQ, Exceptions, and Practical C#",
-        description: "Use LINQ effectively, handle exceptions, and write cleaner everyday .NET code.",
-        duration: "55 min",
-        lessons: "5 lessons",
+        title: "Collections, Generics, LINQ, and Exceptions",
+        description: "Choose data structures by workload, use generics and LINQ safely, and design explicit exception boundaries.",
+        duration: "100 min",
+        lessons: "14 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["LINQ basics", "Filtering and projection", "Exception handling", "Using statements", "Clean coding"],
-        detailedDescription: "This module covers the parts of C# that make professional code more expressive and maintainable, especially LINQ and structured exception handling.",
+        topics: ["List and Dictionary", "HashSet and Queue", "Generic Types and Methods", "Constraints", "LINQ Operators", "Deferred Execution", "Projection and Grouping", "Custom Comparers", "Exception Taxonomy", "Custom Exceptions", "Validation Patterns", "Result Modeling", "Partial Failure Handling", "Data Pipeline Composition"],
+        detailedDescription: "Intermediate module for data processing correctness, readability, and resilience.",
         detailedContent: [
             {
-                title: "LINQ",
-                content: `LINQ lets you query collections declaratively. It improves readability when used with discipline and can replace a lot of repetitive loop-based code.`,
-                code: `var numbers = new List<int> { 1, 2, 3, 4, 5 };
-var evenSquares = numbers
-    .Where(n => n % 2 == 0)
-    .Select(n => n * n)
+                title: "Module Blueprint",
+                content: `Module Number: Module 3
+Module Name: Collections, Generics, LINQ, and Exceptions
+Difficulty: Intermediate
+Estimated Reading Time: 100 min
+Estimated Completion Time: 10-11 hours
+Prerequisites: Modules 1-2
+Learning Objectives:
+- select collections based on operation profile
+- build reusable generic APIs and LINQ queries
+- model exceptions with consistent recovery behavior
+Skills Gained:
+- collection trade-off reasoning
+- LINQ fluency and pitfalls awareness
+- reliability-first error handling patterns`
+            },
+            {
+                title: "Lesson 1: Collection Trade-offs and Complexity",
+                content: `Why this matters: wrong collection choices quietly degrade performance.
+Learning Objective: align operations to data structure strengths.
+Core Theory: Dictionary expected O(1) lookup, List O(1) index access and O(n) scan, HashSet for fast uniqueness checks.
+Complexity / Trade-offs:
+- List: ordered, index-friendly, slower membership checks
+- Dictionary: key lookups and updates, no inherent ordering
+- HashSet: fast uniqueness and membership
+Practice:
+- replace duplicate-check loop with HashSet strategy`
+            },
+            {
+                title: "Lesson 2: Generics and Constraints",
+                content: `Why this matters: generics improve reuse without unsafe casting.
+Learning Objective: write constrained generic methods and classes.
+Core Theory: constraints (where T : class/new()/interface) express capabilities and prevent invalid use.
+Practice:
+- implement generic repository interface with constraints`
+            },
+            {
+                title: "Lesson 3: LINQ Fundamentals and Deferred Execution",
+                content: `Why this matters: LINQ can improve readability or hide expensive behavior depending on usage.
+Learning Objective: compose pipelines and understand execution timing.
+Core Theory: many LINQ operations are deferred until enumeration; materialization via ToList/ToArray changes behavior.
+Diagram (Mermaid):
+flowchart LR
+  A[source] --> B[Where]
+  B --> C[Select]
+  C --> D[ToList]
+Practice:
+- detect and fix accidental multiple enumeration`,
+                code: `var topNames = students
+    .Where(s => s.Score >= 85)
+    .OrderByDescending(s => s.Score)
+    .Select(s => s.Name)
     .ToList();`
             },
             {
-                title: "Exceptions",
-                content: `C# exception handling should be used deliberately. A professional developer knows when to catch, when to wrap context, and when to fail fast.`,
-                code: `try
+                title: "Lesson 4: Exception Strategy and Domain Errors",
+                content: `Why this matters: broad exception handling reduces observability and correctness.
+Learning Objective: define exception boundaries and map domain failures explicitly.
+Core Theory: catch specific exceptions, enrich with context, and preserve stack where needed.
+Practice:
+- replace catch(Exception) with targeted exception handling`,
+                code: `public sealed class InvalidScoreException : Exception
 {
-    int value = int.Parse("abc");
-}
-catch (FormatException)
-{
-    Console.WriteLine("Invalid number format");
+    public InvalidScoreException(string message) : base(message) { }
 }`
             },
             {
-                title: "Everyday code quality",
-                content: `Professional C# code is readable, testable, and explicit where it needs to be. That usually matters more than using every language feature available.`,
-                code: `string FormatUser(string firstName, string lastName)
-{
-    return $"{firstName} {lastName}".Trim();
-}`
+                title: "Lesson 5: Pipeline Design with LINQ plus Validation",
+                content: `Why this matters: real data pipelines include bad records and partial success.
+Learning Objective: design parse -> validate -> transform -> summarize stages.
+Core Theory: isolate validation rules and maintain reject buckets with reason codes.
+Practice:
+- produce summary report and reject report in one processing run`
+            },
+            {
+                title: "Mini Project: Student Record Manager v2",
+                content: `Project Goal: build a robust student record system using LINQ analytics and explicit exceptions.
+Required Features:
+- add/update/query students by id and course
+- compute top performers and score distribution
+- track invalid operations with domain exceptions
+Evaluation Signals:
+- correct collection choices
+- readable LINQ queries
+- predictable failure behavior`
+            },
+            {
+                title: "Mini Challenge",
+                content: `Stretch Goal:
+- add import mode with malformed-row reject logging
+- support custom comparer for case-insensitive ids`
+            },
+            {
+                title: "Module Quiz",
+                content: `1) Deferred execution means: A) query runs immediately B) query runs on enumeration C) query never runs D) compile only
+2) Best for fast key lookup: A) List B) Dictionary C) Queue D) Array
+3) Generic constraints are used to: A) slow runtime B) enforce API capabilities C) remove typing D) avoid classes
+4) Recommended catch style: A) catch everything silently B) catch specific and handle contextually C) never catch D) swallow errors
+5) HashSet is strongest for: A) ordered indexing B) uniqueness checks C) range sorting D) file IO`
+            },
+            {
+                title: "Interview Preparation",
+                content: `Interview focus:
+- deferred execution pitfalls
+- List vs Dictionary trade-offs
+- generic constraints use-cases
+- exception strategy design`
+            },
+            {
+                title: "Module Summary",
+                content: `You can now build data-heavy C# workflows with strong collection choices, cleaner LINQ pipelines, and explicit error contracts.`
+            },
+            {
+                title: "Next Module Bridge",
+                content: `Next module focuses on asynchronous programming, concurrency safety, cancellation, and resilient background execution.`
             }
         ]
     },
     {
         number: "Module 4",
-        title: "Async Programming and Modern C#",
-        description: "Understand async/await, tasks, and the patterns used in scalable and responsive C# applications.",
-        duration: "60 min",
-        lessons: "5 lessons",
+        title: "Async, Concurrency, and Resilience",
+        description: "Master async/await, task composition, cancellation, and concurrency-safe patterns used in scalable .NET services.",
+        duration: "100 min",
+        lessons: "14 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Task", "async/await", "I/O-bound work", "Error flow", "Modern language habits"],
-        detailedDescription: "Modern C# relies heavily on asynchronous programming, especially in APIs and cloud applications. This module helps you reason correctly about async work.",
+        topics: ["Task and async/await", "Task.WhenAll/WhenAny", "CancellationToken", "ConfigureAwait Basics", "IAsyncEnumerable", "Thread Safety", "Locks and Concurrent Collections", "Background Services", "Retry and Timeout Patterns", "Transient Fault Handling", "Resilience Trade-offs", "Async Exception Flow", "Diagnostics", "Performance Considerations"],
+        detailedDescription: "Advanced-intermediate module for building robust asynchronous systems without hidden concurrency bugs.",
         detailedContent: [
             {
-                title: "Why async matters",
-                content: `Async improves responsiveness and throughput for I/O-bound work such as API calls and file operations. It is not about magically speeding up every task.`,
-                code: `async Task<string> GetMessageAsync()
+                title: "Module Blueprint",
+                content: `Module Number: Module 4
+Module Name: Async, Concurrency, and Resilience
+Difficulty: Intermediate to Advanced
+Estimated Reading Time: 100 min
+Estimated Completion Time: 10-11 hours
+Prerequisites: Modules 1-3
+Learning Objectives:
+- reason correctly about async control flow and scheduling
+- implement cancellation and timeout behavior safely
+- build resilience for transient dependency failures
+Skills Gained:
+- production async design
+- concurrency safety awareness
+- resilient integration patterns`
+            },
+            {
+                title: "Lesson 1: async/await Execution Model",
+                content: `Why this matters: async misunderstandings cause deadlocks, hangs, and poor throughput.
+Learning Objective: model await suspension and continuation behavior.
+Core Theory: await may suspend execution, release thread, and resume later on continuation context.
+Diagram (Mermaid):
+sequenceDiagram
+  participant Caller
+  participant Method as Async Method
+  participant IO as I/O Task
+  Caller->>Method: call
+  Method->>IO: await request
+  IO-->>Method: completes later
+  Method-->>Caller: continuation result
+Practice:
+- refactor blocking .Result code to async/await`,
+                code: `public static async Task<string> FetchAsync(HttpClient client, string url, CancellationToken ct)
 {
-    await Task.Delay(500);
-    return "done";
+    using var response = await client.GetAsync(url, ct);
+    response.EnsureSuccessStatusCode();
+    return await response.Content.ReadAsStringAsync(ct);
 }`
             },
             {
-                title: "The async/await model",
-                content: `The important idea is that an async method may pause, free the thread, and resume later. Once you understand that flow, async code becomes far less mysterious.`,
-                code: `static async Task Main()
-{
-    string message = await GetMessageAsync();
-    Console.WriteLine(message);
-}`
+                title: "Lesson 2: Cancellation and Timeouts",
+                content: `Why this matters: long-running operations must be interruptible.
+Learning Objective: propagate CancellationToken across boundaries.
+Core Theory: cancellation is cooperative; each layer must honor token.
+Practice:
+- add cancellation flow through controller -> service -> repository`
             },
             {
-                title: "Professional async habits",
-                content: `Good async code avoids blocking calls like .Result, propagates cancellation when possible, and keeps naming and exception handling consistent.`,
-                code: `using var cts = new CancellationTokenSource();
-cts.CancelAfter(TimeSpan.FromSeconds(2));`
+                title: "Lesson 3: Concurrency Safety with Shared State",
+                content: `Why this matters: race conditions create non-deterministic bugs.
+Learning Objective: protect shared state with lock discipline or concurrent collections.
+Core Theory: minimize shared mutable state; prefer immutable messages when possible.
+Practice:
+- replace shared List with ConcurrentDictionary in worker logic`
+            },
+            {
+                title: "Lesson 4: Resilience Patterns",
+                content: `Why this matters: APIs and networks fail intermittently in production.
+Learning Objective: apply bounded retry and timeout policies responsibly.
+Core Theory: retries should target transient failures and use backoff to avoid overload.
+Practice:
+- implement retry with max attempts and jittered delay`
+            },
+            {
+                title: "Lesson 5: Async Streams and Background Processing",
+                content: `Why this matters: streaming and background jobs are common in modern services.
+Learning Objective: use IAsyncEnumerable for incremental processing.
+Core Theory: async streams allow progressive consumption without full materialization.
+Practice:
+- process event feed with await foreach and cancellation support`
+            },
+            {
+                title: "Mini Project: Concurrent File Ingestion Worker",
+                content: `Project Goal: build a worker that ingests files concurrently with cancellation and retry safety.
+Required Features:
+- async read and parse pipeline
+- cancellation-aware processing
+- bounded retry for transient failures
+- deterministic summary output
+Evaluation Signals:
+- no deadlocks or blocking waits
+- clear failure categorization
+- predictable cancellation behavior`
+            },
+            {
+                title: "Mini Challenge",
+                content: `Stretch Goal:
+- add per-file timeout and dead-letter output
+- expose metrics summary for success/failure/timeout counts`
+            },
+            {
+                title: "Module Quiz",
+                content: `1) await primarily does: A) blocks thread always B) may suspend and resume later C) compiles to sync code D) avoids exceptions
+2) CancellationToken is: A) forced kill switch B) cooperative cancellation signal C) logging helper D) serializer
+3) Common async anti-pattern: A) await Task.Delay B) using .Result in async path C) Task.WhenAll D) cancellation checks
+4) Retry policy should be: A) infinite by default B) bounded and selective C) random always D) absent
+5) IAsyncEnumerable helps with: A) compile speed B) streaming async data C) class inheritance D) DI setup`
+            },
+            {
+                title: "Interview Preparation",
+                content: `Interview focus:
+- async deadlock scenarios
+- cancellation propagation strategy
+- thread safety design choices
+- retry/timeout trade-offs`
+            },
+            {
+                title: "Module Summary",
+                content: `You can now build asynchronous C# workflows that are resilient, cancellation-aware, and safer under concurrent load.`
+            },
+            {
+                title: "Next Module Bridge",
+                content: `Next module moves into ASP.NET Core APIs, dependency injection, EF Core basics, and production architecture patterns.`
             }
         ]
     },
     {
         number: "Module 5",
-        title: "Web APIs, Architecture, and Professional C#",
-        description: "Connect C# fundamentals to real backend development with APIs, layering, and maintainable architecture.",
-        duration: "65 min",
-        lessons: "5 lessons",
+        title: "ASP.NET Core, Data Access, and Architecture",
+        description: "Build production-style backend services with ASP.NET Core, DI, validation, EF Core basics, and layered architecture.",
+        duration: "105 min",
+        lessons: "14 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Controllers and services", "DTOs", "Dependency injection", "Validation", "Clean architecture"],
-        detailedDescription: "This module shows how C# is used in real applications: API layers, service boundaries, validation, and maintainable project structure.",
+        topics: ["ASP.NET Core Pipeline", "Controllers and Minimal APIs", "Dependency Injection", "DTOs and Validation", "Middleware", "Configuration", "Logging", "EF Core Basics", "Migrations", "Repository Pattern", "Service Layer", "Caching Basics", "Authentication Overview", "API Versioning Basics"],
+        detailedDescription: "Production-focused module that connects C# language skills to real backend service design and operations.",
         detailedContent: [
             {
-                title: "Backend structure",
-                content: `Production C# projects often separate concerns into controllers, services, repositories, DTOs, and domain models.
-
-That structure supports maintainability and clearer testing boundaries.`,
-                code: `public class UserService
-{
-    public string GetUserName(int id)
-    {
-        return "Demo User";
-    }
-}`
+                title: "Module Blueprint",
+                content: `Module Number: Module 5
+Module Name: ASP.NET Core, Data Access, and Architecture
+Difficulty: Intermediate to Advanced
+Estimated Reading Time: 105 min
+Estimated Completion Time: 11-12 hours
+Prerequisites: Modules 1-4
+Learning Objectives:
+- design API endpoints with clear contracts and validation
+- implement layered architecture with DI and data access abstraction
+- add observability and configuration for deployable services
+Skills Gained:
+- backend API engineering
+- service and repository boundary design
+- production readiness practices`
             },
             {
-                title: "Dependency injection",
-                content: `Dependency injection reduces coupling by giving classes what they need instead of forcing them to create every dependency themselves.`,
-                code: `public class UserController
-{
-    private readonly UserService _service;
-
-    public UserController(UserService service)
-    {
-        _service = service;
-    }
-}`
+                title: "Lesson 1: Request Pipeline and Middleware",
+                content: `Why this matters: middleware order controls cross-cutting behavior and security.
+Learning Objective: reason about request flow through ASP.NET Core pipeline.
+Core Theory: each middleware can inspect, short-circuit, or pass request to next component.
+Diagram (Mermaid):
+flowchart LR
+  A[Request] --> B[Auth Middleware]
+  B --> C[Validation Middleware]
+  C --> D[Controller]
+  D --> E[Response]
+Practice:
+- add timing middleware and verify ordering impact`
             },
             {
-                title: "Professional .NET mindset",
-                content: `A professional C# engineer can write readable code, reason about async and exceptions, structure services clearly, and build software that teammates can extend safely.`,
-                code: `record UserDto(int Id, string Name);
-
-var dto = new UserDto(1, "Belagam Harini");
-Console.WriteLine(dto.Name);`
+                title: "Lesson 2: Controllers, DTOs, and Validation",
+                content: `Why this matters: API contracts define integration reliability.
+Learning Objective: use request/response DTOs and model validation.
+Core Theory: DTOs decouple API shape from domain model; validation should fail fast with clear responses.
+Practice:
+- create POST endpoint with validation and typed response`
+            },
+            {
+                title: "Lesson 3: Dependency Injection and Service Boundaries",
+                content: `Why this matters: DI reduces coupling and improves testability.
+Learning Objective: register and consume services through interfaces.
+Core Theory: service lifetime (singleton/scoped/transient) affects behavior and safety.
+Practice:
+- identify a lifetime bug caused by wrong registration`
+            },
+            {
+                title: "Lesson 4: EF Core Basics and Repository Abstraction",
+                content: `Why this matters: data access should be maintainable and test-friendly.
+Learning Objective: perform CRUD with EF Core while preserving domain boundaries.
+Core Theory: DbContext tracks entities; migrations evolve schema over time.
+Practice:
+- add migration and repository methods for one aggregate`
+            },
+            {
+                title: "Lesson 5: Logging, Config, and Deployment Readiness",
+                content: `Why this matters: production support depends on diagnostics and predictable configuration.
+Learning Objective: implement structured logs and environment-specific settings.
+Core Theory: centralize configuration sources and avoid hardcoded secrets.
+Practice:
+- add environment-specific appsettings and startup validation`
+            },
+            {
+                title: "Mini Project: Task Tracker API",
+                content: `Project Goal: build a layered Task Tracker API with validation, DI, and persistence.
+Required Features:
+- create/update/list task endpoints
+- DTO validation and standardized error responses
+- service and repository layers
+- EF Core persistence with migration
+Evaluation Signals:
+- clean API contracts
+- architecture boundary clarity
+- reliable runtime behavior`
+            },
+            {
+                title: "Mini Challenge",
+                content: `Stretch Goal:
+- add paging and filtering to list endpoint
+- include response metadata for total count and page info`
+            },
+            {
+                title: "Module Quiz",
+                content: `1) Middleware order in ASP.NET Core is: A) irrelevant B) critical C) random D) compile-time only
+2) DTOs primarily help with: A) thread pool size B) contract isolation C) migration speed D) GC tuning
+3) Scoped service lifetime is typically per: A) application lifetime B) request C) class file D) assembly
+4) EF Core migration is used for: A) caching B) schema evolution C) logging D) encryption
+5) Config best practice: A) hardcode secrets B) environment-driven configuration C) skip validation D) single file only`
+            },
+            {
+                title: "Interview Preparation",
+                content: `Interview focus:
+- middleware flow explanation
+- DTO vs domain model distinction
+- DI lifetime trade-offs
+- EF Core and repository pattern decisions`
+            },
+            {
+                title: "Module Summary",
+                content: `You can now build production-style ASP.NET Core APIs with maintainable architecture, data access patterns, and operational readiness.`
+            },
+            {
+                title: "Next Module Bridge",
+                content: `Final module integrates testing, architecture review, and full capstone delivery for portfolio and interview readiness.`
             }
         ]
     },
     {
         number: "Module 6",
-        title: "C# Capstone Mini Project",
-        description: "Build a clean C# Web API mini project with DTOs, validation, and layered architecture.",
-        duration: "70 min",
-        lessons: "5 lessons",
+        title: "Production C# Capstone and Interview Readiness",
+        description: "Deliver a complete C# backend project with testing, architecture rationale, operational checks, and interview-grade documentation.",
+        duration: "120 min",
+        lessons: "15 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["API contract", "Services", "Validation", "DI setup", "Portfolio output"],
-        detailedDescription: "Turn C# fundamentals into a backend-style capstone demonstrating maintainable engineering practices.",
+        topics: ["Scope Definition", "Architecture Blueprint", "Domain Model", "API Contracts", "Persistence", "Error Strategy", "Observability", "Automated Testing", "Integration Tests", "Performance Baseline", "Security Checklist", "Documentation", "ADR Basics", "Final Assessment", "Demo Walkthrough"],
+        detailedDescription: "Capstone module that consolidates C# language, backend architecture, and engineering communication into one delivery path.",
         detailedContent: [
             {
-                title: "Project brief",
-                content: `Build a Task Tracker API with create/list/update endpoints and status transitions.`
+                title: "Module Blueprint",
+                content: `Module Number: Module 6
+Module Name: Production C# Capstone and Interview Readiness
+Difficulty: Advanced
+Estimated Reading Time: 120 min
+Estimated Completion Time: 12-14 hours
+Prerequisites: Modules 1-5
+Learning Objectives:
+- deliver an end-to-end C# backend application
+- enforce quality through tests and operational diagnostics
+- explain design choices and trade-offs in interview settings
+Skills Gained:
+- full delivery lifecycle ownership
+- architecture communication confidence
+- portfolio-grade implementation quality`
             },
             {
-                title: "Implementation expectations",
-                content: `Required structure:
-• DTOs for request/response
-• service layer for core logic
-• validation for user inputs
-• clear error responses`
+                title: "Lesson 1: Scope, Constraints, and MVP Planning",
+                content: `Why this matters: unmanaged scope causes incomplete and unstable projects.
+Learning Objective: define MVP features and non-functional boundaries.
+Core Theory: prioritize core workflows first, defer optional enhancements.
+Practice:
+- write feature breakdown with acceptance criteria`
             },
             {
-                title: "Capstone deliverables",
-                content: `Final output should include:
-• runnable API project
-• dependency-injected services
-• unit tests for business logic
-• README with endpoint docs and sample payloads`,
-                code: `public record TaskItemDto(int Id, string Title, string Status);
-
-public interface ITaskService
+                title: "Lesson 2: Architecture and Boundary Enforcement",
+                content: `Why this matters: capstone quality is judged by maintainability, not only feature count.
+Learning Objective: enforce clean separation across API, service, domain, and infrastructure.
+Core Theory: each layer should have one reason to change.
+Practice:
+- perform architecture review and list coupling hotspots`
+            },
+            {
+                title: "Lesson 3: Test Strategy and Coverage Priorities",
+                content: `Why this matters: tests enable safe iteration and bug prevention.
+Learning Objective: build a practical test matrix for unit and integration tests.
+Core Theory: prioritize business-critical paths and failure scenarios.
+Practice:
+- implement tests for happy path, validation failure, and dependency failure`,
+                code: `public sealed class TaskServiceTests
 {
-    TaskItemDto Create(string title);
+    [Fact]
+    public async Task CreateTask_ShouldReject_EmptyTitle()
+    {
+        var repo = new InMemoryTaskRepository();
+        var service = new TaskService(repo);
+
+        await Assert.ThrowsAsync<ValidationException>(() => service.CreateAsync(""));
+    }
 }`
+            },
+            {
+                title: "Lesson 4: Operational Readiness Checklist",
+                content: `Why this matters: production deployment requires more than passing tests.
+Learning Objective: validate logging, configuration, health checks, and error responses.
+Core Theory: use structured logs, correlation ids, and clear health endpoints.
+Practice:
+- add startup checks for required configuration values`
+            },
+            {
+                title: "Lesson 5: Documentation and Architecture Narrative",
+                content: `Why this matters: interviewers evaluate your reasoning and communication, not just source files.
+Learning Objective: produce README, architecture notes, and demo flow.
+Core Theory: document context, decision, alternatives, and consequences for key architectural choices.
+Practice:
+- write one ADR for storage strategy decision`
+            },
+            {
+                title: "Capstone Project Options",
+                content: `Choose one capstone:
+- Task Workflow API
+- Inventory Operations API
+- Student Lifecycle API
+- Personal Finance API
+Minimum Delivery:
+- layered architecture
+- validation and exception strategy
+- persistence and migration
+- tests, logs, and docs`
+            },
+            {
+                title: "Final Assessment",
+                content: `Assessment Format:
+- concept check across modules 1-6
+- implementation task with constraints
+- debugging and failing-test fix exercise
+- architecture trade-off discussion
+Pass Criteria:
+- correctness and maintainability
+- test-backed behavior
+- clarity of design explanations`
+            },
+            {
+                title: "Mini Challenge",
+                content: `Stretch Goal:
+- add one advanced feature (caching, authorization rule, or analytics endpoint)
+- preserve architecture boundaries and test coverage`
+            },
+            {
+                title: "Interview Preparation",
+                content: `Interview focus:
+- explain solution architecture and dependency flow
+- defend key trade-offs
+- show debugging and test strategy
+- deliver concise end-to-end demo narrative`
+            },
+            {
+                title: "Module Summary",
+                content: `You now have a full production-style C# capstone path with implementation depth, quality practices, and interview readiness.`
+            },
+            {
+                title: "Course Completion Path",
+                content: `Complete final assessment, polish capstone documentation, and add your demo walkthrough to your project portfolio.`
             }
         ]
     }
 ];
-
 courseData.cppProgramming = [
     {
         number: "Module 1",
-        title: "C++ Syntax and Core Fundamentals",
-        description: "Learn C++ syntax, variables, functions, control flow, and compilation basics.",
-        duration: "55 min",
-        lessons: "5 lessons",
+        title: "C++ Foundations and Compilation Model",
+        description: "Build strong C++ fundamentals with compilation pipeline, type system basics, control flow, and practical debugging discipline.",
+        duration: "90 min",
+        lessons: "14 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Compilation", "Types", "Functions", "Control flow", "Input/output"],
-        detailedDescription: "This module introduces C++ as a compiled systems language and explains how to write basic programs with precision and control.",
+        topics: ["Introduction and History", "Compilation and Linking", "Toolchain Basics", "Types and Initialization", "Const Correctness", "References", "Functions", "Control Flow", "Input/Output", "Namespaces", "Header and Source Separation", "Error Messages", "Build Configurations", "Assertions", "Debugging Basics"],
+        detailedDescription: "Beginner-first module that explains how C++ programs are built and executed, not just how syntax looks.",
         detailedContent: [
             {
-                title: "How C++ programs run",
-                content: `C++ is compiled directly to machine code. That gives it strong performance and fine-grained control over memory and execution.`,
+                title: "Module Blueprint",
+                content: `Module Number: Module 1
+Module Name: C++ Foundations and Compilation Model
+Difficulty: Beginner
+Estimated Reading Time: 90 min
+Estimated Completion Time: 8-9 hours
+Prerequisites: None
+Learning Objectives:
+- explain preprocessing, compilation, linking, and execution flow
+- write type-safe C++ basics using clear initialization patterns
+- diagnose compile and runtime errors with structured debugging
+Skills Gained:
+- C++ toolchain literacy
+- syntax and type-system confidence
+- practical debugging workflow`
+            },
+                        {
+                                title: "Lesson 0: C++ Introduction and History",
+                                content: `Why this matters: C++ history clarifies why the language prioritizes performance, control, and zero-cost abstractions.
+Learning Objective: understand C++ origins and modern evolution.
+Core Theory: C++ grew from C with object-oriented and generic programming support, then evolved with modern standards (C++11 onward) that improved safety and expressiveness while preserving performance.
+Diagram (Mermaid):
+timeline
+    1985 : First commercial C++ release
+    1998 : First ISO C++ standard
+    2011 : C++11 modern era begins
+    2017 : C++17 mainstream modern features
+    2020 : C++20 concepts and ranges
+Common Mistakes: learning only legacy C-style patterns and missing modern C++ safety tools.
+Recap:
+- C++ emphasizes performance with explicit control
+- Modern standards improved safety without sacrificing speed
+- Industry use remains strong in systems, engines, finance, and embedded
+Practice:
+- compare one pre-modern and modern C++ approach for resource management`
+                        },
+            {
+                title: "Lesson 1: How C++ Code Becomes an Executable",
+                content: `Why this matters: most beginner friction in C++ starts at build stage, not runtime logic.
+Learning Objective: understand preprocessing, compilation, and linking.
+Core Theory: source files are preprocessed, compiled to object files, then linked into an executable.
+Diagram (Mermaid):
+flowchart LR
+  A[.cpp/.h files] --> B[preprocessor]
+  B --> C[compiler]
+  C --> D[object files]
+  D --> E[linker]
+  E --> F[executable]
+Worked Example: split one program across two translation units and link successfully.
+Common Mistakes: missing definitions, duplicate symbols, header include cycles.
+Recap:
+- compiler checks each translation unit
+- linker resolves cross-file symbols
+- build errors require stage-aware troubleshooting
+Practice:
+- create two-file project and fix one linker error`,
                 code: `#include <iostream>
-using namespace std;
 
 int main() {
-    cout << "Hello, C++" << endl;
+    std::cout << "Hello from C++ toolchain" << std::endl;
     return 0;
 }`
             },
             {
-                title: "Variables, flow, and functions",
-                content: `C++ gives you direct control with familiar procedural tools: variables, functions, conditionals, and loops. Precision matters more here than in many higher-level languages.`,
-                code: `int add(int a, int b) {
-    return a + b;
-}
-
-int main() {
-    int score = 88;
-    if (score > 75) {
-        cout << "Good job" << endl;
-    }
+                title: "Lesson 2: Types, Initialization, and Const Correctness",
+                content: `Why this matters: undefined behavior and accidental mutation often begin with weak initialization habits.
+Learning Objective: use direct/list initialization and const constraints intentionally.
+Core Theory: brace initialization avoids narrowing; const expresses immutability at API boundaries.
+Common Mistakes: uninitialized variables and mutable parameters that should be const.
+Recap:
+- initialize values at declaration
+- prefer const for read-only intent
+- enforce invariants through function signatures`
+            },
+            {
+                title: "Lesson 3: Functions, References, and Parameter Passing",
+                content: `Why this matters: C++ performance and correctness depend heavily on function signature design.
+Learning Objective: choose pass-by-value, const reference, and mutable reference appropriately.
+Core Theory: pass-by-value copies; const reference avoids copy while protecting input; non-const reference enables mutation.
+Practice:
+- refactor heavy-copy function to const reference parameters`,
+                code: `int sum(const std::vector<int>& values) {
+    int total = 0;
+    for (int v : values) total += v;
+    return total;
 }`
             },
             {
-                title: "Why C++ still matters",
-                content: `C++ teaches memory awareness, cost models, ownership, and abstraction boundaries. Even if you later use higher-level languages, it sharpens core engineering instincts.`,
-                code: `double price = 199.99;
-char grade = 'A';
-bool ready = true;
-
-cout << price << " " << grade << " " << ready << endl;`
+                title: "Lesson 4: Header/Source Organization and Namespaces",
+                content: `Why this matters: scalable C++ codebases require disciplined boundaries across files.
+Learning Objective: separate declarations and definitions cleanly.
+Core Theory: headers expose interfaces; source files hold implementation; namespaces prevent symbol collisions.
+Practice:
+- move utility functions into namespaced header/source pair`
+            },
+            {
+                title: "Lesson 5: Compile Errors vs Runtime Errors",
+                content: `Why this matters: different failure classes require different debugging strategies.
+Learning Objective: read compiler diagnostics and runtime traces systematically.
+Core Theory: compiler errors often cascade; fix earliest relevant diagnostic first.
+Practice:
+- resolve one syntax error, one type mismatch, and one runtime crash in sequence`
+            },
+            {
+                title: "Mini Project: Student Result Console",
+                content: `Project Goal: build a robust console app for student score analytics.
+Required Features:
+- read student records and validate values
+- compute grade distribution and class summary
+- separate declarations and definitions into multiple files
+Evaluation Signals:
+- clean compile with warnings addressed
+- predictable validation behavior
+- readable modular structure`
+            },
+            {
+                title: "Mini Challenge",
+                content: `Stretch Goal:
+- add CLI flags for input file path and output mode
+- keep behavior deterministic for invalid input handling`
+            },
+            {
+                title: "Module Quiz",
+                content: `1) Linking primarily does: A) syntax checking B) symbol resolution across object files C) memory allocation D) runtime scheduling
+2) Header files should mainly contain: A) random globals B) declarations/interfaces C) only main() D) linker scripts
+3) const reference is best for: A) mutable output B) large read-only input C) temporary counters D) preprocessor macros
+4) First step when many compile errors appear: A) fix random one B) fix earliest root diagnostic C) disable warnings D) rewrite project
+5) Namespace purpose: A) optimize loops B) avoid name collisions C) allocate heap D) open files`
+            },
+            {
+                title: "Interview Preparation",
+                content: `Interview focus:
+- compilation vs linking differences
+- pass-by-value vs const reference trade-offs
+- header/source organization best practices
+- interpreting compiler diagnostics`
+            },
+            {
+                title: "Module Summary",
+                content: `You can now build and debug foundational C++ programs with stronger toolchain awareness and safer type/initialization habits.`
+            },
+            {
+                title: "Next Module Bridge",
+                content: `Next module dives into pointers, references, ownership, and lifetime management where C++ differs most from managed languages.`
             }
         ]
     },
     {
         number: "Module 2",
-        title: "Pointers, References, and Memory",
-        description: "Understand memory addresses, references, pointers, stack vs heap, and common C++ pitfalls.",
-        duration: "60 min",
-        lessons: "5 lessons",
+        title: "Pointers, Ownership, and Lifetime",
+        description: "Master pointer semantics, dynamic memory risks, RAII fundamentals, and ownership modeling for safe C++ systems.",
+        duration: "100 min",
+        lessons: "14 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Pointers", "References", "Stack and heap", "Dynamic allocation", "Memory safety"],
-        detailedDescription: "This is where C++ becomes truly different from many high-level languages: you work closer to memory and need stronger ownership discipline.",
+        topics: ["Pointers and Addresses", "References vs Pointers", "Stack vs Heap", "new/delete", "Dangling Pointers", "Memory Leaks", "RAII Intro", "Smart Pointer Basics", "Move Semantics Intro", "Copy vs Move", "Lifetime Boundaries", "Resource Ownership", "Destructors", "Rule of Zero"],
+        detailedDescription: "Core C++ memory module focused on safety, ownership clarity, and lifetime correctness.",
         detailedContent: [
             {
-                title: "References vs pointers",
-                content: `A reference is an alias; a pointer stores an address. Understanding when each is appropriate is central to writing safe C++ interfaces.`,
-                code: `int value = 10;
-int& ref = value;
-int* ptr = &value;
-
-cout << ref << endl;
-cout << *ptr << endl;`
+                title: "Module Blueprint",
+                content: `Module Number: Module 2
+Module Name: Pointers, Ownership, and Lifetime
+Difficulty: Intermediate
+Estimated Reading Time: 100 min
+Estimated Completion Time: 9-10 hours
+Prerequisites: Module 1
+Learning Objectives:
+- reason about memory lifetime and ownership explicitly
+- avoid common pointer-related bugs and undefined behavior
+- apply RAII and modern ownership patterns
+Skills Gained:
+- memory safety mindset
+- deterministic resource management
+- stronger API ownership contracts`
             },
             {
-                title: "Stack, heap, and ownership",
-                content: `Stack memory is automatic. Heap memory is flexible, but it creates ownership complexity. Senior C++ work means reasoning clearly about who owns what and for how long.`,
-                code: `int* data = new int(42);
-cout << *data << endl;
-delete data;`
+                title: "Lesson 1: Pointers, References, and Lifetime Boundaries",
+                content: `Why this matters: pointer misuse leads to crashes and security vulnerabilities.
+Learning Objective: distinguish aliasing, ownership, and borrowing roles.
+Core Theory: raw pointers may be nullable and rebindable; references are non-null aliases once bound.
+Diagram (Mermaid):
+flowchart TD
+  A[object lifetime] --> B[owning handle]
+  B --> C[borrowed reference]
+  B --> D[observing pointer]
+Practice:
+- annotate function signatures with ownership intent`
             },
             {
-                title: "Why memory bugs matter",
-                content: `Leaks, dangling pointers, and invalid access are not academic issues. They break production systems and can create serious security risks.`,
+                title: "Lesson 2: Stack vs Heap and Allocation Costs",
+                content: `Why this matters: allocation strategy affects both performance and reliability.
+Learning Objective: choose automatic vs dynamic storage appropriately.
+Core Theory: stack allocation is automatic and fast; heap allocation is flexible but requires ownership discipline.
+Common Mistakes: unnecessary heap allocations for short-lived objects.
+Practice:
+- convert heap-based local object usage to stack allocation where safe`
+            },
+            {
+                title: "Lesson 3: RAII and Destructor-Based Cleanup",
+                content: `Why this matters: manual cleanup paths are fragile under exceptions.
+Learning Objective: tie resource release to object lifetime.
+Core Theory: RAII ensures cleanup in destructor regardless of normal return or throw.
+Practice:
+- wrap file/resource handle in RAII class`
+            },
+            {
+                title: "Lesson 4: Smart Pointers and Ownership Models",
+                content: `Why this matters: modern C++ prefers explicit ownership semantics.
+Learning Objective: choose unique_ptr and shared_ptr intentionally.
+Core Theory: unique_ptr models single ownership; shared_ptr models shared lifetime with reference counting overhead.
+Practice:
+- refactor new/delete code to unique_ptr`,
                 code: `#include <memory>
 
-auto value = std::make_unique<int>(99);
-cout << *value << endl;`
+struct User {
+    int id;
+};
+
+int main() {
+    auto user = std::make_unique<User>();
+    user->id = 42;
+    return 0;
+}`
+            },
+            {
+                title: "Lesson 5: Copy, Move, and Rule of Zero",
+                content: `Why this matters: accidental copying can be expensive and semantically wrong.
+Learning Objective: understand move semantics and prefer Rule of Zero where possible.
+Core Theory: classes owning resources may need custom move/copy behavior, but standard containers/smart pointers often remove that need.
+Practice:
+- identify a class that can follow Rule of Zero`
+            },
+            {
+                title: "Mini Project: Memory-Safe Resource Tracker",
+                content: `Project Goal: build a small tracker app that manages resource objects with explicit ownership and safe cleanup.
+Required Features:
+- create/update/list resources
+- use unique_ptr for owned entities
+- avoid raw owning pointers and manual delete
+Evaluation Signals:
+- no leak-prone ownership patterns
+- clear lifetime boundaries
+- exception-safe cleanup`
+            },
+            {
+                title: "Mini Challenge",
+                content: `Stretch Goal:
+- add shared observer views without breaking ownership model
+- justify any use of shared_ptr in design notes`
+            },
+            {
+                title: "Module Quiz",
+                content: `1) unique_ptr represents: A) shared ownership B) single ownership C) no ownership D) compile optimization
+2) RAII primarily guarantees: A) faster compile B) deterministic cleanup C) fewer headers D) no exceptions
+3) Dangling pointer means: A) points to live object B) points to invalid lifetime C) is always null D) is const
+4) Preferred modern owning pointer type: A) raw pointer B) unique_ptr C) reference D) void*
+5) Rule of Zero encourages: A) more manual memory code B) relying on safe standard types C) no constructors D) no classes`
+            },
+            {
+                title: "Interview Preparation",
+                content: `Interview focus:
+- unique_ptr vs shared_ptr trade-offs
+- RAII explanation with practical example
+- dangling pointer scenarios
+- move semantics intuition`
+            },
+            {
+                title: "Module Summary",
+                content: `You can now design C++ code with explicit ownership, safer lifetimes, and modern RAII-driven resource management.`
+            },
+            {
+                title: "Next Module Bridge",
+                content: `Next module introduces STL containers, iterators, algorithms, and complexity-aware choices for data-heavy workloads.`
             }
         ]
     },
     {
         number: "Module 3",
-        title: "STL and Object-Oriented C++",
-        description: "Use STL containers, algorithms, classes, and constructors effectively.",
-        duration: "60 min",
-        lessons: "5 lessons",
+        title: "STL, Algorithms, and Generic Programming",
+        description: "Use STL containers and algorithms effectively with iterators, complexity awareness, and template-based reuse.",
+        duration: "105 min",
+        lessons: "14 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["vector and map", "Algorithms", "Classes", "Constructors", "Encapsulation"],
-        detailedDescription: "This module shows how productive C++ can be when you combine STL containers with clear object modeling and structured design.",
+        topics: ["vector", "deque", "list", "map and unordered_map", "set and unordered_set", "Iterators", "STL Algorithms", "Custom Comparators", "Lambda Functions", "Template Functions", "Template Classes", "Concepts Basics", "Complexity Trade-offs", "Allocator Awareness"],
+        detailedDescription: "Intermediate module for high-signal STL usage and performance-informed generic design.",
         detailedContent: [
             {
-                title: "STL containers and algorithms",
-                content: `The Standard Template Library gives C++ much of its practical power. Learn vectors, maps, and algorithms before reinventing basic structures.`,
-                code: `#include <algorithm>
-#include <vector>
-
-vector<int> values = {4, 1, 3, 2};
-sort(values.begin(), values.end());`
+                title: "Module Blueprint",
+                content: `Module Number: Module 3
+Module Name: STL, Algorithms, and Generic Programming
+Difficulty: Intermediate
+Estimated Reading Time: 105 min
+Estimated Completion Time: 10-11 hours
+Prerequisites: Modules 1-2
+Learning Objectives:
+- choose containers by operation and ordering needs
+- use STL algorithms with iterators and lambdas
+- write reusable templates with clear constraints
+Skills Gained:
+- container and complexity reasoning
+- expressive standard algorithm usage
+- generic programming foundations`
             },
             {
-                title: "Classes and constructors",
-                content: `C++ supports object-oriented design, but unlike Java or C#, the language also demands stronger attention to lifetime and ownership.`,
-                code: `class Student {
-public:
-    string name;
-    int marks;
-
-    Student(string n, int m) : name(n), marks(m) {}
-};`
+                title: "Lesson 1: Container Selection by Workload",
+                content: `Why this matters: performance regressions often come from mismatched data structures.
+Learning Objective: map operation patterns to container choices.
+Core Theory: vector excels at contiguous storage and iteration; unordered_map offers expected O(1) lookup; map provides ordered O(log n) operations.
+Complexity / Trade-offs:
+- vector: fast traversal, expensive middle insert/erase
+- unordered_map: fast expected lookup, unstable order
+- map: ordered iteration with tree-based overhead
+Practice:
+- replace one linear search workflow with unordered_map index`
             },
             {
-                title: "Readable abstraction in C++",
-                content: `The best C++ code uses abstraction carefully. It keeps performance-aware design without sacrificing readability or safety.`,
-                code: `vector<string> languages = {"C++", "Java", "Python"};
-for (const auto& item : languages) {
-    cout << item << endl;
-}`
+                title: "Lesson 2: Iterators, Algorithms, and Lambdas",
+                content: `Why this matters: STL algorithms reduce boilerplate and improve clarity when used correctly.
+Learning Objective: compose find/transform/sort pipelines.
+Core Theory: algorithms operate on iterator ranges; lambdas customize behavior locally.
+Diagram (Mermaid):
+flowchart LR
+  A[container begin/end] --> B[std::transform]
+  B --> C[std::sort]
+  C --> D[result range]
+Practice:
+- rewrite loop-based transform with std::transform`,
+                code: `std::vector<int> values{5, 2, 8, 1};
+std::sort(values.begin(), values.end());
+
+std::vector<int> doubled(values.size());
+std::transform(values.begin(), values.end(), doubled.begin(),
+               [](int v) { return v * 2; });`
+            },
+            {
+                title: "Lesson 3: Template Reuse and Constraints",
+                content: `Why this matters: templates enable zero-cost abstraction but can become hard to read without constraints.
+Learning Objective: write focused generic functions and constrain assumptions.
+Core Theory: templates are compile-time polymorphism; concepts (modern C++) express intent and improve diagnostics.
+Practice:
+- add a concept-constrained utility template`
+            },
+            {
+                title: "Lesson 4: Comparator Design and Ordering Semantics",
+                content: `Why this matters: subtle comparator bugs break sorting and set/map correctness.
+Learning Objective: implement strict weak ordering comparators.
+Core Theory: comparator must be consistent and transitive.
+Practice:
+- implement custom comparator for multi-field record sorting`
+            },
+            {
+                title: "Lesson 5: Algorithmic Thinking with STL",
+                content: `Why this matters: STL is most powerful when used with algorithmic intent.
+Learning Objective: combine containers and algorithms for clear pipelines.
+Core Theory: prefer standard algorithms before writing manual loops unless profiling proves need.
+Practice:
+- build top-N summary report using partial_sort and map accumulators`
+            },
+            {
+                title: "Mini Project: Inventory Analytics Engine",
+                content: `Project Goal: build analytics over inventory records using STL containers and algorithms.
+Required Features:
+- index items by id and category
+- compute low-stock and fast-moving summaries
+- output sorted reports by configurable criteria
+Evaluation Signals:
+- correct container usage
+- clear algorithm pipelines
+- performance-aware design notes`
+            },
+            {
+                title: "Mini Challenge",
+                content: `Stretch Goal:
+- add templated report utility reusable across record types
+- include complexity notes for each major operation`
+            },
+            {
+                title: "Module Quiz",
+                content: `1) map typically provides: A) expected O(1) lookup B) ordered O(log n) operations C) constant insertion at front D) fixed capacity
+2) unordered_map is best when: A) sorted iteration needed B) fast expected key lookup needed C) contiguous memory is mandatory D) random pointers required
+3) STL algorithms mainly operate on: A) classes only B) iterator ranges C) namespaces D) macros
+4) Template constraints improve: A) runtime speed only B) diagnostics and contract clarity C) linker behavior D) memory leaks
+5) Comparator must satisfy: A) random ordering B) strict weak ordering C) hash collision D) reference counting`
+            },
+            {
+                title: "Interview Preparation",
+                content: `Interview focus:
+- vector vs list trade-offs
+- map vs unordered_map decision criteria
+- lambda and algorithm use-cases
+- template constraints and readability`
+            },
+            {
+                title: "Module Summary",
+                content: `You can now design C++ data workflows with STL-first thinking, complexity awareness, and reusable generic abstractions.`
+            },
+            {
+                title: "Next Module Bridge",
+                content: `Next module moves into modern C++ features including move semantics depth, RAII patterns, and advanced language constructs.`
             }
         ]
     },
     {
         number: "Module 4",
-        title: "Modern C++: RAII, Smart Pointers, and Templates",
-        description: "Learn the safer and more expressive side of modern C++ with RAII, templates, and smart pointers.",
-        duration: "65 min",
-        lessons: "5 lessons",
+        title: "Modern C++: RAII, Move Semantics, and Language Features",
+        description: "Apply modern C++ features such as RAII, move semantics, smart pointers, and safer expressive language constructs.",
+        duration: "100 min",
+        lessons: "14 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["RAII", "unique_ptr", "shared_ptr", "Templates", "Generic design"],
-        detailedDescription: "Modern C++ avoids many classic memory problems through ownership-oriented design. This module introduces the habits that matter in professional code.",
+        topics: ["RAII Deep Dive", "Move Semantics", "Rule of Five", "Rule of Zero", "Smart Pointer Patterns", "constexpr", "auto and Type Deduction", "Structured Bindings", "std::optional", "std::variant", "std::span Basics", "Error Handling Patterns", "C++17/C++20 Highlights", "API Design in Modern C++"],
+        detailedDescription: "Advanced-intermediate module focused on writing expressive and safer modern C++ code.",
         detailedContent: [
             {
-                title: "RAII",
-                content: `RAII means resources are tied to object lifetime. This is one of the most important ideas in C++, because it turns cleanup into a structural guarantee instead of a manual hope.`,
-                code: `{
-    std::vector<int> data = {1, 2, 3};
-} // automatic cleanup here`
+                title: "Module Blueprint",
+                content: `Module Number: Module 4
+Module Name: Modern C++: RAII, Move Semantics, and Language Features
+Difficulty: Intermediate to Advanced
+Estimated Reading Time: 100 min
+Estimated Completion Time: 10-11 hours
+Prerequisites: Modules 1-3
+Learning Objectives:
+- use move semantics to avoid unnecessary copies
+- apply modern utility types for safer APIs
+- design maintainable modern C++ interfaces
+Skills Gained:
+- modern language fluency
+- safer ownership and transfer patterns
+- expressive API and type design`
             },
             {
-                title: "Smart pointers",
-                content: `Smart pointers express ownership directly. unique_ptr means one owner; shared_ptr means shared ownership with overhead and care.`,
-                code: `#include <memory>
-
-auto user = std::make_unique<int>(42);
-std::cout << *user << std::endl;`
-            },
-            {
-                title: "Templates",
-                content: `Templates let you write generic, reusable, high-performance code. They are central to the STL and to many serious C++ libraries.`,
-                code: `template <typename T>
-T maxValue(T a, T b) {
-    return a > b ? a : b;
+                title: "Lesson 1: Move Semantics in Practice",
+                content: `Why this matters: unnecessary copies can dominate performance in large data paths.
+Learning Objective: understand lvalues/rvalues and move operations.
+Core Theory: move transfers resources from temporary or explicitly moved objects.
+Practice:
+- profile copy-heavy code path and reduce copies with move-aware design`,
+                code: `std::vector<int> buildData() {
+    std::vector<int> v(1000, 1);
+    return v; // NRVO/move
 }`
+            },
+            {
+                title: "Lesson 2: Rule of Five vs Rule of Zero",
+                content: `Why this matters: custom resource ownership requires explicit copy/move behavior.
+Learning Objective: decide when to implement special member functions.
+Core Theory: if class manages resource directly, Rule of Five may apply; otherwise prefer Rule of Zero.
+Practice:
+- audit a class for unnecessary custom copy/move code`
+            },
+            {
+                title: "Lesson 3: optional, variant, and Safer Return Contracts",
+                content: `Why this matters: expressive types reduce invalid states and ambiguous error codes.
+Learning Objective: replace sentinel values with explicit modeling.
+Core Theory: optional models presence/absence; variant models closed alternatives.
+Practice:
+- refactor parse result from bool+out to variant/optional`
+            },
+            {
+                title: "Lesson 4: constexpr and Compile-Time Computation",
+                content: `Why this matters: compile-time evaluation can improve correctness and performance for static logic.
+Learning Objective: identify suitable constexpr use-cases.
+Core Theory: constexpr functions can run at compile time when given constant expressions.
+Practice:
+- convert one utility to constexpr and verify compile-time usage`
+            },
+            {
+                title: "Lesson 5: Modern API Design Guidelines",
+                content: `Why this matters: strong APIs prevent misuse and lower maintenance cost.
+Learning Objective: design interfaces with clear ownership and minimal surprises.
+Core Theory: prefer explicit constructors, const correctness, and non-owning views where appropriate.
+Practice:
+- redesign one legacy API with modern type contracts`
+            },
+            {
+                title: "Mini Project: Modernized Report Processor",
+                content: `Project Goal: modernize a legacy report module using move semantics and modern utility types.
+Required Features:
+- replace raw ownership with smart pointers or value semantics
+- use optional/variant for result modeling
+- eliminate unnecessary copies in hot paths
+Evaluation Signals:
+- improved readability and safety
+- fewer ownership ambiguities
+- measurable copy reduction`
+            },
+            {
+                title: "Mini Challenge",
+                content: `Stretch Goal:
+- add compile-time validated config constants with constexpr
+- provide benchmark notes before and after modernization`
+            },
+            {
+                title: "Module Quiz",
+                content: `1) Move semantics primarily optimize: A) syntax coloring B) resource transfer efficiency C) linker size D) recursion depth
+2) Rule of Zero suggests: A) always implement destructor B) rely on safe member types and defaults C) use raw pointers only D) avoid classes
+3) optional is best for: A) guaranteed result B) possibly missing value C) threading D) macros
+4) variant models: A) dynamic array B) closed set of alternative types C) file streams D) inheritance only
+5) constexpr allows: A) runtime-only evaluation B) potential compile-time evaluation C) memory leak detection D) auto-linking`
+            },
+            {
+                title: "Interview Preparation",
+                content: `Interview focus:
+- lvalue/rvalue and move semantics intuition
+- Rule of Five vs Rule of Zero
+- optional/variant design decisions
+- modern C++ API best practices`
+            },
+            {
+                title: "Module Summary",
+                content: `You can now apply modern C++ constructs to build safer, clearer, and more efficient APIs and implementations.`
+            },
+            {
+                title: "Next Module Bridge",
+                content: `Next module covers concurrency, synchronization, profiling, and performance engineering in systems-scale C++ code.`
             }
         ]
     },
     {
         number: "Module 5",
-        title: "Performance, Concurrency, and Professional C++",
-        description: "Connect C++ fundamentals to real systems work with performance thinking, concurrency basics, and maintainable engineering habits.",
-        duration: "70 min",
-        lessons: "5 lessons",
+        title: "Concurrency and Performance Engineering in C++",
+        description: "Build concurrent C++ systems safely and optimize with profiling-driven decisions instead of guesswork.",
+        duration: "105 min",
+        lessons: "14 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Cost models", "Move semantics", "Threads", "Profiling mindset", "Systems discipline"],
-        detailedDescription: "This final module helps learners think like professional C++ engineers: measure cost, manage resources, and reason carefully about concurrency.",
+        topics: ["std::thread", "Mutex and Locking", "Deadlocks", "Condition Variables", "Atomics Basics", "Memory Ordering Intro", "Task-Based Concurrency", "Thread Pools Concept", "Profiling Workflow", "Cache and Allocation Costs", "Benchmark Pitfalls", "False Sharing", "Performance Trade-offs", "Optimization Discipline"],
+        detailedDescription: "Advanced module that combines concurrent correctness with measured performance tuning.",
         detailedContent: [
             {
-                title: "Thinking in cost models",
-                content: `C++ gives you performance, but only if you understand where the cost actually comes from: allocations, copies, cache patterns, and indirection.`,
-                code: `std::vector<int> values;
-values.reserve(1000); // reduce reallocations`
+                title: "Module Blueprint",
+                content: `Module Number: Module 5
+Module Name: Concurrency and Performance Engineering in C++
+Difficulty: Advanced
+Estimated Reading Time: 105 min
+Estimated Completion Time: 11-12 hours
+Prerequisites: Modules 1-4
+Learning Objectives:
+- implement thread-safe workflows with explicit synchronization
+- avoid common concurrency hazards and contention bottlenecks
+- optimize based on profiler evidence and benchmark hygiene
+Skills Gained:
+- concurrent systems reasoning
+- synchronization safety practices
+- performance investigation discipline`
             },
             {
-                title: "Concurrency basics",
-                content: `C++ threads are powerful, but shared mutable state is risky. Professional code keeps synchronization explicit and ownership clear.`,
-                code: `#include <thread>
-
-void runTask() {
-    std::cout << "Task running" << std::endl;
-}
-
-std::thread worker(runTask);
-worker.join();`
+                title: "Lesson 1: Threading Basics and Shared-State Hazards",
+                content: `Why this matters: race conditions cause nondeterministic failures that are hard to reproduce.
+Learning Objective: reason about shared state and critical sections.
+Core Theory: concurrent writes to shared data require synchronization.
+Diagram (Mermaid):
+sequenceDiagram
+  participant T1 as Thread 1
+  participant C as Counter
+  participant T2 as Thread 2
+  T1->>C: read
+  T2->>C: read
+  T1->>C: write+1
+  T2->>C: write+1 (lost update)
+Practice:
+- fix race condition with mutex`
             },
             {
-                title: "What makes a C++ developer feel pro",
-                content: `A professional C++ engineer can write readable code, manage ownership correctly, use STL effectively, and optimize based on evidence rather than guesswork.`,
-                code: `auto values = std::vector<int>{1, 2, 3, 4};
-for (const auto& value : values) {
-    std::cout << value << std::endl;
+                title: "Lesson 2: Locks, Deadlocks, and Safe Coordination",
+                content: `Why this matters: incorrect lock ordering can freeze production systems.
+Learning Objective: design lock strategy that avoids deadlock.
+Core Theory: consistent lock ordering and scoped lock helpers reduce risk.
+Practice:
+- refactor two-lock code path to deadlock-safe order`,
+                code: `std::mutex m1, m2;
+
+void safeWork() {
+    std::scoped_lock lock(m1, m2);
+    // critical section using both resources
 }`
+            },
+            {
+                title: "Lesson 3: Atomics and Contention Trade-offs",
+                content: `Why this matters: mutex-heavy designs can bottleneck under load.
+Learning Objective: identify when atomic operations are sufficient.
+Core Theory: atomics are good for simple shared counters/flags; complex invariants often need mutexes.
+Practice:
+- replace mutex-protected counter with atomic counter and compare throughput`
+            },
+            {
+                title: "Lesson 4: Profiling and Benchmarking Workflow",
+                content: `Why this matters: optimization without measurement often worsens code.
+Learning Objective: establish baseline, identify hotspot, optimize, and re-measure.
+Core Theory: benchmark harnesses need warmup, stable input, and fair comparisons.
+Practice:
+- capture baseline and optimize one hotspot with clear before/after results`
+            },
+            {
+                title: "Lesson 5: Cache-Aware and Allocation-Aware Design",
+                content: `Why this matters: memory access patterns can dominate runtime costs.
+Learning Objective: reduce allocations and improve locality where it matters.
+Core Theory: contiguous structures and reservation strategies can reduce overhead.
+Practice:
+- use reserve and data layout improvements in one hot path`
+            },
+            {
+                title: "Mini Project: Concurrent Log Aggregator",
+                content: `Project Goal: build a thread-safe log aggregator with measurable performance goals.
+Required Features:
+- concurrent ingestion from multiple worker threads
+- safe aggregation by error code/category
+- deterministic final summary output
+- benchmark report before and after one optimization
+Evaluation Signals:
+- thread-safe correctness
+- clear synchronization strategy
+- evidence-based optimization decisions`
+            },
+            {
+                title: "Mini Challenge",
+                content: `Stretch Goal:
+- add bounded queue with producer/consumer model
+- report throughput and latency percentiles on sample workload`
+            },
+            {
+                title: "Module Quiz",
+                content: `1) Race condition means: A) compile failure B) order-dependent incorrect behavior C) syntax warning D) linker error
+2) scoped_lock helps with: A) random ordering B) coordinated lock acquisition C) file parsing D) template deduction
+3) Atomics are best for: A) complex multi-step invariants B) simple counters/flags C) dynamic polymorphism D) header guards
+4) First optimization step should be: A) rewrite architecture B) profile baseline C) disable checks D) use macros
+5) reserve() on vector helps reduce: A) compile time B) reallocations C) namespaces D) thread creation`
+            },
+            {
+                title: "Interview Preparation",
+                content: `Interview focus:
+- diagnosing race conditions
+- deadlock prevention strategies
+- atomic vs mutex decisions
+- profiling-driven optimization examples`
+            },
+            {
+                title: "Module Summary",
+                content: `You can now build concurrent C++ workflows with safer synchronization and measurable, profiler-backed performance improvements.`
+            },
+            {
+                title: "Next Module Bridge",
+                content: `Final module integrates architecture, quality, and delivery into a portfolio-ready C++ capstone project.`
             }
         ]
     },
     {
         number: "Module 6",
-        title: "C++ Capstone Mini Project",
-        description: "Build a performance-aware C++ mini project with STL design, ownership safety, and measurable output.",
-        duration: "75 min",
-        lessons: "5 lessons",
+        title: "Production C++ Capstone and Interview Readiness",
+        description: "Deliver a full C++ system with architecture, ownership safety, tests, benchmarking, and interview-ready technical narrative.",
+        duration: "120 min",
+        lessons: "15 lessons",
         isNew: false,
         isLocked: false,
-        topics: ["Problem scoping", "Data structures", "Ownership model", "Benchmarking", "Portfolio output"],
-        detailedDescription: "Apply modern C++ patterns in a compact project that demonstrates engineering discipline and systems thinking.",
+        topics: ["Scope and Requirements", "Architecture Plan", "Data Structures", "Ownership Model", "Error Handling", "CLI/API Boundaries", "Persistence Strategy", "Testing Strategy", "Benchmark Design", "Profiling Results", "Code Review Checklist", "Documentation", "Trade-off Narrative", "Final Assessment", "Demo Walkthrough"],
+        detailedDescription: "Capstone module that consolidates systems thinking, C++ engineering rigor, and communication for job readiness.",
         detailedContent: [
             {
-                title: "Project brief",
-                content: `Build a Log Analyzer that reads structured logs, aggregates metrics, and reports top error categories.`
+                title: "Module Blueprint",
+                content: `Module Number: Module 6
+Module Name: Production C++ Capstone and Interview Readiness
+Difficulty: Advanced
+Estimated Reading Time: 120 min
+Estimated Completion Time: 12-14 hours
+Prerequisites: Modules 1-5
+Learning Objectives:
+- architect and implement a complete C++ project
+- enforce safety, correctness, and performance through tests and benchmarks
+- communicate design trade-offs clearly for interviews and code reviews
+Skills Gained:
+- end-to-end C++ delivery discipline
+- production quality and performance validation
+- technical storytelling confidence`
             },
             {
-                title: "Engineering focus",
-                content: `Your implementation should emphasize:
-• STL-first data structures
-• safe ownership (value semantics / smart pointers)
-• deterministic resource handling
-• basic timing benchmarks`
+                title: "Lesson 1: Scope, Constraints, and MVP Planning",
+                content: `Why this matters: over-scoped projects fail before quality can emerge.
+Learning Objective: define MVP feature boundaries and constraints.
+Core Theory: prioritize core workflows and measurable success criteria first.
+Practice:
+- write acceptance criteria and non-functional goals`
             },
             {
-                title: "Capstone deliverables",
-                content: `Portfolio-ready output:
-• compiled CLI with sample input
-• metrics summary report
-• one measured optimization improvement
-• README describing complexity and trade-offs`,
-                code: `std::unordered_map<std::string, int> errorCount;
-for (const auto& line : lines) {
-    if (line.find("ERROR") != std::string::npos) {
-        errorCount[extractCode(line)]++;
-    }
-}`
+                title: "Lesson 2: Architecture and Ownership Design",
+                content: `Why this matters: C++ architecture must explicitly model ownership and lifetime.
+Learning Objective: design modules with clear resource boundaries.
+Core Theory: separate domain logic, IO adapters, and orchestration layers.
+Practice:
+- produce architecture diagram with ownership notes`
+            },
+            {
+                title: "Lesson 3: Testing and Reliability Strategy",
+                content: `Why this matters: correctness regressions are common in performance-oriented codebases.
+Learning Objective: build tests for core behavior and edge-case failures.
+Core Theory: combine unit tests for domain logic with integration tests for IO boundaries.
+Practice:
+- implement tests for success, invalid input, and failure recovery paths`
+            },
+            {
+                title: "Lesson 4: Benchmarking and Optimization Report",
+                content: `Why this matters: optimization claims must be evidence-based.
+Learning Objective: create reproducible benchmark setup and summarize results.
+Core Theory: compare baseline vs optimized versions under same workload.
+Practice:
+- document one optimization with measured impact`
+            },
+            {
+                title: "Lesson 5: Documentation and Interview Narrative",
+                content: `Why this matters: interviewers evaluate engineering judgment, not only source files.
+Learning Objective: explain architecture choices, trade-offs, and risk mitigation.
+Core Theory: good docs include setup, design rationale, assumptions, and known limits.
+Practice:
+- prepare 5-minute technical walkthrough script`
+            },
+            {
+                title: "Capstone Project Options",
+                content: `Choose one capstone:
+- Log Analytics CLI
+- Inventory Processing Engine
+- Task Scheduling Simulator
+- Metrics Aggregation Service
+Minimum Delivery:
+- modular architecture with ownership clarity
+- robust error handling and validation
+- tests plus benchmark report
+- README with design trade-offs and usage guide`
+            },
+            {
+                title: "Final Assessment",
+                content: `Assessment Format:
+- concept check across modules 1-6
+- implementation task with constraints
+- debugging exercise with memory/lifetime issues
+- architecture and performance trade-off review
+Pass Criteria:
+- correctness and safety
+- measurable performance reasoning
+- clear communication of design decisions`
+            },
+            {
+                title: "Mini Challenge",
+                content: `Stretch Goal:
+- add one advanced feature (parallel processing, caching, or plug-in strategy)
+- preserve safety, test stability, and benchmark transparency`
+            },
+            {
+                title: "Interview Preparation",
+                content: `Interview focus:
+- ownership and lifetime explanation
+- STL and algorithm choices
+- concurrency and profiling decisions
+- concise end-to-end demo narrative`
+            },
+            {
+                title: "Module Summary",
+                content: `You now have a production-grade C++ capstone path with systems-level depth, safety practices, and interview-ready articulation.`
+            },
+            {
+                title: "Course Completion Path",
+                content: `Complete final assessment, polish benchmark and documentation artifacts, and prepare your capstone walkthrough for interviews.`
             }
         ]
     }

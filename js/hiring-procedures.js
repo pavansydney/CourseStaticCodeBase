@@ -1034,6 +1034,15 @@
         }).join("") + "</ul>";
     }
 
+    function buildDisclosure(title, icon, bodyHtml, isOpen) {
+        return [
+            "<details class=\"hiring-disclosure\"" + (isOpen ? " open" : "") + ">",
+            "<summary><i class=\"fas " + escapeHtml(icon) + "\" aria-hidden=\"true\"></i><span>" + escapeHtml(title) + "</span></summary>",
+            "<div class=\"hiring-disclosure-body\">" + bodyHtml + "</div>",
+            "</details>"
+        ].join("");
+    }
+
     function getCompanyCode(name) {
         var parts = String(name).trim().split(/\s+/);
         if (parts.length === 1) {
@@ -1149,9 +1158,65 @@
             var groupName = groupLabels[company.group] || "General";
             var companyCode = getCompanyCode(company.name);
             var logoUrl = getCompanyLogoUrl(company.name);
+            var focusHighlights = guide.focus.slice(0, 2);
+            var snapshotBits = [
+                "<span><i class=\"fas fa-route\"></i> " + audienceProcess.length + " process steps</span>",
+                "<span><i class=\"fas fa-compass-drafting\"></i> " + audienceRounds.length + " interview rounds</span>",
+                "<span><i class=\"fas fa-calendar-check\"></i> 60-day execution plan</span>"
+            ].join("");
             var logoHtml = logoUrl
                 ? "<img src=\"" + escapeHtml(logoUrl) + "\" alt=\"" + escapeHtml(company.name) + " logo\" loading=\"lazy\" onerror=\"this.style.display='none';this.parentElement.classList.add('is-fallback');this.parentElement.textContent='" + escapeHtml(companyCode) + "';\">"
                 : "";
+
+            var disclosureHtml = [
+                buildDisclosure(
+                    "Typical Hiring Procedure",
+                    "fa-list-ol",
+                    "<ol class=\"hiring-process-lane\">" + processHtml + "</ol>",
+                    false
+                ),
+                buildDisclosure(
+                    "Round-by-Round Playbook",
+                    "fa-compass",
+                    "<div class=\"hiring-round-grid\">" + roundsHtml + "</div>",
+                    false
+                ),
+                buildDisclosure(
+                    "How to Clear as " + audienceLabel,
+                    "fa-bullseye",
+                    buildList(guide.focus),
+                    false
+                ),
+                buildDisclosure(
+                    "Application Strategy",
+                    "fa-file-circle-check",
+                    buildList(application),
+                    false
+                ),
+                buildDisclosure(
+                    "30/60 Day Execution Plan",
+                    "fa-calendar-days",
+                    [
+                        "<div class=\"hiring-two-col\">",
+                        "<div>",
+                        "<h4>First 30 Days</h4>",
+                        buildList(guide.day30),
+                        "</div>",
+                        "<div>",
+                        "<h4>Next 30 Days</h4>",
+                        buildList(guide.day60),
+                        "</div>",
+                        "</div>"
+                    ].join(""),
+                    false
+                ),
+                buildDisclosure(
+                    "Common Rejection Reasons",
+                    "fa-triangle-exclamation",
+                    "<section class=\"hiring-risk-block\">" + buildList(pitfalls) + "</section>",
+                    false
+                )
+            ].join("");
 
             return [
                 "<article class=\"hiring-card\">",
@@ -1171,38 +1236,13 @@
                 "    <span class=\"hiring-chip\"><i class=\"fas fa-sitemap\"></i> " + audienceRounds.length + " Key Rounds</span>",
                 "  </div>",
                 "  <div class=\"hiring-card-body\">",
-                "    <section>",
-                "      <h4>Typical Hiring Procedure</h4>",
-                "      <ol class=\"hiring-process-lane\">" + processHtml + "</ol>",
-                "    </section>",
-                "    <section>",
-                "      <h4>Round-by-Round Playbook</h4>",
-                "      <div class=\"hiring-round-grid\">" + roundsHtml + "</div>",
-                "    </section>",
-                "    <section class=\"hiring-two-col\">",
-                "      <div>",
-                "        <h4>How to Clear as " + audienceLabel + "</h4>",
-                buildList(guide.focus),
-                "      </div>",
-                "      <div>",
-                "        <h4>Application Strategy</h4>",
-                buildList(application),
-                "      </div>",
-                "    </section>",
-                "    <section class=\"hiring-two-col\">",
-                "      <div>",
-                "        <h4>First 30 Days</h4>",
-                buildList(guide.day30),
-                "      </div>",
-                "      <div>",
-                "        <h4>Next 30 Days</h4>",
-                buildList(guide.day60),
-                "      </div>",
-                "    </section>",
-                "    <section class=\"hiring-risk-block\">",
-                "      <h4><i class=\"fas fa-triangle-exclamation\"></i> Common Rejection Reasons</h4>",
-                buildList(pitfalls),
-                "    </section>",
+                "    <div class=\"hiring-focus-strip\">",
+                focusHighlights.map(function (item) { return "<p><i class=\"fas fa-check-circle\"></i> " + escapeHtml(item) + "</p>"; }).join(""),
+                "    </div>",
+                "    <div class=\"hiring-snapshot\">" + snapshotBits + "</div>",
+                "    <div class=\"hiring-disclosure-stack\">",
+                disclosureHtml,
+                "    </div>",
                 "  </div>",
                 "</article>"
             ].join("");

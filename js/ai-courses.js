@@ -1,11 +1,6 @@
 // ============================================================
-// AI Engineering: Zero to Hero — extended course content.
-// Loaded only on the Courses page (after script.js). It extends the
-// existing global `courseData` object with new tracks, then the shared
-// loaders in script.js render them into their grids.
-// Module shape matches script.js:
-// { number, title, description, duration, lessons, isNew, isLocked,
-//   topics: [...], detailedDescription, detailedContent: [{title, content, code}] }
+// AI Engineering: Zero to Hero — premium deep rewrite
+// Loaded on Courses page after script.js
 // ============================================================
 
 /* global courseData */
@@ -13,156 +8,350 @@
 // ---------- Stage 1: Deep Learning ----------
 courseData.deepLearning = [
     {
-        number: "Module 1",
-        title: "Neural Networks",
-        description: "How artificial neurons, layers, activations, and backpropagation turn data into predictions.",
-        duration: "50 min",
-        lessons: "5 lessons",
+        number: "AIE - Module 1",
+        title: "Neural Network Foundations and Training Intuition",
+        description: "Build strong first-principles understanding of neurons, activations, loss surfaces, and gradient-based learning.",
+        duration: "120 min",
+        lessons: "6 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Neurons & layers", "Activation functions", "Forward pass", "Backpropagation", "Gradient descent"],
-        detailedDescription: "Neural networks are the foundation of modern AI. This module builds your intuition from a single neuron up to a trainable multi-layer network, then shows the same network in PyTorch.",
+        topics: ["Perceptrons", "Activation functions", "Forward and backward pass", "Optimization", "Initialization", "Generalization"],
+        detailedDescription: "This module turns neural networks from black boxes into inspectable systems with clear mathematical and engineering behavior.",
         detailedContent: [
             {
-                title: "From a neuron to a network",
-                content: `A neuron computes a weighted sum of its inputs plus a bias, then passes the result through a non-linear activation function.
-
-<strong>output = activation( w1*x1 + w2*x2 + ... + b )</strong>
-
-Stacking neurons into <strong>layers</strong>, and layers into a <strong>network</strong>, lets the model learn increasingly abstract features: early layers detect simple patterns, later layers combine them into complex concepts. The "deep" in deep learning simply means many layers.`,
-                code: ""
+                title: "Lesson 1: From Linear Models to Deep Networks",
+                content: `Learning Objective: Explain why stacked non-linear layers can represent complex functions that linear models cannot.
+Core Theory: A linear model learns one global affine mapping. Deep networks compose multiple affine transformations with non-linear activations, enabling hierarchical feature learning. Early layers learn low-level patterns while later layers combine them into semantically meaningful representations.
+Diagram (Mermaid):
+flowchart LR
+A[Input features] --> B[Linear transform]
+B --> C[Non-linearity]
+C --> D[Deeper transform]
+D --> E[Prediction]
+Worked Example: A sentiment classifier can learn local token-level patterns in earlier layers and sentence-level sentiment cues in deeper layers.
+Common Mistakes: Assuming more layers always improve results regardless of data volume and optimization stability.
+Recap:
+- Depth enables compositional representation
+- Non-linearity is the critical expressivity unlock
+- Architecture should match task complexity
+Practice:
+- Compare one task where linear models are sufficient and one where deep models are clearly better`
             },
             {
-                title: "Activation functions & why non-linearity matters",
-                content: `Without a non-linear activation, stacking layers collapses into a single linear function — no matter how deep. Non-linearity is what gives networks their expressive power.
-
-<strong>Common choices:</strong>
-• <strong>ReLU</strong> max(0, x) — the default for hidden layers; fast and avoids vanishing gradients.
-• <strong>Sigmoid</strong> — squashes to (0,1); used for binary outputs.
-• <strong>Softmax</strong> — turns logits into a probability distribution for multi-class output.`,
-                code: `import torch.nn as nn
-
-model = nn.Sequential(
-    nn.Linear(784, 128),   # input layer -> hidden
-    nn.ReLU(),             # non-linearity
-    nn.Linear(128, 64),
-    nn.ReLU(),
-    nn.Linear(64, 10)      # 10-class output (logits)
-)`
+                title: "Lesson 2: Activation Functions and Gradient Flow",
+                content: `Learning Objective: Choose activation functions based on optimization behavior and task context.
+Core Theory: Activation functions determine signal propagation and gradient stability. ReLU variants are common in hidden layers because they mitigate saturation seen in sigmoid and tanh for deep stacks. Output-layer activation must match task type, such as sigmoid for binary probabilities and softmax for categorical class distributions.
+Diagram (Mermaid):
+flowchart TD
+A[Pre-activation z] --> B{Activation}
+B --> C[ReLU family]
+B --> D[Sigmoid or tanh]
+C --> E[Stable deep training]
+D --> F[Potential saturation]
+Worked Example: Replacing tanh with ReLU in a 10-layer image model reduces vanishing-gradient issues and accelerates convergence.
+Common Mistakes: Applying softmax inside hidden layers and destabilizing optimization.
+Recap:
+- Activation choice shapes gradient behavior
+- Hidden and output activations serve different goals
+- Saturation and dead-neuron risks should be monitored
+Practice:
+- Propose output activation and loss for binary classification, multiclass classification, and regression`
             },
             {
-                title: "Learning = forward pass + backpropagation",
-                content: `Training repeats a simple loop:
-
-1. <strong>Forward pass:</strong> run inputs through the network to get predictions.
-2. <strong>Loss:</strong> measure how wrong the predictions are.
-3. <strong>Backpropagation:</strong> use the chain rule to compute how each weight contributed to the error (the gradient).
-4. <strong>Gradient descent:</strong> nudge each weight slightly in the direction that reduces the loss.
-
-Repeat over many batches and the network gradually improves.`,
-                code: `import torch
-
-loss_fn = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
-
-for x, y in train_loader:
-    optimizer.zero_grad()
-    preds = model(x)          # forward pass
-    loss = loss_fn(preds, y)  # how wrong?
-    loss.backward()           # backprop -> gradients
-    optimizer.step()          # gradient descent update`
+                title: "Lesson 3: Forward Pass, Loss, and Backpropagation",
+                content: `Learning Objective: Trace how prediction error propagates backward to update each parameter.
+Core Theory: Training consists of forward computation, loss evaluation, backward gradient computation via chain rule, and optimizer update. Backpropagation is efficient dynamic programming over computation graphs, not symbolic re-derivation at every step.
+Diagram (Mermaid):
+flowchart LR
+A[Input batch] --> B[Forward pass]
+B --> C[Loss]
+C --> D[Backward gradients]
+D --> E[Optimizer update]
+E --> F[Next iteration]
+Worked Example: In a two-layer classifier, gradients from cross-entropy flow through logits, hidden activations, and first-layer weights to adjust all parameters coherently.
+Common Mistakes: Forgetting to reset optimizer gradients each iteration and accumulating stale gradients.
+Recap:
+- Backprop computes parameter sensitivity efficiently
+- Loss function defines optimization target
+- Correct training loop order is essential
+Practice:
+- Write pseudocode for one minibatch training iteration with explicit zero_grad, forward, backward, and step`
+            },
+            {
+                title: "Lesson 4: Optimization Algorithms and Learning Rate Strategy",
+                content: `Learning Objective: Select optimizers and learning-rate schedules based on convergence dynamics.
+Core Theory: SGD with momentum provides strong generalization but may require careful schedule tuning. Adam family optimizers adapt per-parameter step sizes and typically converge faster early. Learning-rate warmup and decay schedules often matter more than optimizer brand for final quality.
+Diagram (Mermaid):
+flowchart TD
+A[Initial learning rate] --> B[Warmup]
+B --> C[Stable training phase]
+C --> D[Decay]
+D --> E[Fine convergence]
+Worked Example: A transformer model diverges without warmup; adding linear warmup plus cosine decay stabilizes training and improves final validation loss.
+Common Mistakes: Keeping one fixed learning rate through entire training run.
+Recap:
+- Optimizer and schedule must be tuned together
+- Warmup helps large models and large batches
+- Late-stage decay improves final minima quality
+Practice:
+- Compare expected behavior of SGD+momentum vs AdamW on noisy minibatch training`
+            },
+            {
+                title: "Lesson 5: Initialization, Normalization, and Stable Depth",
+                content: `Learning Objective: Explain how initialization and normalization influence deep-network trainability.
+Core Theory: Poor initialization can explode or vanish activations. He/Xavier-style schemes align variance with layer fan-in/out assumptions. Batch normalization and layer normalization stabilize internal feature distributions and improve optimization robustness.
+Diagram (Mermaid):
+flowchart LR
+A[Weight initialization] --> B[Activation scale]
+B --> C[Gradient scale]
+C --> D[Training stability]
+D --> E[Normalization support]
+Worked Example: Deep MLP fails to train with naive random initialization but converges after He initialization and normalization layers.
+Common Mistakes: Reusing initialization defaults across fundamentally different architectures.
+Recap:
+- Initialization determines starting signal quality
+- Normalization improves optimization conditioning
+- Stable depth requires both architectural and numeric care
+Practice:
+- Describe why residual connections pair well with normalization in deep stacks`
+            },
+            {
+                title: "Lesson 6: Overfitting, Regularization, and Validation Discipline",
+                content: `Learning Objective: Build training workflows that maximize generalization rather than memorization.
+Core Theory: Overfitting appears when training error decreases while validation error plateaus or worsens. Regularization methods include dropout, weight decay, data augmentation, early stopping, and label smoothing. Honest model selection requires strict train/validation/test separation.
+Diagram (Mermaid):
+flowchart TD
+A[Train loss down] --> B{Validation trend}
+B -->|Improves| C[Continue]
+B -->|Worsens| D[Regularize and tune]
+D --> E[Re-evaluate]
+Worked Example: Image classifier with strong augmentation and weight decay outperforms larger unregularized model on unseen test data.
+Common Mistakes: Tuning repeatedly on the test set and inflating reported performance.
+Recap:
+- Generalization is the production objective
+- Regularization is multi-dimensional, not one technique
+- Evaluation protocol quality matters as much as model design
+Practice:
+- Create a checklist for detecting and mitigating overfitting in one training project`
             }
         ]
     },
     {
-        number: "Module 2",
-        title: "Training Neural Networks",
-        description: "Loss functions, optimizers, overfitting, and the regularization techniques that make models generalize.",
-        duration: "45 min",
+        number: "AIE - Module 2",
+        title: "Transformer Architecture and Attention Engineering",
+        description: "Understand attention computation, positional encoding, scaling behavior, and decoder generation mechanics.",
+        duration: "125 min",
         lessons: "5 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Loss functions", "Optimizers", "Overfitting vs underfitting", "Regularization & dropout", "Train/val/test splits"],
-        detailedDescription: "A model that memorizes the training set is useless. This module covers how to train networks that generalize to unseen data.",
+        topics: ["Tokenization", "Self-attention", "Multi-head attention", "Positional encoding", "Decoder inference"],
+        detailedDescription: "This module explains the core architecture behind modern LLM systems and practical implications for latency and quality.",
         detailedContent: [
             {
-                title: "Loss functions & optimizers",
-                content: `The <strong>loss function</strong> defines what "good" means. Pick it to match the task:
-• <strong>Cross-entropy</strong> for classification.
-• <strong>MSE / MAE</strong> for regression.
-
-The <strong>optimizer</strong> decides how to update weights from gradients. <strong>Adam</strong> is a strong default (adaptive per-parameter learning rates). The <strong>learning rate</strong> is the single most important hyperparameter — too high diverges, too low crawls.`,
-                code: ""
+                title: "Lesson 1: Tokenization and Embedding Space",
+                content: `Learning Objective: Explain how text becomes model-ready token IDs and dense vectors.
+Core Theory: Tokenization maps raw text into subword units that trade vocabulary size for compositional coverage. Embedding layers convert token IDs into continuous vectors where semantic and syntactic relationships can be represented geometrically.
+Diagram (Mermaid):
+flowchart LR
+A[Raw text] --> B[Tokenizer]
+B --> C[Token IDs]
+C --> D[Embedding lookup]
+D --> E[Dense vectors]
+Worked Example: Rare domain terms split into multiple subwords, affecting context length and prompting strategy.
+Common Mistakes: Assuming one token equals one word for budgeting context windows.
+Recap:
+- Tokenization is a lossy but practical compression of language
+- Embeddings are learned semantic representations
+- Token budgeting starts at tokenizer behavior
+Practice:
+- Estimate token-count impact of long numeric tables vs prose paragraphs`
             },
             {
-                title: "Overfitting and how to fight it",
-                content: `<strong>Overfitting</strong>: the model does great on training data but poorly on new data — it memorized noise. <strong>Underfitting</strong>: the model is too simple to capture the pattern.
-
-<strong>Tools to generalize:</strong>
-• <strong>More/augmented data</strong> — the most reliable fix.
-• <strong>Dropout</strong> — randomly zero activations during training so the network can't rely on any single path.
-• <strong>Weight decay (L2)</strong> — penalize large weights.
-• <strong>Early stopping</strong> — stop when validation loss stops improving.`,
-                code: `model = nn.Sequential(
-    nn.Linear(784, 128), nn.ReLU(),
-    nn.Dropout(0.3),               # regularization
-    nn.Linear(128, 10)
-)
-# weight decay adds L2 regularization
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-4)`
+                title: "Lesson 2: Self-Attention Computation",
+                content: `Learning Objective: Derive the intuition for query-key-value attention and relevance weighting.
+Core Theory: Each token produces query, key, and value vectors. Attention weights are similarity scores between query and keys, normalized with softmax. The resulting weighted sum of values gives context-aware token representations.
+Diagram (Mermaid):
+flowchart TD
+A[Token embeddings] --> B[Q K V projections]
+B --> C[Score Q·K]
+C --> D[Softmax weights]
+D --> E[Weighted sum of V]
+Worked Example: Pronoun resolution emerges when a token attends strongly to earlier noun tokens providing referential context.
+Common Mistakes: Interpreting attention weights as a complete causal explanation of model behavior.
+Recap:
+- Attention dynamically routes contextual information
+- Softmax normalizes relevance distribution
+- Representations become context-dependent at each layer
+Practice:
+- Explain why scaling by sqrt(d_k) is used in attention scores`
             },
             {
-                title: "Splitting data honestly",
-                content: `Always split data into three sets:
-• <strong>Train</strong> — the model learns from this.
-• <strong>Validation</strong> — you tune hyperparameters against this.
-• <strong>Test</strong> — touched only once, to report final performance.
-
-If you tune on the test set, your reported accuracy is a lie. Keep the test set locked away until the very end.`,
-                code: ""
+                title: "Lesson 3: Multi-Head Attention and Representation Diversity",
+                content: `Learning Objective: Understand why multiple attention heads improve modeling capacity.
+Core Theory: Multi-head attention learns parallel relation subspaces. Different heads can specialize in syntactic dependencies, positional cues, or semantic associations. Concatenating head outputs increases representational richness.
+Diagram (Mermaid):
+flowchart LR
+A[Input states] --> B[Head 1 attention]
+A --> C[Head 2 attention]
+A --> D[Head N attention]
+B --> E[Concat and projection]
+C --> E
+D --> E
+Worked Example: One head tracks nearby grammatical structure while another captures long-range topic consistency.
+Common Mistakes: Assuming more heads always help regardless of model width and training data.
+Recap:
+- Heads create parallel attention perspectives
+- Diversity across heads can improve contextual encoding
+- Architectural scaling must remain balanced
+Practice:
+- Describe one sign that head count might be over-provisioned`
+            },
+            {
+                title: "Lesson 4: Positional Encoding and Sequence Order",
+                content: `Learning Objective: Explain how transformer models recover token order despite parallel processing.
+Core Theory: Self-attention alone is permutation-invariant, so positional information must be injected. Absolute or relative positional encodings provide order-aware signals that attention can use for sequence reasoning.
+Diagram (Mermaid):
+flowchart LR
+A[Token embeddings] --> B[Add positional signals]
+B --> C[Attention layers]
+C --> D[Order-aware contextual states]
+Worked Example: Relative positional bias helps models retain meaningful behavior on longer contexts than seen in training.
+Common Mistakes: Ignoring positional strategy when extending context length in deployment.
+Recap:
+- Positional signals are mandatory for ordered language tasks
+- Absolute and relative methods have different extrapolation behavior
+- Context extension choices affect quality and stability
+Practice:
+- Compare absolute and relative position encoding trade-offs`
+            },
+            {
+                title: "Lesson 5: Decoder Inference and KV Caching",
+                content: `Learning Objective: Understand autoregressive decoding cost and optimization with KV cache.
+Core Theory: Decoder-only LLMs generate one token at a time, repeatedly attending to prior context. KV caching stores previous key/value tensors so each new token avoids recomputing full history, significantly reducing inference latency.
+Diagram (Mermaid):
+flowchart TD
+A[Prompt tokens] --> B[Initial forward pass]
+B --> C[Store KV cache]
+C --> D[Generate next token]
+D --> E[Append token and reuse cache]
+Worked Example: Chat response latency drops substantially after enabling KV caching in long multi-turn conversations.
+Common Mistakes: Measuring throughput without separating prefill and decode phases.
+Recap:
+- Decoding is inherently sequential
+- KV cache is a core production optimization
+- Prefill and decode have different performance profiles
+Practice:
+- Define metrics to evaluate decode-time optimization effectiveness`
             }
         ]
     },
     {
-        number: "Module 3",
-        title: "Transformers & Attention",
-        description: "The architecture behind every modern LLM: self-attention, tokens, and why transformers replaced RNNs.",
-        duration: "55 min",
+        number: "AIE - Module 3",
+        title: "Deep Learning Systems and MLOps for LLM Workloads",
+        description: "Move from notebooks to reproducible training and inference systems with monitoring, deployment, and rollback safety.",
+        duration: "130 min",
         lessons: "5 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Tokens & embeddings", "Self-attention", "Multi-head attention", "Positional encoding", "Encoder vs decoder"],
-        detailedDescription: "Transformers power GPT, Gemini, Claude, and Llama. Understand attention and you understand what LLMs actually do under the hood.",
+        topics: ["Data pipelines", "Experiment tracking", "Model registry", "Serving patterns", "Monitoring"],
+        detailedDescription: "This module focuses on the engineering discipline required to run deep learning models reliably in production.",
         detailedContent: [
             {
-                title: "Why attention beat recurrence",
-                content: `Older sequence models (RNNs, LSTMs) processed text one token at a time, struggling with long-range dependencies and being slow to train.
-
-The <strong>Transformer</strong> (2017, "Attention Is All You Need") processes all tokens in parallel and lets every token directly "look at" every other token via <strong>self-attention</strong>. This scales beautifully on GPUs and captures long-range context — the key unlock behind large language models.`,
-                code: ""
+                title: "Lesson 1: Data Pipelines and Feature Integrity",
+                content: `Learning Objective: Design data pipelines that preserve training-serving consistency.
+Core Theory: Model behavior is highly sensitive to data preprocessing. Versioned datasets, deterministic transforms, and schema validation reduce silent drift. Feature parity between training and serving is mandatory to avoid online/offline skew.
+Diagram (Mermaid):
+flowchart LR
+A[Raw data] --> B[Validation]
+B --> C[Transform pipeline]
+C --> D[Versioned dataset]
+D --> E[Training and serving parity]
+Worked Example: Token normalization mismatch between offline training and online API causes significant quality drop despite unchanged model weights.
+Common Mistakes: Updating preprocessing logic in serving path without retraining or backtesting.
+Recap:
+- Data contracts are production dependencies
+- Reproducible transforms reduce debugging cost
+- Serving parity is a non-negotiable quality condition
+Practice:
+- Define a minimal dataset versioning and schema-check policy`
             },
             {
-                title: "Self-attention intuition",
-                content: `For each token, attention produces three vectors: <strong>Query</strong>, <strong>Key</strong>, and <strong>Value</strong>. A token's new representation is a weighted blend of all tokens' Values, where the weights come from how well its Query matches each Key.
-
-In plain terms: each word decides <em>which other words are relevant to it</em> and pulls in their meaning. "It" learns to attend to the noun it refers to. <strong>Multi-head</strong> attention runs several of these in parallel to capture different relationships.`,
-                code: `import torch, torch.nn.functional as F
-
-def attention(Q, K, V):
-    d_k = Q.size(-1)
-    scores = Q @ K.transpose(-2, -1) / d_k ** 0.5
-    weights = F.softmax(scores, dim=-1)   # who attends to whom
-    return weights @ V                    # blended values`
+                title: "Lesson 2: Experiment Tracking and Reproducibility",
+                content: `Learning Objective: Make model experiments auditable and repeatable.
+Core Theory: Every run should log code revision, data snapshot, hyperparameters, metrics, and artifacts. Reproducibility enables trustworthy model comparisons and incident forensics.
+Diagram (Mermaid):
+flowchart TD
+A[Experiment run] --> B[Log params and data hash]
+B --> C[Capture metrics]
+C --> D[Store artifacts]
+D --> E[Compare runs]
+Worked Example: Regression bug is traced quickly because run metadata links degraded model to a specific tokenizer change.
+Common Mistakes: Keeping only final metrics without run context and environment information.
+Recap:
+- Reproducibility is an engineering requirement
+- Metadata quality drives decision quality
+- Comparative evaluation needs consistent logging standards
+Practice:
+- List the mandatory metadata fields for one training run`
             },
             {
-                title: "Tokens, positions, and model families",
-                content: `Text is first split into <strong>tokens</strong> (sub-words) and mapped to <strong>embeddings</strong>. Since attention has no built-in order, <strong>positional encodings</strong> inject where each token sits.
-
-<strong>Three families:</strong>
-• <strong>Encoder-only</strong> (BERT) — understanding tasks like classification.
-• <strong>Decoder-only</strong> (GPT, Llama) — text generation; predicts the next token. This is what most LLMs are.
-• <strong>Encoder-decoder</strong> (T5) — translation and summarization.`,
-                code: ""
+                title: "Lesson 3: Model Registry, Promotion, and Rollback",
+                content: `Learning Objective: Implement controlled model lifecycle management across environments.
+Core Theory: Model registry systems track model versions, lineage, approval status, and deployment stage. Promotion gates should include offline metrics, safety checks, and canary performance before full rollout.
+Diagram (Mermaid):
+flowchart LR
+A[Candidate model] --> B[Registry stage: Staging]
+B --> C[Canary deployment]
+C --> D{Healthy metrics}
+D -->|Yes| E[Promote to production]
+D -->|No| F[Rollback]
+Worked Example: Canary detects token-cost spike and hallucination increase, preventing faulty model from full release.
+Common Mistakes: Promoting models directly from local experiments to production endpoints.
+Recap:
+- Registry enforces lifecycle discipline
+- Promotion gates reduce blast radius
+- Rollback readiness must be automatic
+Practice:
+- Design promotion criteria for a customer-support LLM model`
+            },
+            {
+                title: "Lesson 4: Inference Serving Patterns and Cost Control",
+                content: `Learning Objective: Choose serving architecture for latency, throughput, and cost constraints.
+Core Theory: Common patterns include synchronous API serving, asynchronous batch generation, and hybrid retrieval-plus-generation flows. Cost control uses request caching, prompt compression, model routing, and token budget limits.
+Diagram (Mermaid):
+flowchart TD
+A[Incoming request] --> B[Route policy]
+B --> C[Small model path]
+B --> D[Large model path]
+C --> E[Low-cost response]
+D --> F[High-quality fallback]
+Worked Example: Routing easy classification queries to a smaller model cuts total spend while preserving quality on complex cases via larger-model fallback.
+Common Mistakes: Optimizing only latency while ignoring exploding token costs.
+Recap:
+- Serving architecture should reflect workload classes
+- Model routing can improve cost-quality balance
+- Budget guards are essential for sustainable operations
+Practice:
+- Propose a two-tier model-routing rule for helpdesk queries`
+            },
+            {
+                title: "Lesson 5: Monitoring Drift, Quality, and Incidents",
+                content: `Learning Objective: Build monitoring that catches model regressions before user impact escalates.
+Core Theory: Monitor input drift, output quality signals, safety violations, latency, and cost anomalies. Couple alerts to runbooks and ownership. Use periodic human review and golden-set re-evaluation for semantic quality tracking.
+Diagram (Mermaid):
+flowchart LR
+A[Production telemetry] --> B[Quality dashboards]
+B --> C[Alert rules]
+C --> D[Mitigation and rollback]
+D --> E[Postmortem and fixes]
+Worked Example: Input domain shift after product launch causes rising abstain rates and incorrect answers, triggering controlled rollback and retraining plan.
+Common Mistakes: Monitoring only infrastructure metrics without output-quality measurement.
+Recap:
+- Model observability must include semantics, not just uptime
+- Alerting requires response playbooks
+- Continuous evaluation prevents silent degradation
+Practice:
+- Define a monitoring matrix with at least five quality and reliability signals`
             }
         ]
     }
@@ -171,278 +360,453 @@ def attention(Q, K, V):
 // ---------- Stage 2: Generative AI ----------
 courseData.generativeAI = [
     {
-        number: "Module 1",
-        title: "Generative AI",
-        description: "What generative AI is, how it differs from traditional ML, and the landscape of models and use cases.",
-        duration: "40 min",
-        lessons: "4 lessons",
-        isNew: true,
-        isLocked: false,
-        topics: ["Discriminative vs generative", "Foundation models", "Modalities", "Capabilities & limits"],
-        detailedDescription: "Generative AI creates new content — text, images, audio, and code. This module frames the field before you dive into LLMs and agents.",
-        detailedContent: [
-            {
-                title: "Generative vs discriminative",
-                content: `<strong>Discriminative</strong> models draw boundaries — "is this spam or not?" <strong>Generative</strong> models learn the underlying distribution well enough to <em>produce new samples</em> — a paragraph, an image, a function.
-
-Modern generative AI is built on <strong>foundation models</strong>: very large models pre-trained on massive datasets, then adapted to many tasks via prompting, RAG, or fine-tuning.`,
-                code: ""
-            },
-            {
-                title: "Modalities and the model landscape",
-                content: `Generative AI spans modalities:
-• <strong>Text</strong> — GPT, Gemini, Claude, Llama.
-• <strong>Images</strong> — diffusion models (Stable Diffusion, Imagen).
-• <strong>Audio/Speech</strong> — TTS and speech-to-text.
-• <strong>Code</strong> — Copilot-style assistants.
-• <strong>Multimodal</strong> — models that mix text, images, and audio.
-
-As an AI engineer you'll mostly compose these via APIs rather than train them from scratch.`,
-                code: ""
-            },
-            {
-                title: "Capabilities and honest limitations",
-                content: `LLMs are excellent at summarizing, drafting, extracting, translating, and reasoning over provided context. But they:
-• <strong>Hallucinate</strong> — produce confident, wrong answers.
-• Have a <strong>knowledge cutoff</strong> and no live data unless you give it.
-• Are <strong>stateless</strong> between calls unless you manage memory.
-
-The rest of this track is largely about engineering around these limits with grounding, tools, and memory.`,
-                code: ""
-            }
-        ]
-    },
-    {
-        number: "Module 2",
-        title: "Large Language Models",
-        description: "How LLMs generate text: tokens, context windows, temperature, and calling a model via an API.",
-        duration: "45 min",
+        number: "AIE - Module 4",
+        title: "Generative AI Foundations and Product Framing",
+        description: "Map model capabilities to product requirements with honest constraints and risk-aware architecture choices.",
+        duration: "110 min",
         lessons: "5 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Next-token prediction", "Context window", "Temperature & sampling", "System/user/assistant roles", "Structured output"],
-        detailedDescription: "Before building agents, you must be fluent with the raw material: the LLM API. This module covers how generation works and how to control it.",
+        topics: ["Generative vs discriminative", "Model families", "Use-case framing", "Risk surfaces", "Evaluation goals"],
+        detailedDescription: "This module sets the product and engineering frame for building serious generative AI systems.",
         detailedContent: [
             {
-                title: "Next-token prediction & the context window",
-                content: `An LLM generates text one token at a time, each time predicting the most likely next token given everything so far. Loop that and you get sentences.
-
-The <strong>context window</strong> is the maximum number of tokens the model can consider at once (input + output). Everything the model "knows" for a request must fit inside it — this is why long documents get chunked and retrieved (RAG).`,
-                code: ""
+                title: "Lesson 1: What Generative Models Actually Learn",
+                content: `Learning Objective: Distinguish generative objectives from discriminative prediction tasks.
+Core Theory: Discriminative models estimate decision boundaries, while generative models learn data distributions sufficient to synthesize plausible samples. In language, autoregressive models estimate next-token distributions conditioned on prior context.
+Diagram (Mermaid):
+flowchart LR
+A[Training corpus] --> B[Distribution learning]
+B --> C[Conditional generation]
+C --> D[Text or code output]
+Worked Example: A generative support assistant can draft responses in varied styles, while a classifier only predicts predefined labels.
+Common Mistakes: Expecting deterministic outputs from probabilistic generation systems.
+Recap:
+- Generative systems optimize distributional modeling
+- Output variability is intrinsic to sampling
+- Product design must account for non-determinism
+Practice:
+- Identify one product feature best solved by classification and one by generation`
             },
             {
-                title: "Controlling generation",
-                content: `Key knobs:
-• <strong>temperature</strong> — 0 is deterministic/focused; higher is more creative/random.
-• <strong>top_p</strong> — nucleus sampling; another diversity control.
-• <strong>max_tokens</strong> — caps output length.
-
-Messages use <strong>roles</strong>: a <strong>system</strong> prompt sets behavior, <strong>user</strong> messages are requests, and <strong>assistant</strong> messages are the model's replies (and prior turns).`,
-                code: `from openai import OpenAI
-client = OpenAI()
-
-resp = client.chat.completions.create(
-    model="gpt-4o-mini",
-    temperature=0.2,
-    messages=[
-        {"role": "system", "content": "You are a concise assistant."},
-        {"role": "user", "content": "Explain embeddings in one sentence."}
-    ],
-)
-print(resp.choices[0].message.content)`
+                title: "Lesson 2: Capability Mapping and Task Fit",
+                content: `Learning Objective: Match LLM strengths and weaknesses to realistic product tasks.
+Core Theory: LLMs excel at transformation tasks (summarization, extraction, rewriting) and context-grounded reasoning. They are weak at guaranteed factual recall without grounding and can produce plausible but incorrect output.
+Diagram (Mermaid):
+flowchart TD
+A[Task request] --> B{Needs grounded facts}
+B -->|Yes| C[Add retrieval or tools]
+B -->|No| D[Direct generation]
+Worked Example: Policy Q&A requires retrieval from current policy corpus instead of open-ended model recall.
+Common Mistakes: Shipping factual assistants without grounding and source attribution.
+Recap:
+- Task fit determines architecture complexity
+- Grounding is mandatory for factual reliability
+- Capability mapping should precede implementation
+Practice:
+- Classify five candidate features into direct-generation vs grounded-generation buckets`
             },
             {
-                title: "Structured output",
-                content: `For real applications you rarely want free-form prose — you want JSON your code can use. Ask the model for a schema and validate it. Most providers support a JSON / structured-output mode that guarantees parseable results.
-
-Treat model output as untrusted input: validate it, and never directly execute it without checks.`,
-                code: `resp = client.chat.completions.create(
-    model="gpt-4o-mini",
-    response_format={"type": "json_object"},
-    messages=[
-        {"role": "system", "content": "Return JSON: {sentiment, confidence}."},
-        {"role": "user", "content": "I love this product!"}
-    ],
-)
-import json
-data = json.loads(resp.choices[0].message.content)`
+                title: "Lesson 3: Quality Dimensions Beyond Accuracy",
+                content: `Learning Objective: Define multidimensional quality targets for generative products.
+Core Theory: Quality spans factuality, relevance, helpfulness, style consistency, latency, cost, and safety compliance. Single scalar metrics can hide severe failure modes; use rubric-based and scenario-based evaluation.
+Diagram (Mermaid):
+flowchart LR
+A[Generated output] --> B[Factuality check]
+A --> C[Usefulness check]
+A --> D[Safety check]
+A --> E[Latency and cost check]
+Worked Example: Response quality improves after adding style constraints, but latency regression exceeds SLA; release is blocked until optimization.
+Common Mistakes: Optimizing one metric while degrading user-trust dimensions.
+Recap:
+- Generative quality is multi-objective
+- Evaluation design must reflect product goals
+- Trade-offs should be explicit and measurable
+Practice:
+- Build a scoring rubric with at least six dimensions for a writing assistant`
+            },
+            {
+                title: "Lesson 4: Safety, Abuse, and Policy-Driven Design",
+                content: `Learning Objective: Integrate safety controls into architecture from day one.
+Core Theory: Safety layers include input moderation, output policy checks, sensitive-topic handling, and audit logging. High-risk actions require additional verification and potentially human approval.
+Diagram (Mermaid):
+flowchart TD
+A[User prompt] --> B[Input policy gate]
+B --> C[Model response]
+C --> D[Output policy gate]
+D --> E[Safe response or block]
+Worked Example: Financial-advice assistant routes high-risk investment requests to approved guidance workflow.
+Common Mistakes: Treating safety as a post-launch patch rather than a core design dimension.
+Recap:
+- Safety controls are architectural components
+- Policy enforcement must be testable
+- Auditability is crucial for incident review
+Practice:
+- Propose a two-stage moderation flow for a public chatbot`
+            },
+            {
+                title: "Lesson 5: Product Rollout Strategy for GenAI Features",
+                content: `Learning Objective: Plan staged rollout with measurable confidence gates.
+Core Theory: Start with internal pilots, then limited cohorts, then broad release. Each stage needs success criteria for quality, safety, and support load. Feedback loops should rapidly convert observed failures into evaluation tests.
+Diagram (Mermaid):
+flowchart LR
+A[Internal pilot] --> B[Limited beta]
+B --> C[Guarded GA]
+C --> D[Continuous improvement]
+Worked Example: Beta logs reveal ambiguity failures; prompt and retrieval updates are verified on regression set before wider release.
+Common Mistakes: Launching globally before collecting representative failure patterns.
+Recap:
+- Rollout strategy reduces operational risk
+- Stage gates require objective metrics
+- Feedback-to-test conversion hardens product quality
+Practice:
+- Define go or no-go criteria for moving from beta to general availability`
             }
         ]
     },
     {
-        number: "Module 3",
-        title: "Prompt Engineering",
-        description: "Practical techniques — zero/few-shot, chain-of-thought, and role prompting — to get reliable results.",
-        duration: "40 min",
+        number: "AIE - Module 5",
+        title: "Prompt Engineering for Reliability",
+        description: "Design prompts that are robust, testable, and production-ready under adversarial and messy user input.",
+        duration: "115 min",
         lessons: "5 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Clear instructions", "Few-shot examples", "Chain-of-thought", "Role & format control", "Guardrails"],
-        detailedDescription: "Prompt engineering is the cheapest, fastest way to improve LLM output. Learn the patterns that consistently work.",
+        topics: ["Instruction design", "Few-shot patterns", "Output contracts", "Injection resistance", "Prompt testing"],
+        detailedDescription: "This module turns prompting from art into engineering discipline.",
         detailedContent: [
             {
-                title: "Be specific, show the format",
-                content: `The biggest wins come from clarity:
-• State the <strong>task, audience, and constraints</strong> explicitly.
-• Show the <strong>exact output format</strong> you want (a template or JSON schema).
-• Give the model a <strong>role</strong>: "You are a senior data engineer reviewing SQL."
-
-Vague prompts get vague answers. Specific prompts get usable ones.`,
-                code: ""
+                title: "Lesson 1: Prompt Structure and Role Separation",
+                content: `Learning Objective: Compose prompts with clear instruction hierarchy and stable role boundaries.
+Core Theory: System messages define durable behavior constraints. User messages provide task-specific intent. Retrieved context should be clearly delimited as data, not instructions. Explicitly separate policy, task, and context to reduce ambiguity.
+Diagram (Mermaid):
+flowchart TD
+A[System instruction] --> D[Prompt assembly]
+B[User request] --> D
+C[Retrieved context] --> D
+D --> E[Model output]
+Worked Example: Classification assistant improves consistency after separating rubric rules from user message body.
+Common Mistakes: Blending task policy and retrieved text into one undelimited blob.
+Recap:
+- Hierarchy clarity improves determinism
+- Delimiters reduce instruction confusion
+- Role separation supports maintainability
+Practice:
+- Refactor one unstructured prompt into system, user, and context sections`
             },
             {
-                title: "Few-shot and chain-of-thought",
-                content: `<strong>Zero-shot</strong>: just ask. <strong>Few-shot</strong>: include 2-5 worked examples so the model mimics the pattern — great for consistent formatting or edge cases.
-
-<strong>Chain-of-thought</strong>: for reasoning tasks, ask the model to work step by step before answering. It improves accuracy on math and logic. For clean output, have it reason internally and then return only the final structured answer.`,
-                code: `prompt = """Classify the ticket as: billing, bug, or feature.
-
-Example 1: "I was charged twice" -> billing
-Example 2: "The app crashes on login" -> bug
-
-Ticket: "Can you add dark mode?" ->"""`
+                title: "Lesson 2: Few-Shot Patterning and Edge Cases",
+                content: `Learning Objective: Use examples to enforce formatting and decision boundaries.
+Core Theory: Few-shot prompting gives the model demonstrations of desired reasoning style and output format. Include representative edge cases to reduce brittle behavior on unusual inputs.
+Diagram (Mermaid):
+flowchart LR
+A[Instruction] --> B[Representative examples]
+B --> C[Target input]
+C --> D[Patterned output]
+Worked Example: Ticket-routing prompt handles sarcasm better after adding examples with implicit intent.
+Common Mistakes: Providing examples that conflict with instructions or include inconsistent formatting.
+Recap:
+- Examples are behavioral constraints
+- Edge-case coverage improves robustness
+- Example quality outweighs quantity
+Practice:
+- Design three few-shot examples for sentiment labels with ambiguous phrasing`
             },
             {
-                title: "Guardrails in the prompt",
-                content: `Prompts also encode safety and reliability:
-• Tell the model what to do when it <strong>doesn't know</strong> ("say 'I don't know' rather than guess").
-• Constrain scope ("only answer from the provided context").
-• Beware <strong>prompt injection</strong>: untrusted text (web pages, user data) can contain instructions. Never blindly trust retrieved content, and keep system instructions separate from user data.`,
-                code: ""
+                title: "Lesson 3: Output Contracts and Structured Generation",
+                content: `Learning Objective: Enforce machine-usable outputs with schema constraints and validation.
+Core Theory: Production systems should avoid free-form outputs where downstream parsing is required. Use strict JSON schemas or provider-level structured output modes, then validate before business logic execution.
+Diagram (Mermaid):
+flowchart TD
+A[Prompt with schema] --> B[Model generation]
+B --> C[Schema validation]
+C --> D[Business logic]
+C --> E[Repair or retry path]
+Worked Example: Extraction pipeline shifts from brittle regex parsing to schema-validated JSON, reducing failure rate.
+Common Mistakes: Executing model-produced arguments without type and range validation.
+Recap:
+- Structured outputs improve reliability
+- Validation must be mandatory, not optional
+- Retry or repair flows handle malformed responses
+Practice:
+- Create a JSON schema for extracting invoice id, amount, and due date`
+            },
+            {
+                title: "Lesson 4: Prompt Injection and Context Isolation",
+                content: `Learning Objective: Defend prompt pipelines against untrusted instruction content.
+Core Theory: Retrieved pages, user uploads, and tool outputs may contain malicious instructions. Treat these as untrusted data. Keep immutable high-priority system constraints and tool permission checks outside model-controllable text.
+Diagram (Mermaid):
+flowchart LR
+A[Untrusted context] --> B[Isolation and sanitization]
+B --> C[Prompt assembly]
+C --> D[Model]
+D --> E[Guarded tool policy]
+Worked Example: Web-browsing assistant ignores embedded "reveal system prompt" attack after strict context isolation and response policy checks.
+Common Mistakes: Letting tool-call authority depend solely on generated text intent.
+Recap:
+- External context must be treated as adversarial
+- Policy and permissions belong outside untrusted content
+- Defense requires layered controls
+Practice:
+- Propose two controls that prevent unauthorized tool usage via prompt injection`
+            },
+            {
+                title: "Lesson 5: Prompt Evaluation and Regression Harness",
+                content: `Learning Objective: Build repeatable test suites for prompt revisions.
+Core Theory: Prompt quality should be measured on fixed benchmark sets with rubric scoring. Every change runs regression evaluation to detect quality, safety, and formatting regressions before deployment.
+Diagram (Mermaid):
+flowchart TD
+A[Prompt change] --> B[Run eval suite]
+B --> C[Compare baseline]
+C --> D{Pass thresholds}
+D -->|Yes| E[Deploy]
+D -->|No| F[Revise]
+Worked Example: New concise prompt improves latency but fails citation completeness checks; revision adds mandatory evidence section.
+Common Mistakes: Evaluating prompt changes only on ad hoc manual examples.
+Recap:
+- Prompting requires CI-like validation
+- Benchmark sets should represent real workload diversity
+- Threshold-based gates improve release quality
+Practice:
+- Define three regression metrics for a support-answer prompt`
             }
         ]
     },
     {
-        number: "Module 4",
-        title: "Embeddings & Vector Databases",
-        description: "Turn text into vectors to power semantic search — the retrieval half of RAG and agent memory.",
-        duration: "45 min",
+        number: "AIE - Module 6",
+        title: "Embeddings, Retrieval, and RAG Architecture",
+        description: "Engineer retrieval pipelines that improve factual reliability and keep responses current and source-grounded.",
+        duration: "130 min",
+        lessons: "6 lessons",
+        isNew: true,
+        isLocked: false,
+        topics: ["Embeddings", "Chunking", "Indexing", "Retrieval", "RAG orchestration", "Evaluation"],
+        detailedDescription: "This module covers the most important production pattern for trustworthy LLM applications.",
+        detailedContent: [
+            {
+                title: "Lesson 1: Semantic Embeddings and Similarity Search",
+                content: `Learning Objective: Explain how embeddings enable semantic matching beyond keywords.
+Core Theory: Embeddings map text to high-dimensional vectors where semantic similarity corresponds to geometric proximity. Similarity metrics such as cosine or dot product drive nearest-neighbor retrieval.
+Diagram (Mermaid):
+flowchart LR
+A[Document text] --> B[Embedding model]
+B --> C[Vector space]
+D[User query] --> E[Query embedding]
+E --> C
+C --> F[Nearest chunks]
+Worked Example: Query "refund timeline" retrieves policy section titled "reimbursement processing window" despite no literal keyword overlap.
+Common Mistakes: Assuming embedding quality is invariant across domains without validation.
+Recap:
+- Embeddings represent semantic meaning compactly
+- Similarity search enables semantic retrieval
+- Domain testing is essential for reliability
+Practice:
+- Compare cosine similarity and dot product considerations for retrieval`
+            },
+            {
+                title: "Lesson 2: Chunking Strategy and Context Quality",
+                content: `Learning Objective: Design chunking policies that maximize retrieval relevance.
+Core Theory: Chunk size and overlap influence recall and precision. Too small loses context coherence; too large dilutes topical relevance. Structural chunking based on headings often outperforms naive fixed windows.
+Diagram (Mermaid):
+flowchart TD
+A[Source document] --> B[Chunk policy]
+B --> C[Chunk set]
+C --> D[Embed and index]
+D --> E[Retrieve for query]
+Worked Example: Legal policy corpus improves answer grounding after heading-aware chunking replaces fixed 1k-token windows.
+Common Mistakes: One-size-fits-all chunking across different document formats.
+Recap:
+- Chunk design is a major quality lever
+- Structural boundaries often improve retrieval precision
+- Chunk tuning should be empirical
+Practice:
+- Propose chunking rules for API docs, FAQs, and long contracts`
+            },
+            {
+                title: "Lesson 3: Indexing Pipelines and Metadata Filtering",
+                content: `Learning Objective: Build retrieval indices that support relevance and governance constraints.
+Core Theory: Index pipelines should capture embeddings plus metadata such as source, timestamp, document type, and access control tags. Metadata filters narrow candidate space before semantic ranking.
+Diagram (Mermaid):
+flowchart LR
+A[Parsed chunks] --> B[Attach metadata]
+B --> C[Vector index]
+C --> D[Filtered retrieval]
+Worked Example: Enterprise assistant filters by tenant and policy version before similarity search, preventing cross-tenant leakage.
+Common Mistakes: Indexing raw content without provenance and access tags.
+Recap:
+- Metadata is critical for safe retrieval
+- Filtering improves relevance and compliance
+- Provenance enables traceable citations
+Practice:
+- Define mandatory metadata fields for internal knowledge retrieval`
+            },
+            {
+                title: "Lesson 4: Retrieval Fusion and Re-ranking",
+                content: `Learning Objective: Improve recall and precision using hybrid retrieval and re-ranking.
+Core Theory: Pure vector search may miss exact keyword constraints. Hybrid retrieval combines lexical and semantic search. Re-rankers reorder candidates using cross-encoder relevance scoring.
+Diagram (Mermaid):
+flowchart TD
+A[User query] --> B[Vector retrieval]
+A --> C[Keyword retrieval]
+B --> D[Candidate merge]
+C --> D
+D --> E[Re-ranker]
+E --> F[Top context]
+Worked Example: Compliance assistant improves citation accuracy after adding BM25 plus semantic fusion and re-ranker stage.
+Common Mistakes: Over-relying on top-k vector results without relevance verification.
+Recap:
+- Hybrid retrieval mitigates single-method blind spots
+- Re-ranking improves final context quality
+- Retrieval stack complexity should match error profile
+Practice:
+- Design a hybrid retrieval flow for technical troubleshooting queries`
+            },
+            {
+                title: "Lesson 5: RAG Prompting, Citations, and Answer Control",
+                content: `Learning Objective: Construct grounded prompts that enforce source-bounded answering.
+Core Theory: RAG prompts should instruct model to answer from provided evidence and abstain when evidence is insufficient. Citation formatting must map output claims to source chunks for auditability.
+Diagram (Mermaid):
+flowchart LR
+A[Retrieved evidence] --> B[Grounded prompt]
+B --> C[LLM answer]
+C --> D[Citation mapping]
+D --> E[User response]
+Worked Example: Support bot returns "I do not know" for uncovered edge case instead of hallucinating policy details.
+Common Mistakes: Injecting retrieved context without explicit grounding rules and abstention policy.
+Recap:
+- Grounding instructions control factual behavior
+- Citations improve trust and debugging
+- Abstention is better than confident fabrication
+Practice:
+- Write a grounded-answer prompt template with explicit abstain behavior`
+            },
+            {
+                title: "Lesson 6: RAG Evaluation and Continuous Improvement",
+                content: `Learning Objective: Evaluate retrieval and generation stages separately and jointly.
+Core Theory: End-to-end answer metrics are insufficient. Measure retrieval recall at k, context relevance, citation correctness, groundedness, and task success. Feed observed production failures back into evaluation sets.
+Diagram (Mermaid):
+flowchart TD
+A[Eval query set] --> B[Retrieval metrics]
+A --> C[Generation metrics]
+B --> D[Error analysis]
+C --> D
+D --> E[Pipeline tuning]
+Worked Example: Low groundedness traced to retrieval misses, fixed by chunking update and metadata filters.
+Common Mistakes: Tuning generation prompt when failure root cause is retrieval quality.
+Recap:
+- Separate-stage metrics accelerate diagnosis
+- Evaluation should mirror production scenarios
+- Continuous feedback loops compound quality gains
+Practice:
+- Define five metrics for a quarterly RAG quality dashboard`
+            }
+        ]
+    },
+    {
+        number: "AIE - Module 7",
+        title: "Fine-Tuning and Adaptation Strategies",
+        description: "Choose between prompting, RAG, adapters, and full fine-tuning based on cost, risk, and behavior goals.",
+        duration: "110 min",
         lessons: "5 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["What embeddings are", "Cosine similarity", "Chunking", "Vector databases", "Semantic search"],
-        detailedDescription: "Embeddings map meaning to geometry. This module is the backbone of retrieval, RAG, and long-term memory.",
+        topics: ["When to tune", "Dataset curation", "PEFT and LoRA", "Evaluation", "Deployment"],
+        detailedDescription: "This module clarifies when model adaptation is worth the operational complexity and how to execute it safely.",
         detailedContent: [
             {
-                title: "Meaning as vectors",
-                content: `An <strong>embedding model</strong> converts text into a fixed-length vector (e.g., 1536 numbers). Texts with similar meaning land close together in that space, even if they share no words.
-
-"How do I reset my password?" and "I forgot my login" will have nearby vectors. This is what makes <strong>semantic search</strong> possible — matching by meaning, not keywords.`,
-                code: `from openai import OpenAI
-client = OpenAI()
-
-def embed(text):
-    r = client.embeddings.create(model="text-embedding-3-small", input=text)
-    return r.data[0].embedding
-
-v1 = embed("How do I reset my password?")
-v2 = embed("I forgot my login")`
+                title: "Lesson 1: Decision Framework for Fine-Tuning",
+                content: `Learning Objective: Decide when to fine-tune versus improving prompts and retrieval.
+Core Theory: Fine-tuning is best for persistent behavior shifts such as style, format adherence, domain-specific instruction following, or compression of long system prompts. Dynamic factual knowledge should remain in retrieval systems.
+Diagram (Mermaid):
+flowchart TD
+A[Performance gap] --> B{Knowledge or behavior}
+B -->|Knowledge| C[Improve retrieval]
+B -->|Behavior| D[Consider fine-tuning]
+Worked Example: Assistant requiring strict JSON compliance improves with fine-tuning on validated examples after prompt-only attempts plateau.
+Common Mistakes: Fine-tuning to inject rapidly changing operational facts.
+Recap:
+- Adaptation choice depends on failure category
+- Retrieval and tuning are complementary, not substitutes
+- Start with lower-cost interventions first
+Practice:
+- Classify three failure scenarios into retrieval fix vs tuning fix`
             },
             {
-                title: "Measuring similarity & chunking",
-                content: `Closeness is usually measured with <strong>cosine similarity</strong> (1 = identical direction, 0 = unrelated).
-
-Long documents are split into <strong>chunks</strong> (e.g., a few hundred tokens with slight overlap) before embedding, so retrieval returns focused, relevant passages rather than whole documents. Chunking strategy strongly affects quality.`,
-                code: `import numpy as np
-
-def cosine(a, b):
-    a, b = np.array(a), np.array(b)
-    return a @ b / (np.linalg.norm(a) * np.linalg.norm(b))
-
-print(cosine(v1, v2))  # high -> semantically similar`
+                title: "Lesson 2: Curating High-Quality Tuning Data",
+                content: `Learning Objective: Build datasets that encode desired behavior without hidden noise.
+Core Theory: Tuning quality depends more on label quality and distribution coverage than sheer dataset size. Include difficult and adversarial examples, enforce formatting consistency, and exclude contradictory targets.
+Diagram (Mermaid):
+flowchart LR
+A[Raw interaction logs] --> B[Filtering and dedup]
+B --> C[Human curation]
+C --> D[Train and validation splits]
+D --> E[Tuning dataset]
+Worked Example: Domain support responses are curated with rejection of ambiguous low-confidence historical answers.
+Common Mistakes: Training on unreviewed chat logs that include incorrect assistant behavior.
+Recap:
+- Data curation is the primary quality driver
+- Coverage and consistency matter more than volume
+- Validation split integrity is required for trustworthy evaluation
+Practice:
+- Define acceptance criteria for adding one sample to tuning dataset`
             },
             {
-                title: "Vector databases",
-                content: `A <strong>vector database</strong> (Pinecone, Weaviate, pgvector, Chroma, FAISS) stores millions of embeddings and answers "find the k most similar vectors" in milliseconds using approximate nearest-neighbor search.
-
-The pattern: embed your knowledge base once, store the vectors, then at query time embed the question and retrieve the closest chunks. That retrieved context feeds the LLM.`,
-                code: ""
-            }
-        ]
-    },
-    {
-        number: "Module 5",
-        title: "Retrieval-Augmented Generation (RAG)",
-        description: "Ground LLMs in your own data to reduce hallucination and answer from up-to-date, private sources.",
-        duration: "50 min",
-        lessons: "5 lessons",
-        isNew: true,
-        isLocked: false,
-        topics: ["Why RAG", "Ingest & index", "Retrieve & augment", "Citations", "RAG vs fine-tuning"],
-        detailedDescription: "RAG is the most common production pattern for LLM apps. Learn to build a pipeline that answers from your documents.",
-        detailedContent: [
-            {
-                title: "The RAG pattern",
-                content: `RAG has two phases:
-
-<strong>Indexing (offline):</strong> load documents → chunk → embed → store in a vector DB.
-
-<strong>Query (online):</strong> embed the user's question → retrieve the top-k relevant chunks → stuff them into the prompt as context → the LLM answers <em>from that context</em>.
-
-This grounds answers in your data, keeps them current, and lets you show sources — without retraining the model.`,
-                code: ""
+                title: "Lesson 3: PEFT, LoRA, and Resource-Efficient Adaptation",
+                content: `Learning Objective: Explain why parameter-efficient methods dominate practical tuning workflows.
+Core Theory: Parameter-efficient fine-tuning methods update a small subset of parameters or low-rank adapters while freezing base weights. This reduces memory and compute requirements while preserving strong baseline capabilities.
+Diagram (Mermaid):
+flowchart LR
+A[Base model weights frozen] --> B[Train adapter layers]
+B --> C[Merge or attach adapters]
+C --> D[Adapted behavior]
+Worked Example: LoRA adapters specialize an open model for customer-support formatting with far lower training cost than full fine-tune.
+Common Mistakes: Treating adapter rank and target modules as fixed defaults for every task.
+Recap:
+- PEFT enables practical adaptation cycles
+- Adapter configuration influences quality-cost trade-off
+- Base-model choice still strongly affects final performance
+Practice:
+- List hyperparameters you would sweep for LoRA tuning`
             },
             {
-                title: "A minimal RAG query",
-                content: `The core of query-time RAG is: retrieve, then augment the prompt. Always instruct the model to answer <em>only</em> from the retrieved context and to admit when the answer isn't there — this is what cuts hallucination.`,
-                code: `def rag_answer(question, vector_store):
-    chunks = vector_store.similarity_search(question, k=4)
-    context = "\\n\\n".join(c.text for c in chunks)
-    prompt = f"""Answer using ONLY the context. If it's not there, say you don't know.
-
-Context:
-{context}
-
-Question: {question}"""
-    return llm(prompt), chunks   # return sources for citations`
+                title: "Lesson 4: Post-Tuning Evaluation and Safety Regression",
+                content: `Learning Objective: Validate tuned models against baseline quality, safety, and cost criteria.
+Core Theory: Evaluation must compare tuned and baseline models on held-out domain tasks, safety probes, and structural output checks. Guard against regressions where improved domain fit harms general instruction adherence.
+Diagram (Mermaid):
+flowchart TD
+A[Tuned candidate] --> B[Domain eval set]
+A --> C[Safety eval set]
+A --> D[Format compliance eval]
+B --> E[Promotion decision]
+C --> E
+D --> E
+Worked Example: Tuned model improves extraction accuracy but degrades refusal policy compliance; release is blocked pending safety rebalancing.
+Common Mistakes: Evaluating only in-domain quality and ignoring broad safety behavior.
+Recap:
+- Tuning can introduce unintended regressions
+- Multi-axis evaluation is mandatory
+- Baseline comparison prevents false confidence
+Practice:
+- Design a pass or fail scorecard for tuned-model release`
             },
             {
-                title: "RAG vs fine-tuning",
-                content: `Choose deliberately:
-• <strong>RAG</strong> — best for <em>knowledge</em> that changes or is private (docs, tickets, policies). Cheap to update: just re-index.
-• <strong>Fine-tuning</strong> — best for <em>behavior/style/format</em> the model should always follow.
-
-They're complementary: fine-tune <em>how</em> the model responds, use RAG for <em>what</em> facts it responds with.`,
-                code: ""
-            }
-        ]
-    },
-    {
-        number: "Module 6",
-        title: "Fine-Tuning LLMs",
-        description: "When and how to adapt a model's behavior with techniques like LoRA and instruction tuning.",
-        duration: "45 min",
-        lessons: "4 lessons",
-        isNew: true,
-        isLocked: false,
-        topics: ["When to fine-tune", "Data preparation", "LoRA / PEFT", "Evaluation"],
-        detailedDescription: "Fine-tuning specializes a model to your task or style. Learn when it's worth it and how modern parameter-efficient methods make it practical.",
-        detailedContent: [
-            {
-                title: "When fine-tuning is (and isn't) the answer",
-                content: `Reach for fine-tuning when you need a consistent <strong>style, format, or behavior</strong>, want to <strong>compress a long system prompt</strong> into the weights, or need a smaller/cheaper model to match a bigger one on a narrow task.
-
-Do <em>not</em> fine-tune to add changing facts — use RAG. Always try strong prompting and RAG first; they're faster and cheaper.`,
-                code: ""
-            },
-            {
-                title: "Data is everything",
-                content: `Fine-tuning quality is dominated by data quality. You need a clean dataset of input → ideal output examples that demonstrate exactly the behavior you want. A few hundred excellent examples beat thousands of noisy ones.
-
-Format is usually chat-style JSONL: each row a conversation with the desired assistant response.`,
-                code: `# Example JSONL row for instruction tuning
-{"messages": [
-  {"role": "system", "content": "You extract invoice fields as JSON."},
-  {"role": "user", "content": "Invoice #A-102, total $59.90, due 2026-08-01"},
-  {"role": "assistant", "content": "{\\"id\\":\\"A-102\\",\\"total\\":59.90,\\"due\\":\\"2026-08-01\\"}"}
-]}`
-            },
-            {
-                title: "LoRA & parameter-efficient tuning",
-                content: `Full fine-tuning updates all weights — expensive. <strong>LoRA</strong> (Low-Rank Adaptation) freezes the base model and trains tiny adapter matrices, cutting compute and memory dramatically while keeping quality. This is the standard for open models (via Hugging Face PEFT).
-
-Always evaluate on a held-out set and compare against your prompt/RAG baseline before shipping.`,
-                code: ""
+                title: "Lesson 5: Deployment and Adapter Lifecycle Management",
+                content: `Learning Objective: Deploy adapted models with rollback safety and clear version governance.
+Core Theory: Treat adapters and prompts as versioned artifacts. Maintain rollout stages, compatibility matrices, and rapid rollback paths. Monitor drift between tuned behavior and evolving product requirements.
+Diagram (Mermaid):
+flowchart LR
+A[Adapter version] --> B[Staging tests]
+B --> C[Canary release]
+C --> D[Full deployment]
+D --> E[Continuous monitoring]
+Worked Example: Region-specific adapter rollout includes automatic fallback to base model when latency or safety thresholds fail.
+Common Mistakes: Deploying adapters without explicit compatibility checks against tokenizer and base model versions.
+Recap:
+- Adapter lifecycle needs same rigor as model lifecycle
+- Rollback must be immediate and rehearsed
+- Ongoing monitoring preserves tuned-value over time
+Practice:
+- Define a versioning scheme for base model, adapter, and prompt package`
             }
         ]
     }
@@ -451,459 +815,795 @@ Always evaluate on a held-out set and compare against your prompt/RAG baseline b
 // ---------- Stage 3: AI Agents ----------
 courseData.aiAgents = [
     {
-        number: "Module 1",
-        title: "Agentic AI",
-        description: "What makes AI 'agentic': the perceive-reason-act loop, autonomy, and the ReAct pattern.",
-        duration: "45 min",
+        number: "AIE - Module 8",
+        title: "Agentic Systems: Reason-Act-Observe Loops",
+        description: "Understand when agentic architectures are appropriate and how to constrain them for reliability.",
+        duration: "115 min",
         lessons: "5 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Agents vs pipelines", "The agent loop", "ReAct (reason + act)", "Autonomy levels", "When to use agents"],
-        detailedDescription: "Agentic AI moves from single prompts to systems that plan, act, observe, and iterate toward a goal. This module sets the mental model for the whole stage.",
+        topics: ["Agent vs workflow", "Planning loops", "Tool orchestration", "Termination criteria", "Risk control"],
+        detailedDescription: "This module establishes the architectural mental model for robust agent behavior.",
         detailedContent: [
             {
-                title: "From pipelines to agents",
-                content: `A <strong>pipeline</strong> follows a fixed sequence of steps you wrote. An <strong>agent</strong> uses an LLM to decide the steps at runtime: it chooses which tool to call, reads the result, and decides what to do next — looping until the goal is met.
-
-Agentic systems trade predictability for flexibility. Use them when the path can't be hard-coded; use plain pipelines when it can.`,
-                code: ""
+                title: "Lesson 1: Agentic Workflows vs Deterministic Pipelines",
+                content: `Learning Objective: Decide whether a task needs dynamic planning or fixed workflow execution.
+Core Theory: Deterministic workflows are predictable and testable for known paths. Agentic systems are useful when task decomposition is uncertain or context-dependent. Added flexibility increases observability and safety requirements.
+Diagram (Mermaid):
+flowchart LR
+A[Task request] --> B{Path known upfront}
+B -->|Yes| C[Deterministic pipeline]
+B -->|No| D[Agentic planning loop]
+Worked Example: Invoice extraction with fixed schema fits deterministic pipeline, while multi-source research synthesis benefits from agentic exploration.
+Common Mistakes: Using agents for tasks that can be solved by simple deterministic orchestration.
+Recap:
+- Agentic design should be need-driven
+- Flexibility introduces control complexity
+- Simpler architecture wins when sufficient
+Practice:
+- Classify four product tasks into deterministic vs agentic approaches`
             },
             {
-                title: "The agent loop & ReAct",
-                content: `Most agents run a loop:
-
-<strong>Thought → Action → Observation → (repeat) → Answer</strong>
-
-This is the <strong>ReAct</strong> pattern (Reason + Act): the model reasons about what to do, takes an action (calls a tool), observes the result, and reasons again. The loop continues until it decides it has enough to answer.`,
-                code: `# Conceptual agent loop
-goal = "What's the weather in Tokyo in Fahrenheit?"
-while not done:
-    thought, action = llm_decide(goal, history)   # reason + pick a tool
-    observation = run_tool(action)                # act
-    history.append((thought, action, observation))
-    done = is_goal_met(history)
-answer = llm_finalize(goal, history)`
+                title: "Lesson 2: ReAct Loop and State Transitions",
+                content: `Learning Objective: Model agent behavior as explicit state transitions.
+Core Theory: ReAct cycles through reasoning, tool action, observation, and revision. Explicit state tracking enables budget enforcement, reproducibility, and debugging.
+Diagram (Mermaid):
+flowchart TD
+A[Reason about next step] --> B[Call tool]
+B --> C[Observe result]
+C --> D{Goal met}
+D -->|No| A
+D -->|Yes| E[Return answer]
+Worked Example: Research agent performs search, reads documents, and iterates until evidence threshold is satisfied.
+Common Mistakes: Implicit loops without step counters or stop conditions.
+Recap:
+- Explicit loop state improves reliability
+- Observations must feed next-step decisions
+- Stop conditions are core safety controls
+Practice:
+- Define three termination rules for a research agent`
             },
             {
-                title: "Levels of autonomy",
-                content: `Agency is a spectrum:
-• <strong>Assisted</strong> — model suggests, human approves each step.
-• <strong>Supervised</strong> — agent acts, human reviews checkpoints.
-• <strong>Autonomous</strong> — agent runs end-to-end.
-
-Start low. For anything with side effects (sending email, spending money, writing to prod), keep a human in the loop and add hard limits.`,
-                code: ""
+                title: "Lesson 3: Tool Selection Policy and Permission Boundaries",
+                content: `Learning Objective: Prevent unsafe or irrelevant tool usage through policy design.
+Core Theory: Tool catalogs should include capability descriptions, input schemas, and permission scopes. Policy layers can disallow categories of actions based on user role, task context, or risk score.
+Diagram (Mermaid):
+flowchart LR
+A[Agent intent] --> B[Tool policy gate]
+B --> C[Allowed tool call]
+B --> D[Denied or escalation]
+Worked Example: Agent can query read-only CRM data for support requests but cannot mutate billing records without approval.
+Common Mistakes: Exposing broad tool privileges to all agent runs.
+Recap:
+- Tool governance is security-critical
+- Least privilege reduces blast radius
+- Policy checks should be external to model text decisions
+Practice:
+- Draft permission tiers for read, write, and high-impact tools`
+            },
+            {
+                title: "Lesson 4: Recovery from Failures and Loop Degeneration",
+                content: `Learning Objective: Detect and recover from stuck loops and low-progress behavior.
+Core Theory: Failure handling includes max-step budgets, repeated-action detection, fallback prompts, and human handoff triggers. Observability should capture loop trajectories to identify systematic planner issues.
+Diagram (Mermaid):
+flowchart TD
+A[Loop execution] --> B{Progress signal}
+B -->|Healthy| C[Continue]
+B -->|Stalled| D[Fallback strategy]
+D --> E[Escalate or terminate]
+Worked Example: Agent repeatedly calls same search query; repeated-action detector forces reformulation strategy before another tool call.
+Common Mistakes: Allowing unlimited loops in production workflows.
+Recap:
+- Degeneration detection is mandatory
+- Recovery plans should be deterministic
+- Escalation paths preserve user trust
+Practice:
+- Define a stalled-loop detector using two measurable signals`
+            },
+            {
+                title: "Lesson 5: Agent Evaluation for Task Completion",
+                content: `Learning Objective: Evaluate agents on end-task success, not only response quality.
+Core Theory: Agent evaluation should include completion rate, tool-efficiency, failure mode taxonomy, and human-review burden. Scenario-based benchmarks expose planning defects invisible to single-turn prompts.
+Diagram (Mermaid):
+flowchart LR
+A[Agent run logs] --> B[Task success metrics]
+A --> C[Tool-call efficiency]
+A --> D[Failure taxonomy]
+B --> E[Iteration improvements]
+C --> E
+D --> E
+Worked Example: Agent success rises after introducing plan-verification step before executing expensive tools.
+Common Mistakes: Measuring only final answer quality while ignoring excessive or unsafe tool usage.
+Recap:
+- Completion metrics capture real utility
+- Efficiency and safety are first-class outcomes
+- Failure taxonomy guides targeted fixes
+Practice:
+- Build an evaluation table for agent task success and operational overhead`
             }
         ]
     },
     {
-        number: "Module 2",
-        title: "AI Agents",
-        description: "The anatomy of an agent: the LLM brain, tools, memory, and a planner working together.",
-        duration: "45 min",
+        number: "AIE - Module 9",
+        title: "Tool Calling, Function Execution, and Safe Integrations",
+        description: "Implement production-grade function-calling loops with validation, retries, and auditability.",
+        duration: "120 min",
         lessons: "5 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["LLM as controller", "Tools", "Memory", "Planning", "Failure handling"],
-        detailedDescription: "An agent is more than an LLM. This module breaks down the components you'll assemble to build reliable agents.",
+        topics: ["Function schemas", "Execution loop", "Argument validation", "Retries and timeouts", "Auditing"],
+        detailedDescription: "This module focuses on the most practical foundation of real-world agents: reliable tool execution.",
         detailedContent: [
             {
-                title: "The four components",
-                content: `A capable agent combines:
-• <strong>Brain (LLM)</strong> — decides and reasons.
-• <strong>Tools</strong> — functions/APIs that let it act (search, DB, code, HTTP).
-• <strong>Memory</strong> — short-term (the current conversation) and long-term (facts recalled across sessions, often via a vector store).
-• <strong>Planner</strong> — breaks a goal into steps, sometimes revising as it learns.`,
-                code: ""
+                title: "Lesson 1: Function Schema Design",
+                content: `Learning Objective: Design tool schemas that reduce hallucinated arguments and ambiguous calls.
+Core Theory: Good schemas use explicit required fields, constrained enums, and descriptive parameter docs. Narrow schemas reduce model ambiguity and improve execution reliability.
+Diagram (Mermaid):
+flowchart TD
+A[Tool intent] --> B[Schema definition]
+B --> C[Model tool call]
+C --> D[Validator]
+D --> E[Execution]
+Worked Example: Currency conversion tool with enum-constrained currency codes eliminates malformed requests.
+Common Mistakes: Creating overly generic string parameters for structured business logic.
+Recap:
+- Schema clarity drives call correctness
+- Constrained parameters improve reliability
+- Tool ergonomics influence model behavior
+Practice:
+- Design a schema for flight search with strict date and cabin-class constraints`
             },
             {
-                title: "Tools are the agent's hands",
-                content: `An LLM alone can only produce text. <strong>Tools</strong> give it the ability to affect and read the world. You describe each tool (name, purpose, parameters) and the model chooses when to call it. Good tool design — clear names, tight schemas, helpful errors — matters more than prompt wording for reliability.`,
-                code: `tools = [{
-  "type": "function",
-  "function": {
-    "name": "get_weather",
-    "description": "Get current weather for a city.",
-    "parameters": {
-      "type": "object",
-      "properties": {"city": {"type": "string"}},
-      "required": ["city"]
-    }
-  }
-}]`
+                title: "Lesson 2: Robust Call-Execute-Return Loop",
+                content: `Learning Objective: Implement safe loop orchestration between model and tool runtime.
+Core Theory: The runtime should parse tool requests, validate arguments, execute side effects under policy, append tool results, and resume model reasoning. Each step must be logged with correlation IDs.
+Diagram (Mermaid):
+flowchart LR
+A[Model proposes call] --> B[Validate]
+B --> C[Execute tool]
+C --> D[Capture result]
+D --> E[Return observation to model]
+Worked Example: Support agent calls account-status API, returns normalized payload, then composes customer response with clear status and next actions.
+Common Mistakes: Feeding raw tool exceptions directly back to users.
+Recap:
+- Loop orchestration must be deterministic and inspectable
+- Validation precedes all side effects
+- Normalized observations improve downstream reasoning
+Practice:
+- Write pseudocode for tool execution middleware with structured error handling`
             },
             {
-                title: "Designing for failure",
-                content: `Agents fail in ways pipelines don't: infinite loops, wrong tool choices, hallucinated arguments. Build in guardrails:
-• <strong>Max steps</strong> / iteration budget.
-• <strong>Validation</strong> of tool arguments before executing.
-• <strong>Timeouts and retries</strong>.
-• A <strong>fallback</strong> ("if stuck, ask the user").
-
-Reliability engineering is most of what separates a demo agent from a production one.`,
-                code: ""
+                title: "Lesson 3: Validation, Policy Checks, and Side-Effect Safety",
+                content: `Learning Objective: Prevent harmful actions through layered pre-execution controls.
+Core Theory: Use schema validation, business-rule checks, authorization checks, and dry-run simulations for high-impact operations. Include human approval gates for irreversible actions.
+Diagram (Mermaid):
+flowchart TD
+A[Tool call request] --> B[Schema validation]
+B --> C[Authorization check]
+C --> D[Business rule check]
+D --> E{High impact}
+E -->|Yes| F[Human approval]
+E -->|No| G[Execute]
+Worked Example: Refund issuance tool requires transaction ownership validation and manager approval over threshold amounts.
+Common Mistakes: Assuming model intent is equivalent to user authorization.
+Recap:
+- Safety requires policy checks beyond schema validity
+- High-impact actions need extra controls
+- Authorization logic must stay outside model text generation
+Practice:
+- Define approval policy for financial and account-deletion tool calls`
+            },
+            {
+                title: "Lesson 4: Retry Semantics, Idempotency, and Timeouts",
+                content: `Learning Objective: Make tool execution resilient without duplicating side effects.
+Core Theory: Retries should be bounded and aware of idempotency. Non-idempotent operations require idempotency keys or compensating transactions. Timeouts prevent hung workflows and preserve system health.
+Diagram (Mermaid):
+flowchart LR
+A[Tool execution] --> B{Success}
+B -->|No| C[Retry policy]
+C --> D{Idempotent}
+D -->|Yes| E[Retry safely]
+D -->|No| F[Escalate]
+Worked Example: Payment-capture tool includes idempotency token to prevent double charges on retry.
+Common Mistakes: Blind retries on non-idempotent operations.
+Recap:
+- Reliability and correctness must be balanced
+- Retry policy depends on operation semantics
+- Timeout and circuit-breaker patterns protect infrastructure
+Practice:
+- Propose retry classes for read-only, write-idempotent, and write-non-idempotent tools`
+            },
+            {
+                title: "Lesson 5: Audit Logs and Compliance Readiness",
+                content: `Learning Objective: Build traceability for every agent action and decision path.
+Core Theory: Audit logs should capture user request, prompt version, tool calls, arguments, policy decisions, outputs, and timestamps. Immutable logging supports incident response and compliance obligations.
+Diagram (Mermaid):
+flowchart TD
+A[Agent run] --> B[Event stream]
+B --> C[Immutable audit store]
+C --> D[Compliance reporting]
+C --> E[Incident investigation]
+Worked Example: Disputed account action is resolved quickly because full tool-call chain and approvals are recorded.
+Common Mistakes: Logging only final responses and losing decision provenance.
+Recap:
+- End-to-end traceability is operationally critical
+- Audit data supports security and regulatory workflows
+- Provenance improves debugging and trust
+Practice:
+- Define required audit fields for a regulated customer-support agent`
             }
         ]
     },
     {
-        number: "Module 3",
-        title: "Tool & Function Calling",
-        description: "The mechanism that lets LLMs invoke your code — the foundation of every agent.",
-        duration: "40 min",
-        lessons: "4 lessons",
-        isNew: true,
-        isLocked: false,
-        topics: ["Tool schemas", "The call/execute loop", "Returning results", "Security"],
-        detailedDescription: "Function calling is how an LLM turns intent into action. Master this and agents become straightforward.",
-        detailedContent: [
-            {
-                title: "How function calling works",
-                content: `You send the model a list of available tools with JSON schemas. Instead of answering directly, the model can respond with a <strong>tool call</strong>: the function name plus arguments it invented from the conversation. <em>Your code</em> executes the function and sends the result back. The model then continues, using the result.
-
-The model never runs code itself — it only requests calls; you stay in control of execution.`,
-                code: ""
-            },
-            {
-                title: "The execute-and-return loop",
-                content: `The full loop: send messages + tools → if the model returns tool calls, run them → append the results as tool messages → call the model again → repeat until it returns a normal answer.`,
-                code: `def run_weather(city):
-    return {"temp_c": 21, "city": city}
-
-messages = [{"role": "user", "content": "Weather in Tokyo?"}]
-resp = client.chat.completions.create(model="gpt-4o-mini", messages=messages, tools=tools)
-call = resp.choices[0].message.tool_calls[0]
-args = json.loads(call.function.arguments)
-result = run_weather(**args)                       # you execute
-messages.append(resp.choices[0].message)
-messages.append({"role": "tool", "tool_call_id": call.id,
-                 "content": json.dumps(result)})   # return result
-final = client.chat.completions.create(model="gpt-4o-mini", messages=messages)`
-            },
-            {
-                title: "Treat tool calls as untrusted",
-                content: `The model can hallucinate arguments or be manipulated via prompt injection. Before executing:
-• <strong>Validate</strong> arguments against the schema and business rules.
-• <strong>Scope</strong> tools with least privilege (read-only where possible).
-• Require <strong>human approval</strong> for destructive or costly actions.
-• <strong>Log</strong> every call for audit.`,
-                code: ""
-            }
-        ]
-    },
-    {
-        number: "Module 4",
-        title: "Agent Memory",
-        description: "Give agents short-term and long-term memory so they stay coherent and personalized.",
-        duration: "40 min",
-        lessons: "4 lessons",
-        isNew: true,
-        isLocked: false,
-        topics: ["Short-term vs long-term", "Conversation buffers", "Vector memory", "Summarization"],
-        detailedDescription: "LLMs are stateless. This module covers the memory patterns that make agents feel continuous and context-aware.",
-        detailedContent: [
-            {
-                title: "Two kinds of memory",
-                content: `<strong>Short-term memory</strong> is the running conversation held in the context window — it vanishes when the window fills or the session ends.
-
-<strong>Long-term memory</strong> persists across sessions: user preferences, past facts, prior decisions. It's typically stored outside the model (a database or vector store) and retrieved when relevant, then injected into the prompt.`,
-                code: ""
-            },
-            {
-                title: "Vector memory in practice",
-                content: `Long-term memory usually reuses the embeddings + vector DB pattern: write important facts as embedded notes; at each turn, retrieve the most relevant memories and add them to the context. This is essentially RAG applied to the agent's own history.`,
-                code: `def remember(text, store):        # write
-    store.add(embed(text), text)
-
-def recall(query, store, k=3):    # read relevant memories
-    return store.search(embed(query), k)
-
-context_memories = recall(user_message, store)`
-            },
-            {
-                title: "Managing a growing context",
-                content: `As conversations grow, you can't keep everything. Strategies:
-• <strong>Buffer window</strong> — keep only the last N turns.
-• <strong>Summarization</strong> — periodically compress old turns into a short summary.
-• <strong>Selective recall</strong> — retrieve only memories relevant to the current query.
-
-Good memory management keeps agents coherent without blowing the token budget.`,
-                code: ""
-            }
-        ]
-    },
-    {
-        number: "Module 5",
-        title: "How to Build an Agent",
-        description: "Put it together: build a working tool-using agent loop from scratch, then know when to reach for a framework.",
-        duration: "55 min",
+        number: "AIE - Module 10",
+        title: "Agent Memory, Planning, and Multi-Step Reasoning",
+        description: "Implement memory systems and planners that keep agents coherent across long and complex tasks.",
+        duration: "120 min",
         lessons: "5 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Define the goal & tools", "The control loop", "Stopping conditions", "From scratch vs framework", "Testing agents"],
-        detailedDescription: "A capstone for this stage: assemble the brain, tools, and loop into an agent you fully understand before adopting LangChain or LangGraph.",
+        topics: ["Working memory", "Long-term memory", "Planning", "Reflection", "Cost-aware reasoning"],
+        detailedDescription: "This module addresses the hardest practical challenge in agents: maintaining context and plan quality over many steps.",
         detailedContent: [
             {
-                title: "Design first",
-                content: `Before code, answer:
-• <strong>Goal</strong> — what does 'done' look like?
-• <strong>Tools</strong> — the minimal set of actions needed.
-• <strong>Constraints</strong> — max steps, cost, what needs human approval.
-• <strong>Output</strong> — the shape of the final answer.
-
-Fewer, well-designed tools beat many overlapping ones.`,
-                code: ""
+                title: "Lesson 1: Working Memory and Context Budgeting",
+                content: `Learning Objective: Manage short-term context so reasoning remains coherent and efficient.
+Core Theory: Working memory includes recent dialogue, current plan state, and critical observations. Context windows are finite, so systems must prioritize salient state while pruning redundant history.
+Diagram (Mermaid):
+flowchart LR
+A[Conversation history] --> B[Relevance filter]
+B --> C[Working context]
+C --> D[Model reasoning]
+Worked Example: Agent summary memory compresses previous 30 turns into compact state and preserves decision continuity.
+Common Mistakes: Appending full history blindly until context truncation causes hidden information loss.
+Recap:
+- Working memory should be intentionally curated
+- Compression and relevance filters are essential
+- Context budget is a first-class resource
+Practice:
+- Design a policy for retaining, summarizing, or dropping prior turns`
             },
             {
-                title: "A minimal from-scratch agent",
-                content: `The whole agent is a loop around function calling with a step budget and a clear stopping condition. Understanding this ~20 lines makes every framework feel familiar.`,
-                code: `def agent(goal, tools, tool_impls, max_steps=6):
-    messages = [{"role": "user", "content": goal}]
-    for _ in range(max_steps):
-        r = client.chat.completions.create(
-            model="gpt-4o-mini", messages=messages, tools=tools)
-        msg = r.choices[0].message
-        messages.append(msg)
-        if not msg.tool_calls:
-            return msg.content                 # done
-        for call in msg.tool_calls:            # act
-            args = json.loads(call.function.arguments)
-            out = tool_impls[call.function.name](**args)
-            messages.append({"role": "tool", "tool_call_id": call.id,
-                             "content": json.dumps(out)})
-    return "Stopped: step budget exceeded."`
+                title: "Lesson 2: Long-Term Memory with Retrieval",
+                content: `Learning Objective: Store and recall durable user and task facts safely.
+Core Theory: Long-term memory stores facts, preferences, and prior outcomes in external storage. Retrieval should be relevance-scored and policy-filtered before injection into prompts.
+Diagram (Mermaid):
+flowchart TD
+A[Important fact detected] --> B[Memory write]
+B --> C[Indexed store]
+D[New request] --> E[Relevant memory retrieval]
+E --> F[Prompt context]
+Worked Example: Agent recalls user timezone preference from prior sessions and schedules reminders correctly.
+Common Mistakes: Storing sensitive data without retention policy or consent boundaries.
+Recap:
+- Long-term memory enables personalization and continuity
+- Retrieval should be selective and policy-aware
+- Data governance must apply to memory systems
+Practice:
+- Define which memory types should expire vs persist indefinitely`
             },
             {
-                title: "From scratch vs framework",
-                content: `Building from scratch teaches you the mechanics and gives full control. Reach for a <strong>framework</strong> (next stage) when you need prebuilt tool integrations, streaming, persistence, retries, tracing, and multi-agent orchestration without reinventing them.
-
-Test agents like software: unit-test tools, and use scripted scenarios plus an LLM-as-judge to catch regressions.`,
-                code: ""
+                title: "Lesson 3: Planning Strategies and Task Decomposition",
+                content: `Learning Objective: Improve completion quality via explicit subtask planning.
+Core Theory: Plans decompose complex goals into verifiable steps with dependencies. Dynamic replanning updates steps when observations invalidate assumptions. Planner quality strongly affects tool efficiency and success rate.
+Diagram (Mermaid):
+flowchart LR
+A[Goal] --> B[Initial plan]
+B --> C[Execute step]
+C --> D[Observe result]
+D --> E{Plan still valid}
+E -->|No| F[Replan]
+E -->|Yes| C
+Worked Example: Incident-analysis agent revises plan after missing logs force alternate data source path.
+Common Mistakes: Skipping explicit plans for long tasks and relying on ad hoc reasoning.
+Recap:
+- Planning adds structure to agent behavior
+- Replanning handles uncertainty and non-determinism
+- Step-level verification improves reliability
+Practice:
+- Draft a five-step plan template with validation checkpoint fields`
+            },
+            {
+                title: "Lesson 4: Reflection and Self-Critique Loops",
+                content: `Learning Objective: Use bounded self-critique to improve answer quality without runaway latency.
+Core Theory: Reflection prompts ask model to evaluate draft output against rubric before finalizing. This can improve quality on complex tasks but increases token and latency cost, so should be triggered selectively.
+Diagram (Mermaid):
+flowchart TD
+A[Draft output] --> B[Reflection check]
+B --> C{Quality pass}
+C -->|No| D[Revise]
+D --> B
+C -->|Yes| E[Finalize]
+Worked Example: Legal-summary agent catches missing citation in reflection phase and corrects before user delivery.
+Common Mistakes: Applying reflection to every trivial request and doubling costs unnecessarily.
+Recap:
+- Reflection is a targeted quality tool
+- Trigger conditions should be policy-driven
+- Bounded loops prevent latency explosion
+Practice:
+- Define trigger rules for when reflection is required`
+            },
+            {
+                title: "Lesson 5: Cost-Aware Reasoning and Budget Enforcement",
+                content: `Learning Objective: Keep multi-step reasoning economically sustainable.
+Core Theory: Agent systems should track token, tool, and time budgets per request. Planner can adjust strategy based on remaining budget, choosing concise reasoning or fallback summary when limits near.
+Diagram (Mermaid):
+flowchart LR
+A[Request budget] --> B[Plan selection]
+B --> C[Execution tracking]
+C --> D{Budget remaining}
+D -->|Low| E[Fallback strategy]
+D -->|Healthy| F[Continue]
+Worked Example: Research agent shifts from exhaustive search to summary mode after budget threshold is reached.
+Common Mistakes: Measuring quality without visibility into per-task cost and marginal utility.
+Recap:
+- Budget-aware planning protects operational viability
+- Cost and quality should be co-optimized
+- Transparent budgeting improves product predictability
+Practice:
+- Create a budget policy with token, tool-call, and time limits for one agent workflow`
             }
         ]
     }
 ];
 
-// ---------- Stage 4: Agent Frameworks & Systems ----------
+// ---------- Stage 4: Frameworks, Protocols, and Production ----------
 courseData.agentFrameworks = [
     {
-        number: "Module 1",
-        title: "LangChain",
-        description: "The most popular framework for LLM apps: models, prompts, tools, chains, and agents.",
-        duration: "50 min",
+        number: "AIE - Module 11",
+        title: "LangChain and LangGraph for Production Agent Workflows",
+        description: "Use framework primitives to build stateful, testable, and observable agent systems at scale.",
+        duration: "125 min",
         lessons: "5 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Core abstractions", "LCEL & chains", "Tools & agents", "Integrations", "When to use it"],
-        detailedDescription: "LangChain gives you batteries-included building blocks for LLM applications. Learn its model of the world and build a tool-using agent.",
+        topics: ["LangChain primitives", "LCEL composition", "LangGraph state machines", "Human-in-the-loop", "Tracing"],
+        detailedDescription: "This module shows how to apply popular frameworks without losing architectural clarity and control.",
         detailedContent: [
             {
-                title: "What LangChain gives you",
-                content: `LangChain standardizes the pieces of an LLM app behind common interfaces: <strong>chat models</strong>, <strong>prompt templates</strong>, <strong>output parsers</strong>, <strong>tools</strong>, <strong>retrievers</strong>, and <strong>memory</strong> — plus hundreds of integrations (OpenAI, Anthropic, vector DBs, APIs).
-
-Its value is composability and ecosystem: swap a model or vector store without rewriting your app.`,
-                code: ""
+                title: "Lesson 1: LangChain Core Abstractions",
+                content: `Learning Objective: Understand model, prompt, tool, retriever, and parser abstractions.
+Core Theory: LangChain standardizes interfaces for composing LLM apps and swapping providers. Clear abstraction boundaries reduce vendor lock-in and accelerate experimentation.
+Diagram (Mermaid):
+flowchart TD
+A[Prompt template] --> B[Model]
+B --> C[Output parser]
+A --> D[Retriever]
+D --> B
+Worked Example: One retrieval pipeline switches from one model provider to another with minimal orchestration changes.
+Common Mistakes: Treating framework abstraction as substitute for understanding underlying model behavior.
+Recap:
+- Abstractions improve composability
+- Provider interchangeability reduces migration risk
+- Architecture understanding remains essential
+Practice:
+- Map a RAG pipeline into LangChain abstraction components`
             },
             {
-                title: "Composing with LCEL",
-                content: `The <strong>LangChain Expression Language</strong> (LCEL) pipes components together with the | operator: prompt | model | parser. This makes chains readable, streamable, and easy to modify.`,
-                code: `from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
-
-prompt = ChatPromptTemplate.from_template("Summarize in one line: {text}")
-chain = prompt | ChatOpenAI(model="gpt-4o-mini") | StrOutputParser()
-print(chain.invoke({"text": "LangChain composes LLM building blocks."}))`
+                title: "Lesson 2: LCEL Composition and Reusable Chains",
+                content: `Learning Objective: Build reusable chain components with clear interfaces.
+Core Theory: LCEL composition encourages declarative pipelines where each component has defined input/output contracts. Reusable chain modules improve maintainability and testing.
+Diagram (Mermaid):
+flowchart LR
+A[Input payload] --> B[Prompt node]
+B --> C[Model node]
+C --> D[Parser node]
+D --> E[Structured output]
+Worked Example: Shared summarization chain is reused across support tickets, release notes, and executive reports with task-specific prompt inputs.
+Common Mistakes: Embedding business logic directly in opaque prompt text instead of explicit chain steps.
+Recap:
+- Declarative chains support readability and reuse
+- Component contracts enable testing
+- Separation of concerns improves iteration speed
+Practice:
+- Design one reusable chain interface for text extraction`
             },
             {
-                title: "Tools and agents in LangChain",
-                content: `You define tools with a decorator, bind them to a model, and let LangChain run the call/execute loop. For anything stateful or multi-step, LangChain now points you to <strong>LangGraph</strong> (next module) for more control over the agent's flow.`,
-                code: `from langchain_core.tools import tool
-
-@tool
-def get_weather(city: str) -> str:
-    "Get current weather for a city."
-    return f"21C and sunny in {city}"
-
-llm_with_tools = ChatOpenAI(model="gpt-4o-mini").bind_tools([get_weather])`
+                title: "Lesson 3: LangGraph State Machines and Durable Loops",
+                content: `Learning Objective: Use graph-based orchestration for multi-step, branching, and looping agent workflows.
+Core Theory: LangGraph models agent execution as a state graph with typed state, deterministic edges, and conditional routing. Checkpointing supports crash recovery and human intervention.
+Diagram (Mermaid):
+flowchart TD
+A[Model node] --> B{Tool needed}
+B -->|Yes| C[Tool node]
+C --> A
+B -->|No| D[Finalize]
+Worked Example: Review agent loops through retrieval and citation validation until confidence threshold is reached.
+Common Mistakes: Building long-running loops in linear chains without explicit state transitions.
+Recap:
+- Graph orchestration improves control and resilience
+- Typed state reduces hidden coupling
+- Conditional edges support explicit decision logic
+Practice:
+- Draw a graph for an approve-or-escalate support workflow`
+            },
+            {
+                title: "Lesson 4: Human-in-the-Loop and Approval Gates",
+                content: `Learning Objective: Integrate human checkpoints into automated workflows for high-impact actions.
+Core Theory: Framework-level pause/resume and checkpoint APIs allow approval before irreversible operations. Human decisions should be logged as first-class events in run traces.
+Diagram (Mermaid):
+flowchart LR
+A[Agent proposes action] --> B[Approval gate]
+B --> C{Approved}
+C -->|Yes| D[Execute action]
+C -->|No| E[Revise or stop]
+Worked Example: Finance agent pauses before refund issuance above policy threshold for supervisor approval.
+Common Mistakes: Relying on natural-language model caution without formal approval gates.
+Recap:
+- HITL controls reduce risk in critical workflows
+- Approval metadata improves accountability
+- Pause-resume infrastructure should be tested regularly
+Practice:
+- Specify approval thresholds and escalation paths for three tool categories`
+            },
+            {
+                title: "Lesson 5: Tracing and Debugging Framework Pipelines",
+                content: `Learning Objective: Diagnose failures using structured traces and state snapshots.
+Core Theory: Tracing captures prompt versions, model responses, tool calls, latency breakdown, and branch decisions. Root-cause analysis becomes practical when each node transition is observable.
+Diagram (Mermaid):
+flowchart TD
+A[Pipeline run] --> B[Trace capture]
+B --> C[Step-level metrics]
+C --> D[Failure diagnosis]
+D --> E[Patch and regression test]
+Worked Example: Unexpected hallucination traced to missing retrieval node branch after a graph refactor.
+Common Mistakes: Debugging by final output only and ignoring intermediate state transitions.
+Recap:
+- Observability is required for safe iteration
+- Node-level traces accelerate debugging
+- Trace-driven regression tests prevent repeat failures
+Practice:
+- Define a minimum tracing schema for framework-based agent workflows`
             }
         ]
     },
     {
-        number: "Module 2",
-        title: "LangGraph",
-        description: "Build reliable, stateful agents as graphs with branches, cycles, persistence, and human-in-the-loop.",
-        duration: "50 min",
+        number: "AIE - Module 12",
+        title: "MCP Protocol, Tool Ecosystem, and Enterprise Integration",
+        description: "Use MCP-style tool interoperability patterns to scale agent capabilities across products and teams.",
+        duration: "115 min",
         lessons: "5 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Graphs vs chains", "State", "Nodes & edges", "Cycles & control", "Checkpointing"],
-        detailedDescription: "LangGraph models agents as state machines/graphs — the production-grade way to get control, durability, and human oversight.",
+        topics: ["Protocol model", "Tools and resources", "Auth and trust", "Server design", "Enterprise governance"],
+        detailedDescription: "This module focuses on protocol-level interoperability and governance for large AI engineering organizations.",
         detailedContent: [
             {
-                title: "Why a graph",
-                content: `Linear chains struggle with loops, branching, and recovery. <strong>LangGraph</strong> represents an agent as a <strong>graph</strong>: <strong>nodes</strong> do work (call the LLM, run a tool), <strong>edges</strong> decide what runs next, and a shared <strong>state</strong> object flows through.
-
-Because edges can loop back, you get the agent's think-act-observe cycle explicitly and controllably — plus durability and human-in-the-loop.`,
-                code: ""
+                title: "Lesson 1: Interoperability Problem and Protocol Value",
+                content: `Learning Objective: Explain why protocol standards matter for AI tool ecosystems.
+Core Theory: Without shared protocols, each AI client needs custom integrations for each tool backend, creating high maintenance and inconsistent security posture. Protocol-oriented design standardizes discovery, invocation, and metadata.
+Diagram (Mermaid):
+flowchart LR
+A[Client A] --> D[Protocol server]
+B[Client B] --> D
+C[Client C] --> D
+D --> E[Shared tools and resources]
+Worked Example: Multiple internal assistants consume the same approved knowledge and action tools through one protocol surface.
+Common Mistakes: Building one-off proprietary connectors for each team.
+Recap:
+- Protocols reduce integration duplication
+- Standard surfaces improve governance
+- Shared tooling accelerates platform velocity
+Practice:
+- List three integration costs reduced by protocol standardization`
             },
             {
-                title: "State, nodes, and edges",
-                content: `You define a typed <strong>state</strong>, add <strong>nodes</strong> (functions that read/update state), and connect them with edges. <strong>Conditional edges</strong> route based on state — e.g., "if the model asked for a tool, go to the tool node; else finish."`,
-                code: `from langgraph.graph import StateGraph, END
-from typing import TypedDict, List
-
-class State(TypedDict):
-    messages: List[dict]
-
-def call_model(state): ...      # returns {"messages": [...]}
-def call_tools(state): ...
-
-g = StateGraph(State)
-g.add_node("model", call_model)
-g.add_node("tools", call_tools)
-g.set_entry_point("model")
-g.add_conditional_edges("model", needs_tool, {"yes": "tools", "no": END})
-g.add_edge("tools", "model")    # loop back
-app = g.compile()`
+                title: "Lesson 2: Tool, Resource, and Prompt Contracts",
+                content: `Learning Objective: Design interoperable contracts for actions, data access, and reusable prompts.
+Core Theory: Contracts should include capability metadata, input/output schema, version, and policy tags. Discovery endpoints enable clients to reason about available capabilities before invocation.
+Diagram (Mermaid):
+flowchart TD
+A[Capability catalog] --> B[Tool contract]
+A --> C[Resource contract]
+A --> D[Prompt contract]
+B --> E[Client invocation]
+Worked Example: A shared financial-data tool advertises rate limits, required scopes, and schema so different clients can integrate safely.
+Common Mistakes: Publishing tools without versioning or compatibility guarantees.
+Recap:
+- Contracts are the basis of reliable interoperability
+- Capability metadata improves client orchestration
+- Version governance prevents breaking integrations
+Practice:
+- Draft a versioning policy for protocol-exposed tools`
             },
             {
-                title: "Persistence & human-in-the-loop",
-                content: `LangGraph can <strong>checkpoint</strong> state after every step. That enables:
-• <strong>Durability</strong> — resume after a crash.
-• <strong>Human-in-the-loop</strong> — pause before a risky action, let a human approve, then continue.
-• <strong>Time travel</strong> — rewind and branch.
-
-These features are exactly what production agents need and are painful to build by hand.`,
-                code: ""
+                title: "Lesson 3: Authentication, Authorization, and Trust Boundaries",
+                content: `Learning Objective: Secure protocol-based tool access in multi-tenant environments.
+Core Theory: Protocol clients should authenticate identities and pass scoped authorization context. Servers enforce least privilege, tenant isolation, and audit logging on each invocation.
+Diagram (Mermaid):
+flowchart LR
+A[Client identity] --> B[Auth token]
+B --> C[Protocol server]
+C --> D[Policy engine]
+D --> E[Tool execution]
+Worked Example: Tenant-scoped retrieval server blocks cross-tenant document access despite similar query vectors.
+Common Mistakes: Trusting client-declared tenant IDs without server-side policy validation.
+Recap:
+- Security boundaries must be explicit and enforced server-side
+- Scoped tokens reduce unauthorized access risk
+- Audit logs support compliance and forensics
+Practice:
+- Define required claims for a tool invocation authorization token`
+            },
+            {
+                title: "Lesson 4: Protocol Server Reliability and Scalability",
+                content: `Learning Objective: Build servers that remain reliable under concurrent tool traffic.
+Core Theory: Server design requires timeout controls, concurrency limits, queueing policy, and idempotency handling for retried requests. Backpressure mechanisms protect downstream dependencies.
+Diagram (Mermaid):
+flowchart TD
+A[Incoming calls] --> B[Rate and concurrency controls]
+B --> C[Execution workers]
+C --> D[Result and audit]
+C --> E[Retry and error policy]
+Worked Example: Tool server remains stable during traffic spike by applying concurrency caps and graceful degradation responses.
+Common Mistakes: Unbounded parallel execution causing cascading downstream failures.
+Recap:
+- Reliability requires capacity-aware execution design
+- Backpressure and rate control prevent collapse
+- Error semantics should be explicit and consistent
+Practice:
+- Specify timeout and retry classes for three tool categories`
+            },
+            {
+                title: "Lesson 5: Governance for Shared Tool Platforms",
+                content: `Learning Objective: Operate shared protocol tool ecosystems with clear ownership and lifecycle controls.
+Core Theory: Governance includes ownership metadata, SLA definitions, deprecation policy, security reviews, and change management. Platform teams should provide certification gates before tools become broadly discoverable.
+Diagram (Mermaid):
+flowchart LR
+A[New tool proposal] --> B[Security and quality review]
+B --> C[Certification]
+C --> D[Catalog publish]
+D --> E[Lifecycle monitoring]
+Worked Example: Deprecated tool version remains available with warning window before enforced migration to secure replacement.
+Common Mistakes: Publishing tools without support ownership or deprecation timelines.
+Recap:
+- Shared ecosystems need platform governance
+- Certification improves trust and reliability
+- Lifecycle policy prevents integration chaos
+Practice:
+- Create a governance checklist for onboarding new protocol tools`
             }
         ]
     },
     {
-        number: "Module 3",
-        title: "MCP Servers",
-        description: "The Model Context Protocol: a standard way to expose tools, data, and prompts to any AI app.",
-        duration: "45 min",
+        number: "AIE - Module 13",
+        title: "Multi-Agent Architectures and Coordination Patterns",
+        description: "Design specialist-agent systems with supervisor control, shared memory, and bounded collaboration loops.",
+        duration: "120 min",
         lessons: "5 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["What MCP is", "Client-server model", "Tools, resources, prompts", "Building a server", "Why it matters"],
-        detailedDescription: "MCP is an open standard (from Anthropic) that lets AI applications connect to tools and data through a uniform interface — 'USB-C for AI tools'.",
+        topics: ["Role decomposition", "Supervisor routing", "Shared context", "Conflict resolution", "Performance trade-offs"],
+        detailedDescription: "This module helps you design multi-agent systems that are useful and controllable rather than expensive and chaotic.",
         detailedContent: [
             {
-                title: "The problem MCP solves",
-                content: `Every AI app used to integrate tools and data its own way — an N×M mess. <strong>MCP (Model Context Protocol)</strong> standardizes it: build a tool/integration <em>once</em> as an MCP <strong>server</strong>, and any MCP-compatible <strong>client</strong> (Claude Desktop, IDEs, your own agent) can use it.
-
-Think of it as a universal adapter between AI models and the outside world.`,
-                code: ""
+                title: "Lesson 1: Role Decomposition and Specialization",
+                content: `Learning Objective: Split complex workflows into specialist responsibilities.
+Core Theory: Specialized agents reduce tool overload and instruction ambiguity by narrowing cognitive scope. Effective decomposition aligns each agent with distinct objectives, tools, and evaluation criteria.
+Diagram (Mermaid):
+flowchart LR
+A[Complex task] --> B[Research agent]
+A --> C[Execution agent]
+A --> D[Review agent]
+B --> E[Supervisor synthesis]
+C --> E
+D --> E
+Worked Example: Incident-response pipeline uses separate diagnosis, remediation, and reviewer agents to improve correctness.
+Common Mistakes: Creating many overlapping agents with unclear boundaries.
+Recap:
+- Specialization improves reliability when boundaries are clear
+- Decomposition should follow task structure
+- Ownership clarity reduces coordination errors
+Practice:
+- Define role boundaries for a three-agent technical-support system`
             },
             {
-                title: "Servers, clients, and primitives",
-                content: `An MCP <strong>server</strong> exposes three things:
-• <strong>Tools</strong> — actions the model can invoke (like function calling).
-• <strong>Resources</strong> — data the model can read (files, DB rows, API responses).
-• <strong>Prompts</strong> — reusable prompt templates.
-
-The <strong>client</strong> (inside the AI app) discovers and calls these over a simple protocol (stdio or HTTP). The model's host wires it all together.`,
-                code: ""
+                title: "Lesson 2: Supervisor and Routing Policies",
+                content: `Learning Objective: Build supervisor logic that routes subtasks effectively.
+Core Theory: Supervisors can use rule-based routing, model-based routing, or hybrid strategies. Routing confidence thresholds and fallback paths reduce misassignment costs.
+Diagram (Mermaid):
+flowchart TD
+A[Incoming subtask] --> B[Supervisor router]
+B --> C[Agent A]
+B --> D[Agent B]
+B --> E[Agent C]
+C --> F[Supervisor merge]
+D --> F
+E --> F
+Worked Example: Routing errors drop after adding task taxonomy and confidence-based escalation to human reviewer.
+Common Mistakes: Hard-coding one routing strategy without performance telemetry.
+Recap:
+- Routing is a measurable control function
+- Confidence-aware fallback improves robustness
+- Supervisor should remain lightweight and transparent
+Practice:
+- Propose routing features for assigning legal, billing, and technical subtasks`
             },
             {
-                title: "A minimal MCP server",
-                content: `With the Python SDK, you declare tools with a decorator and run the server. Any MCP client can then discover and call your tool — no custom integration per app.`,
-                code: `from mcp.server.fastmcp import FastMCP
-
-mcp = FastMCP("weather")
-
-@mcp.tool()
-def get_weather(city: str) -> str:
-    "Return current weather for a city."
-    return f"21C and sunny in {city}"
-
-if __name__ == "__main__":
-    mcp.run()   # exposes the tool over MCP`
+                title: "Lesson 3: Shared Memory and Coordination State",
+                content: `Learning Objective: Design shared state that supports collaboration without conflict.
+Core Theory: Multi-agent systems need shared context stores for plans, evidence, and decisions. State updates should be versioned and conflict-aware to avoid stale-overwrite behavior.
+Diagram (Mermaid):
+flowchart LR
+A[Agent outputs] --> B[Shared state store]
+B --> C[Supervisor view]
+B --> D[Agent retrieval]
+Worked Example: Agents append evidence with source IDs and confidence scores, enabling transparent synthesis.
+Common Mistakes: Free-form shared notes that become contradictory and unverifiable.
+Recap:
+- Shared state must be structured
+- Versioning prevents coordination races
+- Evidence provenance supports quality review
+Practice:
+- Define a shared-state schema with fields for claim, source, confidence, and owner`
+            },
+            {
+                title: "Lesson 4: Conflict Resolution and Consensus Checks",
+                content: `Learning Objective: Resolve contradictory agent outputs with structured policies.
+Core Theory: Conflict policies can prioritize trusted agents, require evidence-weighted ranking, or trigger tie-breaker review agent. Consensus should be based on verifiable evidence, not majority opinion alone.
+Diagram (Mermaid):
+flowchart TD
+A[Conflicting outputs] --> B[Conflict detector]
+B --> C[Evidence comparison]
+C --> D{Resolved}
+D -->|No| E[Reviewer or human escalation]
+D -->|Yes| F[Final decision]
+Worked Example: Reviewer agent resolves discrepancy between retrieval and calculation agents by recomputing with explicit evidence constraints.
+Common Mistakes: Merging outputs without checking contradiction or evidence quality.
+Recap:
+- Conflict handling is required in multi-agent systems
+- Evidence quality should drive resolution
+- Escalation paths reduce silent error propagation
+Practice:
+- Create a resolution policy for contradictory risk assessments`
+            },
+            {
+                title: "Lesson 5: Cost, Latency, and Utility in Multi-Agent Systems",
+                content: `Learning Objective: Evaluate when multi-agent orchestration creates net value.
+Core Theory: Multi-agent designs increase coordination overhead and token usage. Utility should be measured as quality gain per added cost and latency. For many tasks, a single well-instrumented agent remains superior.
+Diagram (Mermaid):
+flowchart LR
+A[Architecture choice] --> B[Quality gain]
+A --> C[Cost increase]
+A --> D[Latency increase]
+B --> E[Utility decision]
+C --> E
+D --> E
+Worked Example: Two-agent reviewer architecture improves factuality modestly but doubles latency; team keeps it only for high-risk tasks.
+Common Mistakes: Assuming more agents always means better outcomes.
+Recap:
+- Multi-agent is a strategic choice, not default
+- Utility must account for cost and latency
+- Task-tiering can selectively apply complex orchestration
+Practice:
+- Propose criteria for when to enable multi-agent mode`
             }
         ]
     },
     {
-        number: "Module 4",
-        title: "Multi-Agent Orchestration",
-        description: "Coordinate multiple specialized agents — supervisors, handoffs, and crews — to solve complex tasks.",
-        duration: "50 min",
-        lessons: "5 lessons",
+        number: "AIE - Module 14",
+        title: "Production Readiness: Evaluation, Safety, and Operations",
+        description: "Ship agentic AI systems with robust quality gates, incident response, governance, and continuous improvement loops.",
+        duration: "130 min",
+        lessons: "6 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Why multiple agents", "Supervisor pattern", "Handoffs", "Shared state", "Frameworks (CrewAI, AutoGen)"],
-        detailedDescription: "Some problems are better split across specialists. This module covers the patterns and pitfalls of multi-agent systems.",
+        topics: ["Offline evals", "Online metrics", "Safety operations", "Incident response", "Cost governance", "Roadmap loops"],
+        detailedDescription: "This capstone module turns prototypes into launch-ready AI engineering systems fit for high-stakes production use.",
         detailedContent: [
             {
-                title: "When one agent isn't enough",
-                content: `A single agent with too many tools and responsibilities gets confused. <strong>Multi-agent</strong> systems assign narrow roles — e.g., a Researcher, a Coder, and a Reviewer — each with focused tools and instructions. Specialization improves reliability and makes the system easier to reason about.
-
-But coordination adds cost and latency: only go multi-agent when a single agent genuinely struggles.`,
-                code: ""
+                title: "Lesson 1: Offline Evaluation Harness Design",
+                content: `Learning Objective: Build benchmark suites that represent real-world workload diversity.
+Core Theory: Offline evaluation should include scenario coverage across routine, edge, and adversarial inputs. Use rubric-based grading with deterministic checks where possible and calibrated LLM judges where needed.
+Diagram (Mermaid):
+flowchart TD
+A[Curated eval set] --> B[Run candidate system]
+B --> C[Score by rubric]
+C --> D[Gate decision]
+Worked Example: Launch candidate fails edge-case escalation criterion despite high average quality score.
+Common Mistakes: Overfitting to tiny benchmark sets that do not reflect production traffic.
+Recap:
+- Evaluation quality depends on scenario representativeness
+- Rubrics should map to product objectives
+- Gate criteria should be explicit and versioned
+Practice:
+- Define an eval dataset composition policy by traffic segment`
             },
             {
-                title: "Orchestration patterns",
-                content: `Common topologies:
-• <strong>Supervisor / router</strong> — a lead agent decides which specialist handles each subtask and combines results.
-• <strong>Handoff</strong> — agents pass control to one another (like a support escalation).
-• <strong>Pipeline</strong> — output of one agent feeds the next.
-• <strong>Debate/review</strong> — agents critique each other to improve quality.
-
-A shared <strong>state</strong> or message bus lets them collaborate.`,
-                code: `# Supervisor pattern (pseudocode)
-def supervisor(task):
-    plan = llm_plan(task)                 # break into subtasks
-    results = []
-    for step in plan:
-        agent = pick_agent(step.role)     # researcher / coder / reviewer
-        results.append(agent.run(step))
-    return llm_combine(task, results)`
+                title: "Lesson 2: Online Metrics and User-Centric Observability",
+                content: `Learning Objective: Track live quality and reliability with actionable telemetry.
+Core Theory: Online monitoring should include task completion rate, user correction rate, escalation rate, latency percentiles, safety intervention frequency, and per-request cost. Segment metrics by user cohort and task type.
+Diagram (Mermaid):
+flowchart LR
+A[Live requests] --> B[Telemetry pipeline]
+B --> C[Quality dashboards]
+B --> D[Alert rules]
+C --> E[Optimization backlog]
+Worked Example: Rising correction rate in one region reveals localization prompt gap rather than model-level regression.
+Common Mistakes: Relying on aggregate metrics that hide cohort-specific failures.
+Recap:
+- Live metrics should reflect user outcomes
+- Segmentation improves root-cause clarity
+- Dashboards must connect to ownership and actions
+Practice:
+- Design a dashboard with five core KPIs and owner mapping`
             },
             {
-                title: "Frameworks & pitfalls",
-                content: `<strong>LangGraph</strong>, <strong>CrewAI</strong>, and <strong>AutoGen</strong> provide multi-agent primitives (roles, handoffs, shared memory). Watch for common failure modes: runaway loops between agents, ballooning token cost, and agents that confidently agree on a wrong answer. Add step budgets, clear termination, and evaluation just as with single agents.`,
-                code: ""
-            }
-        ]
-    },
-    {
-        number: "Module 5",
-        title: "Evaluating & Deploying Agents",
-        description: "Take agents to production: evaluation, tracing, cost/latency control, safety, and monitoring.",
-        duration: "45 min",
-        lessons: "5 lessons",
-        isNew: true,
-        isLocked: false,
-        topics: ["Evaluation & LLM-as-judge", "Tracing & observability", "Cost & latency", "Guardrails & safety", "Monitoring"],
-        detailedDescription: "The last mile. This capstone covers what it takes to run agents reliably and responsibly in production.",
-        detailedContent: [
-            {
-                title: "Evaluating non-deterministic systems",
-                content: `Agents don't have a single right output, so testing differs from normal software:
-• Build a <strong>dataset</strong> of representative tasks with expected outcomes or rubrics.
-• Use <strong>LLM-as-judge</strong> to score responses against criteria (correctness, grounding, tone).
-• Track <strong>task success rate</strong>, not just token-level metrics.
-• Re-run this suite on every prompt/model change to catch regressions.`,
-                code: ""
+                title: "Lesson 3: Safety Operations and Policy Lifecycle",
+                content: `Learning Objective: Operate safety policies as evolving systems, not static checklists.
+Core Theory: Safety operations require policy versioning, abuse-pattern tracking, red-team exercises, and regular rule updates. False positives and false negatives should be measured and tuned.
+Diagram (Mermaid):
+flowchart TD
+A[Policy version] --> B[Runtime enforcement]
+B --> C[Incident feedback]
+C --> D[Policy update]
+D --> A
+Worked Example: Prompt-injection attacks in uploaded documents trigger policy hardening and stricter context isolation.
+Common Mistakes: Freezing safety policy after launch while threat patterns evolve.
+Recap:
+- Safety policy must evolve with threat landscape
+- Feedback loops are essential for policy quality
+- Trade-off tuning should be data-driven
+Practice:
+- Propose a monthly safety-operations review agenda`
             },
             {
-                title: "Observability, cost, and latency",
-                content: `You can't fix what you can't see. Use <strong>tracing</strong> (LangSmith, OpenTelemetry) to record every step, tool call, and token. In production, watch:
-• <strong>Cost</strong> — tokens per request; cache and use smaller models where possible.
-• <strong>Latency</strong> — stream responses, parallelize tool calls, cap steps.
-• <strong>Failure rate</strong> — retries, timeouts, and graceful fallbacks.`,
-                code: ""
+                title: "Lesson 4: Incident Response for AI Systems",
+                content: `Learning Objective: Respond to quality and safety incidents with structured operational discipline.
+Core Theory: Incident workflow should include severity classification, containment, user-impact analysis, mitigation rollout, and retrospective remediation tasks. Preserve prompt, model, and tool-call evidence for forensic review.
+Diagram (Mermaid):
+flowchart LR
+A[Incident detected] --> B[Triage severity]
+B --> C[Containment]
+C --> D[Mitigation release]
+D --> E[Postmortem]
+Worked Example: Hallucinated legal guidance incident is contained by enabling strict citation mode and temporarily routing high-risk queries to human review.
+Common Mistakes: Patching symptoms without collecting reproducible evidence.
+Recap:
+- AI incidents need classic SRE rigor plus model-specific evidence
+- Containment speed protects users
+- Retrospectives must produce measurable follow-up actions
+Practice:
+- Write an incident template specific to agent hallucination events`
             },
             {
-                title: "Safety & monitoring",
-                content: `Ship responsibly:
-• <strong>Guardrails</strong> — input/output filtering, PII redaction, allow-listed tools.
-• <strong>Least privilege</strong> and human approval for high-impact actions.
-• <strong>Prompt-injection defenses</strong> — treat all external content as untrusted.
-• <strong>Monitoring & feedback</strong> — log outcomes, collect user feedback, and continuously improve your eval set.
-
-Congratulations — that's the full path from a single neuron to production AI agents.`,
-                code: ""
+                title: "Lesson 5: Cost Governance and Capacity Planning",
+                content: `Learning Objective: Keep AI operations financially sustainable under growth.
+Core Theory: Governance includes per-feature budgets, model-tier routing, caching strategy, and quota controls. Capacity planning should model token demand, concurrency peaks, and tool backend bottlenecks.
+Diagram (Mermaid):
+flowchart TD
+A[Demand forecast] --> B[Capacity plan]
+B --> C[Budget controls]
+C --> D[Runtime enforcement]
+D --> E[Monthly optimization]
+Worked Example: Team introduces request classification and cache layer, reducing monthly token spend while preserving quality targets.
+Common Mistakes: Launching premium models broadly without usage controls.
+Recap:
+- Cost control is a product and platform concern
+- Capacity planning prevents reliability surprises
+- Governance should be proactive, not reactive
+Practice:
+- Define monthly cost review metrics for one AI product`
+            },
+            {
+                title: "Lesson 6: Continuous Improvement and Launch Readiness Checklist",
+                content: `Learning Objective: Establish a repeatable launch and iteration cadence for high-quality AI products.
+Core Theory: Mature teams operate closed loops between user feedback, evaluation suites, prompt/model changes, and release governance. Launch readiness requires passing quality, safety, latency, cost, and supportability gates.
+Diagram (Mermaid):
+flowchart LR
+A[User feedback] --> B[Eval backlog updates]
+B --> C[Improvements]
+C --> D[Gate checks]
+D --> E[Release]
+E --> A
+Worked Example: Quarterly release cadence includes mandatory red-team pass, regression suite pass, and canary health validation.
+Common Mistakes: Treating launch as endpoint instead of start of operational learning.
+Recap:
+- Continuous loops sustain long-term quality
+- Multi-gate readiness reduces launch risk
+- Operational excellence differentiates premium AI products
+Practice:
+- Create a launch checklist with at least ten go or no-go items`
             }
         ]
     }
