@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Company Hiring Procedures - Cloudvana</title>
-    <meta name="description" content="Company-wise hiring procedures and interview-clearing guidance for freshers and experienced candidates across top product, consulting, and enterprise MNCs.">
+    <title>Interview Playbooks for 15 Companies | Cloudvana</title>
+    <meta name="description" content="Explore independent interview playbooks for 15 companies. Find common hiring rounds and preparation plans for early-career and experienced candidates.">
     <meta name="author" content="Chilakalapalli Pavan Kalyan">
-    <meta name="theme-color" content="#4285f4">
+    <meta name="theme-color" content="#087e8b">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="canonical" href="https://cloudvana.vercel.app/hiring-procedures.html">
     <meta property="og:type" content="website">
@@ -14,27 +14,28 @@
     <meta property="og:description" content="Company-wise hiring procedures and interview strategy for freshers and experienced candidates.">
     <meta property="og:url" content="https://cloudvana.vercel.app/hiring-procedures.html">
     <meta property="og:image" content="https://cloudvana.vercel.app/assets/Cloudvana%20logo.jpg">
-    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Company Hiring Procedures - Cloudvana">
     <meta name="twitter:description" content="Interview strategy and hiring process guidance across top companies.">
     <meta name="twitter:image" content="https://cloudvana.vercel.app/assets/Cloudvana%20logo.jpg">
     <meta name="google-site-verification" content="okR4wrh-4aH5RLFmJPOSof5rAZKjbeRNU5VB0J33UYk" />
     <link rel="icon" type="image/jpeg" href="assets/Cloudvana%20logo.jpg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="js/theme.js"></script>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body data-page="hiring-procedures">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <div id="site-nav"></div>
+    <noscript><nav class="noscript-banner" aria-label="Site navigation"><a href="index.html">Home</a> &middot; <a href="courses.html">Courses</a> &middot; <a href="certifications.html">Certifications</a>. Enable JavaScript for company playbooks and search.</nav></noscript>
+    <main id="main-content" tabindex="-1">
 
     <section class="hiring-hero page-section">
         <div class="container">
-            <span class="hiring-kicker">Interview Readiness Hub</span>
-            <h1 class="hiring-title">Hiring Procedure Playbooks by Company</h1>
-            <p class="hiring-subtitle">Focus on one audience, one company bucket, and one clear plan. This page is intentionally structured to reduce noise and improve interview conversion.</p>
+            <span class="hiring-kicker">PREPARE FOR YOUR NEXT OPPORTUNITY</span>
+            <h1 class="hiring-title">A little preparation.<br>A more confident interview.</h1>
+            <p class="hiring-subtitle">Explore company-specific playbooks, common interview rounds, and practical preparation plans for early-career and experienced candidates.</p>
             <div class="hiring-hero-stats">
                 <div class="hiring-stat"><strong>15</strong><span>Companies Covered</span></div>
                 <div class="hiring-stat"><strong>2</strong><span>Audience Modes</span></div>
@@ -51,7 +52,7 @@
     <section class="hiring-hub courses-section">
         <div class="container">
             <h2 class="section-title">Find Your Target Company's Process</h2>
-            <p class="section-subtitle">Switch audience mode, filter company type, and use the playbook to improve your interview conversion rate.</p>
+            <p class="section-subtitle">Choose your experience level, narrow your shortlist, and explore one company at a time.</p>
 
             <div class="hiring-update-banner" role="note">
                 <i class="fas fa-circle-info"></i>
@@ -61,19 +62,19 @@
             <div class="hiring-controls">
                 <div class="hiring-control-block">
                     <p class="hiring-control-title">Audience</p>
-                    <div class="section-tabs hiring-audience-tabs" id="audienceTabs">
-                        <button class="section-tab active" type="button" data-audience="fresher">Freshers</button>
-                        <button class="section-tab" type="button" data-audience="experienced">Experienced</button>
+                    <div class="section-tabs hiring-audience-tabs" id="audienceTabs" role="group" aria-label="Experience level">
+                        <button class="section-tab active" type="button" data-audience="fresher" aria-pressed="true">Early career</button>
+                        <button class="section-tab" type="button" data-audience="experienced" aria-pressed="false">Experienced</button>
                     </div>
                 </div>
 
                 <div class="hiring-control-block">
                     <p class="hiring-control-title">Company Group</p>
-                    <div class="provider-filter hiring-group-filter" id="companyGroupFilter">
-                        <button class="filter-btn active" type="button" data-group="all">All</button>
-                        <button class="filter-btn" type="button" data-group="product">Product MNCs</button>
-                        <button class="filter-btn" type="button" data-group="consulting">Consulting & Services</button>
-                        <button class="filter-btn" type="button" data-group="enterprise">Enterprise Tech</button>
+                    <div class="provider-filter hiring-group-filter" id="companyGroupFilter" role="group" aria-label="Company group">
+                        <button class="filter-btn active" type="button" data-group="all" aria-pressed="true">All</button>
+                        <button class="filter-btn" type="button" data-group="product" aria-pressed="false">Product</button>
+                        <button class="filter-btn" type="button" data-group="consulting" aria-pressed="false">Consulting &amp; services</button>
+                        <button class="filter-btn" type="button" data-group="enterprise" aria-pressed="false">Enterprise tech</button>
                     </div>
                 </div>
 
@@ -81,7 +82,7 @@
                     <span class="hiring-control-title">Search Company</span>
                     <span class="hiring-search-field">
                         <i class="fas fa-magnifying-glass" aria-hidden="true"></i>
-                        <input id="companySearch" type="text" placeholder="Search Microsoft, TCS, SAP..." autocomplete="off">
+                        <input id="companySearch" type="search" placeholder="Try Microsoft, TCS, or SAP" autocomplete="off" aria-controls="companyHiringGrid" aria-describedby="hiringResultsBar">
                     </span>
                 </label>
             </div>
@@ -112,7 +113,7 @@
                 </article>
             </div>
 
-            <div id="companyHiringGrid" class="hiring-company-grid" aria-live="polite"></div>
+            <div id="companyHiringGrid" class="hiring-company-grid"></div>
         </div>
     </section>
 
@@ -157,10 +158,11 @@
         </div>
     </section>
 
+    </main>
     <div id="site-footer"></div>
 
-    <script src="js/layout.js"></script>
-    <script src="script.js"></script>
-    <script src="js/hiring-procedures.js"></script>
+    <script src="js/layout.js" defer></script>
+    <script src="js/site.js" defer></script>
+    <script src="js/hiring-procedures.js" defer></script>
 </body>
 </html>

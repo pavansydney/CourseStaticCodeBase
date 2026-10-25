@@ -1090,18 +1090,25 @@
 
                 var audienceFresh = document.querySelector("#audienceTabs [data-audience='fresher']");
                 var audienceButtons = document.querySelectorAll("#audienceTabs [data-audience]");
-                audienceButtons.forEach(function (b) { b.classList.remove("active"); });
+                audienceButtons.forEach(function (b) {
+                    b.classList.remove("active");
+                    b.setAttribute("aria-pressed", String(b === audienceFresh));
+                });
                 if (audienceFresh) audienceFresh.classList.add("active");
 
                 var groupAll = document.querySelector("#companyGroupFilter [data-group='all']");
                 var groupButtons = document.querySelectorAll("#companyGroupFilter [data-group]");
-                groupButtons.forEach(function (b) { b.classList.remove("active"); });
+                groupButtons.forEach(function (b) {
+                    b.classList.remove("active");
+                    b.setAttribute("aria-pressed", String(b === groupAll));
+                });
                 if (groupAll) groupAll.classList.add("active");
 
                 var search = document.getElementById("companySearch");
                 if (search) search.value = "";
 
                 renderCards();
+                document.getElementById("companySearch").focus();
             });
         }
     }
@@ -1247,6 +1254,7 @@
                 "</article>"
             ].join("");
         }).join("");
+        enhanceExternalLinks(grid);
     }
 
     function setupAudienceTabs() {
@@ -1254,7 +1262,10 @@
         tabs.forEach(function (tab) {
             tab.addEventListener("click", function () {
                 activeAudience = tab.getAttribute("data-audience") || "fresher";
-                tabs.forEach(function (b) { b.classList.remove("active"); });
+                tabs.forEach(function (b) {
+                    b.classList.remove("active");
+                    b.setAttribute("aria-pressed", String(b === tab));
+                });
                 tab.classList.add("active");
                 renderCards();
             });
@@ -1266,7 +1277,10 @@
         buttons.forEach(function (btn) {
             btn.addEventListener("click", function () {
                 activeGroup = btn.getAttribute("data-group") || "all";
-                buttons.forEach(function (b) { b.classList.remove("active"); });
+                buttons.forEach(function (b) {
+                    b.classList.remove("active");
+                    b.setAttribute("aria-pressed", String(b === btn));
+                });
                 btn.classList.add("active");
                 renderCards();
             });

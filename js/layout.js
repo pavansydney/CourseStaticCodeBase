@@ -1,136 +1,234 @@
-// Shared layout: injects the navbar and footer into every page so there is a
-// single source of truth (no duplicated markup). Set the current page with
-// <body data-page="home"> etc. Runs synchronously (scripts sit at end of body).
 (function () {
-    // Apply the saved theme as early as possible to reduce flicker.
-    // New visitors default to light; a manual choice is remembered afterwards.
-    try {
-        var savedTheme = localStorage.getItem('cloudvana-theme-v2') || 'light';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-    } catch (e) {
-        /* localStorage unavailable — default to light */
-        document.documentElement.setAttribute('data-theme', 'light');
+    'use strict';
+
+    const navMount = document.getElementById('site-nav');
+    const footerMount = document.getElementById('site-footer');
+    const current = document.body.dataset.page;
+    const external = 'target="_blank" rel="noopener noreferrer"';
+
+    if (navMount) {
+        navMount.innerHTML = `
+            <header class="site-header">
+                <nav class="navbar" aria-label="Primary navigation">
+                    <div class="container nav-inner">
+                        <a href="index.html" class="nav-brand" aria-label="Cloudvana home">
+                            <img class="nav-logo" src="assets/Cloudvana%20logo.jpg" alt="Cloudvana" width="144" height="32" fetchpriority="high">
+                        </a>
+                        <ul class="nav-menu" id="navMenu">
+                            <li><a href="index.html" class="nav-link" data-nav="home">Home</a></li>
+                            <li><a href="courses.html" class="nav-link" data-nav="courses">Courses</a></li>
+                            <li class="nav-dropdown">
+                                <div class="nav-dropdown-row">
+                                    <a href="certifications.html" class="nav-link" data-nav="certifications">Certifications</a>
+                                    <button class="nav-dropdown-toggle nav-chevron" type="button" aria-label="Certification providers" aria-expanded="false" aria-controls="certMenu">
+                                        <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <ul class="nav-dropdown-menu" id="certMenu" hidden>
+                                    <li><a href="certifications.html?provider=azure">Microsoft Azure</a></li>
+                                    <li><a href="certifications.html?provider=aws">Amazon Web Services</a></li>
+                                    <li><a href="certifications.html?provider=gcp">Google Cloud</a></li>
+                                    <li><a href="certifications.html?provider=salesforce">Salesforce</a></li>
+                                    <li><a href="certifications.html?provider=sap">SAP</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="mentorship.html" class="nav-link" data-nav="mentorship">Mentorship</a></li>
+                            <li class="nav-dropdown">
+                                <button class="nav-link nav-dropdown-toggle" type="button" aria-expanded="false" aria-controls="resourceMenu">
+                                    Resources <i class="fas fa-chevron-down" aria-hidden="true"></i>
+                                </button>
+                                <ul class="nav-dropdown-menu" id="resourceMenu" hidden>
+                                    <li><a href="find-your-path.html" data-nav="find-your-path">Find your path</a></li>
+                                    <li><a href="prerequisites.html" data-nav="prerequisites">Prerequisites</a></li>
+                                    <li><a href="hiring-procedures.html" data-nav="hiring-procedures">Interview playbooks</a></li>
+                                    <li><a href="about.html" data-nav="about">About Cloudvana</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <div class="nav-actions">
+                            <a class="btn btn-primary nav-cta" href="find-your-path.html">Find my path <span aria-hidden="true">&rarr;</span></a>
+                            <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme"></button>
+                            <button class="nav-toggle" id="navToggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="navMenu">
+                                <span></span><span></span><span></span>
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+            <div class="site-notice" id="storageNotice" hidden>
+                <p id="storageNoticeText" role="status"></p>
+                <button type="button" aria-label="Dismiss storage notice">&times;</button>
+            </div>`;
     }
 
-    var navHTML =
-        '<nav class="navbar">' +
-            '<div class="container">' +
-                '<a href="index.html" class="nav-brand" aria-label="Cloudvana home">' +
-                    '<img class="nav-logo" src="assets/Cloudvana%20logo.jpg" alt="Cloudvana">' +
-                '</a>' +
-                '<button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navMenu">' +
-                    '<span></span><span></span><span></span>' +
-                '</button>' +
-                '<ul class="nav-menu" id="navMenu">' +
-                    '<li><a href="index.html" class="nav-link" data-nav="home">Home</a></li>' +
-                    '<li><a href="courses.html" class="nav-link" data-nav="courses">Courses</a></li>' +
-                    '<li class="nav-dropdown" data-nav="certifications">' +
-                        '<a href="certifications.html" class="nav-dropdown-toggle">Certifications <i class="fas fa-chevron-down"></i></a>' +
-                        '<ul class="nav-dropdown-menu">' +
-                            '<li><a href="certifications.html?provider=azure" class="nav-link">Azure AI</a></li>' +
-                            '<li><a href="certifications.html?provider=aws" class="nav-link">AWS AI</a></li>' +
-                            '<li><a href="certifications.html?provider=gcp" class="nav-link">GCP AI</a></li>' +
-                            '<li><a href="certifications.html?provider=salesforce" class="nav-link">Salesforce AI</a></li>' +
-                            '<li><a href="certifications.html?provider=sap" class="nav-link">SAP AI</a></li>' +
-                        '</ul>' +
-                    '</li>' +
-                    '<li><a href="mentorship.html" class="nav-link" data-nav="mentorship">Mentorship</a></li>' +
-                    '<li class="nav-dropdown" data-nav="resources">' +
-                        '<a href="#" class="nav-dropdown-toggle">Resources <i class="fas fa-chevron-down"></i></a>' +
-                        '<ul class="nav-dropdown-menu">' +
-                            '<li><a href="prerequisites.html" class="nav-link" data-nav="prerequisites">Prerequisites</a></li>' +
-                            '<li><a href="find-your-path.html" class="nav-link" data-nav="find-your-path">Find Your Path</a></li>' +
-                            '<li><a href="hiring-procedures.html" class="nav-link" data-nav="hiring-procedures">Hiring Procedures</a></li>' +
-                            '<li><a href="about.html" class="nav-link" data-nav="about">About</a></li>' +
-                        '</ul>' +
-                    '</li>' +
-                    '<li><button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode" title="Toggle light/dark theme"><i class="fas fa-moon"></i></button></li>' +
-                '</ul>' +
-            '</div>' +
-        '</nav>';
+    if (footerMount) {
+        footerMount.innerHTML = `
+            <footer class="footer">
+                <div class="container">
+                    <div class="footer-content">
+                        <div class="footer-section footer-intro">
+                            <a class="footer-brand" href="index.html">Cloudvana<span aria-hidden="true">.</span></a>
+                            <p>A clearer path from curious to capable. Free learning resources for AI, software engineering, and cloud certifications.</p>
+                            <div class="social-links">
+                                <a href="https://www.linkedin.com/in/chilakalapalli-p-141267119/" ${external}><i class="fab fa-linkedin" aria-hidden="true"></i> LinkedIn</a>
+                                <a href="https://github.com/pavansydney" ${external}><i class="fab fa-github" aria-hidden="true"></i> GitHub</a>
+                            </div>
+                        </div>
+                        <div class="footer-section">
+                            <h2>Learn</h2>
+                            <ul>
+                                <li><a href="courses.html">Learning tracks</a></li>
+                                <li><a href="certifications.html">Cloud certifications</a></li>
+                                <li><a href="prerequisites.html">Prerequisites</a></li>
+                                <li><a href="https://developers.google.com/machine-learning/crash-course" ${external}>Google ML Crash Course</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-section">
+                            <h2>Take your next step</h2>
+                            <ul>
+                                <li><a href="find-your-path.html">Find your path</a></li>
+                                <li><a href="hiring-procedures.html">Interview playbooks</a></li>
+                                <li><a href="mentorship.html">Mentorship</a></li>
+                                <li><a href="about.html">About Cloudvana</a></li>
+                                <li><a href="about.html#privacy">Privacy &amp; your data</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-section">
+                            <h2>Official credentials</h2>
+                            <ul>
+                                <li><a href="https://learn.microsoft.com/credentials/certifications/" ${external}>Microsoft Learn</a></li>
+                                <li><a href="https://aws.amazon.com/certification/" ${external}>AWS Certification</a></li>
+                                <li><a href="https://cloud.google.com/learn/certification" ${external}>Google Cloud</a></li>
+                                <li><a href="https://trailhead.salesforce.com/credentials/agentforcespecialist" ${external}>Salesforce Trailhead</a></li>
+                                <li><a href="https://learning.sap.com/certifications/sap-certified-associate-sap-generative-ai-developer" ${external}>SAP Learning</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        <p>&copy; ${new Date().getFullYear()} Cloudvana. Founded by <a href="https://www.linkedin.com/in/chilakalapalli-p-141267119/" ${external}>Pavan Kalyan</a>.</p>
+                        <p>Independent educational resources. Not affiliated with certification providers. Official exam fees are separate.</p>
+                    </div>
+                </div>
+            </footer>`;
+    }
 
-    var footerHTML =
-        '<footer class="footer">' +
-            '<div class="container">' +
-                '<div class="footer-content">' +
-                    '<div class="footer-section">' +
-                        '<h4>Cloudvana</h4>' +
-                        '<p>Machine learning fundamentals and Azure, AWS, Google Cloud, Salesforce &amp; SAP AI certification prep for everyone</p>' +
-                    '</div>' +
-                    '<div class="footer-section">' +
-                        '<h4>Links</h4>' +
-                        '<ul>' +
-                            '<li><a href="hiring-procedures.html">Hiring Procedures</a></li>' +
-                            '<li><a href="mentorship.html">Mentorship Program</a></li>' +
-                            '<li><a href="https://developers.google.com/machine-learning/crash-course" target="_blank">Original ML Course</a></li>' +
-                            '<li><a href="https://learn.microsoft.com/credentials/certifications/browse/?products=azure&subjects=artificial-intelligence" target="_blank">Azure AI Certifications</a></li>' +
-                            '<li><a href="https://aws.amazon.com/certification/" target="_blank">AWS Certifications</a></li>' +
-                            '<li><a href="https://cloud.google.com/learn/certification" target="_blank">Google Cloud Certifications</a></li>' +
-                            '<li><a href="https://trailhead.salesforce.com/credentials/agentforcespecialist" target="_blank">Salesforce Agentforce Certification</a></li>' +
-                            '<li><a href="https://learning.sap.com/certifications/sap-certified-associate-sap-generative-ai-developer" target="_blank">SAP Generative AI Developer Certification</a></li>' +
-                        '</ul>' +
-                    '</div>' +
-                    '<div class="footer-section">' +
-                        '<h4>Follow</h4>' +
-                        '<div class="social-links">' +
-                            '<a href="https://www.linkedin.com/in/chilakalapalli-p-141267119/" target="_blank" class="social-link"><i class="fab fa-linkedin"></i> LinkedIn</a>' +
-                            '<a href="https://github.com/pavansydney" target="_blank" class="social-link"><i class="fab fa-github"></i> GitHub</a>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="footer-bottom">' +
-                    '<p>Founded by <a href="https://www.linkedin.com/in/chilakalapalli-p-141267119/" target="_blank">Chilakalapalli Pavan Kalyan</a></p>' +
-                    '<p>&copy; 2024–2026 Cloudvana - Educational Content. Based on Google\'s ML Course, Microsoft Learn, AWS, Google Cloud &amp; Salesforce Trailhead.</p>' +
-                '</div>' +
-            '</div>' +
-        '</footer>';
+    if (current === 'not-found') {
+        [navMount, footerMount].filter(Boolean).forEach(mount => {
+            mount.querySelectorAll('a[href], img[src]').forEach(element => {
+                const attribute = element.tagName === 'IMG' ? 'src' : 'href';
+                const value = element.getAttribute(attribute);
+                if (!value.startsWith('https:') && !value.startsWith('/')) element.setAttribute(attribute, '/' + value);
+            });
+        });
+    }
 
-    var navMount = document.getElementById('site-nav');
-    if (navMount) navMount.innerHTML = navHTML;
+    document.querySelectorAll('[data-nav]').forEach(link => {
+        if (link.dataset.nav !== current) return;
+        link.classList.add('active');
+        link.setAttribute('aria-current', 'page');
+        const dropdown = link.closest('.nav-dropdown');
+        if (dropdown) dropdown.querySelector('.nav-dropdown-toggle').classList.add('active');
+    });
 
-    var footMount = document.getElementById('site-footer');
-    if (footMount) footMount.innerHTML = footerHTML;
+    const menu = document.getElementById('navMenu');
+    const navToggle = document.getElementById('navToggle');
+    const mobile = window.matchMedia('(max-width: 960px)');
+    const dropdowns = Array.from(document.querySelectorAll('.nav-dropdown'));
 
-    // Highlight the current page's nav item
-    var current = (document.body && document.body.getAttribute('data-page')) || '';
-    document.querySelectorAll('[data-nav]').forEach(function (el) {
-        if (el.getAttribute('data-nav') !== current) return;
-        if (el.classList.contains('nav-dropdown')) {
-            var toggle = el.querySelector('.nav-dropdown-toggle');
-            if (toggle) toggle.classList.add('active');
-        } else {
-            el.classList.add('active');
-            // If this link lives inside a dropdown, mark its parent toggle active too.
-            var parentDd = el.closest ? el.closest('.nav-dropdown') : null;
-            if (parentDd) {
-                var parentToggle = parentDd.querySelector('.nav-dropdown-toggle');
-                if (parentToggle) parentToggle.classList.add('active');
-            }
+    function setDropdown(dropdown, open) {
+        dropdown.classList.toggle('open', open);
+        dropdown.querySelector('.nav-dropdown-toggle').setAttribute('aria-expanded', String(open));
+        dropdown.querySelector('.nav-dropdown-menu').hidden = !open;
+    }
+
+    function closeDropdowns() {
+        dropdowns.forEach(dropdown => setDropdown(dropdown, false));
+    }
+
+    function closeNavigation() {
+        if (!menu || !navToggle) return;
+        menu.hidden = mobile.matches;
+        menu.classList.remove('open');
+        navToggle.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.setAttribute('aria-label', 'Open navigation');
+        closeDropdowns();
+    }
+
+    if (menu && navToggle) {
+        closeNavigation();
+        mobile.addEventListener('change', closeNavigation);
+        navToggle.addEventListener('click', () => {
+            const open = navToggle.getAttribute('aria-expanded') !== 'true';
+            menu.hidden = !open;
+            menu.classList.toggle('open', open);
+            navToggle.classList.toggle('open', open);
+            navToggle.setAttribute('aria-expanded', String(open));
+            navToggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+            if (!open) closeDropdowns();
+        });
+        menu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeNavigation));
+    }
+
+    dropdowns.forEach(dropdown => {
+        const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+        toggle.addEventListener('click', () => {
+            const open = toggle.getAttribute('aria-expanded') !== 'true';
+            closeDropdowns();
+            setDropdown(dropdown, open);
+        });
+        toggle.addEventListener('keydown', event => {
+            if (event.key !== 'ArrowDown') return;
+            event.preventDefault();
+            closeDropdowns();
+            setDropdown(dropdown, true);
+            dropdown.querySelector('.nav-dropdown-menu a').focus();
+        });
+        dropdown.addEventListener('focusout', event => {
+            if (!dropdown.contains(event.relatedTarget)) setDropdown(dropdown, false);
+        });
+    });
+
+    document.addEventListener('click', event => {
+        if (!event.target.closest('.navbar')) closeNavigation();
+        else if (!event.target.closest('.nav-dropdown')) closeDropdowns();
+    });
+    document.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        const openDropdown = dropdowns.find(dropdown => dropdown.classList.contains('open'));
+        if (openDropdown) {
+            setDropdown(openDropdown, false);
+            openDropdown.querySelector('.nav-dropdown-toggle').focus();
+        } else if (navToggle && navToggle.getAttribute('aria-expanded') === 'true') {
+            closeNavigation();
+            navToggle.focus();
         }
     });
 
-    // Wire up the light/dark theme toggle
-    function currentTheme() {
-        return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    const themeButton = document.getElementById('themeToggle');
+    function updateThemeButton() {
+        const dark = document.documentElement.dataset.theme === 'dark';
+        themeButton.innerHTML = `<i class="fas fa-${dark ? 'sun' : 'moon'}" aria-hidden="true"></i>`;
+        themeButton.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+        themeButton.setAttribute('title', themeButton.getAttribute('aria-label'));
     }
-    function setThemeIcon(btn) {
-        if (!btn) return;
-        btn.innerHTML = currentTheme() === 'dark'
-            ? '<i class="fas fa-sun"></i>'
-            : '<i class="fas fa-moon"></i>';
-    }
-    var themeBtn = document.getElementById('themeToggle');
-    setThemeIcon(themeBtn);
-    if (themeBtn) {
-        themeBtn.addEventListener('click', function () {
-            var next = currentTheme() === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            try {
-                localStorage.setItem('cloudvana-theme-v2', next);
-            } catch (e) {
-                /* preference just won't persist */
-            }
-            setThemeIcon(themeBtn);
+    if (themeButton) {
+        updateThemeButton();
+        themeButton.addEventListener('click', () => {
+            const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.dataset.theme = next;
+            window.CloudvanaStorage.set('cloudvana-theme-v2', next);
+            updateThemeButton();
         });
     }
+
+    const notice = document.getElementById('storageNotice');
+    function showStorageNotice() {
+        if (!notice || !window.CloudvanaStorage.warning) return;
+        document.getElementById('storageNoticeText').textContent = window.CloudvanaStorage.warning;
+        notice.hidden = false;
+    }
+    if (notice) notice.querySelector('button').addEventListener('click', () => { notice.hidden = true; });
+    window.addEventListener('cloudvana:storage-warning', showStorageNotice);
+    showStorageNotice();
 })();

@@ -3,10 +3,10 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Courses — Cloudvana</title>
-        <meta name="description" content="Learn machine learning, AI engineering, DSA, system design, and OS &amp; networking through structured, self-contained modules with practical code examples and real-world applications.">
+        <title>Free AI, Programming &amp; Computer Science Courses | Cloudvana</title>
+        <meta name="description" content="Explore free courses in machine learning, AI engineering, programming, DSA, system design, and OS &amp; networking. Learn at your pace, without an account.">
         <meta name="author" content="Chilakalapalli Pavan Kalyan">
-        <meta name="theme-color" content="#4285f4">
+        <meta name="theme-color" content="#087e8b">
         <meta name="robots" content="index, follow, max-image-preview:large">
         <link rel="canonical" href="https://cloudvana.vercel.app/courses.html">
         <meta property="og:type" content="website">
@@ -14,51 +14,63 @@
         <meta property="og:description" content="Explore Cloudvana courses in machine learning, AI engineering, DSA, system design, OS and networking.">
         <meta property="og:url" content="https://cloudvana.vercel.app/courses.html">
         <meta property="og:image" content="https://cloudvana.vercel.app/assets/Cloudvana%20logo.jpg">
-        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:card" content="summary">
         <meta name="twitter:title" content="Courses - Cloudvana">
         <meta name="twitter:description" content="Structured AI and computer science learning tracks with practical examples.">
         <meta name="twitter:image" content="https://cloudvana.vercel.app/assets/Cloudvana%20logo.jpg">
         <meta name="google-site-verification" content="okR4wrh-4aH5RLFmJPOSof5rAZKjbeRNU5VB0J33UYk" />
-        <link rel="icon" type="image/jpeg" href="assets/Cloudvana%20logo.jpg">    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link rel="icon" type="image/jpeg" href="assets/Cloudvana%20logo.jpg">            <script src="js/theme.js"></script>
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous">
         <link rel="stylesheet" href="styles.css">
     </head>
     <body data-page="courses">
+        <a class="skip-link" href="#main-content">Skip to main content</a>
         <div id="site-nav"></div>
+        <noscript><nav class="noscript-banner" aria-label="Site navigation"><a href="index.html">Home</a> &middot; <a href="certifications.html">Certifications</a> &middot; <a href="mentorship.html">Mentorship</a>. Enable JavaScript to load the learning modules. Official learning resources are available from <a href="https://developers.google.com/machine-learning/crash-course">Google's ML Crash Course</a>.</nav></noscript>
+        <main id="main-content" tabindex="-1">
 
         <!-- Course track selector -->
         <section class="course-tracks page-section">
             <div class="container">
-                <h1 class="section-title">Explore Learning Tracks</h1>
-                <p class="section-subtitle">Pick a track to jump straight to it. Every track is self-contained, so you can start anywhere and learn at your own pace.</p>
+                <p class="section-eyebrow">YOUR NEXT CHAPTER</p>
+                <h1 class="section-title">Make curiosity a skill.</h1>
+                <p class="section-subtitle">Five focused tracks. Practical examples. No sign-up required. Choose a starting point or find a module that answers your next question.</p>
+
+                <div class="course-search">
+                    <label for="moduleSearch">Find a module across all tracks</label>
+                    <div class="course-search-input"><i class="fas fa-search" aria-hidden="true"></i><input type="search" id="moduleSearch" placeholder="Try Python, regression, or networks" autocomplete="off" aria-controls="courseSearchResults" aria-describedby="courseSearchStatus"></div>
+                    <p id="courseSearchStatus" class="search-status" role="status"></p>
+                    <div id="courseSearchResults" class="course-search-results" hidden></div>
+                </div>
 
                 <div class="course-tracks-grid">
                     <button type="button" class="track-card" data-track="courses" onclick="showTrack('courses')">
                         <span class="track-card-icon"><i class="fas fa-brain"></i></span>
-                        <h3>Machine Learning</h3>
+                        <span class="track-card-title">Machine Learning</span>
                         <p>ML models, data, advanced ML, and real-world machine learning.</p>
                         <span class="track-level track-level-beginner">Beginner friendly</span>
                     </button>
                     <button type="button" class="track-card" data-track="track-ai-eng" onclick="showTrack('track-ai-eng')">
                         <span class="track-card-icon"><i class="fas fa-robot"></i></span>
-                        <h3>AI Engineering</h3>
+                        <span class="track-card-title">AI Engineering</span>
                         <p>Deep learning to production AI agents and agent frameworks.</p>
                         <span class="track-level track-level-intermediate">Intermediate</span>
                     </button>
                     <button type="button" class="track-card" data-track="track-dsa-sd" onclick="showTrack('track-dsa-sd')">
                         <span class="track-card-icon"><i class="fas fa-code-branch"></i></span>
-                        <h3>DSA &amp; System Design</h3>
+                        <span class="track-card-title">DSA &amp; System Design</span>
                         <p>Problem-solving patterns plus scalable system design and interviews.</p>
                         <span class="track-level track-level-beginner">All levels</span>
                     </button>
                     <button type="button" class="track-card" data-track="track-os-net" onclick="showTrack('track-os-net')">
                         <span class="track-card-icon"><i class="fas fa-network-wired"></i></span>
-                        <h3>OS &amp; Networking</h3>
+                        <span class="track-card-title">OS &amp; Networking</span>
                         <p>How computers run programs and communicate across networks.</p>
                         <span class="track-level track-level-beginner">Beginner friendly</span>
                     </button>
                     <button type="button" class="track-card" data-track="track-programming-languages" onclick="showTrack('track-programming-languages')">
                         <span class="track-card-icon"><i class="fas fa-laptop-code"></i></span>
-                        <h3>Programming Languages</h3>
+                        <span class="track-card-title">Programming Languages</span>
                         <p>Learn Java, Python, C#, and C++ through language-specific foundations and project-ready practice.</p>
                         <span class="track-level track-level-beginner">Language-wise certificates</span>
                     </button>
@@ -345,60 +357,27 @@
             </div>
         </section>
 
+        </main>
         <div id="site-footer"></div>
 
         <!-- Module Modal -->
-        <div id="moduleModal" class="modal">
+        <dialog id="moduleModal" class="modal" aria-labelledby="moduleModalTitle">
             <div class="modal-content">
-                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <button class="close-btn" type="button" onclick="closeModal()" aria-label="Close module" autofocus>&times;</button>
                 <div id="modal-body">
                     <!-- Module details will be loaded here -->
-                </div>
+                </dialog>
             </div>
         </div>
 
-        <script src="js/layout.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-        <script src="script.js"></script>
-        <script src="js/ai-courses.js"></script>
-        <script src="js/dsa-system-design.js"></script>
-        <script src="js/os-networking.js"></script>
-        <script src="js/programming-languages.js"></script>
-        <script>
-            // Top-level track switching: show one track at a time to keep the
-            // page short and focused, instead of stacking every track.
-            (function () {
-                var TRACK_IDS = ['courses', 'track-ai-eng', 'track-dsa-sd', 'track-os-net', 'track-programming-languages'];
-
-                function showTrack(id, doScroll) {
-                    if (TRACK_IDS.indexOf(id) === -1) return;
-
-                    TRACK_IDS.forEach(function (tid) {
-                        var sec = document.getElementById(tid);
-                        if (sec) sec.style.display = (tid === id) ? '' : 'none';
-                    });
-
-                    document.querySelectorAll('.track-card').forEach(function (c) {
-                        c.classList.toggle('active', c.getAttribute('data-track') === id);
-                    });
-                    document.querySelectorAll('.track-switch-link').forEach(function (l) {
-                        l.classList.toggle('active', l.getAttribute('data-track') === id);
-                    });
-
-                    if (doScroll !== false) {
-                        var sec = document.getElementById(id);
-                        if (sec) {
-                            var top = sec.getBoundingClientRect().top + window.pageYOffset - 120;
-                            window.scrollTo({ top: top, behavior: 'smooth' });
-                        }
-                    }
-                }
-
-                window.showTrack = showTrack;
-
-                // Default: show the first track only (keeps initial scroll short).
-                showTrack('courses', false);
-            })();
-        </script>
+        <script src="js/layout.js" defer></script>
+        <script src="js/site.js" defer></script>
+        <script src="script.js" defer></script>
+        <script src="js/ml-content.js" defer></script>
+        <script src="js/ai-courses.js" defer></script>
+        <script src="js/dsa-system-design.js" defer></script>
+        <script src="js/os-networking.js" defer></script>
+        <script src="js/programming-languages.js" defer></script>
+        <script src="js/courses.js" defer></script>
     </body>
     </html>

@@ -1,0 +1,10 @@
+node_modules
+package.json
+package-lock.json
+e2e
+tests
+test-results
+playwright-report
+preview.cjs
+playwright.config.cjs
+README.md
