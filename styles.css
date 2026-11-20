@@ -603,6 +603,7 @@ html:not([data-theme]) #site-nav { display: none; }
 .form-note[data-state="pending"] { color: var(--primary-color); background: var(--primary-soft); }
 .form-note[data-state="success"] { color: var(--success-color); background: var(--success-bg); }
 .form-note[data-state="error"] { color: var(--danger-color); background: var(--danger-bg); }
+.form-note[data-state="warning"] { color: var(--warning-color); background: var(--warning-bg); }
 
 /* Company interview playbooks */
 .hiring-hero { padding: 64px 0 48px; background: var(--surface-subtle); border-bottom: 1px solid var(--border-color); }

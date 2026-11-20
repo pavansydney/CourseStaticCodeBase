@@ -8,4 +8,5 @@ playwright-report
 preview.cjs
 playwright.config.cjs
 scripts
+apps-script
 README.md

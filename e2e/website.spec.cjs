@@ -255,11 +255,50 @@ test('mentorship confirms only acknowledged requests and sends the intended payl
     await expect(page.locator('#mentorshipForm button[type="submit"]')).toBeEnabled();
 });
 
-for (const failure of ['unacknowledged', 'network', 'invalid-json']) {
+for (const emailStatus of ['accepted', 'unconfirmed', 'pending']) {
+    test('mentorship shows a saved reference with ' + emailStatus + ' email status', async ({ page }) => {
+        const reference = 'CV-0123456789ABCDEF0123456789ABCDEF';
+        await page.route('https://script.google.com/**', route => route.fulfill({
+            status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' },
+            body: JSON.stringify({ ok: true, reference, emailStatus })
+        }));
+        await fillMentorship(page);
+        await page.locator('#mentorshipForm button[type="submit"]').click();
+        const message = page.locator('#mentorshipFormMsg');
+        await expect(message).toHaveAttribute('data-state', emailStatus === 'accepted' ? 'success' : 'warning');
+        await expect(message).toContainText(reference);
+        await expect(message).toContainText('Your slot is not confirmed');
+        await expect(message).toContainText(emailStatus === 'accepted' ? 'submitted for sending' : 'you do not need to register again');
+        await expect(page.locator('input[name="name"]')).toHaveValue('');
+        expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
+    });
+}
+
+test('mentorship explains the daily limit without discarding entered details', async ({ page }) => {
+    await page.route('https://script.google.com/**', route => route.fulfill({
+        status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' },
+        body: '{"ok":false,"code":"daily-limit"}'
+    }));
+    await fillMentorship(page);
+    await page.locator('#mentorshipForm button[type="submit"]').click();
+    await expect(page.locator('#mentorshipFormMsg')).toContainText('Your request has not been saved');
+    await expect(page.locator('input[name="name"]')).toHaveValue('Test Learner');
+    await expect(page.locator('#mentorshipForm button[type="submit"]')).toBeEnabled();
+    await expect(page.locator('#mentorshipForm')).not.toHaveAttribute('aria-busy');
+});
+
+for (const failure of ['unacknowledged', 'network', 'invalid-json', 'invalid-reference', 'skipped']) {
     test('mentorship preserves entries on ' + failure + ' delivery', async ({ page }) => {
         await page.route('https://script.google.com/**', async route => {
             if (failure === 'network') await route.abort('failed');
-            else await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: failure === 'invalid-json' ? '<html>Not an acknowledgement</html>' : '{"success":false}' });
+            else {
+                const bodies = {
+                    'invalid-json': '<html>Not an acknowledgement</html>',
+                    'invalid-reference': '{"ok":true,"reference":"<script>invalid</script>"}',
+                    skipped: '{"ok":true,"skipped":true}'
+                };
+                await route.fulfill({ status: 200, contentType: 'application/json', headers: { 'Access-Control-Allow-Origin': '*' }, body: bodies[failure] || '{"success":false}' });
+            }
         });
         await fillMentorship(page);
         await page.locator('#mentorshipForm button[type="submit"]').click();

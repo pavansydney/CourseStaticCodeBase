@@ -59,9 +59,24 @@
             const response = await fetch(endpoint, { method: 'POST', body: params, signal: controller.signal });
             if (!response.ok || response.type === 'opaque') throw new Error('The submission service did not provide a readable successful response.');
             const result = await response.json();
-            const acknowledged = result && (result.success === true || result.ok === true || result.status === 'success');
+            if (result && result.ok === false && result.code === 'daily-limit') {
+                setMessage('The registration service has reached its daily limit. Your request has not been saved. Your entries are still here; please contact cloud.vana@outlook.com or try again later.', 'error');
+                return;
+            }
+            const acknowledged = result && !result.skipped && (result.success === true || result.ok === true || result.status === 'success');
             if (!acknowledged) throw new Error('The submission service did not acknowledge the request.');
-            setMessage('Your request has been received. We will review it and contact you by email. No payment has been taken.', 'success');
+            if (result.reference != null && (typeof result.reference !== 'string' || !/^CV-[A-F0-9]{32}$/.test(result.reference))) {
+                throw new Error('The submission service returned an invalid reference.');
+            }
+            const reference = result.reference ? ' Your reference: ' + result.reference + '.' : '';
+            const emailNote = result.reference ?
+                (result.emailStatus === 'accepted' ?
+                    ' A confirmation email has been submitted for sending; check your inbox and spam folder.' :
+                    ' Your request is saved, but the confirmation email is not confirmed. Keep your reference and contact cloud.vana@outlook.com if needed; you do not need to register again.') :
+                '';
+            setMessage('Thanks for registering. Your request has been received.' + reference + emailNote +
+                ' We will review your request and email you about next steps and any available session date and time. Your slot is not confirmed. No payment has been taken.',
+                result.reference && result.emailStatus !== 'accepted' ? 'warning' : 'success');
             form.reset();
         } catch (error) {
             console.error('Mentorship submission could not be confirmed:', error);

@@ -122,9 +122,104 @@ that the browser can read through CORS. An acknowledgement must be JSON with
 responses, network failures, and timeouts are shown as unconfirmed delivery.
 The form retains entered data when delivery cannot be confirmed.
 
-The submission service is external to this repository. Its deployment, response
-headers, processing, and email delivery must be verified by its owner. Do not
-restore `no-cors` requests or report success without a readable acknowledgement.
+The deployment is external to this repository. The replacement
+[Apps Script source](apps-script/mentorship.gs) preserves the first ten sheet
+columns, generates a server-side UUID reference, and sends branded HTML plus
+plain-text email through Google MailApp. The sender is the Google account that
+owns and executes the deployment, with display name `Cloudvana`. Student
+acknowledgements use `cloud.vana@outlook.com` as Reply-To. Admin alerts also go
+to that Outlook inbox, with the student's address as Reply-To. Outlook is not
+the sender. No Microsoft application, OAuth library, client secret, or mailbox
+password is needed. Copying or pushing repository changes does not deploy this
+script.
+
+The new response includes `reference: "CV-<32 uppercase hex characters>"` and
+`emailStatus: "accepted"`, `"pending"`, or `"unconfirmed"`. A successful MailApp
+call means submitted for sending, not proof of delivery. The page shows the reference and
+distinguishes a saved request from an unconfirmed email. It remains compatible
+with the old acknowledgement, without inventing a reference or claiming an
+email was sent. Session dates and times are agreed manually, not booked by the
+form.
+
+### Configure Gmail sending and deploy the intake script
+
+1. Back up your existing Apps Script and sheet. Use a copy of the sheet and a
+   test deployment first. Do not paste credentials into source code or chat.
+2. Replace the old Apps Script code with the replacement source. In
+   **Project Settings > Script properties**, add `SPREADSHEET_ID`. Its value is
+   the portion between `/d/` and `/edit` in the registration sheet's URL.
+   Optionally set `SHEET_NAME`; its default is `Sheet1`. Keep script editor
+   access restricted to trusted owners. Do not change the first ten columns.
+3. Run `doGet` once from the Apps Script editor and grant the Google permissions
+   requested for spreadsheet access and sending email. Run as the personal
+   Google account you intend to use as sender. `doGet` is a health check, not a
+   test email. No Outlook sign-in or authorization is required.
+4. Deploy the web app to **execute as you**, with access appropriate for public
+   website submissions (**Anyone**). Update the existing deployment to a new
+   version to preserve its `/exec` URL. If you create a different deployment,
+   update the endpoint in the page script.
+5. Run the live checks below against the test deployment before updating
+   production. The owner must grant Google permissions. Do not enable a public
+   sender merely because mock tests passed. If you previously configured the
+   abandoned Outlook integration, revoke that application's consent and remove
+   its unused credentials, tokens, and OAuth library after backing up as needed.
+
+See Google's [MailApp reference](https://developers.google.com/apps-script/reference/mail/mail-app)
+for HTML, plain-text, display-name, and Reply-To options. This is a small-pilot
+setup, not a bulk-email service.
+
+### Check delivery and operate the pilot
+
+* Submit a test request to an address you control, never a real student's
+  address without their request. Check the browser reference matches column K,
+  the student email subject/body, and the admin notification in Outlook.
+* Inspect the recipient's actual From and Reply-To headers: From must be the
+  deployment owner's Google address and Reply-To must be the Cloudvana Outlook
+  address for the student email. Reply and confirm it arrives in Outlook.
+  Check inbox/spam placement, HTML and plain-text views, and mobile rendering.
+  Do not assume MailApp messages appear in Gmail's Sent folder; check the
+  controlled recipient and intake statuses. Submission is not proof of delivery.
+* Repeat the exact request within 24 hours. It must return the same reference
+  without another sheet row or email. Duplicate matching uses the normalized
+  complete payload, so changed requests are treated as new registrations.
+* Test an invalid plan, missing consent, exhausted Google mail quota, and a
+  mail-send failure. Failed email must leave the saved
+  registration visible with an honest status, not ask the learner to pay or
+  resubmit.
+* Existing columns A-J retain their order. New columns K-O are Reference,
+  Request fingerprint, Student email, Admin email, and Consent. If your sheet
+  already has a header row, add those header labels manually; existing rows
+  are not rewritten. Empty sheets receive the complete header row.
+* Monitor the sheet and owner execution logs. `pending` can mean a request is
+  still processing or the script was interrupted. `unconfirmed` requires
+  manual review. No automatic resend occurs after an ambiguous failure:
+  investigate the send and contact the learner using their reference if needed.
+  A student-send failure also prevents the admin alert in that execution, so
+  the sheet remains the source of truth.
+* A script lock prevents concurrent duplicate inserts. Intake is capped at
+  200 new registrations per rolling 24 hours, with at most two email submissions
+  per registration. The honeypot and cap are basic safeguards, not bot
+  verification; add verified anti-abuse controls before promoting widely.
+  An unauthenticated form cannot prove the entered email belongs to its user.
+  At capacity, requests are not saved and the page offers direct contact.
+  The registration cap does not raise Google's sending quota.
+* Google currently documents 100 email recipients per day for consumer Apps
+  Script accounts. With one student email and one admin alert, that allows
+  roughly 50 fully emailed registrations if no other scripts consume the
+  account's quota. The script checks `MailApp.getRemainingDailyQuota()` before
+  each send. Further requests can still be saved up to the 200-registration cap,
+  but emails are marked `unconfirmed` when quota runs out. They are not queued
+  for automatic delivery the next day; manual follow-up is required. If only
+  one recipient remains, the student email is sent first and the admin alert
+  may be unconfirmed. Verify current [Google quotas](https://developers.google.com/apps-script/guides/services/quotas)
+  before relying on volume estimates.
+* Keep the existing deployment available for rollback and do not commit
+  secrets or student data.
+
+The owner must verify deployment, CORS responses, processing, and email
+delivery. Do not restore `no-cors` requests or report success without a readable
+acknowledgement. Tests use mocked Google services; they do not
+send real email or establish production readiness.
 
 No payment is taken by this website. Free orientation and focused mentorship at
 149 INR per session remain separate from free learning content and official
