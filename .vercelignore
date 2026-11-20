@@ -7,4 +7,5 @@ test-results
 playwright-report
 preview.cjs
 playwright.config.cjs
+scripts
 README.md

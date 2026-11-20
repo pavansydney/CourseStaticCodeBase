@@ -58,6 +58,33 @@ test('JavaScript and structured data parse successfully', () => {
     }
 });
 
+test('every published page shares a real large social image with descriptive metadata', () => {
+    const image = fs.readFileSync(path.join(root, 'assets', 'cloudvana-social.png'));
+    assert.equal(image.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+    assert.equal(image.readUInt32BE(16), 1200);
+    assert.equal(image.readUInt32BE(20), 630);
+    for (const [page, html] of Object.entries(contents)) {
+        assert.equal(metadata(html, 'twitter:card'), 'summary_large_image', page);
+        assert.equal(metadata(html, 'og:image'), 'https://cloudvana.vercel.app/assets/cloudvana-social.png', page);
+        assert.equal(metadata(html, 'twitter:image'), metadata(html, 'og:image'), page);
+        assert.equal(metadata(html, 'og:image:width'), '1200', page);
+        assert.equal(metadata(html, 'og:image:height'), '630', page);
+        assert.ok(metadata(html, 'og:image:alt')?.length > 30, page);
+        assert.ok(metadata(html, 'twitter:image:alt')?.length > 30, page);
+    }
+});
+
+test('trust disclosures distinguish local progress and unverified claims from guarantees', () => {
+    assert.match(contents['index.html'], /not affiliated with, sponsored by, or endorsed by Microsoft/);
+    assert.match(contents['index.html'], /same browser.*not to an account/);
+    assert.match(contents['index.html'], /not independently verified coverage/);
+    assert.match(contents['about.html'], /id="content-standards"/);
+    assert.match(contents['about.html'], /No complete subject-matter review/);
+    assert.match(contents['about.html'], /specific official job posting and recruiter instructions/);
+    assert.match(contents['certifications.html'], /coverage of current exam objectives has not been independently verified/);
+    assert.match(contents['hiring-procedures.html'], /not independently verified current hiring processes/);
+});
+
 function loadContent(files) {
     const source = 'const courseData = {};\n' + files.map(file => read(path.join('js', file))).join('\n') + '\nJSON.stringify(courseData)';
     return JSON.parse(vm.runInNewContext(source, {}, { timeout: 5000 }));

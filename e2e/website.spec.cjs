@@ -35,6 +35,7 @@ for (const filename of pages) {
         for (const theme of ['light', 'dark']) {
             if (theme === 'dark') await page.getByRole('button', { name: 'Switch to dark theme' }).click();
             await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+            await page.evaluate(() => Promise.all(document.getAnimations().map(animation => animation.finished)));
             const audit = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa', 'best-practice']).analyze();
             const violations = audit.violations.map(item => ({ id: item.id, impact: item.impact, targets: item.nodes.map(node => node.target) }));
             if (violations.length) await testInfo.attach(filename + '-' + theme + '-accessibility', { body: JSON.stringify(violations, null, 2), contentType: 'application/json' });
@@ -211,10 +212,14 @@ test('company search, filters, reset, and disclosures remain keyboard usable', a
     await expect(page.locator('[data-audience="fresher"]')).toHaveAttribute('aria-pressed', 'true');
     await page.locator('#companySearch').fill('MSFT');
     await expect(page.locator('.hiring-card')).toHaveCount(1);
-    const summary = page.locator('.hiring-disclosure summary').first();
+    const disclosure = page.locator('.hiring-card .hiring-disclosure').first();
+    const initiallyOpen = await disclosure.evaluate(element => element.open);
+    const summary = disclosure.locator('summary').first();
     await summary.focus();
     await page.keyboard.press('Space');
-    await expect(page.locator('.hiring-disclosure').first()).toHaveAttribute('open', '');
+    await expect(disclosure).toHaveJSProperty('open', !initiallyOpen);
+    await page.keyboard.press('Enter');
+    await expect(disclosure).toHaveJSProperty('open', initiallyOpen);
 });
 
 async function fillMentorship(page) {
@@ -278,7 +283,8 @@ test('blocked storage is visible and does not prevent learning', async ({ page }
 });
 
 test('initial JavaScript transfer stays within page-specific budgets', async ({ page }) => {
-    const budgets = { 'index.html': 35000, 'courses.html': 1000000, 'certifications.html': 750000, 'find-your-path.html': 45000, 'hiring-procedures.html': 115000, 'mentorship.html': 40000, 'about.html': 35000, 'prerequisites.html': 35000 };
+    // The expanded 15-company plans include 180 scoped tasks; cap decoded hiring scripts at 140 KB.
+    const budgets = { 'index.html': 35000, 'courses.html': 1000000, 'certifications.html': 750000, 'find-your-path.html': 45000, 'hiring-procedures.html': 140000, 'mentorship.html': 40000, 'about.html': 35000, 'prerequisites.html': 35000 };
     for (const [filename, budget] of Object.entries(budgets)) {
         await page.goto('/' + filename);
         const bytes = await page.evaluate(() => performance.getEntriesByType('resource').filter(entry => entry.initiatorType === 'script').reduce((sum, entry) => sum + entry.decodedBodySize, 0));

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title description">
+  <title id="title">Cloudvana: learn, build, explain</title>
+  <desc id="description">Free programming and AI learning for students, with worked examples, project practice, and interview preparation.</desc>
+  <rect width="1200" height="630" fill="#102d35"/>
+  <rect x="64" y="64" width="8" height="502" rx="4" fill="#76d7d1"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="110" y="130" fill="#76d7d1" font-size="38" font-weight="700">CLOUDVANA</text>
+    <text x="110" y="250" fill="#ffffff" font-size="72" font-weight="700">Learn. Build. Explain.</text>
+    <text x="110" y="330" fill="#e8f0f4" font-size="36">Programming and AI for students.</text>
+    <text x="110" y="390" fill="#afc2ce" font-size="30">Worked examples. Project practice. Interview preparation.</text>
+    <text x="110" y="505" fill="#76d7d1" font-size="28">Free learning. No account required.</text>
+    <text x="110" y="550" fill="#afc2ce" font-size="24">cloudvana.vercel.app</text>
+  </g>
+</svg>

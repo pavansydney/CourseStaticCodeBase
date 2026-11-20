@@ -106,7 +106,7 @@
                     </div>
                     <div class="footer-bottom">
                         <p>&copy; ${new Date().getFullYear()} Cloudvana. Founded by <a href="https://www.linkedin.com/in/chilakalapalli-p-141267119/" ${external}>Pavan Kalyan</a>.</p>
-                        <p>Independent educational resources. Not affiliated with certification providers. Official exam fees are separate.</p>
+                        <p>Independent educational resources. Not affiliated with or endorsed by Microsoft, AWS, Google Cloud, Salesforce, SAP, or featured employers. Official exam fees are separate. <a href="about.html#independence">Independence notice</a> · <a href="about.html#content-standards">Sources and review status</a>.</p>
                     </div>
                 </div>
             </footer>`;

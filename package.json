@@ -5,6 +5,7 @@
   "description": "Independent AI, software engineering, and cloud certification learning paths.",
   "scripts": {
     "dev": "node preview.cjs",
+    "content:catalog": "node scripts\\generate-course-catalog.cjs",
     "test": "node --test",
     "test:browser": "playwright test"
   },

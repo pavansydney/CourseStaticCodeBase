@@ -10,12 +10,12 @@ courseData.javaProgramming = [
     {
         number: "Module 1",
         title: "Java Core and Toolchain",
-        description: "Build deep Java fundamentals across runtime internals, type-safe coding, classpath setup, and command-line workflow.",
+        description: "Install a JDK, run your first program, then learn values, decisions, loops, methods, and debugging.",
         duration: "80 min",
         lessons: "15 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Introduction and History", "Java Language Evolution", "JDK/JRE/JVM", "Classpath and Packages", "Compilation and Bytecode", "Project Structure", "Variables and Types", "Operators", "Control Flow", "Methods", "Arrays", "Strings", "Enums", "Wrapper Types", "Command Line Build", "Debugging Basics"],
+        topics: ["Setup and First Program", "Variables and Types", "Operators", "Control Flow", "Methods", "Arrays", "Strings", "Enums", "Wrapper Types", "Command Line Build", "Debugging Basics", "Project Structure", "Classpath and Packages", "Optional: Java History and JVM"],
         detailedDescription: "Beginner-first module with stronger depth on runtime model, program structure, and practical coding discipline.",
         detailedContent: [
             {
@@ -36,7 +36,7 @@ Skills Gained:
 • starter-level debugging and troubleshooting`
             },
                         {
-                                title: "Lesson 0: Java Introduction and History",
+                                title: "Optional: Java Introduction and History",
                                 content: `Why this matters: language history explains why Java emphasizes portability, backward compatibility, and enterprise stability.
 Learning Objective: understand where Java came from and why it remains widely used.
 Core Theory: Java began at Sun Microsystems (mid-1990s) with a "write once, run anywhere" model. Over time it evolved from applets/desktop-heavy usage to backend, cloud, Android, and large-scale enterprise systems.
@@ -55,26 +55,23 @@ Practice:
 • map one Java release feature to a real project benefit`
                         },
             {
-                title: "Lesson 1: Why Java, and How the Runtime Actually Works",
-                content: `Why this matters: Java jobs expect runtime understanding, not just syntax memorization. Knowing bytecode and JVM responsibilities helps you debug startup and compatibility issues quickly.
-Learning Objective: understand the Java execution pipeline end-to-end.
-Core Theory: Java source (.java) is compiled by javac into bytecode (.class). The JVM loads classes through class loaders, verifies bytecode safety, and executes with interpreter + JIT compilation. JDK is a development kit (compiler + tools), while JRE is runtime components.
+                title: "Lesson 1: Install, Compile, and Run Java",
+                content: `Goal: see a program you wrote print a message before studying runtime internals.
+1. Install a JDK version 21 or later from a trusted distributor. A JDK includes the compiler and runtime; an editor alone does not.
+2. Open a new terminal. Run java -version and javac -version. Both should show the intended JDK. If either command is missing, fix your JDK installation/PATH and reopen the terminal.
+3. Create an empty learning folder and save the complete example as HelloWorld.java, not HelloWorld.java.txt. The public class name must match the filename.
+4. In that folder run javac HelloWorld.java, then java HelloWorld (without .java or .class). Expected output: Hello, Java runtime!
+5. Change the message, save, compile again, and run again. Compilation updates the .class file; running alone will not rebuild it.
+Read the code: main is the entry point; braces group statements; println prints a line; statements end with semicolons. String[] args receives command-line arguments, which we will use later.
+First values and decisions: put int score = 75; inside main, then print score + 5. You should see 80. Add if (score >= 60) { System.out.println("Pass"); } and predict Pass.
+First repetition: for (int i = 1; i <= 3; i++) { System.out.println(i); } prints 1, 2, 3 on separate lines.
 Diagram (Mermaid):
 flowchart LR
-    A[input] --> B[validate]
-    B --> C[transform]
-    C --> D[format result]
-  D --> E[Bytecode Verifier]
-  E --> F[JVM Execution + JIT]
-Worked Example: run a HelloWorld class and inspect bytecode using javap -c.
-Common Mistakes: confusing JDK and JRE; incorrect classpath; class name/file mismatch.
-Recap:
-• JDK builds programs
-• JVM runs bytecode
-• bytecode is portable, JVM implementations are platform specific
-Practice:
-• compile and run HelloWorld from terminal
-• run javap -c and identify main method instructions`,
+  A[Save HelloWorld.java] --> B[javac HelloWorld.java]
+  B --> C[java HelloWorld]
+  C --> D[Read printed message]
+Practice: print your name and the result of 7 + 3 on separate lines. Expected second line: 10.
+Later, optional runtime reading: javac produces bytecode. A platform-specific JVM loads and verifies classes, then interprets or JIT-compiles their instructions. javap -c HelloWorld inspects bytecode; recognizing opcodes is not required to complete this module.`,
                 code: `public class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello, Java runtime!");
@@ -85,27 +82,32 @@ Practice:
                 title: "Lesson 2: Variables, Primitive Types, and Numeric Correctness",
                 content: `Why this matters: Many production defects are data-type bugs: truncation, overflow, and wrong numeric representation.
 Learning Objective: choose types intentionally and avoid hidden conversions.
-Core Theory: primitives have fixed range/precision; widening conversion is safe, narrowing may lose data. int division truncates toward zero. Use BigDecimal for money calculations instead of float/double.
+Core Theory: primitives have defined ranges/precision; widening can still lose precision (for example int to float). Narrowing may lose magnitude as well. Integer division truncates toward zero: 7 / 2 is 3; 7 / 2.0 is 3.5. Start with int counts and double measurements; BigDecimal is a later extension for decimal money calculations.
 Diagram (Mermaid):
 flowchart TD
   A[byte] --> B[short] --> C[int] --> D[long]
   C --> E[float] --> F[double]
-Worked Example: bill total with tax using BigDecimal.
+Worked Example: the complete Invoice.java below multiplies 199.99 by 3, adds 18% tax, then rounds the final payable amount to two decimal places. Run javac Invoice.java then java Invoice. Expected: Total: 707.96.
 Common Mistakes: using double for currency; implicit cast assumptions.
 Recap:
 • type decisions affect correctness
 • numeric operations follow strict conversion rules
 • currency needs decimal-safe representation
 Practice:
-• rewrite an invoice calculator from double to BigDecimal`,
+• change quantity to 2 in the supplied invoice. Expected rounded total: 471.98.`,
                 code: `import java.math.BigDecimal;
 
-BigDecimal price = new BigDecimal("199.99");
-BigDecimal qty = new BigDecimal("3");
-BigDecimal taxRate = new BigDecimal("0.18");
-BigDecimal subtotal = price.multiply(qty);
-BigDecimal total = subtotal.add(subtotal.multiply(taxRate));
-System.out.println("Total: " + total);`
+public class Invoice {
+    public static void main(String[] args) {
+        BigDecimal price = new BigDecimal("199.99");
+        BigDecimal qty = new BigDecimal("3");
+        BigDecimal taxRate = new BigDecimal("0.18");
+        BigDecimal subtotal = price.multiply(qty);
+        BigDecimal total = subtotal.add(subtotal.multiply(taxRate))
+            .setScale(2, java.math.RoundingMode.HALF_UP);
+        System.out.println("Total: " + total);
+    }
+}`
             },
             {
                 title: "Lesson 3: Input, Validation, and Control Flow Patterns",
@@ -124,18 +126,30 @@ Recap:
 • guard clauses simplify branching
 • failure paths should be explicit
 Practice:
-• accept 5 scores, reject values outside 0..100, then compute average`,
+• run the complete Score.java below with 90, -1, and hello on separate runs. Expect Grade: A, Invalid marks, and Enter a whole number. Extension: collect five valid marks before computing an average.`,
                 code: `import java.util.Scanner;
 
-Scanner sc = new Scanner(System.in);
-System.out.print("Enter marks (0-100): ");
-int marks = Integer.parseInt(sc.nextLine());
-if (marks < 0 || marks > 100) {
-    System.out.println("Invalid marks");
-    return;
-}
-String grade = marks >= 90 ? "A" : marks >= 75 ? "B" : marks >= 60 ? "C" : "D";
-System.out.println("Grade: " + grade);`
+public class Score {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter marks (0-100): ");
+        if (!sc.hasNextLine()) {
+            System.out.println("No input");
+            return;
+        }
+        try {
+            int marks = Integer.parseInt(sc.nextLine().trim());
+            if (marks < 0 || marks > 100) {
+                System.out.println("Invalid marks");
+                return;
+            }
+            String grade = marks >= 90 ? "A" : marks >= 75 ? "B" : marks >= 60 ? "C" : "D";
+            System.out.println("Grade: " + grade);
+        } catch (NumberFormatException ex) {
+            System.out.println("Enter a whole number");
+        }
+    }
+}`
             },
             {
                 title: "Lesson 4: Methods, Scope, and Reusability",
@@ -147,20 +161,20 @@ flowchart TD
   A[input] --> B[validateMarks]
   B --> C[calculateAverage]
   C --> D[formatReport]
-Worked Example: split one long method into three focused helpers.
+Worked Example: start with int[] marks = {60, 90}; int total = 0; for (int mark : marks) total += mark; System.out.println(total / (double) marks.length); inside main. It prints 75.0.
 Common Mistakes: god methods; hidden side effects through mutable shared state.
 Recap:
 • one method = one primary responsibility
 • return useful values instead of printing from deep logic
 • keep method names verb-focused
 Practice:
-• refactor a 60-line main method into 4-6 cohesive methods`
+• move the calculation above into static double average(int[] marks). Reject an empty array with IllegalArgumentException before division, return the average, and print only in main. Verify {60, 90} returns 75.0 and {100} returns 100.0. Do not introduce shared fields.`
             },
             {
                 title: "Lesson 5: Arrays, Strings, Enums, and Wrapper Utilities",
                 content: `Why this matters: these are the building blocks for most early and interview coding tasks.
 Learning Objective: use core APIs safely and efficiently.
-Core Theory: arrays are fixed-size contiguous storage; String is immutable; enums encode finite domain values; wrappers enable parsing and null-aware object use.
+Core Theory: arrays have a fixed length and zero-based indices; Java does not specify a physical storage layout for all arrays. String is immutable; enums encode finite domain values; wrappers enable parsing and object use, but unboxing null throws NullPointerException.
 Diagram (Mermaid):
 flowchart LR
   A[raw input] --> B[String parse]
@@ -175,15 +189,18 @@ Recap:
 • enums increase domain safety
 Practice:
 • build a parser that maps "NEW/PROCESSING/DONE" into an enum and summarizes counts`,
-                code: `enum Status { NEW, PROCESSING, DONE }
-
-String[] raw = {"NEW", "DONE", "NEW"};
-int done = 0;
-for (String value : raw) {
-    Status s = Status.valueOf(value);
-    if (s == Status.DONE) done++;
-}
-System.out.println("Done count: " + done);`
+                code: `                public class StatusDemo {
+                    enum Status { NEW, PROCESSING, DONE }
+                    public static void main(String[] args) {
+                        String[] raw = {"NEW", "DONE", "NEW"};
+                        int done = 0;
+                        for (String value : raw) {
+                            Status s = Status.valueOf(value);
+                            if (s == Status.DONE) done++;
+                        }
+                        System.out.println("Done count: " + done);
+                    }
+                }`
             },
             {
                 title: "Lesson 6: CLI Tooling, Build Hygiene, and Debugging Basics",
@@ -202,7 +219,7 @@ Recap:
 • stack traces are structured diagnostics
 • command-line fluency accelerates troubleshooting
 Practice:
-• break and fix two runtime errors in a sample CLI app`
+• inside HelloWorld.main run System.out.println(Integer.parseInt("ten"));. Read NumberFormatException and its source line, then change "ten" to "10". Next try new int[]{7}[1], identify ArrayIndexOutOfBoundsException, and use index 0. Expected fixed outputs: 10 and 7.`
             },
             {
                 title: "Mini Project: Student Result Analyzer",
@@ -368,7 +385,7 @@ Recap:
     private final String memberId;
 
     Member(String memberId) {
-        this.memberId = memberId;
+        this.memberId = java.util.Objects.requireNonNull(memberId, "memberId");
     }
 
     @Override
@@ -512,18 +529,24 @@ flowchart TD
 Worked Example: sum producer list and append to consumer list.
 Common Mistakes: raw types; wildcard overuse in public APIs.
 Practice:
-• define copyNumbers(List<? extends Number>, List<? super Number>)`,
-                code: `static double sumNumbers(java.util.List<? extends Number> values) {
-    double sum = 0.0;
-    for (Number n : values) sum += n.doubleValue();
-    return sum;
+• define static void copyNumbers(List<? extends Number> source, List<? super Number> destination) using a for loop that adds each Number to destination. For source List.of(1, 2.5) and an empty List<Object>, expect [1, 2.5].
+Run the sum example as Main.java. Expected output: 3.5.`,
+                code: `public class Main {
+    static double sumNumbers(java.util.List<? extends Number> values) {
+        double sum = 0.0;
+        for (Number n : values) sum += n.doubleValue();
+        return sum;
+    }
+    public static void main(String[] args) {
+        System.out.println(sumNumbers(java.util.List.of(1, 2.5)));
+    }
 }`
             },
             {
                 title: "Lesson 3: Exception Hierarchy and Error Strategy",
                 content: `Why this matters: random exception handling makes systems hard to debug and support.
 Learning Objective: classify failures and propagate context.
-Core Theory: checked exceptions model recoverable scenarios; unchecked exceptions model programming or invariant violations. Wrap low-level exceptions with domain context where necessary.
+Core Theory: checked exceptions must be caught or declared; unchecked exceptions (RuntimeException subclasses) do not have that compiler requirement. Recovery depends on the operation and caller, not solely on the exception category. Preserve the original cause when wrapping low-level failures.
 Diagram (Mermaid):
 flowchart LR
   A[IO/DB failure] --> B[Repository Exception]
@@ -648,7 +671,7 @@ flowchart LR
   B --> C[map]
   C --> D[groupingBy]
   D --> E[result]
-Worked Example: department-wise salary aggregates with collectors.
+Worked Example: department-wise salary aggregates with collectors. Use the complete Employee record and input fixtures in Guided practice; insert the fragment below inside main after defining employees. Expected averages there: Engineering=150.0 and Sales=90.0. Filter negative salaries as the guide requires before collecting.
 Common Mistakes: mutating external state inside stream operations.
 Practice:
 • refactor nested loops into groupingBy + mapping`,
@@ -677,25 +700,30 @@ Practice:
                 title: "Lesson 3: Records, Sealed Types, and Pattern Matching",
                 content: `Why this matters: modern Java can reduce boilerplate while increasing type safety.
 Learning Objective: model closed domain hierarchies.
-Core Theory: records are immutable carriers; sealed classes constrain inheritance; pattern matching reduces instanceof noise.
+Core Theory: records have final component fields but are only shallowly immutable: a component can reference a mutable list. Use defensive copies for collection components. Sealed classes constrain inheritance; pattern matching reduces instanceof noise. The switch example requires Java 21 without preview flags.
 Diagram (Mermaid):
 flowchart TD
   A[sealed PaymentResult] --> B[Success]
   A --> C[Failure]
   A --> D[Pending]
-Worked Example: exhaustive switch over payment outcomes.
+Worked Example: exhaustive switch over payment outcomes. Save the complete program as Main.java; compile with JDK 21+. Expected output: Paid: T1, then Failed: declined on separate lines.
 Common Mistakes: using records for mutable entities.
 Practice:
 • convert DTO class hierarchy to sealed + record structure`,
-                code: `sealed interface PaymentResult permits Success, Failure {}
-record Success(String txnId) implements PaymentResult {}
-record Failure(String reason) implements PaymentResult {}
-
-static String message(PaymentResult result) {
-    return switch (result) {
-        case Success s -> "Paid: " + s.txnId();
-        case Failure f -> "Failed: " + f.reason();
-    };
+                code: `public class Main {
+    sealed interface PaymentResult permits Success, Failure {}
+    record Success(String txnId) implements PaymentResult {}
+    record Failure(String reason) implements PaymentResult {}
+    static String message(PaymentResult result) {
+        return switch (result) {
+            case Success s -> "Paid: " + s.txnId();
+            case Failure f -> "Failed: " + f.reason();
+        };
+    }
+    public static void main(String[] args) {
+        System.out.println(message(new Success("T1")));
+        System.out.println(message(new Failure("declined")));
+    }
 }`
             },
             {
@@ -819,24 +847,26 @@ Practice:
                 title: "Lesson 2: Executors, Futures, and Backpressure Awareness",
                 content: `Why this matters: unbounded thread creation crashes services.
 Learning Objective: choose bounded pools and task queues.
-Core Theory: fixed thread pool protects resources; queue policy controls load; Future/CompletableFuture model async result and error paths.
+Core Theory: a fixed worker count limits active threads, not queued work. Executors.newFixedThreadPool uses an unbounded queue; use ThreadPoolExecutor with a bounded queue and explicit rejection policy for load control. Future/CompletableFuture model results and failures. A timeout alone does not guarantee that underlying work stops; design cooperative cancellation.
 Diagram (Mermaid):
 flowchart LR
   A[tasks] --> B[bounded queue]
   B --> C[fixed pool workers]
   C --> D[future results]
 Practice:
-• configure fixed pool and timeout strategy for slow tasks`,
-                code: `java.util.concurrent.ExecutorService pool = java.util.concurrent.Executors.newFixedThreadPool(4);
-
-java.util.concurrent.CompletableFuture<String> first =
-    java.util.concurrent.CompletableFuture.supplyAsync(() -> "A", pool);
-java.util.concurrent.CompletableFuture<String> second =
-    java.util.concurrent.CompletableFuture.supplyAsync(() -> "B", pool);
-
-String combined = first.thenCombine(second, (a, b) -> a + b).join();
-System.out.println(combined);
-pool.shutdown();`
+• run this complete Main.java example; expect AB. Then make the second task throw IllegalStateException("B failed") and observe join propagating a CompletionException while finally still requests shutdown. Use the guided exercise for per-file counts.`,
+                code: `import java.util.concurrent.*;
+public class Main {
+    public static void main(String[] args) {
+        ExecutorService pool = new ThreadPoolExecutor(2, 2, 0L, TimeUnit.MILLISECONDS,
+            new ArrayBlockingQueue<>(2), new ThreadPoolExecutor.AbortPolicy());
+        try {
+            CompletableFuture<String> first = CompletableFuture.supplyAsync(() -> "A", pool);
+            CompletableFuture<String> second = CompletableFuture.supplyAsync(() -> "B", pool);
+            System.out.println(first.thenCombine(second, (a, b) -> a + b).join());
+        } finally { pool.shutdown(); }
+    }
+}`
             },
             {
                 title: "Lesson 3: Concurrent Collections and Locking Strategies",
@@ -855,7 +885,7 @@ Practice:
                 title: "Lesson 4: File IO, NIO.2, and Data Integrity",
                 content: `Why this matters: file systems fail in partial and unpredictable ways.
 Learning Objective: build resilient file processing flows.
-Core Theory: java.nio.file APIs support path operations, buffered streaming, and safer file handling; use temp files + atomic move for integrity-sensitive writes.
+Core Theory: java.nio.file APIs support paths and buffered streaming. For integrity-sensitive writes, write a sibling staging file, close it, then request an atomic move on the same filesystem. ATOMIC_MOVE may be unsupported; report that explicitly rather than promising atomicity after a non-atomic fallback. Atomic visibility does not itself guarantee durability after power loss.
 Diagram (Mermaid):
 flowchart LR
   A[input file] --> B[validate line]
@@ -1106,12 +1136,12 @@ courseData.pythonProgramming = [
     {
         number: "Module 1",
         title: "Python Core and Runtime Foundations",
-        description: "Build strong Python fundamentals with interpreter internals, syntax discipline, functions, collections, and debugging workflow.",
+        description: "Run a Python script, then build confidence with values, decisions, loops, functions, collections, and tracebacks.",
         duration: "85 min",
         lessons: "14 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Introduction and History", "Python Execution Model", "Interpreter and Bytecode", "Variables and Dynamic Typing", "Operators and Expressions", "Control Flow", "Functions", "Scope Rules", "Strings", "Lists", "Tuples", "Sets", "Dictionaries", "CLI and Debugging Basics", "Code Style"],
+        topics: ["Setup and First Script", "Variables and Dynamic Typing", "Operators and Expressions", "Control Flow", "Functions", "Scope Rules", "Strings", "Lists", "Tuples", "Sets", "Dictionaries", "CLI and Debugging Basics", "Code Style", "Optional: History and CPython Bytecode"],
         detailedDescription: "Beginner-first module that goes beyond syntax and builds practical understanding of how Python code executes and fails.",
         detailedContent: [
             {
@@ -1132,7 +1162,7 @@ Skills Gained:
 - stronger coding discipline for later modules`
             },
                         {
-                                title: "Lesson 0: Python Introduction and History",
+                                title: "Optional: Python Introduction and History",
                                 content: `Why this matters: understanding Python's design goals helps you write idiomatic code instead of treating it like another C-style language.
 Learning Objective: understand Python's origins and major ecosystem evolution.
 Core Theory: Python was created by Guido van Rossum (early 1990s) with emphasis on readability and developer productivity. Python 3 standardized modern semantics and enabled broad growth across web, automation, data science, and AI.
@@ -1151,23 +1181,16 @@ Practice:
 - explain one Python design principle and show it in a small code example`
                         },
             {
-                title: "Lesson 1: How Python Executes Code",
-                content: `Why this matters: strong engineers debug with a runtime mental model, not guesswork.
-Learning Objective: understand source -> bytecode -> execution flow.
-Core Theory: CPython compiles .py to bytecode and executes via the Python virtual machine. __pycache__ stores cached bytecode artifacts.
-Diagram (Mermaid):
-flowchart LR
-  A[.py source] --> B[compile]
-  B --> C[bytecode]
-  C --> D[PVM execution]
-Worked Example: inspect disassembly of a simple function with dis module.
-Common Mistakes: assuming Python is interpreted line-by-line without compilation stage.
-Recap:
-- Python has a compile step to bytecode
-- runtime behavior depends on interpreter implementation
-- stack traces map failures to source paths
-Practice:
-- run dis.dis on one function and explain two opcodes`
+                title: "Lesson 1: Install Python and Run a Script",
+                content: `Goal: run a small program before studying how the interpreter works.
+1. Install Python 3.11 or later from a trusted source. Open a terminal and run python --version (on Windows, py --version is another option; on some systems use python3).
+2. Create a learning folder and save hello.py containing print("Hello, Python!"). Use a plain-text editor, not a word processor.
+3. Open a terminal in that folder and run python hello.py. Use your verified interpreter command consistently. Expected output: Hello, Python!
+4. Add score = 75 and print(score + 5). Save and rerun; the second line should be 80.
+5. Add if score >= 60: followed by an indented print("Pass") on the next line. Use four spaces for indentation. Expected final line: Pass.
+6. Add for score in [60, 75, 90]: with an indented print(score). It prints those three numbers on separate lines. input("Score: ") returns text; int("75") converts text to an integer, while int("hello") raises ValueError.
+Practice: print your name, then print(7 + 3). Explain why print("7" + "3") instead prints 73.
+Optional, after functions and tracebacks: CPython compiles source into bytecode and executes it with its interpreter. Imported modules may cache bytecode in __pycache__; running a script does not necessarily create that cache for the main file. Other Python implementations differ. To explore, define def twice(n): return n * 2, then use import dis; dis.dis(twice). Opcode names vary by Python version; memorizing them is not a prerequisite.`
             },
             {
                 title: "Lesson 2: Variables, Types, and Mutability",
@@ -1178,14 +1201,14 @@ Diagram (Mermaid):
 flowchart TD
   A[name a] --> B[object]
   C[name b] --> B
-Worked Example: demonstrate shared list reference side effect.
+Worked Example: a = [1]; b = a; b.append(2); print(a) prints [1, 2]. Replace b = a with b = a.copy(); now a stays [1]. A shallow copy still shares nested objects.
 Common Mistakes: using mutable default arguments.
 Recap:
 - names reference objects
 - copying and mutation are separate operations
 - immutability simplifies reasoning
 Practice:
-- fix a function that uses a mutable default list`
+- repair def remember(value, seen=[]): seen.append(value); return seen. Call remember("A"), then remember("B"). They currently share a list; use seen=None and create [] inside when seen is None so the calls return ["A"] and ["B"] independently.`
             },
             {
                 title: "Lesson 3: Control Flow, Guard Clauses, and Exceptions",
@@ -1207,7 +1230,7 @@ Recap:
                 title: "Lesson 4: Functions, Scope, and Reusability",
                 content: `Why this matters: maintainability depends on small, composable functions.
 Learning Objective: design function signatures for clarity and testability.
-Core Theory: LEGB scope rules govern name lookup. Prefer pure functions when possible and isolate side effects.
+Core Theory: LEGB means Local, Enclosing, Global, Built-in name lookup. A parameter is a local name. return sends a result to the caller; print only displays text. Prefer pure functions (same inputs, same result, no external mutation) for calculations.
 Diagram (Mermaid):
 flowchart TD
     A[input] --> B[validate]
@@ -1215,7 +1238,7 @@ flowchart TD
     C --> D[format result]
 Common Mistakes: giant functions and hidden global dependencies.
 Practice:
-- refactor one long script into 4 focused functions`,
+- start with the supplied compute_grade function, then write summarize(scores) that returns [compute_grade(s) for s in scores]. Call print(summarize([59, 60, 90])); expected ['D', 'C', 'A']. Keep input and printing outside compute_grade.`,
                 code: `def compute_grade(score: int) -> str:
     if not 0 <= score <= 100:
         raise ValueError("score must be between 0 and 100")
@@ -1334,7 +1357,7 @@ Learning Objective: use positional-only, keyword-only, defaults, and unpacking s
 Core Theory: function signatures document intent and prevent misuse.
 Common Mistakes: ambiguous parameters and mutable defaults.
 Practice:
-- redesign a weak API using keyword-only arguments`
+- replace def discount(price, percent=10) with def discount(price, *, percent=10). Return price * (1 - percent / 100). Verify discount(100, percent=20) returns 80.0 and discount(100, 20) raises TypeError. Validate nonnegative price and percent between 0 and 100 before calculating.`
             },
             {
                 title: "Lesson 2: Comprehensions without Readability Loss",
@@ -1471,12 +1494,17 @@ Practice:
 
 @dataclass(frozen=True)
 class Money:
-    amount: float
+    amount: int
     currency: str
 
     def __post_init__(self):
-        if self.amount < 0:
-            raise ValueError("amount cannot be negative")`
+        if type(self.amount) is not int or self.amount < 0:
+            raise ValueError("amount must be non-negative integer minor units")
+        if self.currency not in {"USD", "EUR"}:
+            raise ValueError("unsupported currency")
+
+# Amount is in cents: Money(1250, "USD") means 12.50 USD.
+print(Money(1250, "USD"))`
             },
             {
                 title: "Lesson 2: Composition over Inheritance",
@@ -1484,7 +1512,7 @@ class Money:
 Learning Objective: identify when composition is safer and easier to evolve.
 Core Theory: favor has-a relationships for behavior assembly.
 Practice:
-- refactor inheritance-heavy design into strategy composition`
+- create Checkout(policy) where policy is a callable receiving integer cents. Compare Checkout(lambda cents: cents).total(1000) with Checkout(lambda cents: cents * 9 // 10).total(1000): expect 1000 and 900. Checkout.total delegates to its policy; no subclass is needed. Use only nonnegative integer cents for this exercise.`
             },
             {
                 title: "Lesson 3: Abstract Base Classes and Protocols",
@@ -1538,7 +1566,7 @@ Quality Signals:
                 title: "Module Quiz",
                 content: `1) Better default for extensibility: A) deep inheritance B) composition C) globals D) metaclasses
 2) Protocol primarily supports: A) runtime speed B) structural contracts C) GUI widgets D) SQL joins
-3) dataclass(frozen=True) implies: A) mutable fields B) immutable instances C) no constructor D) no typing
+3) dataclass(frozen=True) normally prevents: A) mutation of every nested object B) field reassignment C) constructor creation D) type checking
 4) Layered architecture should minimize: A) cohesion B) boundaries C) coupling D) tests
 5) __repr__ is most useful for: A) encryption B) debugging representation C) package install D) API auth`
             },
@@ -1600,7 +1628,7 @@ Practice:
                 title: "Lesson 2: Context Managers and Resource Safety",
                 content: `Why this matters: leaked resources cause subtle production failures.
 Learning Objective: use with and custom context managers for deterministic cleanup.
-Core Theory: __enter__/__exit__ define setup and teardown guarantees.
+Core Theory: after __enter__ succeeds, with calls __exit__ when the block exits normally or by an exception. Cleanup is not guaranteed if entry fails or the process is forcibly terminated. Returning a truthy value from __exit__ suppresses the exception, so do so only intentionally.
 Practice:
 - build a custom timer context manager`,
                 code: `import time
@@ -1633,7 +1661,7 @@ Practice:
             },
             {
                 title: "Lesson 5: Typing and Static Quality Checks",
-                content: `Why this matters: type hints prevent class of integration bugs before runtime.
+                content: `                Why this matters: type hints help static tools catch integration mistakes before runtime; annotations themselves do not enforce types. Validate untrusted input separately.
 Learning Objective: annotate interfaces and enforce checks.
 Core Theory: annotate public APIs first; use Optional, Union, and TypedDict where appropriate.
 Practice:
@@ -1660,7 +1688,7 @@ Evaluation Signals:
             },
             {
                 title: "Module Quiz",
-                content: `1) with statement guarantees: A) syntax highlighting B) cleanup execution C) no exceptions D) faster loops
+                content: `1) After successful context entry, with normally invokes: A) a compiler B) the context exit handler C) no exceptions D) faster loops
 2) Best logging approach: A) print everything B) structured context logs C) no logs D) only stack traces
 3) Config best practice: A) hardcode values B) centralized validated loading C) per-function globals D) random defaults
 4) Custom exceptions help with: A) color theme B) domain clarity C) package naming D) runtime speed
@@ -1716,7 +1744,7 @@ Skills Gained:
                 title: "Lesson 1: Threads, Processes, and asyncio Trade-offs",
                 content: `Why this matters: wrong concurrency model can hurt performance and complexity.
 Learning Objective: map IO-bound and CPU-bound tasks correctly.
-Core Theory: GIL affects CPU-bound threads; multiprocessing bypasses GIL with process isolation; asyncio excels at IO orchestration.
+Core Theory: on standard GIL-enabled CPython, CPU-bound Python bytecode usually cannot execute in parallel across threads. Processes can run it in parallel, with startup/serialization costs. Native extensions may release the GIL, and optional free-threaded builds differ. asyncio coordinates cooperative I/O; a blocking call inside a coroutine still blocks its event loop.
 Diagram (Mermaid):
 flowchart LR
   A[Workload] --> B{CPU bound?}
@@ -1741,9 +1769,23 @@ Practice:
 Learning Objective: split tests into unit, integration, and end-to-end purposefully.
 Core Theory: unit tests cover core logic fast; integration tests verify external boundaries; mocks isolate unstable dependencies.
 Practice:
-- add tests for both success and failure path of API service`,
+- run the complete fake-client test below as a script. It should report one passing test and exactly two fetch calls. Then compare with the async retry tests in Guided practice.`,
                 code: `import unittest
 from unittest.mock import Mock
+
+class DataService:
+    def __init__(self, client, max_retries=1):
+        if max_retries < 0:
+            raise ValueError("max_retries cannot be negative")
+        self.client = client
+        self.max_retries = max_retries
+    def load(self):
+        for attempt in range(self.max_retries + 1):
+            try:
+                return self.client.fetch()
+            except TimeoutError:
+                if attempt == self.max_retries:
+                    raise
 
 class TestService(unittest.TestCase):
     def test_retries_on_timeout(self):
@@ -1751,7 +1793,11 @@ class TestService(unittest.TestCase):
         client.fetch.side_effect = [TimeoutError(), {"ok": True}]
         service = DataService(client, max_retries=1)
         result = service.load()
-        self.assertTrue(result["ok"])`
+        self.assertTrue(result["ok"])
+        self.assertEqual(client.fetch.call_count, 2)
+
+if __name__ == "__main__":
+    unittest.main()`
             },
             {
                 title: "Lesson 4: Profiling and Optimization Discipline",
@@ -1790,7 +1836,7 @@ Evaluation Signals:
             },
             {
                 title: "Module Quiz",
-                content: `1) Best for CPU-bound work in Python: A) threading B) multiprocessing C) asyncio D) recursion
+                content: `1) For CPU-heavy pure Python on GIL-enabled CPython, which can use multiple cores? A) threading alone B) multiprocessing C) asyncio alone D) recursion alone
 2) Retry policy should be: A) infinite B) bounded and selective C) disabled always D) random
 3) Unit tests are best for: A) full deployment checks B) isolated logic behavior C) network latency D) package publishing
 4) Profiling should happen: A) after random rewrites B) before optimization C) only in production incidents D) never
@@ -2010,12 +2056,12 @@ courseData.csharpProgramming = [
     {
         number: "Module 1",
         title: "C# and .NET Foundations",
-        description: "Build strong C# fundamentals with CLR execution model, type system depth, control flow, and debugging discipline.",
+        description: "Create and run a console app, then learn C# values, decisions, methods, collections, and error messages.",
         duration: "85 min",
         lessons: "14 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Introduction and History", "CLR and IL", "JIT Compilation", "Value vs Reference Types", "Variables and Operators", "Control Flow", "Methods", "Parameter Modifiers", "Strings", "Arrays", "Collections Basics", "Namespaces", "Project and Build Basics", "Exception Basics", "Debugging with Stack Traces"],
+        topics: ["SDK Setup and First Console App", "Variables and Operators", "Control Flow", "Methods", "Value vs Reference Types", "Parameter Modifiers", "Strings", "Arrays", "Collections Basics", "Namespaces", "Project and Build Basics", "Exception Basics", "Debugging with Stack Traces", "Optional: History, CLR and IL"],
         detailedDescription: "Beginner-first module that explains how C# actually runs, not just how to write syntax.",
         detailedContent: [
             {
@@ -2036,7 +2082,7 @@ Skills Gained:
 - early debugging and troubleshooting habits`
             },
                         {
-                                title: "Lesson 0: C# Introduction and History",
+                                title: "Optional: C# Introduction and History",
                                 content: `Why this matters: C# history explains its balance of productivity, strong typing, and enterprise tooling.
 Learning Objective: understand C# evolution and where it fits in modern development.
 Core Theory: C# emerged in the early 2000s with .NET to provide modern language features and managed runtime safety. It evolved through generics, LINQ, async/await, records, and cloud-native .NET development.
@@ -2056,25 +2102,17 @@ Practice:
 - connect one C# feature evolution (for example LINQ or async) to a practical use case`
                         },
             {
-                title: "Lesson 1: How C# Runs on .NET",
-                content: `Why this matters: runtime understanding helps you diagnose build and execution issues faster.
-Learning Objective: understand C# -> IL -> CLR/JIT execution flow.
-Core Theory: C# compiles to Intermediate Language (IL). CLR loads assemblies and JIT-compiles IL to machine code at runtime.
-Diagram (Mermaid):
-flowchart LR
-  A[C# source] --> B[compiler]
-  B --> C[IL assembly]
-  C --> D[CLR loader]
-  D --> E[JIT]
-  E --> F[native execution]
-Worked Example: run a console app and inspect generated assembly metadata.
-Common Mistakes: mixing runtime and SDK concepts; targeting wrong framework version.
-Recap:
-- C# compiles to IL, not machine code directly
-- CLR provides execution services
-- JIT compiles methods on demand
-Practice:
-- create, build, and run a new console app from CLI`,
+                title: "Lesson 1: Install the SDK and Run a Console App",
+                content: `Goal: get visible output from your own program.
+1. Install a supported .NET SDK (not just the runtime). In a new terminal run dotnet --list-sdks. A version line confirms an SDK is available.
+2. In a learning folder run dotnet new console -n HelloCourse, then cd HelloCourse. The project file records your target framework; Program.cs holds your source.
+3. Replace Program.cs entirely with the complete example below. Do not append it to the template's top-level statements.
+4. Run dotnet run. Expected output: Hello from C# runtime. This command builds before it runs.
+5. Inside Main add int score = 75; Console.WriteLine(score + 5);. The next line is 80. Add if (score >= 60) { Console.WriteLine("Pass"); } to print Pass.
+6. Add foreach (int mark in new[] {60, 75, 90}) { Console.WriteLine(mark); }. Predict the three printed numbers before running.
+Practice: print your name and the result of 7 + 3 on separate lines. A string uses double quotes; an int is a whole number; braces group code; semicolons end statements.
+If dotnet is missing, reopen the terminal after SDK installation. If a build fails, fix the first diagnostic and rerun.
+Optional runtime context after these basics: normal SDK builds emit IL and metadata in assemblies. The CLR manages execution and the JIT commonly compiles methods to native code on demand. Native AOT is an alternative deployment mode, so C# is not restricted to JIT execution.`,
                 code: `using System;
 
 class Program
@@ -2098,7 +2136,7 @@ Worked Example: compare struct copy and class reference behavior.
 Common Mistakes: accidental shared mutation through references.
 Recap:
 - value assignment copies data
-- reference assignment copies pointer to object
+- reference assignment copies a reference to the same object; value/reference behavior is not a simple stack/heap distinction
 - nullability annotations improve API clarity`
             },
             {
@@ -2107,7 +2145,7 @@ Recap:
 Learning Objective: design clear signatures using value, ref, out, and optional parameters responsibly.
 Core Theory: default passing is by value; ref/out modify caller-visible variables and should be used intentionally.
 Practice:
-- refactor a method with too many responsibilities into smaller methods`,
+- use the supplied TryParseScore in Program. Call it with "75", "-1", and "hello". Expect true/75, false/0, false/0. Print only after checking its boolean result; zero on failure is not a valid parsed score.`,
                 code: `static bool TryParseScore(string input, out int score)
 {
     if (int.TryParse(input, out score) && score >= 0 && score <= 100)
@@ -2141,7 +2179,7 @@ flowchart LR
   B --> C[stack trace]
   C --> D[root cause fix]
 Practice:
-- trigger and resolve InvalidOperationException in sample code`
+- put int[] values = Array.Empty<int>(); Console.WriteLine(values.First()); in Program.cs (add using System.Linq;). First() on an empty sequence throws InvalidOperationException. Check values.Length first and print "No scores" instead. Verify an array containing 42 prints 42.`
             },
             {
                 title: "Mini Project: Student Score Console",
@@ -2163,7 +2201,7 @@ Quality Signals:
             },
             {
                 title: "Module Quiz",
-                content: `1) C# compiles to: A) native always B) IL C) byte arrays only D) XML
+                content: `1) A normal .NET SDK build emits: A) native code only, always B) IL and metadata C) JSON only D) XML source
 2) Class instances are usually: A) value types B) reference types C) enums D) tuples
 3) string in C# is: A) mutable B) immutable C) numeric D) collection only
 4) ref/out are mainly for: A) namespace alias B) caller-visible modifications C) async only D) logging
@@ -2255,7 +2293,7 @@ public sealed class EmailNotifier : INotifier
 Learning Objective: choose composition when behavior should be assembled.
 Core Theory: use strategy-like interfaces to swap behavior without deep class hierarchies.
 Practice:
-- refactor inheritance-heavy flow into composed services`
+- create a synchronous IPricePolicy with decimal Apply(decimal subtotal). Implement FullPrice (return subtotal) and TenPercentOff (return subtotal * 0.9m). Inject the policy into Checkout. For 100m expect 100m and 90m respectively; reject negative subtotals before invoking either policy. Async collaborators are deferred to Module 4.`
             },
             {
                 title: "Lesson 4: Records, Equality, and Domain Modeling",
@@ -2485,7 +2523,7 @@ Skills Gained:
                 title: "Lesson 1: async/await Execution Model",
                 content: `Why this matters: async misunderstandings cause deadlocks, hangs, and poor throughput.
 Learning Objective: model await suspension and continuation behavior.
-Core Theory: await may suspend execution, release thread, and resume later on continuation context.
+Core Theory: an async method runs synchronously until it reaches an incomplete await. It then returns control to its caller; await does not itself create a thread. Completed tasks may continue synchronously. Continuation context depends on the host; console apps normally have no synchronization context.
 Diagram (Mermaid):
 sequenceDiagram
   participant Caller
@@ -2496,7 +2534,7 @@ sequenceDiagram
   IO-->>Method: completes later
   Method-->>Caller: continuation result
 Practice:
-- refactor blocking .Result code to async/await`,
+- insert the FetchAsync method below into a class with System.Net.Http, System.Threading, and System.Threading.Tasks imports. It requires a caller-owned HttpClient and a real URL; it is an integration fragment, not a complete console program. For a dependency-free, runnable introduction use the two-task cancellation example in Guided practice instead. Never use a live network response as a deterministic unit test.`,
                 code: `public static async Task<string> FetchAsync(HttpClient client, string url, CancellationToken ct)
 {
     using var response = await client.GetAsync(url, ct);
@@ -2833,12 +2871,12 @@ courseData.cppProgramming = [
     {
         number: "Module 1",
         title: "C++ Foundations and Compilation Model",
-        description: "Build strong C++ fundamentals with compilation pipeline, type system basics, control flow, and practical debugging discipline.",
+        description: "Compile one small C++ program, then learn initialization, decisions, functions, input, and diagnostics before multi-file builds.",
         duration: "90 min",
         lessons: "14 lessons",
         isNew: true,
         isLocked: false,
-        topics: ["Introduction and History", "Compilation and Linking", "Toolchain Basics", "Types and Initialization", "Const Correctness", "References", "Functions", "Control Flow", "Input/Output", "Namespaces", "Header and Source Separation", "Error Messages", "Build Configurations", "Assertions", "Debugging Basics"],
+        topics: ["Compiler Setup and First Program", "Types and Initialization", "Control Flow", "Input/Output", "Functions", "Const Correctness", "References", "Namespaces", "Header and Source Separation", "Compilation and Linking", "Error Messages", "Build Configurations", "Assertions", "Debugging Basics", "Optional: C++ History"],
         detailedDescription: "Beginner-first module that explains how C++ programs are built and executed, not just how syntax looks.",
         detailedContent: [
             {
@@ -2859,7 +2897,7 @@ Skills Gained:
 - practical debugging workflow`
             },
                         {
-                                title: "Lesson 0: C++ Introduction and History",
+                                title: "Optional: C++ Introduction and History",
                                 content: `Why this matters: C++ history clarifies why the language prioritizes performance, control, and zero-cost abstractions.
 Learning Objective: understand C++ origins and modern evolution.
 Core Theory: C++ grew from C with object-oriented and generic programming support, then evolved with modern standards (C++11 onward) that improved safety and expressiveness while preserving performance.
@@ -2879,25 +2917,17 @@ Practice:
 - compare one pre-modern and modern C++ approach for resource management`
                         },
             {
-                title: "Lesson 1: How C++ Code Becomes an Executable",
-                content: `Why this matters: most beginner friction in C++ starts at build stage, not runtime logic.
-Learning Objective: understand preprocessing, compilation, and linking.
-Core Theory: source files are preprocessed, compiled to object files, then linked into an executable.
-Diagram (Mermaid):
-flowchart LR
-  A[.cpp/.h files] --> B[preprocessor]
-  B --> C[compiler]
-  C --> D[object files]
-  D --> E[linker]
-  E --> F[executable]
-Worked Example: split one program across two translation units and link successfully.
-Common Mistakes: missing definitions, duplicate symbols, header include cycles.
-Recap:
-- compiler checks each translation unit
-- linker resolves cross-file symbols
-- build errors require stage-aware troubleshooting
-Practice:
-- create two-file project and fix one linker error`,
+                title: "Lesson 1: Set Up a Compiler and Run C++",
+                content: `Goal: build a single-file program before splitting code across files.
+1. Choose one toolchain. On Windows, install Visual Studio Build Tools with Desktop development with C++ and open its Developer PowerShell. Run cl to check it is available. Alternatively use an existing GCC/Clang toolchain and check g++ --version or clang++ --version.
+2. Create a learning folder. Save the complete example as main.cpp, not main.cpp.txt.
+3. For MSVC run cl /std:c++20 /EHsc /W4 main.cpp /Fe:hello.exe. For GCC run g++ -std=c++20 -Wall -Wextra -pedantic main.cpp -o hello.exe (Clang accepts equivalent flags).
+4. In Windows PowerShell run .\\hello.exe. Expected output: Hello from C++ toolchain.
+5. Inside main add int score{75}; std::cout << score + 5 << std::endl;. Rebuild and run; the next line is 80. Add if (score >= 60) { std::cout << "Pass" << std::endl; }.
+6. A loop for (int i{1}; i <= 3; ++i) { std::cout << i << std::endl; } prints 1, 2, 3. std::cin >> score reads a whole number; always test whether that extraction succeeded.
+Read the code: #include makes a standard-library declaration available; main is the entry point; std::cout writes output; return 0 signals success. Save and rebuild after each edit.
+Practice: print your name, then 7 + 3. Expected second line: 10.
+Later build model: preprocessing expands includes/macros; compilation checks each translation unit and emits object code; linking resolves definitions across object files. Missing definitions are linker errors, not input-validation failures.`,
                 code: `#include <iostream>
 
 int main() {
@@ -2909,7 +2939,7 @@ int main() {
                 title: "Lesson 2: Types, Initialization, and Const Correctness",
                 content: `Why this matters: undefined behavior and accidental mutation often begin with weak initialization habits.
 Learning Objective: use direct/list initialization and const constraints intentionally.
-Core Theory: brace initialization avoids narrowing; const expresses immutability at API boundaries.
+Core Theory: brace initialization rejects narrowing conversions such as int count{2.5}; initialize variables before reading them. const prevents modification through that name; const references do not make a separately aliased object deeply immutable.
 Common Mistakes: uninitialized variables and mutable parameters that should be const.
 Recap:
 - initialize values at declaration
@@ -2923,10 +2953,17 @@ Learning Objective: choose pass-by-value, const reference, and mutable reference
 Core Theory: pass-by-value copies; const reference avoids copy while protecting input; non-const reference enables mutation.
 Practice:
 - refactor heavy-copy function to const reference parameters`,
-                code: `int sum(const std::vector<int>& values) {
+                code: `#include <iostream>
+#include <vector>
+
+int sum(const std::vector<int>& values) {
     int total = 0;
     for (int v : values) total += v;
     return total;
+}
+
+int main() {
+    std::cout << sum({60, 90}) << std::endl; // 150; inputs here fit in int.
 }`
             },
             {
@@ -3021,7 +3058,7 @@ Skills Gained:
                 title: "Lesson 1: Pointers, References, and Lifetime Boundaries",
                 content: `Why this matters: pointer misuse leads to crashes and security vulnerabilities.
 Learning Objective: distinguish aliasing, ownership, and borrowing roles.
-Core Theory: raw pointers may be nullable and rebindable; references are non-null aliases once bound.
+Core Theory: raw pointers may be nullable and rebindable. A valid reference aliases an existing object and cannot be reseated; it does not extend arbitrary object lifetimes or prevent dangling. Raw pointers and references are normally borrowers, not owners.
 Diagram (Mermaid):
 flowchart TD
   A[object lifetime] --> B[owning handle]
@@ -3043,7 +3080,7 @@ Practice:
                 title: "Lesson 3: RAII and Destructor-Based Cleanup",
                 content: `Why this matters: manual cleanup paths are fragile under exceptions.
 Learning Objective: tie resource release to object lifetime.
-Core Theory: RAII ensures cleanup in destructor regardless of normal return or throw.
+Core Theory: RAII ties release to an owning object's destructor during normal scope exit and exception unwinding. Destructors should not throw. Forced process termination and undefined behavior are outside this guarantee. Standard streams, containers, and smart pointers already provide RAII.
 Practice:
 - wrap file/resource handle in RAII class`
             },
@@ -3170,12 +3207,19 @@ flowchart LR
   C --> D[result range]
 Practice:
 - rewrite loop-based transform with std::transform`,
-                code: `std::vector<int> values{5, 2, 8, 1};
-std::sort(values.begin(), values.end());
+                code: `#include <algorithm>
+#include <iostream>
+#include <vector>
 
-std::vector<int> doubled(values.size());
-std::transform(values.begin(), values.end(), doubled.begin(),
-               [](int v) { return v * 2; });`
+int main() {
+    std::vector<int> values{5, 2, 8, 1};
+    std::sort(values.begin(), values.end());
+    std::vector<int> doubled(values.size());
+    std::transform(values.begin(), values.end(), doubled.begin(),
+                   [](int v) { return v * 2; });
+    for (int value : doubled) std::cout << value << ' ';
+    std::cout << std::endl; // 2 4 10 16 (with a trailing space).
+}`
             },
             {
                 title: "Lesson 3: Template Reuse and Constraints",
@@ -3277,12 +3321,19 @@ Skills Gained:
                 title: "Lesson 1: Move Semantics in Practice",
                 content: `Why this matters: unnecessary copies can dominate performance in large data paths.
 Learning Objective: understand lvalues/rvalues and move operations.
-Core Theory: move transfers resources from temporary or explicitly moved objects.
+Core Theory: std::move is a cast that permits move overload selection; it does not itself transfer anything. A move constructor/assignment may transfer resources; a const source may instead be copied. Moved-from standard-library objects are valid but often have unspecified values. Do not assume a moved-from vector is empty; a moved-from unique_ptr is null.
 Practice:
 - profile copy-heavy code path and reduce copies with move-aware design`,
-                code: `std::vector<int> buildData() {
+                code: `#include <iostream>
+#include <vector>
+
+std::vector<int> buildData() {
     std::vector<int> v(1000, 1);
     return v; // NRVO/move
+}
+int main() {
+    auto data = buildData();
+    std::cout << data.size() << ' ' << data.front() << std::endl; // 1000 1
 }`
             },
             {
@@ -3393,7 +3444,7 @@ Skills Gained:
                 title: "Lesson 1: Threading Basics and Shared-State Hazards",
                 content: `Why this matters: race conditions cause nondeterministic failures that are hard to reproduce.
 Learning Objective: reason about shared state and critical sections.
-Core Theory: concurrent writes to shared data require synchronization.
+Core Theory: conflicting unsynchronized accesses to the same memory, with at least one write, form a data race and cause undefined behavior in C++. This is stronger than merely obtaining an occasionally wrong count. Use mutexes or atomics and join threads before consuming their results.
 Diagram (Mermaid):
 sequenceDiagram
   participant T1 as Thread 1
@@ -3413,12 +3464,15 @@ Learning Objective: design lock strategy that avoids deadlock.
 Core Theory: consistent lock ordering and scoped lock helpers reduce risk.
 Practice:
 - refactor two-lock code path to deadlock-safe order`,
-                code: `std::mutex m1, m2;
+                code: `#include <mutex>
+
+std::mutex m1, m2;
 
 void safeWork() {
     std::scoped_lock lock(m1, m2);
-    // critical section using both resources
-}`
+    // Every caller accessing the protected pair must hold these locks.
+}
+int main() { safeWork(); }`
             },
             {
                 title: "Lesson 3: Atomics and Contention Trade-offs",
@@ -3607,3 +3661,1190 @@ Pass Criteria:
         ]
     }
 ];
+
+// Guides are separate from lessons. Exact titles make accidental curriculum drift visible.
+(() => {
+    const guides = {
+        javaProgramming: {
+            "Java Core and Toolchain": {
+                prerequisites: "None. A terminal runs commands; a source file is plain text containing instructions. Start with the setup and first-program lesson, not bytecode inspection.",
+                setup: "Install JDK 21 or later. Check java -version and javac -version in a new terminal. In an empty learning folder save the solution as Main.java. Run javac Main.java, then java Main 75. Arguments follow Main; do not type a .class suffix. Recompile after edits.",
+                workedExample: {
+                    problem: "Turn one whole-number score into a grade: A for 90–100, B for 75–89, C for 60–74, D for 0–59.",
+                    steps: [
+                        "Start with public class Main { public static void main(String[] args) { System.out.println(\"Hello\"); } }. Save as Main.java, compile, and run java Main. Confirm Hello before adding input.",
+                        "Replace the greeting with int score = 75; System.out.println(score >= 60 ? \"Pass\" : \"Fail\");. This prints Pass: >= includes the boundary.",
+                        "In the solution, args[0] is text. Check that exactly one argument exists, parse it inside try, reject scores outside 0–100, then test grade thresholds from highest to lowest. For 75 the >=90 check fails and >=75 succeeds."
+                    ],
+                    expected: "java Main 75 prints B. java Main 60 prints C. Invalid or missing input prints Invalid score rather than a stack trace."
+                },
+                practice: {
+                    task: "Implement that exact single-score command-line grader, accepting an integer from 0 through 100 inclusive. Print only the grade or Invalid score; handle missing, extra, non-integer, and out-of-range arguments.",
+                    cases: [
+                        {input: "java Main 90", expected: "A"},
+                        {input: "java Main 59", expected: "D"},
+                        {input: "java Main hello", expected: "Invalid score"},
+                        {input: "java Main 101", expected: "Invalid score"}
+                    ],
+                    hint: "Check args.length before indexing. Integer.parseInt throws NumberFormatException for text that is not an int. A series of descending thresholds avoids overlapping branches.",
+                    solution: `public class Main {
+    public static void main(String[] args) {
+        if (args.length != 1) { System.out.println("Invalid score"); return; }
+        try {
+            int score = Integer.parseInt(args[0]);
+            if (score < 0 || score > 100) { System.out.println("Invalid score"); return; }
+            String grade = score >= 90 ? "A" : score >= 75 ? "B" : score >= 60 ? "C" : "D";
+            System.out.println(grade);
+        } catch (NumberFormatException ex) {
+            System.out.println("Invalid score");
+        }
+    }
+}
+// The length guard prevents an invalid index; parsing and range validation are separate checks. Only valid scores reach classification.`
+                },
+                interview: {question: "What is the difference between compiling and running this program?", answer: "javac checks Main.java and produces Main.class bytecode. java Main starts the JVM and invokes main. Editing source requires recompilation; running an old class file can otherwise hide your change."},
+                readiness: ["I can create, compile, change, and rerun Main.java without an IDE.", "I can trace 59, 60, 74, 75, 89, and 90 through the branches and explain both invalid-input paths."]
+            },
+            "Object-Oriented Design and Architecture": {
+                prerequisites: "Complete Java Module 1: methods, private/local state, conditionals, and exceptions. A constructor creates an object's initial valid state; an invariant is a rule that must keep holding.",
+                setup: "Use JDK 21+. Save the complete solution as Main.java; run javac Main.java then java Main. No libraries or build tool are needed. Amounts below are integer cents, not floating-point currency.",
+                workedExample: {
+                    problem: "Protect a wallet from spending more cents than it owns.",
+                    steps: [
+                        "Construct Wallet(500). Its private cents field starts at 500. Reject a negative opening balance in the constructor so callers cannot create an invalid wallet.",
+                        "Call spend(200). Check amount > 0 and amount <= cents before subtracting. The new balance is 300.",
+                        "Call spend(400). Return false without mutation. A balance() query must still return 300; the caller never writes the field directly."
+                    ],
+                    expected: "For the worked calls: true, false, 300 on separate lines. A rejected operation leaves the invariant cents >= 0 intact."
+                },
+                practice: {
+                    task: "Implement Wallet with a validated constructor, boolean spend(int amount), and int balance(). Reject non-positive spends and overspending without changing state. Demonstrate two independent wallets.",
+                    cases: [
+                        {input: "Wallet(500); spend(200); spend(400); balance()", expected: "true, false, 300"},
+                        {input: "Wallet(100); spend(0); spend(100); balance()", expected: "false, true, 0"},
+                        {input: "Wallet(-1)", expected: "IllegalArgumentException"}
+                    ],
+                    hint: "Make cents private. Test all rejection conditions before the single mutation. Do not add a public setter that bypasses the rule.",
+                    solution: `public class Main {
+    static final class Wallet {
+        private int cents;
+        Wallet(int cents) {
+            if (cents < 0) throw new IllegalArgumentException("negative balance");
+            this.cents = cents;
+        }
+        boolean spend(int amount) {
+            if (amount <= 0 || amount > cents) return false;
+            cents -= amount;
+            return true;
+        }
+        int balance() { return cents; }
+    }
+    public static void main(String[] args) {
+        Wallet a = new Wallet(500);
+        System.out.println(a.spend(200));
+        System.out.println(a.spend(400));
+        System.out.println(a.balance());
+        Wallet b = new Wallet(100);
+        System.out.println(b.spend(0));
+        System.out.println(b.spend(100));
+        System.out.println(b.balance());
+    }
+}
+// Each instance owns separate state. The constructor validates creation; spend validates each transition, so no caller can bypass the balance rule.`
+                },
+                interview: {question: "Why not make cents public and check it in main?", answer: "Another caller could bypass main's checks. Encapsulation puts the invariant beside the state in every construction/update path. Interfaces become useful when a service genuinely needs interchangeable wallet/storage behavior, not merely to increase class count."},
+                readiness: ["I can show that a rejected spend does not change either wallet.", "I can explain which rules belong in a constructor versus an operation, and why composition does not require inheritance."]
+            },
+            "Data Structures, Generics, and Reliability": {
+                prerequisites: "Java Modules 1–2, loops, classes, exceptions, and the difference between a list and an ID lookup. Map<K,V> associates a key with one value.",
+                setup: "JDK 21+, Main.java, javac Main.java then java Main. The supplied importer uses an in-memory String array, so no CSV parser or files are needed. Its deliberately simple format is id,integerScore with no quoted commas.",
+                workedExample: {
+                    problem: "Import S1,80 then S1,90 without silently replacing the first student.",
+                    steps: [
+                        "Split each row with split(\",\", -1), trim both fields, require a nonempty ID and an integer score between 0 and 100. Validate before touching the map.",
+                        "Insert S1 -> 80. When the second row's ID is already present, record a duplicate reject instead of calling put again.",
+                        "Continue after the reject. Use TreeMap for an ID-sorted final display; collect rejection messages separately with one-based row numbers."
+                    ],
+                    expected: "Stored record: S1=80. Reject: row 2: duplicate. Counts are accepted=1, rejected=1."
+                },
+                practice: {
+                    task: "Import the cases below. Keep the first valid occurrence of each ID, reject malformed rows/ranges/duplicates with a reason and row number, and print sorted stored records plus reject count. An invalid occurrence must not reserve its ID.",
+                    cases: [
+                        {input: "[S1,80; S1,90; S2,101; S3,70]", expected: "{S1=80, S3=70}; rejects=2; row 2 duplicate, row 3 range"},
+                        {input: "[S1,x; S1,60; ,50; bad]", expected: "{S1=60}; rejects=3; rows 1 number, 3 id, 4 fields"}
+                    ],
+                    hint: "Use one rejection per row. Check fields, ID, number, range, then duplicates in that order. Catch only numeric conversion failures.",
+                    solution: `import java.util.*;
+public class Main {
+    static void load(String[] rows) {
+        Map<String, Integer> scores = new TreeMap<>();
+        List<String> rejects = new ArrayList<>();
+        for (int i = 0; i < rows.length; i++) {
+            String[] p = rows[i].split(",", -1);
+            String reason = null;
+            if (p.length != 2) reason = "fields";
+            else if (p[0].trim().isEmpty()) reason = "id";
+            else {
+                try {
+                    int score = Integer.parseInt(p[1].trim());
+                    String id = p[0].trim();
+                    if (score < 0 || score > 100) reason = "range";
+                    else if (scores.containsKey(id)) reason = "duplicate";
+                    else scores.put(id, score);
+                } catch (NumberFormatException ex) { reason = "number"; }
+            }
+            if (reason != null) rejects.add("row " + (i + 1) + ": " + reason);
+        }
+        System.out.println(scores);
+        System.out.println("rejects=" + rejects.size());
+        rejects.forEach(System.out::println);
+    }
+    public static void main(String[] args) {
+        load(new String[]{"S1,80", "S1,90", "S2,101", "S3,70"});
+        load(new String[]{"S1,x", "S1,60", ",50", "bad"});
+    }
+}
+// Validation completes before insertion, so a bad row cannot overwrite data or reserve an ID. TreeMap gives O(log n) operations and sorted output.`
+                },
+                interview: {question: "When would HashMap be preferable, and what does PECS mean?", answer: "Use HashMap for expected O(1) lookup when sorted traversal is not required; explicitly sort only at reporting time. Producer Extends, Consumer Super describes wildcard APIs: read Number from List<? extends Number>, and write Integer to List<? super Integer>. It is unrelated to exception recovery."},
+                readiness: ["I can trace each rejected row and prove accepted + rejected equals input row count.", "I can explain sorted versus hash lookup costs and keep invalid rows from mutating indexes."]
+            },
+            "Modern Java: Streams to Pattern Matching": {
+                prerequisites: "Java Modules 1–3: typed collections, lambdas as behavior passed to a method, and basic loops. Records and sealed switch examples in this module target Java 21.",
+                setup: "Use JDK 21+ with javac Main.java and java Main. The solution is a complete file. Salary units are integer cents; averages are displayed as doubles for this exercise, not used to settle payments.",
+                workedExample: {
+                    problem: "Average salaries by department without mutating an external total from inside a stream.",
+                    steps: [
+                        "Represent each row with record Employee(String dept, int salary). Prepare Engineering salaries 100 and 200 and Sales salary 90.",
+                        "Filter out negative salaries, then collect with groupingBy(Employee::dept, TreeMap::new, averagingInt(Employee::salary)). Each department gets its own accumulator.",
+                        "The Engineering sum is 300 across two accepted rows, giving 150.0. TreeMap keeps output sorted; the input list is unchanged."
+                    ],
+                    expected: "{Engineering=150.0, Sales=90.0}. A department with only rejected rows is absent, not assigned a fabricated zero average."
+                },
+                practice: {
+                    task: "Write averages(List<Employee>) with the exact filtering/grouping behavior above. Empty input must yield an empty map. Keep the original list unchanged and include tests for a negative salary.",
+                    cases: [
+                        {input: "Engineering:100, Engineering:200, Sales:90, Sales:-1", expected: "{Engineering=150.0, Sales=90.0}"},
+                        {input: "empty list", expected: "{}"},
+                        {input: "Sales:-1", expected: "{}"}
+                    ],
+                    hint: "Use a terminal collect operation; merely building a stream does not run its pipeline. Supply TreeMap::new if output order matters.",
+                    solution: `import java.util.*;
+import java.util.stream.Collectors;
+public class Main {
+    record Employee(String dept, int salary) {}
+    static Map<String, Double> averages(List<Employee> employees) {
+        return employees.stream().filter(e -> e.salary() >= 0)
+            .collect(Collectors.groupingBy(Employee::dept, TreeMap::new,
+                Collectors.averagingInt(Employee::salary)));
+    }
+    public static void main(String[] args) {
+        System.out.println(averages(List.of(new Employee("Engineering", 100),
+            new Employee("Engineering", 200), new Employee("Sales", 90),
+            new Employee("Sales", -1))));
+        System.out.println(averages(List.of()));
+        System.out.println(averages(List.of(new Employee("Sales", -1))));
+    }
+}
+// The collector owns aggregation state. List.of also makes accidental list mutation fail; records with mutable components would still need defensive copies.`
+                },
+                interview: {question: "Why not accumulate salaries into a shared map inside forEach?", answer: "External mutation hides dependencies and can become unsafe if parallel execution is introduced. A collector expresses grouping and accumulation explicitly. Streams are not automatically faster than loops; compare readability and measure relevant workloads."},
+                readiness: ["I can predict when the pipeline executes and explain why negative-only groups disappear.", "I can write an equivalent loop and verify identical empty/grouped outputs before replacing legacy code."]
+            },
+            "Concurrency, IO, and JVM Internals": {
+                prerequisites: "Java Modules 1–4, exceptions and try/finally. Understand that two tasks may overlap and that joining a result is different from creating a task.",
+                setup: "JDK 21+, Main.java, javac Main.java then java Main. Start with in-memory rows to isolate concurrency from filesystem faults. The two-worker executor below is intentionally bounded; no network access is required.",
+                workedExample: {
+                    problem: "Count valid score lines concurrently while preserving the same summary as a serial scan.",
+                    steps: [
+                        "Treat each file fixture as a separate List<String>: [80, bad, 60] yields accepted=2, rejected=1; [101, 90] yields accepted=1, rejected=1.",
+                        "Let each worker return its own immutable Counts record. Submit at most these two tasks, wait for both futures, then add their counts on the caller thread.",
+                        "Use a bounded queue and shut down in finally. If a future fails, report the operation failure rather than pretending that a zero-count file succeeded."
+                    ],
+                    expected: "accepted=3 rejected=2 on every completed run. Worker completion order must not affect this line."
+                },
+                practice: {
+                    task: "Implement the two-fixture processor below with no shared mutable counters. Count integers 0–100 as accepted and all other lines as rejected. An empty fixture contributes zero. Preserve cleanup if a future throws.",
+                    cases: [
+                        {input: "[80, bad, 60] and [101, 90]", expected: "accepted=3 rejected=2"},
+                        {input: "[] and [-1, x]", expected: "accepted=0 rejected=2"}
+                    ],
+                    hint: "Return per-task results, then sum after get(). Bounding active workers alone is not queue backpressure. A production reader must additionally close file streams and support cooperative cancellation.",
+                    solution: `import java.util.*;
+import java.util.concurrent.*;
+public class Main {
+    record Counts(int accepted, int rejected) {}
+    static Counts scan(List<String> lines) {
+        int good = 0;
+        for (String line : lines) {
+            try {
+                int n = Integer.parseInt(line.trim());
+                if (n >= 0 && n <= 100) good++;
+            } catch (NumberFormatException ex) { /* rejected below */ }
+        }
+        return new Counts(good, lines.size() - good);
+    }
+    static void run(List<String> a, List<String> b) throws Exception {
+        ExecutorService pool = new ThreadPoolExecutor(2, 2, 0L, TimeUnit.MILLISECONDS,
+            new ArrayBlockingQueue<>(2), new ThreadPoolExecutor.AbortPolicy());
+        try {
+            Future<Counts> x = pool.submit(() -> scan(a));
+            Future<Counts> y = pool.submit(() -> scan(b));
+            Counts p = x.get(), q = y.get();
+            System.out.println("accepted=" + (p.accepted() + q.accepted())
+                + " rejected=" + (p.rejected() + q.rejected()));
+        } finally { pool.shutdownNow(); }
+    }
+    public static void main(String[] args) throws Exception {
+        run(List.of("80", "bad", "60"), List.of("101", "90"));
+        run(List.of(), List.of("-1", "x"));
+    }
+}
+// Only the caller combines results. No worker writes another worker's counts, so there is no lost-update race. shutdownNow requests interruption; real long-running tasks must honor it.`
+                },
+                interview: {question: "Is ConcurrentHashMap enough to make a multi-step operation atomic?", answer: "No. Individual operations are thread-safe, but a read-then-write sequence can still race. Use atomic map methods such as compute for a per-key update or a lock/transaction for invariants spanning keys. Measure contention before choosing a more complex design."},
+                readiness: ["I can compare serial and concurrent totals over repeated runs and explain executor cleanup.", "I can distinguish a bounded worker count, a bounded queue, a timeout, and cooperative cancellation."]
+            },
+            "Production Java Capstone and Testing": {
+                prerequisites: "Java Modules 1–5. Be able to validate domain operations, isolate repositories, run tests, and explain a transaction. This is a multi-session capstone, not a one-file exercise.",
+                setup: "Choose the Banking Ledger option with JDK 21+, Maven or Gradle, JUnit 5, and a local transactional SQL database/JDBC driver. Record exact versions and a repeatable test command in the project README. First implement an in-memory repository and deterministic tests before connecting JDBC; no cloud account is needed.",
+                workedExample: {
+                    problem: "Transfer 250 cents from account A (1000) to B (100) without creating or losing money.",
+                    steps: [
+                        "Define transfer(requestId, fromId, toId, cents). Require distinct existing accounts, cents > 0, and sufficient funds. Initial total is 1100 cents.",
+                        "In one database transaction, claim a unique requestId, conditionally debit A if its balance is sufficient, and credit B. If any update fails, roll back both updates and the claim.",
+                        "Commit the successful result with requestId T1. Repeat T1 with identical payload: return the stored result, not another debit. Reject reuse of T1 with a different payload."
+                    ],
+                    expected: "After T1: A=750, B=350, total=1100. Replaying T1 keeps these balances. An injected credit failure leaves A=1000, B=100 on a fresh fixture."
+                },
+                practice: {
+                    task: "Deliver the concrete ledger workflow above behind app/service/domain/repository boundaries. Acceptance: integer cents; no negative balances; durable idempotency; rollback on a forced credit failure; persisted balances after restart; >=15 automated tests including concurrency, duplicates, invalid input and JDBC integration. Include setup/run/test commands, an ADR on transaction strategy, and a five-minute scripted demo.",
+                    cases: [
+                        {input: "Fresh A=1000 B=100; T1 transfer A->B 250; replay T1", expected: "A=750 B=350; one committed transfer"},
+                        {input: "Fresh A=1000 B=100; T2 transfer 1200", expected: "insufficient funds; no balance or ledger mutation"},
+                        {input: "Fresh fixture; force credit update to fail after debit", expected: "transaction rolled back; A=1000 B=100; no committed request"}
+                    ],
+                    hint: "A service-level check without a database transaction does not protect concurrent transfers. A unique request ID must be persisted in the same atomic unit as the balances.",
+                    solution: "Implementation route: define Money as validated integer cents and TransferResult as an immutable value. Give the repository a transfer transaction operation rather than separate public debit/credit calls. Inside JDBC set autoCommit(false); insert a unique request row carrying the payload; debit using UPDATE ... WHERE balance >= amount; require one affected row; credit using an overflow-safe update; store result; commit. On any failure roll back and preserve the cause. Handle duplicate request IDs by loading the existing payload/result in a clean transaction and comparing all fields. Use consistent row-lock order or a documented retry strategy for deadlocks. Test with two connections attempting incompatible debits and assert no negative balance and unchanged total. Parameterize every SQL value, use try-with-resources, and verify restart persistence against the database, not the in-memory fake. A mock alone cannot prove rollback or isolation."
+                },
+                interview: {question: "What evidence would justify claiming this ledger is reliable?", answer: "A reproducible build, domain tests, real-database rollback/isolation tests, duplicate-request tests, restart verification, and documented failure limits. Passing fifteen tests alone is not proof of production correctness; explain the database isolation assumptions and unresolved operational risks."},
+                readiness: ["I can run the accepted, rejected, replay, and forced-failure scenarios from a fresh database and show balances.", "I can present test results and the transaction ADR, including what was not load-tested or operationally validated."]
+            }
+        },
+        pythonProgramming: {
+            "Python Core and Runtime Foundations": {
+                prerequisites: "None. You need a text editor and a terminal. A variable names a value; a function is a reusable group of instructions.",
+                setup: "Install Python 3.11+ and verify python --version (or py --version on Windows). Save the solution as grades.py in a learning folder; run python grades.py using the command you verified. No packages are required. Indent function bodies with four spaces.",
+                workedExample: {
+                    problem: "Classify a score and distinguish numeric input from invalid text.",
+                    steps: [
+                        "Run print(\"Hello, Python!\") first and check the message. Next score = 75; print(score + 5) prints 80, but input() returns text, not an integer.",
+                        "Define grade(text). Try int(text); if conversion raises ValueError, return Invalid score. Then reject values below 0 or above 100.",
+                        "For text \"75\", int yields 75. The >=90 branch fails, the >=75 branch succeeds, and return \"B\" ends the function. print(grade(\"75\")) displays that returned value."
+                    ],
+                    expected: "Calling grade with \"75\", \"59\", and \"hello\" returns B, D, and Invalid score respectively; each print displays one line."
+                },
+                practice: {
+                    task: "Write grade(text) using A=90–100, B=75–89, C=60–74, D=0–59. Accept only text convertible by int(), then validate range. Return Invalid score for invalid text or range. Use the supplied list to run all examples.",
+                    cases: [
+                        {input: "grade('90')", expected: "A"},
+                        {input: "grade('60')", expected: "C"},
+                        {input: "grade('75.5')", expected: "Invalid score"},
+                        {input: "grade('-1')", expected: "Invalid score"}
+                    ],
+                    hint: "Only put conversion in try/except ValueError; do not catch every exception. Return results from the function and print at the call site.",
+                    solution: `def grade(text):
+    try:
+        score = int(text)
+    except ValueError:
+        return "Invalid score"
+    if not 0 <= score <= 100:
+        return "Invalid score"
+    if score >= 90:
+        return "A"
+    if score >= 75:
+        return "B"
+    if score >= 60:
+        return "C"
+    return "D"
+
+for text in ["90", "60", "75.5", "-1"]:
+    print(grade(text))
+
+# The function returns on the first matching branch. Converting text and checking its numeric range are different operations; neither silently clamps an invalid score.`
+                },
+                interview: {question: "Does b = a copy a list?", answer: "No. Both names refer to the same list, so appending through b changes what a sees. a.copy() creates a shallow outer-list copy; nested mutable objects are still shared."},
+                readiness: ["I can save and rerun a script, identify indentation errors, and distinguish print from return.", "I can explain why '75' needs conversion, why 75.5 text is rejected, and what happens at each grade boundary."]
+            },
+            "Functions, Comprehensions, and Data Pipelines": {
+                prerequisites: "Python Module 1: functions, loops, lists, dictionaries, int conversion, and targeted exception handling. A generator yields one result at a time instead of constructing a result list.",
+                setup: "Python 3.11+, save solution as pipeline.py and run python pipeline.py. The example uses an iterator of strings rather than a real file. Later wrap a CSV reader in with open(..., newline='', encoding='utf-8') for quoted CSV handling.",
+                workedExample: {
+                    problem: "Read score text once, yield valid scores, and preserve exact rejection reasons.",
+                    steps: [
+                        "For enumerate(rows, start=1), convert each stripped string with int(). Rows \"90\", \"oops\", and \"60\" convert to 90, conversion failure, and 60.",
+                        "Append (2, 'number') to rejects for oops; yield only 90 and 60. Do not build a full list of all raw rows.",
+                        "Consume the generator with sum(score >= 60 for score in valid_scores(...)). Both yielded scores pass, so the total is 2. Side effects in rejects occur during consumption, not generator creation."
+                    ],
+                    expected: "passes=2 rejects=[(2, 'number')]. Empty input produces passes=0 rejects=[]."
+                },
+                practice: {
+                    task: "Implement valid_scores(rows, rejects) as a lazy generator over a one-pass input iterator. Accept 0–100 inclusive. Store (one-based row number, 'number' or 'range') for every reject, then count scores >=60 without consuming the iterator twice.",
+                    cases: [
+                        {input: "['90', 'oops', '60', '101']", expected: "passes=2 rejects=[(2, 'number'), (4, 'range')]"},
+                        {input: "['0', '59', '100']", expected: "passes=1 rejects=[]"},
+                        {input: "[]", expected: "passes=0 rejects=[]"}
+                    ],
+                    hint: "yield inside a function makes a generator. Use continue after conversion failure so rejected text never reaches the range check. A reject list still consumes memory proportional to rejects.",
+                    solution: `def valid_scores(rows, rejects):
+    for line_number, text in enumerate(rows, start=1):
+        try:
+            score = int(text.strip())
+        except ValueError:
+            rejects.append((line_number, "number"))
+            continue
+        if not 0 <= score <= 100:
+            rejects.append((line_number, "range"))
+            continue
+        yield score
+
+for rows in [["90", "oops", "60", "101"], ["0", "59", "100"], []]:
+    rejects = []
+    passes = sum(score >= 60 for score in valid_scores(iter(rows), rejects))
+    print(f"passes={passes} rejects={rejects}")
+
+# The source is traversed once. For very large reject volumes, replace list append with a report writer/callback rather than promising constant memory for the whole pipeline.`
+                },
+                interview: {question: "Can a generator be traversed again after sum consumes it?", answer: "No; an exhausted generator stays exhausted. Construct a new generator from a reusable source or materialize deliberately if multiple traversals are required. Laziness saves result storage but does not eliminate storage used by the source or reject report."},
+                readiness: ["I can show when yielding and rejection recording happen, including empty input.", "I can process a one-shot iterator without a second pass or silently dropping malformed rows."]
+            },
+            "Object-Oriented Python and Design Patterns": {
+                prerequisites: "Python Modules 1–2 and dictionaries. Understand a class instance, method calls, and why each object should own its mutable data.",
+                setup: "Python 3.11+, save as library.py and run python library.py. The solution uses only dataclasses and typing from the standard library. Protocol describes an interface for static tools; it is not a runtime validation mechanism.",
+                workedExample: {
+                    problem: "Issue a book through a service that depends on a repository contract, not a file format.",
+                    steps: [
+                        "Create a frozen Book('B1', 'Loops') value and an in-memory repository containing it. The service asks repo.get('B1') rather than opening a file itself.",
+                        "Issue B1: verify existence and absence from the service's active-loan set, then add B1 and return issued.",
+                        "Issue B1 again: return unavailable without adding a duplicate loan. A lookup for B9 returns not found. Keep file persistence as a separate adapter, not inside the Book class."
+                    ],
+                    expected: "The three calls return issued, unavailable, not found. Only B1 is recorded as on loan."
+                },
+                practice: {
+                    task: "Implement Book, a Books protocol, MemoryBooks, and Library.issue(book_id) with exactly the outcomes above. Each Library must own its own loan set; demonstrate missing and duplicate issues.",
+                    cases: [
+                        {input: "issue('B1'), issue('B1') with B1 present", expected: "issued, unavailable"},
+                        {input: "issue('B9') with only B1 present", expected: "not found"},
+                        {input: "first issue in two separately created Library instances", expected: "issued in both; loan sets are not shared"}
+                    ],
+                    hint: "Put self.on_loan = set() in __init__, not as a mutable class attribute. The service can use any object implementing get; no repository inheritance is required.",
+                    solution: `from dataclasses import dataclass
+from typing import Protocol
+
+@dataclass(frozen=True)
+class Book:
+    book_id: str
+    title: str
+
+class Books(Protocol):
+    def get(self, book_id: str) -> Book | None: ...
+
+class MemoryBooks:
+    def __init__(self, books):
+        self._books = {book.book_id: book for book in books}
+    def get(self, book_id):
+        return self._books.get(book_id)
+
+class Library:
+    def __init__(self, books: Books):
+        self.books = books
+        self.on_loan = set()
+    def issue(self, book_id):
+        if self.books.get(book_id) is None:
+            return "not found"
+        if book_id in self.on_loan:
+            return "unavailable"
+        self.on_loan.add(book_id)
+        return "issued"
+
+repo = MemoryBooks([Book("B1", "Loops")])
+library = Library(repo)
+print(library.issue("B1"))
+print(library.issue("B1"))
+print(library.issue("B9"))
+print(Library(repo).issue("B1"))
+
+# The fake repository is composed into the service. Loans are intentionally session-local here; persistent, shared loans require a transactional repository in the later capstone.`
+                },
+                interview: {question: "How does a Protocol differ from an abstract base class?", answer: "A Protocol lets a static checker accept objects with matching members without explicit inheritance. An ABC can require methods through nominal inheritance and prevent instantiation when abstract methods are missing. Neither automatically makes a repository durable or thread-safe."},
+                readiness: ["I can swap a fake repository without changing Library.issue.", "I can explain why frozen dataclasses are shallowly frozen and why loan state must not be a shared class attribute."]
+            },
+            "Error Handling, Context, and Production Practices": {
+                prerequisites: "Python Modules 1–3, exception flow, file reading, and simple classes. Understand that an error message for a user and a diagnostic for an operator can differ.",
+                setup: "Python 3.11+. Save solution as config_check.py and run python config_check.py. It uses io.StringIO to test resource cleanup without creating files or reading real environment secrets.",
+                workedExample: {
+                    problem: "Read a positive batch-size setting while guaranteeing cleanup on normal and invalid paths.",
+                    steps: [
+                        "Call load_limit on a text stream containing ' 25 '. Enter with stream as handle, read its text, and convert to int.",
+                        "If the value is outside 1–1000, raise ConfigError('LIMIT must be 1..1000'). If conversion fails, raise ConfigError('LIMIT must be an integer') from the original ValueError.",
+                        "Leave the with block on success or failure. In both paths the stream is closed. Let an outer boundary display the domain message; never log raw secrets."
+                    ],
+                    expected: "Input '25' returns 25 and closes the stream. Input 'oops' raises ConfigError with a ValueError cause and also closes the stream."
+                },
+                practice: {
+                    task: "Implement load_limit(stream) for integer text in 1..1000. It takes ownership of the stream and closes it. Preserve the conversion cause; distinguish conversion failure from a range violation. Demonstrate both using a fresh StringIO per call.",
+                    cases: [
+                        {input: "StringIO('25')", expected: "value 25; closed=True"},
+                        {input: "StringIO('0')", expected: "ConfigError: LIMIT must be 1..1000; closed=True"},
+                        {input: "StringIO('oops')", expected: "ConfigError: LIMIT must be an integer; cause is ValueError; closed=True"}
+                    ],
+                    hint: "The cleanup belongs in with, not in success-only code. Catch ValueError only around int conversion; otherwise you may accidentally relabel your own validation error.",
+                    solution: `from io import StringIO
+
+class ConfigError(Exception):
+    pass
+
+def load_limit(stream):
+    with stream as handle:
+        text = handle.read()
+        try:
+            limit = int(text.strip())
+        except ValueError as exc:
+            raise ConfigError("LIMIT must be an integer") from exc
+        if not 1 <= limit <= 1000:
+            raise ConfigError("LIMIT must be 1..1000")
+        return limit
+
+for text in ["25", "0", "oops"]:
+    stream = StringIO(text)
+    try:
+        print(load_limit(stream))
+    except ConfigError as exc:
+        print(f"ConfigError: {exc}")
+    print(f"closed={stream.closed}")
+
+# I/O failures are not converted into validation errors: they propagate to a separate operational boundary. This avoids hiding a permission or disk failure behind a misleading integer message.`
+                },
+                interview: {question: "Why use raise ConfigError(...) from exc?", answer: "It adds a domain-specific message while preserving the original cause and traceback for diagnostics. A broad except Exception followed by pass would hide the failure. Type hints cannot replace this runtime validation of external text."},
+                readiness: ["I can demonstrate closure after both conversion and range failure.", "I can preserve exception causes and describe which boundary handles input errors versus I/O failures."]
+            },
+            "Concurrency, APIs, Testing, and Performance": {
+                prerequisites: "Python Modules 1–4, functions that raise exceptions, and a basic understanding of await. The first concurrency test uses a fake dependency, not the public internet.",
+                setup: "Python 3.11+, save as retry_demo.py and run python retry_demo.py. asyncio and unittest are in the standard library. The caller supplies a cooperative asynchronous operation; a real HTTP library must have its own timeout and cancellation support.",
+                workedExample: {
+                    problem: "Retry a timed-out read once but do not retry a permanent validation failure.",
+                    steps: [
+                        "The fake operation raises TimeoutError on call 1 and returns {'ok': True} on call 2. max_attempts=2 means two total calls, not two extra retries.",
+                        "Wrap each await in asyncio.wait_for with a positive timeout. Catch only TimeoutError, sleep between attempts, and re-raise on exhaustion.",
+                        "A ValueError must propagate after one call; cancellation must also propagate. The tests assert call counts so a returned success cannot hide excessive retries."
+                    ],
+                    expected: "The timeout-then-success test observes two calls; the permanent-error test observes one. The exhaustion test observes exactly two and raises TimeoutError."
+                },
+                practice: {
+                    task: "Implement retry_read(operation, max_attempts=2, timeout=0.1). Validate positive settings, retry only TimeoutError, cap attempts, and keep cancellation unhandled. Add deterministic async unit tests without real sleeps or network access.",
+                    cases: [
+                        {input: "fake raises TimeoutError, then returns {'ok': True}", expected: "{'ok': True}; calls=2"},
+                        {input: "fake raises ValueError", expected: "ValueError; calls=1"},
+                        {input: "fake always raises TimeoutError; max_attempts=2", expected: "TimeoutError; calls=2"}
+                    ],
+                    hint: "Use AsyncMock with side_effect and IsolatedAsyncioTestCase. Set retry delay to zero in this learning version; add capped backoff/jitter and idempotency checks for real integrations.",
+                    solution: `import asyncio
+import unittest
+from unittest.mock import AsyncMock
+
+async def retry_read(operation, max_attempts=2, timeout=0.1):
+    if max_attempts < 1 or timeout <= 0:
+        raise ValueError("positive attempts and timeout required")
+    for attempt in range(max_attempts):
+        try:
+            return await asyncio.wait_for(operation(), timeout)
+        except TimeoutError:
+            if attempt + 1 == max_attempts:
+                raise
+            await asyncio.sleep(0)
+
+class RetryTests(unittest.IsolatedAsyncioTestCase):
+    async def test_success_after_timeout(self):
+        op = AsyncMock(side_effect=[TimeoutError(), {"ok": True}])
+        self.assertEqual(await retry_read(op), {"ok": True})
+        self.assertEqual(op.await_count, 2)
+    async def test_permanent_error(self):
+        op = AsyncMock(side_effect=ValueError("bad response"))
+        with self.assertRaises(ValueError):
+            await retry_read(op)
+        self.assertEqual(op.await_count, 1)
+    async def test_exhaustion(self):
+        op = AsyncMock(side_effect=TimeoutError())
+        with self.assertRaises(TimeoutError):
+            await retry_read(op)
+        self.assertEqual(op.await_count, 2)
+
+if __name__ == "__main__":
+    unittest.main()
+
+# This is a read-only retry contract. Blindly retrying writes can duplicate side effects. wait_for requests cancellation on timeout and may wait for cleanup; it cannot forcibly stop blocking code or an operation that ignores cancellation.`
+                },
+                interview: {question: "Why doesn't asyncio make a CPU-heavy loop parallel?", answer: "Coroutines share an event-loop thread and cooperate at await points. A CPU loop prevents other tasks from progressing. On GIL-enabled CPython, use processes for parallel pure-Python CPU work, or native code that releases the GIL; benchmark overhead before choosing."},
+                readiness: ["I can test success, permanent failure, exhaustion, and cancellation without a live API.", "I can explain total attempts, per-attempt timeout, backoff, and the limits of cooperative cancellation."]
+            },
+            "Production Python Capstone": {
+                prerequisites: "Python Modules 1–5, repository/service separation, targeted errors, unit tests, and safe resource handling. Choose the Inventory and Reorder Platform option for this concrete capstone.",
+                setup: "Use Python 3.11+ with sqlite3, argparse, logging, and unittest from the standard library. Build app/service/domain/repository modules in your own capstone folder. Use a disposable local inventory.db for integration tests and document python -m unittest discover as the test command.",
+                workedExample: {
+                    problem: "Reserve two units of SKU P1 from stock 5 and make duplicate requests harmless.",
+                    steps: [
+                        "Create items(sku PRIMARY KEY, stock INTEGER CHECK(stock >= 0)) and reservations(request_id PRIMARY KEY, sku, quantity). Seed P1 with 5 units.",
+                        "For request R1, validate integer quantity >0, start a transaction, check for an existing request/payload, conditionally decrement stock where stock >= quantity, and insert the reservation.",
+                        "Commit both changes together. Replay R1 with the same payload as a no-op success; reject reuse with a different quantity. Inject an insert failure to verify the decrement rolls back."
+                    ],
+                    expected: "R1(P1,2) leaves stock 3 and one reservation. An identical replay leaves stock 3. A fresh request for 4 is rejected without mutation."
+                },
+                practice: {
+                    task: "Deliver reserve and stock CLI commands backed by SQLite. Acceptance: durable idempotency; no negative stock; atomic reserve; restart persistence; explicit unknown-SKU and insufficient-stock messages; >=12 tests with >=8 automated domain/integration cases; forced-write failure and two-connection contention tests. Include logs without payload secrets, a storage ADR, README commands, and a scripted demo.",
+                    cases: [
+                        {input: "seed P1=5; reserve R1 P1 2; repeat R1 P1 2; restart; stock P1", expected: "3; exactly one reservation persisted"},
+                        {input: "P1=3; reserve R2 P1 4", expected: "insufficient stock; P1=3; no R2"},
+                        {input: "seed P1=5; force reservation insert failure after decrement", expected: "rollback; P1=5; no reservation"}
+                    ],
+                    hint: "Validate quantity before SQL. An UPDATE with a stock >= quantity predicate avoids a stale read-then-write check. Manage a connection explicitly; sqlite3 connection context management handles commit/rollback but does not itself close the connection.",
+                    solution: "Implementation route: define reserve(request_id, sku, quantity) at the service boundary and validate nonempty IDs and type(quantity) is int with quantity >0. Open a connection, enable a documented busy timeout, and BEGIN IMMEDIATE for the reserve transaction. Load any existing reservation: if all payload fields match return its stored result, otherwise reject request-ID reuse. Execute parameterized UPDATE items SET stock=stock-? WHERE sku=? AND stock>=? and require rowcount=1; distinguish unknown SKU from insufficient stock within the transaction. Insert the reservation and commit; on every exception roll back, then close in finally. Persist request identity and stock in the same transaction. Test using separate on-disk connections, including an injected exception between update and insert. Do not confuse the in-memory fake's passing tests with SQLite locking evidence. Surface lock exhaustion as an operational error, not insufficient stock."
+                },
+                interview: {question: "Why is validate-before-write insufficient for concurrent stock changes?", answer: "Two callers can both read the same stock before either writes. A transaction plus a conditional update enforces the rule at storage time; a persisted unique request ID prevents replay duplication. Validation is still needed for syntax, types, and clear error messages."},
+                readiness: ["I can reproduce reserve, replay, rejection, restart, and rollback with a fresh fixture.", "I can explain transaction/locking assumptions and show which tests use real SQLite rather than a fake."]
+            },
+            "Career Specialization Tracks (Optional)": {
+                prerequisites: "Complete Python Modules 1–6. Choose one track, not all three at once. The dependency-free automation option below turns a portfolio claim into a small, inspectable deliverable.",
+                setup: "Use Python 3.11+ and pathlib/unittest only for the initial automation artifact. Work inside a dedicated user-created learning folder with sample files, never your real documents. First build a pure planner; no files should move during planning.",
+                workedExample: {
+                    problem: "Plan image renames reproducibly without overwriting a file or changing anything in dry-run.",
+                    steps: [
+                        "Given names ['b.JPG', 'a.jpg', 'notes.txt'], select .jpg names case-insensitively and sort by (casefolded name, original name). This fixes ordering across runs.",
+                        "Assign destinations image-001.jpg and image-002.jpg in that order. Before emitting a plan, reject any destination already present in the complete input name set, including case-insensitive collisions.",
+                        "Print the proposed moves in dry-run and compare the directory before/after. Only a separate opt-in apply command may rename files; if any destination exists, stop before the first rename."
+                    ],
+                    expected: "a.jpg -> image-001.jpg; b.JPG -> image-002.jpg. notes.txt is untouched. The pure planner does not perform filesystem I/O."
+                },
+                practice: {
+                    task: "Implement plan(names) for those exact JPG rules and collision checks. Use it as the first tested component of the automation portfolio track. Artifact acceptance: dry-run default, explicit apply option, preflight validation, success journal and documented rollback limits, three collision/ordering tests, README demo. Backend alternative: implement one tested CRUD resource with explicit status codes. Data alternative: publish a deterministic cleaned dataset, missing-value report and train/test split with no target leakage. Pick only one extension.",
+                    cases: [
+                        {input: "['b.JPG', 'a.jpg', 'notes.txt']", expected: "[('a.jpg', 'image-001.jpg'), ('b.JPG', 'image-002.jpg')]"},
+                        {input: "['a.jpg', 'IMAGE-001.JPG']", expected: "ValueError: destination exists; no moves"},
+                        {input: "['notes.txt']", expected: "[]"}
+                    ],
+                    hint: "Planning and applying are different responsibilities. For safety, reject rather than attempting clever renaming cycles when a generated destination is already occupied.",
+                    solution: `from pathlib import Path
+
+def plan(names):
+    occupied = {name.casefold() for name in names}
+    photos = sorted(
+        (name for name in names if Path(name).suffix.casefold() == ".jpg"),
+        key=lambda name: (name.casefold(), name),
+    )
+    moves = [(name, f"image-{index:03d}.jpg")
+             for index, name in enumerate(photos, start=1)]
+    if any(target.casefold() in occupied for _, target in moves):
+        raise ValueError("destination exists")
+    return moves
+
+print(plan(["b.JPG", "a.jpg", "notes.txt"]))
+print(plan(["notes.txt"]))
+try:
+    plan(["a.jpg", "IMAGE-001.JPG"])
+except ValueError as exc:
+    print(f"ValueError: {exc}")
+
+# For the opt-in extension, preflight every source and target, journal each completed rename, and reverse only journaled moves whose current state still matches. A preflight alone cannot prevent external concurrent changes; document the single-writer assumption and partial-failure recovery instead of promising universal atomic rollback.`
+                },
+                interview: {question: "How would you demonstrate depth rather than listing three frameworks?", answer: "Show a reproducible artifact, its acceptance tests and failure handling. For this automation track, demonstrate a dry-run with zero changes and a collision rejected before any move. Set a 60-day plan with measurable milestones: tested planner, safe apply/journal, documented recovery demo, then one reviewed release."},
+                readiness: ["I can demonstrate the chosen artifact's normal and failure paths and state its safety limits.", "I can show one role-focused deliverable and a dated roadmap with testable milestones rather than claiming mastery of every track."]
+            }
+        },
+        csharpProgramming: {
+            "C# and .NET Foundations": {
+                prerequisites: "None. A terminal runs commands; an SDK supplies the compiler and runtime. Begin with visible console output before CLR or IL details.",
+                setup: "Install a supported .NET SDK, version 8 or later. Verify dotnet --list-sdks. Run dotnet new console -n ScoreDemo, then cd ScoreDemo. Replace all of Program.cs with the solution and run dotnet run -- 75. The -- separates program arguments from dotnet options. No additional packages.",
+                workedExample: {
+                    problem: "Read one score from a command argument and print Pass at 60 or above, otherwise Retry.",
+                    steps: [
+                        "First replace Program.cs with Console.WriteLine(\"Hello, C#!\"); and run dotnet run. Confirm the greeting; this top-level form has an entry point generated by the compiler.",
+                        "Run dotnet run -- 75. args[0] contains the text \"75\". Check args.Length first, then use int.TryParse to get an int without throwing on bad numeric text.",
+                        "Require 0 <= score <= 100. Only after validation compare score >= 60. For 75 print Pass; for 59 print Retry. An out-of-range number is not a failing grade: it is invalid input."
+                    ],
+                    expected: "75 -> Pass; 59 -> Retry; hello or 101 -> Invalid score. Each invocation prints exactly one result line."
+                },
+                practice: {
+                    task: "Implement the exact one-argument pass checker above. Reject missing/extra arguments, non-integer text, and numbers outside 0–100. Print only Pass, Retry, or Invalid score.",
+                    cases: [
+                        {input: "dotnet run -- 60", expected: "Pass"},
+                        {input: "dotnet run -- 59", expected: "Retry"},
+                        {input: "dotnet run -- hello", expected: "Invalid score"},
+                        {input: "dotnet run -- 101", expected: "Invalid score"}
+                    ],
+                    hint: "Combine the length, TryParse, and range guards using ||. Short-circuiting prevents args[0] access when the length is wrong.",
+                    solution: `using System;
+
+if (args.Length != 1 ||
+    !int.TryParse(args[0], out int score) ||
+    score < 0 || score > 100)
+{
+    Console.WriteLine("Invalid score");
+    return;
+}
+Console.WriteLine(score >= 60 ? "Pass" : "Retry");
+
+// TryParse returns a success flag and assigns the out variable. The range guard is still necessary: successfully parsing 101 does not make it a valid score.`
+                },
+                interview: {question: "How are a value copy and a reference copy different?", answer: "Assigning an int copies its value, so changing the new variable does not change the original. Assigning a List<int> variable copies a reference; both variables then refer to the same mutable list. This is about assignment semantics, not a rule that every value type lives on the stack."},
+                readiness: ["I can create a project, replace Program.cs, and pass arguments without mixing template entry-point styles.", "I can trace short-circuit validation and explain why parsing success and domain validity differ."]
+            },
+            "Object-Oriented C# and Design Principles": {
+                prerequisites: "C# Module 1: methods, constructor syntax, boolean checks, and basic exceptions. A property exposes controlled access to state; an interface names behavior a caller can depend on.",
+                setup: "Use a .NET 8+ console project. Replace Program.cs with the complete solution; dotnet run. Keep top-level statements before the type declarations. The exercise is synchronous deliberately; async notification is introduced in Module 4.",
+                workedExample: {
+                    problem: "Borrow a book once and notify a caller without tying the library rule to email.",
+                    steps: [
+                        "Book('B1') starts with Available=true. Its private setter prevents callers from directly marking availability.",
+                        "Library depends on INotifier. Borrow checks Available, changes it to false, and sends a message through that interface.",
+                        "A second Borrow returns false before sending. A console or test notifier can implement the same interface without changing the borrowing rule."
+                    ],
+                    expected: "First call prints Borrowed B1 and returns true. Second returns false with no second notification. Final Available is false."
+                },
+                practice: {
+                    task: "Implement the synchronous Book, INotifier, and Library shown below. An empty/whitespace book ID must be rejected at construction. Notify once per successful borrow, never for rejection. Use an in-memory counting notifier to verify behavior.",
+                    cases: [
+                        {input: "Book B1; Borrow twice", expected: "True, False; notifications=1; Available=False"},
+                        {input: "Book with whitespace ID", expected: "ArgumentException; no book created"},
+                        {input: "Two separate books B1 and B2, borrow each once", expected: "both True; notifications=2"}
+                    ],
+                    hint: "Constructor validation protects initial state. Put the duplicate-borrow guard before state mutation and notification. This learning notifier cannot fail; durable external notification requires a separate reliability design.",
+                    solution: `using System;
+
+var notifier = new CountingNotifier();
+var library = new Library(notifier);
+var book = new Book("B1");
+Console.WriteLine(library.Borrow(book));
+Console.WriteLine(library.Borrow(book));
+Console.WriteLine($"notifications={notifier.Count}; Available={book.Available}");
+
+public sealed class Book
+{
+    public string Id { get; }
+    public bool Available { get; private set; } = true;
+    public Book(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id)) throw new ArgumentException("ID required");
+        Id = id;
+    }
+    public bool TryBorrow()
+    {
+        if (!Available) return false;
+        Available = false;
+        return true;
+    }
+}
+public interface INotifier { void Send(string message); }
+public sealed class CountingNotifier : INotifier
+{
+    public int Count { get; private set; }
+    public void Send(string message) { Count++; Console.WriteLine(message); }
+}
+public sealed class Library(INotifier notifier)
+{
+    public bool Borrow(Book book)
+    {
+        if (!book.TryBorrow()) return false;
+        notifier.Send($"Borrowed {book.Id}");
+        return true;
+    }
+}
+// The constructor-injected collaborator is composed, not inherited. Book owns availability; Library coordinates notification only after a successful transition.`
+                },
+                interview: {question: "Would a record automatically be the best Book type?", answer: "Not necessarily. This Book has identity and changing availability, so a class is clear. Records are useful for value-centric request/response data, but record syntax does not guarantee deep immutability. Choose by equality and state semantics, not brevity alone."},
+                readiness: ["I can use a fake notifier and prove one notification for two borrow attempts.", "I can explain entity identity, constructor invariants, and why the interface belongs at a real substitution boundary."]
+            },
+            "Collections, Generics, LINQ, and Exceptions": {
+                prerequisites: "C# Modules 1–2, List<T>, method calls, lambdas such as x => x.Score, and the difference between a sequence and a lookup.",
+                setup: "Use a .NET 8+ console project; replace Program.cs and run dotnet run. Explicit using directives in the solution avoid depending on implicit project imports. No database or packages.",
+                workedExample: {
+                    problem: "Build a case-insensitive student index and a deterministic top-scorer list.",
+                    steps: [
+                        "Insert S1:80/Asha into Dictionary<string,Student>(StringComparer.OrdinalIgnoreCase). A later s1:99 is a duplicate of S1, not a new ID; keep the first entry.",
+                        "Reject invalid scores before adding them. Query the stored values with Where(score >=85), then OrderByDescending(score) and ThenBy(Id, OrdinalIgnoreCase) for ties.",
+                        "Materialize with ToList at the boundary. This captures the report once; repeating enumeration of an unmaterialized query could observe source changes."
+                    ],
+                    expected: "For S1:80, s1:99, S2:90, S3:90: one duplicate reject and ranked IDs S2,S3."
+                },
+                practice: {
+                    task: "Write Report over Student records: case-insensitive unique IDs (first valid wins), scores 0–100 only, top threshold >=85, ties by case-insensitive ID. Return a concrete list of IDs and count all invalid-score or duplicate records as rejects.",
+                    cases: [
+                        {input: "S1:80, s1:99, S2:90, S3:90", expected: "top=S2,S3; rejects=1"},
+                        {input: "S1:101, s1:85", expected: "top=s1; rejects=1"},
+                        {input: "empty array", expected: "top=; rejects=0"}
+                    ],
+                    hint: "Range-check first, then TryAdd; an invalid score must not reserve its ID. Do not rely on dictionary traversal order for a ranked report.",
+                    solution: `using System;
+using System.Collections.Generic;
+using System.Linq;
+
+Report(new[] { new Student("S1", 80), new Student("s1", 99),
+    new Student("S2", 90), new Student("S3", 90) });
+Report(new[] { new Student("S1", 101), new Student("s1", 85) });
+Report(Array.Empty<Student>());
+
+static void Report(IEnumerable<Student> rows)
+{
+    var byId = new Dictionary<string, Student>(StringComparer.OrdinalIgnoreCase);
+    int rejects = 0;
+    foreach (var student in rows)
+    {
+        if (student.Score < 0 || student.Score > 100 ||
+            !byId.TryAdd(student.Id, student)) rejects++;
+    }
+    var top = byId.Values.Where(s => s.Score >= 85)
+        .OrderByDescending(s => s.Score)
+        .ThenBy(s => s.Id, StringComparer.OrdinalIgnoreCase)
+        .Select(s => s.Id).ToList();
+    Console.WriteLine($"top={string.Join(",", top)}; rejects={rejects}");
+}
+public record Student(string Id, int Score);
+
+// The exercise assumes nonempty IDs supplied by its caller. An API/import boundary must additionally validate IDs. Short-circuit || prevents TryAdd for an invalid score.`
+                },
+                interview: {question: "Does ToList make the contained Student objects deeply immutable?", answer: "No. It snapshots the sequence into a new list; it does not recursively clone elements. Here positional record properties are init-only, but mutable reference-valued properties would still be shared. Also distinguish LINQ-to-Objects from queries translated by a database provider."},
+                readiness: ["I can predict the effect of duplicate IDs with different casing and invalid-first rows.", "I can explain deferred execution, materialization, and deterministic tie handling without relying on dictionary order."]
+            },
+            "Async, Concurrency, and Resilience": {
+                prerequisites: "C# Modules 1–3, exceptions, method return values, and basic Task/await vocabulary. Cancellation is a cooperative signal, not forced termination.",
+                setup: "Use a .NET 8+ console project. Replace Program.cs with the solution and run dotnet run. Task.Delay simulates cooperative I/O; no HTTP calls, packages, or wall-clock performance assertions are needed.",
+                workedExample: {
+                    problem: "Combine two asynchronous reads in input order and handle a caller-cancelled operation.",
+                    steps: [
+                        "Start ReadAsync('A', token) and ReadAsync('B', token) before awaiting either. Each waits asynchronously using Task.Delay; neither needs Task.Run for this I/O simulation.",
+                        "Await Task.WhenAll(first, second). Its result array follows task input order even if B completes first, so joining the strings yields AB.",
+                        "For a deterministic cancellation test, cancel a CancellationTokenSource before calling the same pipeline. Both delays observe the token; catch OperationCanceledException at the caller boundary."
+                    ],
+                    expected: "Normal run prints AB. A pre-cancelled run prints cancelled. No .Result or .Wait is used."
+                },
+                practice: {
+                    task: "Implement LoadAsync(token) that returns AB from two concurrently started ReadAsync calls and propagates caller cancellation. Keep workers free of shared mutable state. In main demonstrate a successful and pre-cancelled run.",
+                    cases: [
+                        {input: "LoadAsync(CancellationToken.None)", expected: "AB"},
+                        {input: "LoadAsync(token already cancelled)", expected: "OperationCanceledException; boundary prints cancelled"}
+                    ],
+                    hint: "Pass the token into the actual awaited I/O, not just the outer method. Task.WhenAll is not a concurrency limiter for an arbitrarily large input.",
+                    solution: `using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+Console.WriteLine(await LoadAsync(CancellationToken.None));
+using var stop = new CancellationTokenSource();
+stop.Cancel();
+try { Console.WriteLine(await LoadAsync(stop.Token)); }
+catch (OperationCanceledException) when (stop.IsCancellationRequested)
+{
+    Console.WriteLine("cancelled");
+}
+
+static async Task<string> ReadAsync(string value, CancellationToken token)
+{
+    await Task.Delay(value == "A" ? 20 : 1, token);
+    return value;
+}
+static async Task<string> LoadAsync(CancellationToken token)
+{
+    Task<string> first = ReadAsync("A", token);
+    Task<string> second = ReadAsync("B", token);
+    string[] values = await Task.WhenAll(first, second);
+    return string.Concat(values);
+}
+
+// Input-order aggregation avoids completion-order output. For a large feed, bound in-flight work with a semaphore or bounded channel. Do not retry caller cancellation as a transient failure.`
+                },
+                interview: {question: "Does await move work to a new thread?", answer: "No. The method initially runs synchronously. An incomplete await returns control to its caller and arranges continuation after completion. True asynchronous I/O can avoid blocking a thread while waiting; CPU work still needs an appropriate execution strategy."},
+                readiness: ["I can show successful and cancelled behavior without relying on a timing race.", "I can distinguish task composition from thread creation, concurrency limiting, and retry policy."]
+            },
+            "ASP.NET Core, Data Access, and Architecture": {
+                prerequisites: "C# Modules 1–4 and basic HTTP: GET reads a resource; POST creates one; a status code explains the outcome. Learn endpoint validation before connecting EF Core.",
+                setup: "Use a .NET 8+ SDK. Run dotnet new web -n TaskApi then cd TaskApi. Replace Program.cs with the solution. Run dotnet run --urls http://localhost:5050. Use an HTTP client on this local address only. This baseline uses in-memory storage, intentionally no EF provider or external packages.",
+                workedExample: {
+                    problem: "Create a task with a valid title and retrieve it using its returned location.",
+                    steps: [
+                        "POST /tasks with Content-Type: application/json and body {\"title\":\"Read docs\"}. The endpoint trims the title and requires 1–100 characters.",
+                        "Assign an ID, store the response DTO, and return 201 Created with Location /tasks/1 and the stored JSON. Follow the Location using GET.",
+                        "POST {\"title\":\"  \"} returns 400 without storing anything. GET /tasks/999 returns 404. Validation is explicit here; a minimal API does not inherit controller validation behavior by assumption."
+                    ],
+                    expected: "On a fresh process, valid POST returns 201 and {\"id\":1,\"title\":\"Read docs\"}; GET /tasks/1 returns 200 with the same object. Invalid title ->400; missing task ->404."
+                },
+                practice: {
+                    task: "Implement these create/get endpoints with DTOs and explicit validation. Acceptance: 201 with Location; trimming; title length 1–100; 400 invalid; 404 missing; safe concurrent ID assignment. Prove that data disappears after restart, then document the next EF Core migration/repository step rather than claiming this dictionary is persistence.",
+                    cases: [
+                        {input: "Fresh process; POST /tasks {\"title\":\" Read docs \"}; GET returned Location", expected: "201 then 200; title is Read docs; id is 1"},
+                        {input: "POST /tasks {\"title\":\"  \"}", expected: "400; title length error; no task added"},
+                        {input: "GET /tasks/999", expected: "404"}
+                    ],
+                    hint: "Keep request/response DTOs separate. Use Interlocked for ID generation and ConcurrentDictionary for per-key storage; these do not make a multi-record business transaction atomic.",
+                    solution: `using System.Collections.Concurrent;
+using System.Threading;
+
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+var tasks = new ConcurrentDictionary<int, TaskDto>();
+int nextId = 0;
+
+app.MapPost("/tasks", (CreateTask request) =>
+{
+    string title = (request.Title ?? "").Trim();
+    if (title.Length is < 1 or > 100)
+        return Results.BadRequest(new { error = "Title must be 1..100 characters" });
+    int id = Interlocked.Increment(ref nextId);
+    var task = new TaskDto(id, title);
+    tasks[id] = task;
+    return Results.Created($"/tasks/{id}", task);
+});
+app.MapGet("/tasks/{id:int}", (int id) =>
+    tasks.TryGetValue(id, out var task) ? Results.Ok(task) : Results.NotFound());
+app.Run();
+
+public record CreateTask(string? Title);
+public record TaskDto(int Id, string Title);
+
+// Malformed JSON is rejected by request binding before the handler. For the persistence extension, register a scoped DbContext, add a real provider/migration, and move storage behind a service boundary; never share one DbContext across concurrent requests or singleton services.`
+                },
+                interview: {question: "Why is injecting a scoped DbContext into a singleton service a problem?", answer: "The singleton outlives request scopes and may retain/use the context concurrently. DbContext is not thread-safe. Keep request work scoped, or explicitly create and dispose a scope/context per background unit of work. A repository wrapper does not fix an incorrect lifetime."},
+                readiness: ["I can demonstrate the three HTTP outcomes and distinguish binding, validation, and storage failures.", "I can explain why this baseline is not durable or authenticated and outline a migration with real database tests."]
+            },
+            "Production C# Capstone and Interview Readiness": {
+                prerequisites: "C# Modules 1–5: API contracts, async cancellation, DI lifetimes, persistence/migrations, and tests. Choose the Task Workflow API option for a concrete delivery scope.",
+                setup: "Use a supported .NET 8+ SDK, ASP.NET Core, EF Core with a local relational provider, and an existing chosen test framework. Pin compatible package versions in the capstone, document migration and dotnet test commands, and use an isolated database for integration tests. Do not expose the learning API publicly without an authentication design.",
+                workedExample: {
+                    problem: "Prevent two clients from silently overwriting the same task edit.",
+                    steps: [
+                        "Create task 1 with title Draft and version 1. GET returns the version; clients A and B both read it.",
+                        "Client A sends PUT with expectedVersion=1 and title Reviewed. Update using an atomic id/version predicate and increment to version 2.",
+                        "Client B sends a stale PUT with expectedVersion=1. Zero updated rows means conflict, not success. Return 409; do not overwrite Reviewed. GET must still show version 2."
+                    ],
+                    expected: "A receives 200 with Reviewed/version 2; B receives 409. Restarting the API preserves Reviewed/version 2."
+                },
+                practice: {
+                    task: "Deliver create/get/update for tasks with explicit optimistic concurrency. Acceptance: 201 create; 200 read/update; 400 empty or >100-character title; 404 unknown ID; 409 stale version; durable state after restart; cancellation propagated; errors do not expose SQL/internal stack traces. Include >=12 automated tests, real-database concurrency and rollback checks, migration instructions, structured operation logs, one ADR, and a reproducible demo.",
+                    cases: [
+                        {input: "Task 1 Draft/v1; PUT Reviewed with expectedVersion 1; stale PUT Other/v1", expected: "200 Reviewed/v2, then 409; stored title remains Reviewed"},
+                        {input: "PUT existing task with whitespace title and current version", expected: "400; title and version unchanged"},
+                        {input: "GET /tasks/999", expected: "404, not 500 or an empty success object"}
+                    ],
+                    hint: "Comparing versions only in service memory is racy. Enforce the version predicate in the database update or use a correctly configured concurrency token.",
+                    solution: "Implementation route: use separate CreateTaskRequest, UpdateTaskRequest(title, expectedVersion), and TaskResponse DTOs. Validate title/positive version at the API boundary; keep domain validation reusable. Store an integer Version configured as a concurrency token, or issue an atomic parameterized UPDATE WHERE Id=id AND Version=expectedVersion that sets Title and Version=Version+1. With tracked EF entities, compare the loaded version to the submitted one before mutation and handle DbUpdateConcurrencyException for races after that check. Map missing rows to 404 and stale rows to 409 without automatic overwrite. Scope DbContext per request and await operations with cancellation. Test with two contexts/connections, not a shared in-memory collection. Reopen the database after API restart to prove durability. Add a failure-injection test verifying no partial state change when persistence fails. Document that this exercise uses body versions, not HTTP ETag/If-Match semantics; do not mix 409 with an undocumented 412 policy."
+                },
+                interview: {question: "What does a passing mocked repository test fail to prove here?", answer: "It cannot prove the database enforces concurrency, migration compatibility, rollback, or durability. Use domain unit tests for decisions and real-provider integration tests for storage behavior. Explain unresolved authorization, capacity, and operational limits before describing the project as production-ready."},
+                readiness: ["I can demonstrate a real stale-write conflict and persistence after restart using the documented commands.", "I can show the test matrix, architecture dependency direction, concurrency ADR, and honest deployment limitations."]
+            }
+        },
+        cppProgramming: {
+            "C++ Foundations and Compilation Model": {
+                prerequisites: "None. Learn to save, compile and run a single source file before headers, linking details, or history. A compiler turns source into a program; editing source alone does not update the executable.",
+                setup: "Use a C++20-capable compiler. On Windows, open a Visual Studio Developer PowerShell with C++ Build Tools available. Save the complete solution as main.cpp; run cl /std:c++20 /EHsc /W4 main.cpp /Fe:score.exe then .\\score.exe. With an existing GCC toolchain use g++ -std=c++20 -Wall -Wextra -pedantic main.cpp -o score.exe then .\\score.exe. No libraries beyond the standard library.",
+                workedExample: {
+                    problem: "Read one score, check it, and print Pass or Retry without reading an uninitialized value.",
+                    steps: [
+                        "First run the module's hello program and confirm output. Then initialize int score{0}; before reading; braces give a known starting value.",
+                        "Use if (!(std::cin >> score)) to detect extraction failure. Do not compare score to a threshold until input succeeds and the range is 0–100.",
+                        "For input 60 the range check succeeds and score >= 60 is true, so print Pass. For 59 print Retry. Return a nonzero exit code for invalid input."
+                    ],
+                    expected: "60 -> Pass; 59 -> Retry; hello or 101 -> Invalid score. The solution reads one integer token; strict whole-line parsing is a later extension."
+                },
+                practice: {
+                    task: "Implement the single-token score checker below. Accept an integer token in 0–100 inclusive, print Pass for >=60 and Retry otherwise. If extraction fails or range is invalid, print Invalid score and exit 1. Ignore remaining input tokens in this introductory version.",
+                    cases: [
+                        {input: "60", expected: "Pass; exit 0"},
+                        {input: "59", expected: "Retry; exit 0"},
+                        {input: "hello", expected: "Invalid score; exit 1"},
+                        {input: "101", expected: "Invalid score; exit 1"}
+                    ],
+                    hint: "Use || to combine input failure and range guards. std::cin >> int reads a numeric prefix, so do not claim that this validates an entire line such as 75oops.",
+                    solution: `#include <iostream>
+
+int main() {
+    int score{0};
+    if (!(std::cin >> score) || score < 0 || score > 100) {
+        std::cout << "Invalid score" << std::endl;
+        return 1;
+    }
+    std::cout << (score >= 60 ? "Pass" : "Retry") << std::endl;
+    return 0;
+}
+// Initialization prevents indeterminate reads, and the guard prevents invalid data reaching classification. Rebuild before rerunning each edit. A full-line validator can later use getline plus from_chars with an end-pointer check.`
+                },
+                interview: {question: "How does a compiler error differ from a linker error?", answer: "A compiler error can report invalid syntax or types in a translation unit. A linker error can report a declared/called function with no linked definition. Neither is fixed by adding runtime input validation; fix the first relevant build diagnostic."},
+                readiness: ["I can save, compile, change, rebuild, and execute main.cpp using one toolchain.", "I can trace input failure and boundary values, and state the difference between token and full-line validation."]
+            },
+            "Pointers, Ownership, and Lifetime": {
+                prerequisites: "C++ Module 1, functions, scope, references, and value initialization. An owner controls lifetime; a borrower may use an object only while it remains alive.",
+                setup: "Use C++20 and the same main.cpp build command from Module 1. The solution needs only iostream, memory, and utility. Compile with warnings enabled; no manual new/delete or external tools are necessary for this first ownership exercise.",
+                workedExample: {
+                    problem: "Transfer exclusive ownership of a resource while leaving a safe observing reference within its valid lifetime.",
+                    steps: [
+                        "Construct auto first = std::make_unique<Resource>(42). first owns the resource; read_id(*first) borrows it for one function call without taking ownership.",
+                        "auto second = std::move(first) moves the unique_ptr. first becomes null and second owns the same Resource; check first before dereferencing.",
+                        "Leave second's scope. Its destructor destroys Resource exactly once. Never return or retain a pointer/reference that will outlive this owner."
+                    ],
+                    expected: "The solution prints 42, empty, 42, released 42 on separate lines. Destruction is visible after the last valid read."
+                },
+                practice: {
+                    task: "Implement Resource with an ID and destructor message, read_id(const Resource&) as a borrower, and an explicit unique_ptr ownership transfer. Verify that the moved-from owner is null and the resource is destroyed once. Repeat with ID 7.",
+                    cases: [
+                        {input: "Resource ID 42 transferred first->second", expected: "42; empty; 42; released 42 exactly once"},
+                        {input: "Resource ID 7 transferred first->second", expected: "7; empty; 7; released 7 exactly once"}
+                    ],
+                    hint: "std::move does not destroy the Resource; unique_ptr's move constructor transfers its ownership. Do not dereference first after the move or manually delete second.get().",
+                    solution: `#include <iostream>
+#include <memory>
+#include <utility>
+
+struct Resource {
+    int id;
+    explicit Resource(int value) : id{value} {}
+    ~Resource() { std::cout << "released " << id << std::endl; }
+};
+int read_id(const Resource& resource) { return resource.id; }
+void demo(int id) {
+    auto first = std::make_unique<Resource>(id);
+    std::cout << read_id(*first) << std::endl;
+    auto second = std::move(first);
+    std::cout << (first ? "owned" : "empty") << std::endl;
+    std::cout << read_id(*second) << std::endl;
+}
+int main() { demo(42); demo(7); }
+
+// Each demo owns one object throughout the transfer. read_id borrows only for the call. A Resource containing only safe standard members normally follows Rule of Zero; this destructor exists solely to make cleanup observable.`
+                },
+                interview: {question: "Does using shared_ptr automatically prevent leaks and dangling references?", answer: "No. Ownership cycles can leak unless broken with weak_ptr or redesigned. Raw references borrowed from a shared_ptr can still dangle after the last owner disappears. Choose shared ownership only when the domain truly requires shared lifetime."},
+                readiness: ["I can draw the owner before and after the move and identify every valid dereference.", "I can show one destructor call and explain why a borrower must not outlive the owner."]
+            },
+            "STL, Algorithms, and Generic Programming": {
+                prerequisites: "C++ Modules 1–2, vector, loops, references, and object lifetimes. begin/end form a half-open range: begin is included, end is not an element.",
+                setup: "Use C++20 with warnings. Save the solution as main.cpp and compile with the Module 1 command. Headers are included explicitly. Data is a small in-memory inventory; no files or dependencies.",
+                workedExample: {
+                    problem: "List low-stock inventory by quantity, then ID, with reproducible tie ordering.",
+                    steps: [
+                        "Start with B:2, A:2, C:5, D:0. Use copy_if with stock <3 into a new vector: B:2, A:2, D:0. Zero is valid stock.",
+                        "Sort using ascending stock, then ascending ID. Comparing tuple keys with < supplies strict weak ordering; using <= would incorrectly say an item precedes itself.",
+                        "Traverse the sorted vector to print D:0 A:2 B:2. The original vector stays in input order; no iterators from it are invalidated by editing the separate report."
+                    ],
+                    expected: "D:0 A:2 B:2. With no low-stock items print (none)."
+                },
+                practice: {
+                    task: "Implement low_stock over vector<Item>, selecting stock <3 and sorting by (stock,id). Assume unique nonempty IDs and nonnegative stock already validated at ingestion. Preserve the input and output (none) for an empty report.",
+                    cases: [
+                        {input: "B:2, A:2, C:5, D:0", expected: "D:0 A:2 B:2"},
+                        {input: "A:3, B:5", expected: "(none)"},
+                        {input: "empty inventory", expected: "(none)"}
+                    ],
+                    hint: "Use back_inserter so copy_if grows the destination safely. A transform into output.begin() would require an already sized destination.",
+                    solution: `#include <algorithm>
+#include <iostream>
+#include <iterator>
+#include <string>
+#include <tuple>
+#include <vector>
+
+struct Item { std::string id; int stock; };
+void low_stock(const std::vector<Item>& items) {
+    std::vector<Item> report;
+    std::copy_if(items.begin(), items.end(), std::back_inserter(report),
+        [](const Item& item) { return item.stock < 3; });
+    std::sort(report.begin(), report.end(), [](const Item& a, const Item& b) {
+        return std::tie(a.stock, a.id) < std::tie(b.stock, b.id);
+    });
+    if (report.empty()) std::cout << "(none)";
+    for (std::size_t i{0}; i < report.size(); ++i) {
+        if (i != 0) std::cout << ' ';
+        std::cout << report[i].id << ':' << report[i].stock;
+    }
+    std::cout << std::endl;
+}
+int main() {
+    low_stock({{"B", 2}, {"A", 2}, {"C", 5}, {"D", 0}});
+    low_stock({{"A", 3}, {"B", 5}});
+    low_stock({});
+}
+// Filtering is O(n); sorting k selected items is O(k log k). The extra vector costs O(k) storage and keeps the source unchanged.`
+                },
+                interview: {question: "When does vector::push_back invalidate iterators?", answer: "If it reallocates, all pointers/references/iterators to elements are invalidated. Without reallocation, existing element references remain valid, but end changes. reserve can reduce reallocations; it changes capacity, not size, and is not permission to index unconstructed elements."},
+                readiness: ["I can verify the comparator returns false for equal keys and produces deterministic ties.", "I can explain the report's complexity, half-open ranges, and why back_inserter is safe here."]
+            },
+            "Modern C++: RAII, Move Semantics, and Language Features": {
+                prerequisites: "C++ Modules 1–3, ownership and STL algorithms. Learn optional as an explicit maybe-value before mixing variant alternatives or non-owning views into an API.",
+                setup: "Use a C++20 toolchain and the Module 1 compile command. Save the complete solution as main.cpp. std::from_chars uses locale-independent integer parsing and needs no exception or external parser.",
+                workedExample: {
+                    problem: "Replace the ambiguous -1 parse-failure sentinel with optional<int> for a score parser.",
+                    steps: [
+                        "Parse the text with from_chars using [data, data+size). Check both the error code and that the returned pointer reached the end: '75oops' is not a valid whole input.",
+                        "Reject a converted value outside 0–100, returning nullopt. A real score of 0 must remain a successful value.",
+                        "At the caller use if (value), then dereference only inside that branch. An engaged optional containing zero is truthy; it does not mean the numeric result is nonzero."
+                    ],
+                    expected: "'75' -> 75; '0' -> 0; '75oops' -> invalid. This strict parser intentionally rejects surrounding whitespace and leading '+'."
+                },
+                practice: {
+                    task: "Implement parse_score(string_view) returning optional<int>, with complete text consumption and range 0–100. Accept '0', reject empty text, whitespace, trailing junk, and overflow. Do not return a view into local storage.",
+                    cases: [
+                        {input: "'0'", expected: "0 (engaged optional)"},
+                        {input: "'100'", expected: "100"},
+                        {input: "'75oops'", expected: "invalid"},
+                        {input: "'101' or empty string", expected: "invalid"}
+                    ],
+                    hint: "Check empty input before pointer arithmetic; test result.ec and result.ptr, then the domain range. The optional owns an int, not a borrowed string.",
+                    solution: `#include <charconv>
+#include <iostream>
+#include <optional>
+#include <string_view>
+#include <system_error>
+
+std::optional<int> parse_score(std::string_view text) {
+    if (text.empty()) return std::nullopt;
+    int score{0};
+    const char* end = text.data() + text.size();
+    auto result = std::from_chars(text.data(), end, score);
+    if (result.ec != std::errc{} || result.ptr != end || score < 0 || score > 100)
+        return std::nullopt;
+    return score;
+}
+int main() {
+    for (std::string_view text : {"0", "100", "75oops", "101", ""}) {
+        if (auto score = parse_score(text)) std::cout << *score << std::endl;
+        else std::cout << "invalid" << std::endl;
+    }
+}
+// The caller cannot confuse absent with zero. If detailed error reasons become a requirement, return variant<Score, ParseError> instead of overloading nullopt with hidden meaning.`
+                },
+                interview: {question: "Should return std::move(localVector) be used to make a factory faster?", answer: "Usually not. Returning the named local directly allows NRVO; if elision is not performed, eligible values can be moved. An explicit std::move can inhibit NRVO. Measure copies and performance rather than applying move everywhere."},
+                readiness: ["I can distinguish absent, zero, malformed text, overflow, and range failure.", "I can explain the lifetime of string_view, the ownership of optional<int>, and why std::move is not itself a transfer."]
+            },
+            "Concurrency and Performance Engineering in C++": {
+                prerequisites: "C++ Modules 1–4, RAII, lambdas, STL maps, and object lifetimes. Know that a C++ data race is undefined behavior, not just a sometimes-wrong counter.",
+                setup: "Use C++20 with thread support. MSVC: cl /std:c++20 /EHsc /W4 main.cpp /Fe:logs.exe; GCC: g++ -std=c++20 -Wall -Wextra -pthread main.cpp -o logs.exe. Run .\\logs.exe in PowerShell. The workload is in memory; timings are not asserted.",
+                workedExample: {
+                    problem: "Aggregate error codes from two workers without concurrent map writes.",
+                    steps: [
+                        "Partition [E1,E2,E1] and [E2,E3]. Give each worker its own map, with lifetimes enclosing both threads. Each map is modified by only one worker.",
+                        "Join both workers before the caller reads either result. Then merge by code on the caller thread.",
+                        "Use std::map for sorted summary order. Totals become E1=2, E2=2, E3=1 regardless of worker scheduling. Sum of counts must equal five input events."
+                    ],
+                    expected: "E1=2 E2=2 E3=1 on each successful run. Two empty partitions print (none)."
+                },
+                practice: {
+                    task: "Implement the partition-local aggregator below with joined lifetimes and sorted output. Acceptance: no shared writes; total counts equal input size; deterministic empty behavior. Compare serial and two-worker versions on the same generated input in an optimized build, report repeated measurements and checksum, and do not assume parallel is faster.",
+                    cases: [
+                        {input: "[E1,E2,E1] and [E2,E3]", expected: "E1=2 E2=2 E3=1; total=5"},
+                        {input: "[] and []", expected: "(none); total=0"},
+                        {input: "[E1] and [E1]", expected: "E1=2"}
+                    ],
+                    hint: "A separate map per worker removes the need for a map mutex. Join before merging; do not merely sleep and hope workers have finished. A real worker must capture/propagate exceptions rather than letting them escape a thread.",
+                    solution: `#include <iostream>
+#include <map>
+#include <string>
+#include <thread>
+#include <vector>
+
+using Counts = std::map<std::string, int>;
+void scan(const std::vector<std::string>& codes, Counts& out) {
+    for (const auto& code : codes) ++out[code];
+}
+void aggregate(std::vector<std::string> a, std::vector<std::string> b) {
+    Counts left, right;
+    {
+        std::jthread first([&] { scan(a, left); });
+        std::jthread second([&] { scan(b, right); });
+    }
+    for (const auto& [code, count] : right) left[code] += count;
+    if (left.empty()) std::cout << "(none)";
+    bool separator{false};
+    for (const auto& [code, count] : left) {
+        if (separator) std::cout << ' ';
+        std::cout << code << '=' << count;
+        separator = true;
+    }
+    std::cout << std::endl;
+}
+int main() {
+    aggregate({"E1", "E2", "E1"}, {"E2", "E3"});
+    aggregate({}, {});
+    aggregate({"E1"}, {"E1"});
+}
+// The jthread destructors join at the inner scope boundary before merging. Each worker owns its write target; only immutable input and caller-owned lifetimes are shared. This small example assumes successful allocation; production exception propagation needs explicit handling.`
+                },
+                interview: {question: "Would replacing every counter with an atomic make a whole report consistent?", answer: "No. Atomic increments can protect individual counters, not a snapshot or invariant spanning multiple values. Partition-local results followed by joining can give a consistent completed report with less contention. Benchmark overhead, allocation, and locality before changing synchronization."},
+                readiness: ["I can prove which thread writes each map and where visibility is established before reading.", "I can compare serial/parallel checksums and report timings without claiming a guaranteed speedup."]
+            },
+            "Production C++ Capstone and Interview Readiness": {
+                prerequisites: "C++ Modules 1–5, safe ownership, strict parsing, deterministic reporting, failure handling, and profiling basics. Choose the Log Analytics CLI option for this concrete scope.",
+                setup: "Use a C++20 compiler with warnings and an existing build system or a documented single-command build. Start dependency-free with standard streams, from_chars, map, and a small assertion/test executable; tests must run with assertions enabled or use explicit failure checks. Work only on dedicated sample files. Add sanitizers only if the chosen toolchain supports them.",
+                workedExample: {
+                    problem: "Produce an exact log summary from a documented input format and preserve a prior report on validation failure.",
+                    steps: [
+                        "Define each nonempty row as CODE,COUNT, with no quoted fields: CODE is 1–16 uppercase ASCII letters/digits starting with a letter; COUNT is a full decimal nonnegative integer fitting uint64_t. Reject extra commas and detect total overflow.",
+                        "For E1,2 then E2,1 then E1,3, parse into value records and merge into sorted totals E1=5 E2=1. An invalid row is reported with a one-based line number; this strict-mode run exits 2 and does not publish a new report.",
+                        "Only after all rows validate, write a sibling staging report, check write/close success, then use the platform's documented replacement strategy. A failed publication must not be described as a successful run."
+                    ],
+                    expected: "Valid sample: E1=5 E2=1, exit 0. Append bad,row: reject line 4, exit 2, previous report unchanged. A missing input file exits 1."
+                },
+                practice: {
+                    task: "Deliver logs --input sample.csv --output report.txt in strict mode. Acceptance: exact grammar and overflow checks; sorted deterministic totals; line-numbered rejects; missing/read/write failure handling; preserve old output on parse failure; >=12 automated parsing/aggregation/I/O tests; ownership notes; reproducible benchmark with checksum and peak-input size; README/demo and documented platform limits for report replacement. Optional parallel mode must match serial output byte-for-byte.",
+                    cases: [
+                        {input: "E1,2; E2,1; E1,3 on separate lines", expected: "report lines E1=5 and E2=1; exit 0"},
+                        {input: "E1,2 then bad,row; prior report contains OLD", expected: "line 2 rejected; exit 2; report still OLD"},
+                        {input: "E1,18446744073709551615 then E1,1", expected: "overflow rejection on line 2; no published report"}
+                    ],
+                    hint: "Check incoming > max - current before unsigned addition. Validate and aggregate before opening/truncating the final path. std::filesystem::rename replacement behavior must be verified on the target platform; do not promise cross-platform atomic replacement from its name alone.",
+                    solution: "Implementation route: separate parse_row(string_view)->variant<Record,ParseError>, aggregate(records), and file orchestration. Enforce exactly one comma; validate ASCII code characters explicitly; parse unsigned COUNT with from_chars and require full consumption plus ec==errc{}. Before updating a total require count <= numeric_limits<uint64_t>::max()-total. Keep line numbers in errors and stop publication on any reject. For valid input, write the sorted report to a unique sibling staging file using an owning ofstream; explicitly flush/close and inspect failure state, then publish with a tested platform-specific strategy. Never delete the old report before a replacement guaranteed by that strategy. On unsupported replacement, return a clear I/O failure and retain the old file rather than silently weakening guarantees. Test missing source, malformed row, maximum count, overflow, empty input, output-open failure and cleanup. Benchmark serial first in an optimized build, consume its checksum, repeat fixed inputs, and document hardware/compiler/flags; compare optional parallel mode against identical golden output."
+                },
+                interview: {question: "What would you say if sanitizers and tests pass?", answer: "They provide evidence for exercised paths, not a proof of memory safety or production readiness. State the tested compiler/platform, sanitizer availability, input limits, untested failure modes, and replacement/durability assumptions. A benchmark only supports claims about its recorded workload."},
+                readiness: ["I can demonstrate normal, malformed, overflow and I/O failure cases without damaging a prior report.", "I can explain every ownership boundary and present reproducible correctness/performance evidence with explicit limits."]
+            }
+        }
+    };
+
+    const expectedCounts = {javaProgramming: 6, pythonProgramming: 7, csharpProgramming: 6, cppProgramming: 6};
+    const quizAnswers = {
+        javaProgramming: ["B C B B B", "B B A B C", "C B B B C", "B B B B B", "B B B B B", null],
+        pythonProgramming: ["B C B B B", "B B B B B", "B B B C B", "B B B B A", "B B B B B", null, null],
+        csharpProgramming: ["B B B B B", "B B B B B", "B B B B B", "B B B B B", "B B B B B", null],
+        cppProgramming: ["B B B B B", "B B B B B", "B B B B B", "B B B B B", "B B B B B", null]
+    };
+
+    for (const [track, count] of Object.entries(expectedCounts)) {
+        const modules = courseData[track];
+        const trackGuides = guides[track];
+        if (!Array.isArray(modules) || modules.length !== count ||
+            Object.keys(trackGuides).length !== count) {
+            throw new Error(`Programming curriculum count mismatch: ${track}`);
+        }
+        const seen = new Set();
+        modules.forEach((module, index) => {
+            if (module.number !== `Module ${index + 1}` || seen.has(module.title) ||
+                !Object.prototype.hasOwnProperty.call(trackGuides, module.title)) {
+                throw new Error(`Missing or mismatched learning guide: ${track} / ${module.number} / ${module.title}`);
+            }
+            seen.add(module.title);
+            module.learningGuide = trackGuides[module.title];
+
+            if (index === 0) {
+                const historyIndex = module.detailedContent.findIndex(lesson => lesson.title.startsWith("Optional:"));
+                const projectIndex = module.detailedContent.findIndex(lesson => lesson.title.startsWith("Mini Project:"));
+                if (historyIndex < 0 || projectIndex <= historyIndex) {
+                    throw new Error(`Missing first-program sequence anchors: ${track}`);
+                }
+                const [history] = module.detailedContent.splice(historyIndex, 1);
+                module.detailedContent.splice(projectIndex - 1, 0, history);
+            }
+
+            const quiz = module.detailedContent.find(lesson => lesson.title === "Module Quiz");
+            const answers = quizAnswers[track][index];
+            if (Boolean(quiz) !== Boolean(answers)) {
+                throw new Error(`Missing quiz answer key: ${track} / ${module.number}`);
+            }
+            if (quiz) {
+                quiz.content += `\nAnswer key (questions 1–5): ${answers.split(" ").join(", ")}. Review the corresponding lesson and explain why the other choices do not fit.`;
+            }
+        });
+    }
+})();

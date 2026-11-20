@@ -43,9 +43,16 @@ Object.assign(courseData, {
 
 <strong>Why Machine Learning?</strong>
 • Handles complex patterns humans can't easily code
-• Adapts to new data automatically
+• Can be updated with new data through an explicit retraining or online-learning process
 • Scales to large datasets
-• Improves over time with more data`,
+• May improve with relevant, representative data; more data alone does not guarantee improvement
+
+<strong>Read the first code example:</strong>
+• Each row of X_train describes one house. The double brackets keep the shape as rows and columns, even with only one feature.
+• y_train contains one known price for each row, in thousands of dollars.
+• fit() estimates a relationship using these examples. predict() applies that fixed relationship to new inputs; it does not retrain.
+• The prediction for 1100 square feet is 275 thousand dollars in this deliberately simplified dataset. Location and many other real price factors are missing.
+• Run the example using the workspace instructions in the guided practice above. If an import fails, install the packages in the same Python environment that runs the script.`,
                     code: `# Simple ML Example: Predicting House Prices
 from sklearn.linear_model import LinearRegression
 import numpy as np
@@ -246,8 +253,9 @@ prediction = spam_detector.predict(X_new)
 probability = spam_detector.predict_proba(X_new)[0][1]
 
 print("Is spam:", prediction[0] == 1)
-print("Confidence: {:.0%}".format(probability))
-# Output: Is spam: True, Confidence: 95%`
+print("Estimated spam probability: {:.0%}".format(probability))
+# The probability is a model estimate, not a measured guarantee.
+# Check the printed value; do not assume this tiny toy model is calibrated.`
                 },
                 {
                     title: "ML Workflow Overview",
@@ -274,7 +282,7 @@ print("Confidence: {:.0%}".format(probability))
 <strong>4. Model Evaluation</strong>
 • <strong>Test performance:</strong> Use testing data (never seen before!)
 • <strong>Calculate metrics:</strong> Accuracy, precision, recall, etc.
-• <strong>Cross-validation:</strong> Ensure model generalizes well
+• <strong>Cross-validation:</strong> Estimate generalization on multiple held-out folds; it does not guarantee future performance
 • <strong>Compare models:</strong> Choose the best performer
 
 <strong>5. Deployment & Monitoring</strong>
@@ -322,11 +330,12 @@ accuracy = accuracy_score(y_test, predictions)
 print("Model Accuracy: {:.0%}".format(accuracy))
 
 # 6. Make predictions on new data
-new_fruit = [[165, 7.3]]
+new_fruit = pd.DataFrame([[165, 7.3]], columns=['weight', 'diameter'])
 prediction = model.predict(new_fruit)
 print("Predicted fruit:", prediction[0])
 
-# 7. Ready for deployment!`
+# This tiny example demonstrates the workflow, not deployment readiness.
+# Real deployment needs representative evaluation, monitoring and safeguards.`
                 },
                 {
                     title: "Getting Started with ML",
@@ -423,7 +432,7 @@ result = 'Pass' if prediction[0] else 'Fail'
 confidence = probability[0][1]
 
 print("Prediction:", result)
-print("Confidence: {:.0%}".format(confidence))
+print("Estimated pass probability: {:.0%}".format(confidence))
 
 # Congratulations! You built your first ML model! 🎉`
                 }
@@ -6703,3 +6712,242 @@ print("\\nResponsible AI = good engineering + care for human impact")`
     // AI-901: Microsoft Azure AI Fundamentals
     // ==========================================================
 });
+
+(function () {
+    const setup = 'No cloud account or payment is needed. For paper exercises use a calculator. To run the Python examples, create a notebook at https://colab.research.google.com/ (a Google account may be required), or save the code as practice.py with Python 3 installed. In a local terminal run python -m pip install numpy pandas scikit-learn matplotlib, then python practice.py. In Colab use a code cell and Shift+Enter. If an import fails, install that package in the same environment. Never paste passwords or private datasets into a shared notebook.';
+    const guides = {
+        mlModels: [
+            {
+                prerequisites: 'No AI experience needed. Know that a list stores values and a function takes inputs and returns a result; learn Python Core first if those terms are new.',
+                setup,
+                workedExample: {
+                    problem: 'Learn a deliberately simple house-size relationship from (600,150), (800,200), and (1000,250). Size is square feet and price is in thousands of dollars.',
+                    steps: ['Increasing size by 200 increases price by 50, so the slope is 50/200 = 0.25 thousand dollars per square foot.', 'Substitute (600,150): bias = 150 - 0.25*600 = 0. Predict for 1100: 0.25*1100 = 275.', 'The first lesson uses fit() to estimate this line from rows, then predict() to apply it. It is a toy association, not evidence that size alone determines prices.'],
+                    expected: '275 thousand dollars for 1100 square feet. Training finds parameters; prediction uses them without changing them.'
+                },
+                practice: {
+                    task: 'Using price = 0.25*size, calculate prices in thousands for 1200 and 0 square feet. Decide whether a zero-size prediction should be accepted by a real housing app.',
+                    cases: [{ input: 'size=1200', expected: '300 thousand dollars' }, { input: 'size=0', expected: 'Formula returns 0; the application should reject a non-positive house size.' }],
+                    hint: 'Multiply size by 0.25. Distinguish what a mathematical formula produces from what a product should allow.',
+                    solution: '1200*0.25=300. 0*0.25=0 mathematically, but a house size must be positive. Add input validation before calling the model. Predicting outside training sizes is extrapolation and needs separate validation.'
+                },
+                interview: { question: 'How is a learned model different from an if/else rule?', answer: 'A rule is specified by a programmer. A model estimates parameters from examples. We still choose the data, objective and evaluation, and must test unseen examples. A deployed model usually stays fixed until an explicit update.' },
+                readiness: ['Run the first house-price example and explain X_train, y_train, fit and predict without reading the comments.', 'Change the size, predict the result before execution, and explain one reason the toy model is unsuitable for real buying decisions.']
+            },
+            {
+                prerequisites: 'Introduction to ML, multiplication, averages, and the equation y = weight*x + bias.',
+                setup,
+                workedExample: {
+                    problem: 'For x=[1,2,3] and actual y=[3,5,7], compare line A: y=2*x+1 with line B: y=2*x.',
+                    steps: ['Line A predicts [3,5,7]; its squared errors are [0,0,0], so mean squared error (MSE) is 0.', 'Line B predicts [2,4,6]; each residual is -1, so MSE=(1+1+1)/3=1.', 'This training comparison prefers A, but honest evaluation also needs held-out examples. Features with different units should not be compared by coefficient magnitude alone.'],
+                    expected: 'A has MSE 0, B has MSE 1. The bias shifts the line; it is not an error term to delete.'
+                },
+                practice: {
+                    task: 'Use prediction=3*x+2. Compute predictions and squared errors for the supplied (x, actual) pairs, then their average.',
+                    cases: [{ input: 'x=2, actual=9', expected: 'prediction=8, squared error=1' }, { input: 'x=4, actual=12', expected: 'prediction=14, squared error=4' }],
+                    hint: 'Square prediction minus actual; divide the total by the number of examples, not the number of features.',
+                    solution: 'Predictions are 8 and 14. Residuals are -1 and 2; squares are 1 and 4; MSE=5/2=2.5. MSE uses squared target units. RMSE=sqrt(2.5), approximately 1.581, returns to target units.'
+                },
+                interview: { question: 'Does zero training loss prove a regression model is good?', answer: 'No. It may fit noise, use leaked features or have too few examples. I compare with a baseline on a validation split, choose settings there, and use an untouched test set for a final estimate.' },
+                readiness: ['Calculate MSE for a new three-row example and explain the units.', 'Explain why a learned coefficient is not automatically a causal effect.']
+            },
+            {
+                prerequisites: 'Linear regression, probabilities from 0 to 1, and binary labels such as spam/not spam.',
+                setup,
+                workedExample: {
+                    problem: 'A logistic model calculates z=2*x-1 and probability=1/(1+exp(-z)). Classify using probability >= 0.5.',
+                    steps: ['At x=0, z=-1 and sigmoid(-1) is about 0.269, so return class 0.', 'At x=1, z=1 and sigmoid(1) is about 0.731, so return class 1.', 'The probability estimate is not a guarantee. Changing the decision threshold changes labels without retraining the model.'],
+                    expected: 'x=0 -> class 0; x=1 -> class 1 at threshold 0.5.'
+                },
+                practice: {
+                    task: 'Use threshold 0.7, with probability >= threshold returning class 1. Classify each case and say what happens at the exact boundary.',
+                    cases: [{ input: 'p=0.65', expected: 'class 0' }, { input: 'p=0.70', expected: 'class 1' }],
+                    hint: 'The comparison is inclusive. A threshold is a product decision informed by error costs and validation data.',
+                    solution: '0.65 < 0.7 returns 0; 0.70 >= 0.7 returns 1. Raising the threshold cannot increase positive predictions on a fixed set. Choose it on validation data; do not tune it repeatedly on the final test set.'
+                },
+                interview: { question: 'Why can logistic regression classify even though its name includes regression?', answer: 'It models a score transformed into a probability for a class, then a threshold turns that estimate into a decision. It is linear in its input score, not an unrestricted nonlinear classifier.' },
+                readiness: ['Explain score, probability and decision as three different quantities.', 'Show how a threshold change affects a borderline example and name the error trade-off.']
+            },
+            {
+                prerequisites: 'Binary predictions and true labels; basic fractions.',
+                setup,
+                workedExample: {
+                    problem: 'A detector has true positives=8, false positives=2, false negatives=4, true negatives=86.',
+                    steps: ['Precision asks how many positive predictions were right: 8/(8+2)=0.8.', 'Recall asks how many actual positives were found: 8/(8+4)=2/3, about 0.667.', 'Accuracy=(8+86)/100=0.94. The impressive accuracy hides four missed positives; compare with the majority-class baseline and error costs.'],
+                    expected: 'Precision 80%, recall about 66.7%, accuracy 94%.'
+                },
+                practice: {
+                    task: 'Compute precision and recall. If a denominator is zero, report that metric as undefined rather than silently inventing a percentage.',
+                    cases: [{ input: 'TP=3, FP=1, FN=2', expected: 'precision=3/4=75%; recall=3/5=60%' }, { input: 'TP=0, FP=0, FN=5', expected: 'precision undefined; recall=0%' }],
+                    hint: 'Precision uses predicted positives; recall uses actual positives.',
+                    solution: 'Case 1: 3/(3+1)=0.75 and 3/(3+2)=0.6. Case 2 has no positive predictions, so precision is undefined (denominator 0); recall is 0/5=0. Libraries may configure a zero-division convention, which must be documented.'
+                },
+                interview: { question: 'Why can 99% accuracy be a poor result?', answer: 'If only 1% of cases are positive, always predicting negative gets 99% accuracy with zero positive recall. I inspect the confusion matrix, class prevalence, precision/recall and error costs instead of reporting accuracy alone.' },
+                readiness: ['Build a confusion matrix from five true/predicted pairs.', 'Justify a metric using a specific false-positive versus false-negative cost.']
+            }
+        ],
+        data: [
+            {
+                prerequisites: 'Python lists, missing values, mean and standard deviation.',
+                setup,
+                workedExample: {
+                    problem: 'Training ages are [20, null, 40]. Validation contains [100, null]. Impute missing values using the training mean.',
+                    steps: ['Compute the mean of known training ages: (20+40)/2=30.', 'Fill training null with 30, then apply the same learned value to validation: [100,30].', 'Do not recompute the mean using validation. The validation value 100 is information the training preprocessing must not see.'],
+                    expected: 'Training becomes [20,30,40]; validation becomes [100,30].'
+                },
+                practice: {
+                    task: 'Fit a mean imputer using training values [10, null, 30, 50], then transform the cases. Treat null as missing, not zero.',
+                    cases: [{ input: 'validation=[null,90]', expected: '[30,90]' }, { input: 'validation=[0,null]', expected: '[0,30]; zero is a real observed value' }],
+                    hint: 'Fit once on the three observed training values. Do not change the fitted value while transforming.',
+                    solution: 'The training mean is (10+30+50)/3=30. Replace only null with 30. If all training values were missing, a mean would be undefined and you would need an explicit policy rather than a silent zero.'
+                },
+                interview: { question: 'Why put preprocessing inside a fitted pipeline?', answer: 'It keeps imputation/scaling fitted on each training fold and applies exactly those transforms at validation and prediction. Fitting transforms on the whole dataset before cross-validation leaks information.' },
+                readiness: ['Transform a held-out row using training-only statistics.', 'Distinguish missing, zero and outlier values and describe a policy for each.']
+            },
+            {
+                prerequisites: 'Python dictionaries and lists; difference between numeric quantities and category names.',
+                setup,
+                workedExample: {
+                    problem: 'Training colors are blue and red. Use one-hot columns [blue,red] with an explicit unknown category policy.',
+                    steps: ['Encode blue as [1,0] and red as [0,1]. No artificial numeric ranking is introduced.', 'If green appears later, reject it or encode all zeros with a separate unknown indicator; choose and document one policy.', 'Keep exactly the fitted column order when predicting. Rebuilding columns on each batch can silently change meanings.'],
+                    expected: 'With an unknown indicator and columns [blue,red,unknown], green is [0,0,1].'
+                },
+                practice: {
+                    task: 'Encode using columns [cat,dog,unknown], where unknown values use the last column.',
+                    cases: [{ input: 'dog', expected: '[0,1,0]' }, { input: 'bird', expected: '[0,0,1]' }],
+                    hint: 'The fitted vocabulary is cat/dog only. Unknown is a policy, not a newly fitted animal category.',
+                    solution: 'dog activates the second column. bird activates unknown. Using cat=1,dog=2,bird=3 would suggest an arbitrary order and distance for many models. Fit vocabulary using training data only.'
+                },
+                interview: { question: 'When might ordinal encoding be appropriate?', answer: 'When there is a meaningful ordered category such as low/medium/high, and the model assumptions are suitable. For unordered labels I avoid implying rank; I also plan for missing and unseen values.' },
+                readiness: ['Encode an unseen category without changing feature positions.', 'Explain why target encoding must be fitted without leaking the target across validation folds.']
+            },
+            {
+                prerequisites: 'Training, prediction and a simple error metric.',
+                setup,
+                workedExample: {
+                    problem: 'Model A has training accuracy 99% and validation 70%; model B has training 88% and validation 84%. Both use the same valid split.',
+                    steps: ['A has a 29-point train/validation gap; B has a 4-point gap.', 'Prefer B provisionally because validation better estimates performance on unseen cases; investigate split quality and uncertainty.', 'Use the test set only after selection. For predicting future events, use a time-respecting split instead of randomly leaking future records.'],
+                    expected: 'Choose B for further validation, not A just because training accuracy is higher.'
+                },
+                practice: {
+                    task: 'Assign each action to training, validation or test. Explain why the other sets must not be used for that action.',
+                    cases: [{ input: 'Choose tree depth from 3, 5 and 10', expected: 'Validation (or cross-validation on training); do not use the final test set.' }, { input: 'Report final performance after choosing settings', expected: 'Untouched test set; not training performance.' }],
+                    hint: 'Learning parameters, choosing settings and final reporting are separate jobs.',
+                    solution: 'Fit candidate trees on training data; choose depth with validation. After fixing the procedure, evaluate on test once for final reporting. If you revise the method after test results, those results influenced development and are no longer an untouched estimate.'
+                },
+                interview: { question: 'Is a random row split always safe?', answer: 'No. Repeated users or duplicate documents can cross the boundary, and future records can reveal information about the past. I choose grouped or chronological splits according to the prediction use case.' },
+                readiness: ['Explain one leakage route in a student-score dataset.', 'Separate parameter fitting, model selection and final evaluation in a written experiment plan.']
+            }
+        ],
+        advancedML: [
+            {
+                prerequisites: 'Linear models, multiplication, and the idea of a derivative as local rate of change.',
+                setup,
+                workedExample: {
+                    problem: 'A single neuron computes ReLU(w*x+b), with w=2 and b=-3. ReLU(z)=max(0,z).',
+                    steps: ['For x=1, z=2*1-3=-1 and ReLU returns 0.', 'For x=3, z=6-3=3 and ReLU returns 3.', 'Without a nonlinear activation, composing affine layers is still an affine mapping. ReLU supplies a bend, but does not guarantee stable training.'],
+                    expected: 'Outputs 0 and 3. These are activations, not calibrated probabilities.'
+                },
+                practice: {
+                    task: 'Compute ReLU(-2*x+4), then describe the region where output is zero.',
+                    cases: [{ input: 'x=1', expected: '2' }, { input: 'x=3', expected: '0' }],
+                    hint: 'Compute the affine score first; clamp negative results to zero.',
+                    solution: 'At 1 the score is 2; at 3 it is -2 so output 0. Output is zero for x>=2. A network needs a suitable loss, data split and optimizer; forward computation alone is not training.'
+                },
+                interview: { question: 'What does backpropagation compute?', answer: 'It uses the chain rule to compute gradients of loss with respect to parameters. An optimizer then changes parameters using those gradients. Backpropagation is not the update rule itself.' },
+                readiness: ['Trace a two-neuron forward pass with actual numbers.', 'Explain why low training loss alone cannot establish generalization.']
+            },
+            {
+                prerequisites: 'Vectors as lists of numbers, dot products and classification basics.',
+                setup,
+                workedExample: {
+                    problem: 'Compare query q=[1,0] with document A=[1,0] and B=[0,1] using cosine similarity.',
+                    steps: ['The dot product of q and A is 1; both norms are 1, so cosine=1.', 'The dot product of q and B is 0; cosine=0, so A ranks first.', 'This toy geometry demonstrates ranking. Real embedding quality must be checked against relevant queries; similarity is not proof that a claim is true.'],
+                    expected: 'A ranks above B. Cosine is undefined for a zero vector.'
+                },
+                practice: {
+                    task: 'For q=[1,0], compute cosine for each document. State how you handle a zero vector rather than dividing by zero.',
+                    cases: [{ input: 'document=[2,0]', expected: 'cosine=1 despite a different magnitude' }, { input: 'document=[0,0]', expected: 'undefined; reject/flag this embedding before ranking' }],
+                    hint: 'Divide dot product by the product of vector lengths.',
+                    solution: 'For [2,0], dot=2 and norm product=2, giving 1. For [0,0] the denominator is 0, so there is no valid cosine. Add an explicit invalid-embedding path and monitor its frequency.'
+                },
+                interview: { question: 'Why can the most similar retrieved document still be a bad answer source?', answer: 'It may be outdated, unauthorized, contradictory or only superficially relevant. Retrieval needs relevance evaluation, access filters and source checks; ranking is not factual verification.' },
+                readiness: ['Calculate cosine for two nonzero vectors.', 'Explain why query and document embeddings must use compatible models and versions.']
+            },
+            {
+                prerequisites: 'Tokens, probability estimates, embeddings and a basic train/validation distinction.',
+                setup,
+                workedExample: {
+                    problem: 'A text model assigns next-token probabilities: Python=0.6, Java=0.3, Other=0.1.',
+                    steps: ['Greedy decoding selects Python because it has the highest probability.', 'Sampling can choose Java or Other; a probability distribution over text is not a truth score.', 'For a factual college-policy answer, provide a verified policy passage and check that the output is supported, or return an explicit unknown.'],
+                    expected: 'Greedy output is Python for this single step. Neither greedy decoding nor low temperature guarantees factual correctness.'
+                },
+                practice: {
+                    task: 'Apply a policy: answer only when the supplied passage contains the requested fact; otherwise say that it is not stated.',
+                    cases: [{ input: 'Passage: Library closes at 6 pm. Question: closing time?', expected: '6 pm, attributed to the supplied passage.' }, { input: 'Same passage. Question: late fee?', expected: 'The supplied passage does not state the late fee.' }],
+                    hint: 'Do not substitute plausible world knowledge for absent evidence.',
+                    solution: 'Return 6 pm for closing time and an explicit unknown for the fee. Record evidence support separately from fluency. A citation can still be incorrect, so inspect whether its actual text supports the claim.'
+                },
+                interview: { question: 'How do retrieval and fine-tuning differ?', answer: 'Retrieval supplies selected external context at inference time. Fine-tuning changes model parameters using training examples. Neither automatically guarantees current, private or accurate answers; evaluate the actual task and risks.' },
+                readiness: ['Explain next-token prediction without describing the model as a database.', 'Create one answerable and one unanswerable evaluation case for a document assistant.']
+            }
+        ],
+        realWorldML: [
+            {
+                prerequisites: 'Data splits, model metrics and basic API request/response concepts.',
+                setup,
+                workedExample: {
+                    problem: 'A candidate service has p95 latency 280 ms with a 200 ms launch limit; current and candidate recall are both 0.9.',
+                    steps: ['Equal recall does not compensate for failing an explicit latency requirement.', 'Keep the current service while investigating input processing, model serving and queue time with representative load.', 'Use a canary and tested rollback only after quality and latency gates pass. A lab result is not production assurance.'],
+                    expected: 'Do not promote the candidate under these requirements.'
+                },
+                practice: {
+                    task: 'Decide promotion with gates recall>=0.85 and p95 latency<=200 ms. All gates must pass.',
+                    cases: [{ input: 'recall=0.88, p95=180 ms', expected: 'Pass these two gates; still check other launch requirements.' }, { input: 'recall=0.92, p95=240 ms', expected: 'Fail latency gate; do not promote.' }],
+                    hint: 'Use AND, not an average of unrelated metrics.',
+                    solution: 'The first candidate passes both conditions; the second fails latency. Document representative load, cohort performance, access controls, cost, monitoring and rollback before a real launch.'
+                },
+                interview: { question: 'Does drift detection prove model quality has dropped?', answer: 'No. Input or prediction distributions may change without a measured quality drop. I investigate the shift, acquire delayed labels where possible, and evaluate before deciding whether retraining or another fix is needed.' },
+                readiness: ['Write a launch gate with units and a rollback condition.', 'Distinguish model quality, service reliability and data drift in a monitoring plan.']
+            },
+            {
+                prerequisites: 'Validation versus test data, pipelines, and metric direction (higher or lower is better).',
+                setup,
+                workedExample: {
+                    problem: 'An AutoML search evaluates 20 candidates on validation data; A scores 0.86 F1 and B scores 0.89 F1. The majority baseline scores 0.55.',
+                    steps: ['Select B provisionally using validation F1, provided it meets latency, cost and governance constraints.', 'Keep all preprocessing inside training folds; more search does not repair leakage.', 'Evaluate the selected procedure on an untouched test set, report uncertainty, and retain the baseline comparison.'],
+                    expected: 'B is the validation winner, not a guaranteed best future model.'
+                },
+                practice: {
+                    task: 'Select by validation F1 subject to latency<=100 ms. Do not pick a model using its final test score.',
+                    cases: [{ input: 'A: F1=.88,80ms; B: F1=.90,140ms', expected: 'A meets the latency constraint; B is ineligible.' }, { input: 'A: F1=.88,80ms; B: F1=.90,95ms', expected: 'B wins under these stated criteria.' }],
+                    hint: 'Filter by hard requirements first, then compare the selection metric.',
+                    solution: 'Case 1 selects A; case 2 selects B. Fix a trial/time budget before searching. AutoML automates parts of search, not problem framing, dataset validity, final evaluation or responsibility for deployment.'
+                },
+                interview: { question: 'Why can a larger AutoML search overfit validation?', answer: 'Selecting among many trials can exploit noise in the validation estimate. I cap search, use suitable cross-validation, and keep a separate test set for the chosen procedure.' },
+                readiness: ['Define a search budget and a metric tied to error costs.', 'Explain how you would check leakage before trusting a leaderboard.']
+            },
+            {
+                prerequisites: 'Confusion matrices, recall, fractions and the difference between measurement and a value judgment.',
+                setup,
+                workedExample: {
+                    problem: 'A screening model finds 80 of 100 qualified applicants in group A and 30 of 50 in group B.',
+                    steps: ['Group A true-positive rate is 80/100=0.8; group B is 30/50=0.6.', 'The absolute gap is 0.2, or 20 percentage points. This identifies a disparity under one metric, not its cause.', 'Check label quality, sample uncertainty, context and stakeholder impact. Other fairness definitions can conflict, so no single number establishes fairness.'],
+                    expected: 'Report both denominators and the 20-percentage-point gap, then investigate before making a high-stakes decision.'
+                },
+                practice: {
+                    task: 'Compute true-positive rates and absolute percentage-point gaps. If there are no qualified examples in a group, report insufficient evidence.',
+                    cases: [{ input: 'A:18/20, B:8/10', expected: '90% vs 80%; gap 10 percentage points.' }, { input: 'A:18/20, B:0/0', expected: 'A=90%; B undefined; gap cannot be calculated.' }],
+                    hint: 'A missing denominator is not evidence of zero disparity.',
+                    solution: 'Case 1 has 0.9-0.8=0.1 absolute gap. Case 2 lacks positive examples in B, so the comparison is undefined. Report uncertainty and seek representative evidence rather than claiming a fairness pass.'
+                },
+                interview: { question: 'Does removing a protected attribute guarantee a fair model?', answer: 'No. Other features may act as proxies, labels may encode historical inequities, and effects can differ across groups. I evaluate appropriate group metrics and harms, consult stakeholders, document trade-offs and provide review/recourse.' },
+                readiness: ['Compute a group metric with its denominator and explain its limitations.', 'Describe a mitigation, a possible trade-off, and a human review route for a screening scenario.']
+            }
+        ]
+    };
+    Object.entries(guides).forEach(([key, entries]) => {
+        if (entries.length !== courseData[key].length) throw new Error('ML learning guide coverage mismatch: ' + key);
+        entries.forEach((guide, index) => { courseData[key][index].learningGuide = guide; });
+    });
+})();

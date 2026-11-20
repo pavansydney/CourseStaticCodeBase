@@ -79,12 +79,24 @@ test('without JavaScript, form controls stay disabled and prerequisite content s
     expect(new URL(page.url()).search).toBe('');
     await page.goto('http://127.0.0.1:4173/prerequisites.html');
     await expect(page.locator('.tab-panel:visible')).toHaveCount(5);
+    await page.goto('http://127.0.0.1:4173/');
+    await expect(page.getByRole('heading', { name: 'Independent learning, not official vendor training' })).toBeVisible();
+    await expect(page.locator('main')).toContainText('not affiliated with, sponsored by, or endorsed');
+    await page.goto('http://127.0.0.1:4173/courses.html');
+    await expect(page.locator('#student-route-title')).toBeVisible();
+    await expect(page.locator('main noscript p')).toBeVisible();
+    await expect(page.locator('main noscript p')).toContainText('Individual lessons, module search, quizzes, and progress tools require JavaScript');
+    await page.goto('http://127.0.0.1:4173/hiring-procedures.html');
+    await expect(page.getByRole('heading', { name: 'Start interview preparation without interactive tools' })).toBeVisible();
+    await page.goto('http://127.0.0.1:4173/about.html#content-standards');
+    await expect(page.locator('#content-standards')).toContainText('No complete subject-matter review');
     await context.close();
 });
 
 async function addDiagram(page) {
     await page.goto('/courses.html');
     await page.locator('#ml-models-grid .module-open').first().click();
+    await expect(page.locator('.learning-guide')).toBeVisible();
     await page.evaluate(() => {
         const holder = document.createElement('div');
         holder.id = 'diagram-test';
@@ -119,6 +131,7 @@ test('failed diagram requests show an explicit text fallback', async ({ page }) 
 });
 
 test('every published module renders all lessons without errors', async ({ page }) => {
+    test.setTimeout(180000);
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.route('https://cdn.jsdelivr.net/**/mermaid*', route => route.abort());
@@ -134,6 +147,22 @@ test('every published module renders all lessons without errors', async ({ page 
             const dialog = page.getByRole('dialog');
             await expect(dialog.locator('.modal-title')).toHaveText(expected.title);
             await expect(dialog.locator('.content-header')).toHaveCount(expected.lessons);
+            const guide = dialog.locator('.learning-guide');
+            await expect(guide).toHaveCount(1);
+            const content = await guide.evaluate(element => ({
+                sections: element.querySelectorAll('.learning-guide-section').length,
+                cases: element.querySelectorAll('.guide-cases li').length,
+                solutionVisible: element.querySelector('.guide-solution').open,
+                steps: element.querySelector('ol').children.length,
+                solution: element.querySelector('.guide-solution p').textContent,
+                readiness: element.querySelector('.learning-guide-section:last-child ul').children.length
+            }));
+            expect(content.sections).toBe(5);
+            expect(content.cases).toBeGreaterThanOrEqual(2);
+            expect(content.solutionVisible).toBe(false);
+            expect(content.steps).toBeGreaterThanOrEqual(2);
+            expect(content.solution.trim().length).toBeGreaterThan(12);
+            expect(content.readiness).toBeGreaterThanOrEqual(2);
             await page.evaluate(() => closeModal());
             await page.waitForFunction(() => document.body.style.overflow !== 'hidden');
             count++;
@@ -141,6 +170,70 @@ test('every published module renders all lessons without errors', async ({ page 
     }
     expect(count).toBe(160);
     expect(errors).toEqual([]);
+});
+
+test('student sequence opens Python and guided answers stay hidden until requested', async ({ page }) => {
+    await page.goto('/courses.html');
+    await page.locator('.student-route').getByRole('link', { name: 'Write your first Python program.' }).click();
+    await expect(page.locator('#track-programming-languages')).toBeVisible();
+    await expect(page.locator('#panel-python-programming')).toBeVisible();
+    await page.locator('#python-programming-grid .module-open').first().click();
+    const dialog = page.getByRole('dialog');
+    const guide = dialog.locator('.learning-guide');
+    await guide.getByText('Your turn: practise without copying', { exact: true }).click();
+    const solution = guide.locator('.guide-solution p');
+    await expect(solution).toBeHidden();
+    await guide.getByText('Check the solution and reasoning', { exact: true }).click();
+    await expect(solution).toBeVisible();
+    const audit = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+    expect(audit.violations.map(item => ({ id: item.id, targets: item.nodes.map(node => node.target) }))).toEqual([]);
+    for (const width of [320, 390, 1440]) {
+        await page.setViewportSize({ width, height: 960 });
+        expect(await guide.evaluate(element => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(1);
+    }
+    await dialog.getByRole('button', { name: 'Expand All', exact: true }).click();
+    const legb = dialog.locator('.quiz-item').filter({ hasText: 'LEGB stands for' });
+    await expect(legb.locator('.quiz-option')).toHaveCount(4);
+    await expect(legb).toContainText('Local');
+});
+
+test('course bundles load on demand, show download failures, and can be retried', async ({ page }) => {
+    const requests = [];
+    page.on('request', request => {
+        if (request.url().endsWith('/js/ml-content.js')) requests.push(request.url());
+    });
+    await page.route('**/js/ml-content.js', route => route.abort());
+    await page.goto('/courses.html');
+    expect(requests).toEqual([]);
+    await expect(page.locator('.module-card')).toHaveCount(77);
+    await page.locator('#ml-models-grid .module-open').first().click();
+    await expect(page.getByRole('alert')).toContainText('Check your connection and retry');
+    expect(await page.evaluate(() => localStorage.getItem('cloudvana-read'))).toBeNull();
+    await page.unroute('**/js/ml-content.js');
+    await page.getByRole('button', { name: 'Retry lesson', exact: true }).click();
+    await expect(page.locator('.learning-guide')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect.poll(() => page.evaluate(() => document.body.style.overflow)).not.toBe('hidden');
+    await page.locator('#ml-models-grid .module-open').nth(1).click();
+    await expect(page.locator('.modal-title')).toHaveText('Linear Regression');
+    expect(requests.length).toBe(2);
+});
+
+test('closing a lesson during download does not reopen the dialog when it arrives', async ({ page }) => {
+    let release;
+    const gate = new Promise(resolve => { release = resolve; });
+    await page.route('**/js/ml-content.js', async route => {
+        await gate;
+        await route.continue();
+    });
+    await page.goto('/courses.html');
+    await page.locator('#ml-models-grid .module-open').first().click();
+    await expect(page.locator('.modal-title')).toHaveText('Loading lesson');
+    await page.keyboard.press('Escape');
+    release();
+    await page.waitForFunction(() => Boolean(courseData.mlModels[0].learningGuide));
+    await expect(page.getByRole('dialog')).not.toBeVisible();
+    await expect.poll(() => page.evaluate(() => document.body.style.overflow)).not.toBe('hidden');
 });
 
 test('storage quota failures retain current-page progress and explain the limitation', async ({ page }) => {

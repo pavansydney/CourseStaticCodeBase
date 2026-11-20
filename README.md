@@ -40,6 +40,20 @@ conformance. Review keyboard and screen-reader behavior when changing controls.
 
 ## Maintain the website
 
+Social sharing uses the 1200 by 630 raster image
+[cloudvana-social.png](assets/cloudvana-social.png), rendered from the editable
+[SVG source](assets/cloudvana-social.svg). Keep the image, alternative text, and
+Open Graph dimensions aligned when changing it. The original logo remains the
+site icon; filenames with encoded spaces are valid URLs, not a sharing failure.
+
+The [public review status](about.html#content-standards) distinguishes automated
+website checks from subject-matter review. Do not invent review dates, verified
+exam alignment, affiliations, mentor credentials, or customer testimonials.
+Brand permissions have not been established by the independence notice; review
+each vendor's current terms before treating logo use as approved. Accounts,
+marketing email collection, and commercial terms require separate owner
+decisions and are not implemented by these disclosures.
+
 * [Shared layout](js/layout.js) owns navigation and the footer.
 * [Theme and storage](js/theme.js) applies the saved theme before rendering and
   reports unavailable browser storage.
@@ -47,9 +61,10 @@ conformance. Review keyboard and screen-reader behavior when changing controls.
   and certification deep links.
 * [Learning runtime](script.js) renders modules, practice quizzes, lesson dialogs,
   and local completion records.
-* [Machine learning content](js/ml-content.js) and
-  [certification content](js/certification-content.js) load only on their relevant
-  pages. Other course files extend the same `courseData` object.
+* [Course catalog](js/course-catalog.js) loads card metadata without downloading
+  every lesson. Opening a module loads its course bundle once, on demand.
+  [Certification content](js/certification-content.js) loads on its own page.
+  Course files extend the same `courseData` object.
 * [Website styles](styles.css) shares design tokens across every page and both
   themes. It also supports reduced motion and small screens.
 
@@ -57,6 +72,44 @@ Keep homepage module and certification counts aligned with the published tracks.
 Archived course data remains available in the content files but is not included
 in the published module count. Check provider documentation before changing
 exam names, retirement notices, or objectives.
+
+## Content quality contract
+
+Every published module includes an authored `learningGuide` alongside its
+lessons. It contains prerequisites and workspace setup, a worked example with
+reasoning and expected results, a complete practice task with at least two test
+cases, a hint and solution, an interview question with an example answer, and
+observable readiness criteria. These guides are supplementary practice, not
+extra lessons or independently graded assessments.
+
+After editing course titles, descriptions, durations, lesson counts, or code
+examples, run `npm run content:catalog`. The generated metadata must stay aligned
+with its source bundles; tests reject a stale catalog. Catalog metadata is not a
+second copy of lesson content. Failed lesson downloads are shown explicitly
+with a retry action and do not alter saved progress.
+
+The course page downloads metadata first and loads lesson bundles only when a
+module is opened. The existing course and certification transfer caps remain in
+place. The hiring page has a 140 KB decoded-script cap to accommodate concrete
+tasks for both audiences across 15 companies; this includes shared scripts.
+
+Keep examples specific to the module. State units, boundary behaviour,
+assumptions, and limitations. A toy model or paper architecture exercise is not
+evidence of production readiness. Cloud exercises should have a no-account
+paper option; explain cost, permissions, and cleanup before live experiments.
+Check vendor documentation before using real services or booking an exam.
+
+The [student sequence](courses.html#student-route-title) starts with one
+programming language, then ML fundamentals and a project, with role-specific
+interview practice alongside it. Estimated reading times exclude practice.
+Completion remains self-reported and does not guarantee an exam or job result.
+
+Run `npm test` to check guide coverage across all 160 published modules,
+assessment formatting, distinct tasks, and content invariants. The browser
+suite opens every module and checks guide rendering, lesson counts, answer
+disclosures, accessibility, and progress behaviour. These automated checks
+protect structure and known examples; they do not replace subject-matter review
+or validate every external API, vendor objective, or employment outcome.
 
 ## Mentorship submission contract
 

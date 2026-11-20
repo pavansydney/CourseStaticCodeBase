@@ -13,11 +13,16 @@
         <meta property="og:title" content="Courses - Cloudvana">
         <meta property="og:description" content="Explore Cloudvana courses in machine learning, AI engineering, DSA, system design, OS and networking.">
         <meta property="og:url" content="https://cloudvana.vercel.app/courses.html">
-        <meta property="og:image" content="https://cloudvana.vercel.app/assets/Cloudvana%20logo.jpg">
-        <meta name="twitter:card" content="summary">
+        <meta property="og:image" content="https://cloudvana.vercel.app/assets/cloudvana-social.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Cloudvana: free programming and AI learning for students, with worked examples, projects, and interview preparation.">
+        <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:title" content="Courses - Cloudvana">
         <meta name="twitter:description" content="Structured AI and computer science learning tracks with practical examples.">
-        <meta name="twitter:image" content="https://cloudvana.vercel.app/assets/Cloudvana%20logo.jpg">
+        <meta name="twitter:image" content="https://cloudvana.vercel.app/assets/cloudvana-social.png">
+    <meta name="twitter:image:alt" content="Cloudvana: learn, build, explain. Programming and AI practice for students.">
         <meta name="google-site-verification" content="okR4wrh-4aH5RLFmJPOSof5rAZKjbeRNU5VB0J33UYk" />
         <link rel="icon" type="image/jpeg" href="assets/Cloudvana%20logo.jpg">            <script src="js/theme.js"></script>
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha384-t1nt8BQoYMLFN5p42tRAtuAAFQaCQODekUVeKKZrEnEyp4H2R0RHFz0KWpmj7i8g" crossorigin="anonymous">
@@ -34,7 +39,22 @@
             <div class="container">
                 <p class="section-eyebrow">YOUR NEXT CHAPTER</p>
                 <h1 class="section-title">Make curiosity a skill.</h1>
-                <p class="section-subtitle">Five focused tracks. Practical examples. No sign-up required. Choose a starting point or find a module that answers your next question.</p>
+                <p class="section-subtitle">Build AI skills and prepare for early-career interviews through worked examples, concrete practice tasks, and explanations you can give in your own words. No sign-up required.</p>
+                <p>Progress saves in this browser on this device when storage is available. It does not sync across devices; clearing site data removes it. <a href="about.html#privacy">Storage and privacy details</a>. <a href="about.html#content-standards">Content review status</a>.</p>
+                <noscript><p>The student sequence below is readable without JavaScript. Individual lessons, module search, quizzes, and progress tools require JavaScript. For static reference material, read the <a href="prerequisites.html">prerequisites</a> or <a href="https://developers.google.com/machine-learning/crash-course">Google Machine Learning Crash Course</a>.</p></noscript>
+
+                <section class="student-route" aria-labelledby="student-route-title">
+                    <h2 id="student-route-title">Starting from zero? Follow this sequence.</h2>
+                    <p>You do not need a cloud certification to begin. Work at your own pace; advance when you can complete the task without copying, not when a timer runs out.</p>
+                    <ol>
+                        <li><a href="courses.html?track=track-programming-languages&amp;panel=panel-python-programming">Write your first Python program.</a> Start with Python Core, then Functions and Data Pipelines. Build the Student Result Analyzer and test invalid inputs. For Java, C#, or C++ interview roles, choose that language instead; you do not need all four.</li>
+                        <li><a href="courses.html?track=courses">Understand and test an ML model.</a> Begin with Introduction to ML, learn data preparation, and compare a simple model with a baseline on held-out examples. Explain why a tiny demonstration is not production evidence.</li>
+                        <li><a href="courses.html?track=track-ai-eng">Build toward an AI project.</a> After Python and ML basics, study neural networks, then generative AI and retrieval. Keep a README with setup, evaluation results, limitations, and examples that fail. Advanced agent frameworks are not a starting requirement.</li>
+                        <li><a href="courses.html?track=track-dsa-sd">Practise coding interviews alongside your project.</a> Start with DSA foundations and explain one solution aloud. Add <a href="courses.html?track=track-os-net">OS and networking fundamentals</a> and revise the database and aptitude topics required by your target role using additional resources where needed.</li>
+                        <li><a href="hiring-procedures.html">Rehearse for a specific role.</a> Use the company playbooks, practise timed questions, and prepare honest project and teamwork stories. Keep a mistake log and repeat weak tasks before applying.</li>
+                    </ol>
+                    <p>For each study session: understand one concept, trace the worked example, attempt the practice task, check the solution, then explain your reasoning. Completion records are self-reported; no course guarantees an interview result or job offer.</p>
+                </section>
 
                 <div class="course-search">
                     <label for="moduleSearch">Find a module across all tracks</label>
@@ -373,11 +393,7 @@
         <script src="js/layout.js" defer></script>
         <script src="js/site.js" defer></script>
         <script src="script.js" defer></script>
-        <script src="js/ml-content.js" defer></script>
-        <script src="js/ai-courses.js" defer></script>
-        <script src="js/dsa-system-design.js" defer></script>
-        <script src="js/os-networking.js" defer></script>
-        <script src="js/programming-languages.js" defer></script>
+        <script src="js/course-catalog.js" defer></script>
         <script src="js/courses.js" defer></script>
     </body>
     </html>

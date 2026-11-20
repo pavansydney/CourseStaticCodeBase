@@ -18,6 +18,7 @@
         if (doScroll) {
             const url = new URL(window.location.href);
             url.searchParams.set('track', id);
+            url.searchParams.delete('panel');
             url.hash = '';
             history.replaceState(null, '', url);
             scrollToSection(id);
@@ -28,9 +29,20 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const params = new URLSearchParams(window.location.search);
-        const requested = params.get('track') || window.location.hash.slice(1);
+        const hash = window.location.hash.slice(1);
+        const requested = params.get('track') || (trackIds.includes(hash) ? hash : '');
         const selected = trackIds.includes(requested) ? requested : 'courses';
         showTrack(selected, false);
+        const requestedPanel = params.get('panel');
+        if (requestedPanel) {
+            const panel = document.getElementById(requestedPanel);
+            const tab = Array.from(document.querySelectorAll('.section-tab')).find(button => button.dataset.target === requestedPanel);
+            if (panel && panel.closest('section')?.id === selected && tab) {
+                tab.click();
+            } else {
+                document.getElementById('courseSearchStatus').textContent = 'That topic is not available in this track. Choose a topic below.';
+            }
+        }
         if (requested && !trackIds.includes(requested)) {
             document.getElementById('courseSearchStatus').textContent = 'That track is not available. Showing Machine Learning; you can choose another track below.';
         }

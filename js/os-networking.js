@@ -5,6 +5,7 @@
 
 /* global courseData */
 
+// Cross-platform paper labs need no elevated privileges or live network traffic.
 // ---------- Track 1: OS Foundations ----------
 courseData.osFundamentals = [
     {
@@ -28,19 +29,19 @@ A[Application requests] --> B[OS abstraction layer]
 B --> C[CPU scheduling]
 B --> D[Memory isolation]
 B --> E[File and device I/O]
-Worked Example: A text editor writes a file without knowing SSD firmware commands because the OS exposes a filesystem API.
+Worked Example: A process asks to read 2 bytes from handle 3, whose fixture contents are ABC and offset is 0. The kernel checks the handle and writable buffer, copies AB and advances offset to 2, then returns 2. Invalid handle 9 returns an error without advancing handle 3. The API hides device details but still exposes partial reads and errors.
 Common Mistakes: Treating the OS as just a launcher instead of a safety and resource-management system.
 Recap:
 - OS provides abstraction and isolation
 - Resource arbitration is continuous
 - APIs decouple apps from hardware details
 Practice:
-- List three user actions that require kernel-managed resources`
+- Trace read(3,2) followed by read(3,2) on ABC. Expected return counts are 2 then 1, buffers AB then C, and final offset 3. Explain why a request for 2 bytes need not return 2. Use a paper handle table, not platform-specific syscall numbers.`
             },
             {
                 title: "Lesson 2: User Mode vs Kernel Mode",
                 content: `Learning Objective: Explain why modern systems separate unprivileged and privileged execution.
-Core Theory: User mode runs normal applications with restricted instruction access. Kernel mode executes trusted code with full hardware privilege. Controlled transitions protect system integrity by requiring explicit entry points and validation.
+Core Theory: User mode restricts privileged instructions and memory access. Kernel mode runs privileged OS code through controlled entry points. A syscall changes privilege but need not switch to another process; blocking or scheduling may cause a separate context switch. Isolation depends on correct hardware and kernel enforcement, not an unconditional guarantee against all bugs.
 Diagram (Mermaid):
 flowchart LR
 A[User process] --> B[Trap or syscall]
@@ -69,7 +70,7 @@ App->>Runtime: read(file)
 Runtime->>Kernel: syscall read
 Kernel-->>Runtime: bytes or error
 Runtime-->>App: return result
-Worked Example: read(), write(), and socket() wrappers eventually invoke architecture-specific syscall instructions.
+Worked Example: A library may satisfy a buffered read from already-cached user-space bytes with no new syscall. When it needs kernel I/O, its platform wrapper uses that OS's ABI. POSIX read commonly returns -1 and sets errno on errors through its wrapper; Windows APIs expose different handles and error conventions. Library calls and syscalls are not one-to-one.
 Common Mistakes: Confusing library APIs with kernel APIs.
 Recap:
 - Syscalls are strict interfaces
@@ -142,14 +143,14 @@ B --> C[Running]
 C --> D[Blocked]
 D --> B
 C --> E[Terminated]
-Worked Example: A web worker blocks on disk I/O, then returns to ready when the completion interrupt arrives.
+Worked Example: A worker starts ready, is selected to run, requests an unavailable file page and blocks. When I/O completes it becomes ready, not automatically running; the scheduler must select it again. Its saved instruction pointer and registers allow resumption, while its I/O completion status explains why the wait ended.
 Common Mistakes: Thinking blocked tasks still consume CPU time.
 Recap:
 - State transitions model readiness and progress
 - PCB enables pause/resume correctness
 - I/O completion drives unblock events
 Practice:
-- Identify two PCB fields required for context restore`
+- Trace ready -> running -> blocked -> ready -> running for one request. Mark which transition requires scheduler selection and list instruction pointer plus stack pointer as context fields. Expected: I/O completion alone does not immediately run the task.`
             },
             {
                 title: "Lesson 2: Threads and Shared Address Space",
@@ -199,7 +200,7 @@ A[Ready queue] --> B{Policy}
 B --> C[FCFS]
 B --> D[Round Robin]
 B --> E[Priority or MLFQ]
-Worked Example: Desktop OS favors responsive UI tasks while background compile jobs receive lower dynamic priority.
+Worked Example: With both jobs ready at time 0, A needs 5 CPU units and B needs 3. Round Robin quantum 2 gives A[0,2), B[2,4), A[4,6), B[6,7), A[7,8). Completion times are A=8, B=7; waiting times completion-burst are 3 and 4. Assume no I/O or switching cost; real policies differ.
 Common Mistakes: Using fixed priority without aging or fairness safeguards.
 Recap:
 - No universal best scheduler
@@ -249,7 +250,7 @@ flowchart LR
 A[Virtual address] --> B[Page table lookup]
 B --> C[Physical frame]
 C --> D[Permission enforcement]
-Worked Example: Two processes can use the same virtual address value while mapping to different physical memory.
+Worked Example: With 1024-byte pages, virtual address 2500 is page 2 plus offset 452. Process A maps page 2 to frame 7, giving physical address 7*1024+452=7620. Process B maps page 2 to frame 3, giving 3524. The identical virtual address is interpreted using different process mappings.
 Common Mistakes: Believing virtual addresses are globally unique.
 Recap:
 - Virtual memory supports isolation and flexibility
@@ -261,7 +262,7 @@ Practice:
             {
                 title: "Lesson 2: Paging, TLB, and Access Performance",
                 content: `Learning Objective: Connect translation caching behavior to application latency.
-Core Theory: Page-based translation requires lookup on every memory reference. TLB caches recent mappings. TLB misses trigger page table walks, increasing access cost.
+Core Theory: Virtual accesses require address translation, often served by a TLB cache. A TLB miss usually triggers a page-table walk (or a software refill on some systems), not necessarily a page fault. A resident permitted mapping can refill the TLB without storage I/O. Missing mappings and permission violations have different fault outcomes.
 Diagram (Mermaid):
 flowchart TD
 A[Memory reference] --> B{TLB hit}
@@ -281,12 +282,12 @@ Practice:
             {
                 title: "Lesson 3: Demand Paging and Fault Handling",
                 content: `Learning Objective: Distinguish normal page-fault behavior from pathological fault patterns.
-Core Theory: Demand paging loads pages lazily when first touched. Minor faults avoid storage I/O; major faults require disk access and are much slower.
+Core Theory: Demand paging establishes mappings lazily. A valid first touch can allocate a zero-filled page, map an already cached file page, or read backing storage. On systems with minor/major fault counters, major generally indicates required backing-store I/O, not necessarily a physical spinning disk. A forbidden access can instead terminate the process; not every fault is recoverable.
 Diagram (Mermaid):
 flowchart LR
 A[Access page] --> B{In RAM}
 B -->|No| C[Page fault trap]
-C --> D[Load from disk]
+C --> D[Validate then map or load page]
 D --> E[Update mapping]
 E --> F[Resume instruction]
 Worked Example: First request after deployment is slower due to cold page cache and initial fault burst.
@@ -355,14 +356,14 @@ courseData.osProcessesMemory = [
             {
                 title: "Lesson 1: Race Conditions and Visibility",
                 content: `Learning Objective: Explain race conditions and memory visibility guarantees in multithreaded code.
-Core Theory: Data races occur when concurrent unsynchronized accesses include writes and correctness depends on timing. Synchronization constructs create ordering and visibility guarantees needed for deterministic behavior.
+Core Theory: A data race involves conflicting concurrent memory accesses without the ordering required by the language's memory model, with at least one write. In C/C++, non-atomic data races cause undefined behavior, not just occasional lost updates. A logical race can exist even with atomic accesses if a multi-step operation is not protected. Mutexes and appropriate atomics provide specific ordering/visibility guarantees; they do not make all outcomes deterministic.
 Diagram (Mermaid):
 flowchart LR
 A[Thread A write] --> B[Shared state]
 C[Thread B read] --> B
 B --> D{Synchronized}
 D -->|No| E[Nondeterministic result]
-Worked Example: Two worker threads increment same counter without atomicity, losing updates under load.
+Worked Example: In a paper interleaving, counter=0; A reads 0, B reads 0, A computes/writes 1, B computes/writes 1. Final value 1 loses one increment. If each complete read-modify-write is protected by the same mutex, the second thread reads 1 and final value is 2. This is a logical trace, not executable racy C/C++ code.
 Common Mistakes: Assuming intermittent test passes prove race-free code.
 Recap:
 - Race bugs are correctness defects
@@ -470,14 +471,14 @@ flowchart TD
 A[Application open/read/write] --> B[VFS interface]
 B --> C[Specific filesystem driver]
 C --> D[Block device]
-Worked Example: The same application writes to local SSD and network-mounted filesystem through unchanged calls.
+Worked Example: In a POSIX-like paper filesystem, directory name draft maps to inode 42. An open descriptor references inode 42; renaming draft to final changes the name mapping, not the descriptor's file identity. Cross-filesystem moves and Windows sharing/delete modes can behave differently; do not generalize this trace to every filesystem.
 Common Mistakes: Assuming identical durability semantics across all filesystems.
 Recap:
 - VFS decouples API from implementation
 - Filesystem semantics differ in edge cases
 - Portability requires explicit durability assumptions
 Practice:
-- Compare one semantic difference between two filesystems`
+- Start with draft -> inode 42 and descriptor 3 -> inode 42, then rename to final on the same modeled filesystem. Expected: draft lookup fails, final resolves to 42, descriptor 3 still references 42. Explain why this identity trace does not prove crash durability.`
             },
             {
                 title: "Lesson 2: Inodes, Directories, and Path Lookup",
@@ -502,7 +503,7 @@ Practice:
             {
                 title: "Lesson 3: Page Cache, Writeback, and fsync",
                 content: `Learning Objective: Understand delayed-write behavior and explicit durability boundaries.
-Core Theory: write() usually updates cached pages first. Background writeback flushes to storage later. fsync and related calls force durability for required records.
+Core Theory: A successful buffered write commonly reaches memory before durable media. POSIX fsync requests synchronization of a file's data and required metadata; creating or renaming a file may also require synchronizing its containing directory. Windows uses different APIs such as FlushFileBuffers. Guarantees depend on filesystem, remote-storage semantics and honest hardware flush behavior; check errors and document assumptions.
 Diagram (Mermaid):
 flowchart LR
 A[write syscall] --> B[Dirty page cache]
@@ -579,14 +580,14 @@ flowchart TD
 A[Application] --> B[Transport]
 B --> C[Internet]
 C --> D[Link]
-Worked Example: HTTPS traffic uses application semantics over transport reliability and routed IP delivery.
+Worked Example: For HTTPS over HTTP/1.1, an HTTP request is protected by TLS records, carried as TCP bytes inside IP packets and local-link frames. TCP delivers an ordered byte stream, IP selects routed next hops and Ethernet addresses only the current link. HTTP/3 instead uses QUIC over UDP, so HTTPS does not always imply TCP.
 Common Mistakes: Memorizing layers without understanding failure boundaries.
 Recap:
 - Layer boundaries simplify protocol evolution
 - Troubleshooting is faster when mapped by layer
 - Protocols compose, not replace each other
 Practice:
-- Place DNS, TCP, and Ethernet into correct layers`
+- Label an HTTP/1.1 HTTPS packet stack and identify the first stage needing investigation when TCP connects but certificate hostname validation fails. Expected: HTTP/TLS above TCP, IP below TCP, link framing below IP; investigate TLS, not an invented HTTP status.`
             },
             {
                 title: "Lesson 2: Encapsulation and Header Semantics",
@@ -620,7 +621,7 @@ HostA->>Switch: ARP broadcast
 Switch->>HostB: ARP request
 HostB-->>Switch: ARP reply
 Switch-->>HostA: Reply with MAC
-Worked Example: First packet to a local service triggers ARP request before unicast frame delivery.
+Worked Example: Host 192.0.2.10/24 sends to 198.51.100.20 via gateway 192.0.2.1. With an empty neighbor cache, it resolves the gateway's MAC, not the remote server's MAC. The Ethernet destination is the gateway while the IP destination remains 198.51.100.20. These documentation addresses are for a paper trace, not live probes.
 Common Mistakes: Expecting ARP to resolve remote internet hosts.
 Recap:
 - ARP is subnet-local resolution
@@ -632,7 +633,7 @@ Practice:
             {
                 title: "Lesson 4: Routing and Default Gateway",
                 content: `Learning Objective: Understand hop-by-hop forwarding decisions for off-subnet traffic.
-Core Theory: Hosts consult local route table. Remote destinations are sent to default gateway. Each router selects next hop by destination prefix and forwarding policy.
+Core Theory: A host chooses a route using destination-prefix matching, normally preferring the longest matching prefix and then route metrics/policy. Off-link traffic uses that route's next hop; a default gateway is used only when no more specific route wins. A destination can be unreachable when no suitable route exists. Each router repeats its own forwarding decision.
 Diagram (Mermaid):
 flowchart LR
 A[Source host] --> B[Default gateway]
@@ -650,7 +651,7 @@ Practice:
             {
                 title: "Lesson 5: MTU, Fragmentation, and Path Issues",
                 content: `Learning Objective: Diagnose packet-size mismatch issues and explain PMTU behavior.
-Core Theory: Links enforce MTU limits. Oversized packets may fragment or be dropped depending on protocol/path behavior. Path MTU discovery helps endpoints adjust segment size.
+Core Theory: MTU limits IP packet size on a link. IPv4 routers may fragment when permitted, but drop oversized packets with DF set and normally signal a fragmentation-needed error. IPv6 routers never fragment: they send Packet Too Big; the source can adjust sizes or fragment. PMTU discovery depends on useful feedback or packetization-layer probing. MSS limits TCP payload and differs from MTU.
 Diagram (Mermaid):
 flowchart TD
 A[Packet size chosen] --> B{Fits path MTU}
@@ -682,25 +683,25 @@ Practice:
             {
                 title: "Lesson 1: CIDR and Prefix Capacity",
                 content: `Learning Objective: Interpret CIDR notation and estimate subnet capacity.
-Core Theory: Prefix length divides network and host bits. Larger prefix number means smaller subnet range. Effective host capacity differs from raw count due to reserved addresses.
+Core Theory: An IPv4 /p block contains 2^(32-p) addresses when network-aligned. Conventional broadcast subnets through /30 reserve network and broadcast addresses; /31 point-to-point and /32 host routes are exceptions. Providers can reserve additional addresses. IPv6 allocation and multicast/neighbor discovery do not use this IPv4 broadcast subtraction rule.
 Diagram (Mermaid):
 flowchart LR
 A[IP block] --> B[Prefix length]
 B --> C[Network scope]
 B --> D[Host range]
-Worked Example: Splitting 10.0.0.0/24 into four /26 subnets for web, app, data, and operations tiers.
+Worked Example: Splitting 10.0.0.0/24 into four /26 subnets gives network offsets 0,64,128,192. The first block is .0-.63, with conventional usable range .1-.62. Four blocks have 256 raw and 248 conventional usable addresses before extra provider reservations.
 Common Mistakes: Miscounting usable addresses in cloud environments.
 Recap:
 - Prefix math drives allocation planning
 - Subnet sizing affects growth and policy
 - Reservation rules must be considered
 Practice:
-- Divide a /24 into eight equal subnets`
+- Divide 10.0.0.0/24 into eight conventional broadcast subnets. Expected: /27, starts .0,.32,.64,.96,.128,.160,.192,.224, each with 32 raw and 30 conventional usable addresses. Do not apply the minus-two rule to /31 point-to-point links or IPv6.`
             },
             {
                 title: "Lesson 2: Private and Public Address Boundaries",
                 content: `Learning Objective: Explain where private addressing works and where public routing is required.
-Core Theory: Private ranges support internal segmentation and are not internet-routable. Public addresses are needed at exposure points like load balancers, NAT gateways, or edge firewalls.
+Core Theory: RFC 1918 private IPv4 ranges are 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/16; they are not globally routed on the public internet. Publicly reachable services need an appropriate routable edge, but private addresses and NAT are not authorization controls. Firewalls, application permissions and routing policy still determine exposure.
 Diagram (Mermaid):
 flowchart TD
 A[Private hosts] --> B[NAT or edge]
@@ -801,14 +802,14 @@ Client->>Server: Data
 Client->>Server: FIN
 Server-->>Client: ACK then FIN
 Client->>Server: ACK
-Worked Example: API gateway improves latency by reusing upstream keep-alive connections instead of reconnecting per request.
+Worked Example: Client SYN seq100 consumes one sequence number. Server SYN-ACK seq500,ack101 is followed by client ACK seq101,ack501. In a simplified 40 ms RTT path, fresh TCP setup costs about one RTT before the usual client request; TLS and server processing add their own work. Reusing an established connection avoids this TCP setup but not all request latency.
 Common Mistakes: Ignoring connection setup overhead in high-QPS microservice paths.
 Recap:
 - Connection lifecycle has measurable cost
 - Reuse can reduce repeated handshake latency
 - State transitions help debug socket issues
 Practice:
-- Explain why connection pooling improves API performance`
+- Write the SYN/SYN-ACK/ACK sequence for initial client seq10 and server seq90. Expected final ACK seq11,ack91. Explain that TCP acknowledgment confirms transport receipt, not that a database transaction committed.`
             },
             {
                 title: "Lesson 2: Reliable Delivery and Retransmission",
@@ -851,7 +852,7 @@ Practice:
             {
                 title: "Lesson 4: UDP Trade-offs and Application Design",
                 content: `Learning Objective: Decide when UDP is suitable and what reliability features must be added at app level.
-Core Theory: UDP provides low-overhead datagram transport with no built-in ordering or retransmission. Applications requiring timeliness may accept loss and implement selective recovery, jitter buffering, or FEC.
+Core Theory: UDP preserves datagram boundaries but supplies no built-in retransmission, ordered delivery or congestion control. Applications may accept loss or implement acknowledgments, deduplication, bounded retries, jitter buffers and forward-error correction. Internet-facing UDP applications still need congestion control and rate limits; choosing UDP alone does not guarantee low latency.
 Diagram (Mermaid):
 flowchart LR
 A[App datagram] --> B[UDP send]
@@ -869,7 +870,7 @@ Practice:
             {
                 title: "Lesson 5: QUIC and HTTP/3 in Practice",
                 content: `Learning Objective: Summarize why modern web stacks use QUIC for transport evolution.
-Core Theory: QUIC runs over UDP and integrates secure handshake and stream multiplexing to reduce setup latency and head-of-line blocking effects across streams.
+Core Theory: QUIC runs over UDP with congestion control, loss recovery and TLS-based security. Independent streams avoid TCP's cross-stream delivery head-of-line blocking, but an individual ordered stream still waits for its own missing bytes and shared congestion can slow all streams. Reduced handshake cost depends on connection history; 0-RTT data has replay risks and must not carry unsafe non-idempotent actions.
 Diagram (Mermaid):
 flowchart LR
 A[HTTP/3 request] --> B[QUIC transport]
@@ -900,21 +901,21 @@ Practice:
             {
                 title: "Lesson 1: DNS Resolution and Cache Hierarchy",
                 content: `Learning Objective: Trace DNS resolution and explain TTL effects on change propagation.
-Core Theory: Resolution involves local cache, recursive resolver cache, and authoritative hierarchy when needed. TTL values trade freshness for query load.
+Core Theory: A recursive resolver follows referrals from root to TLD to authoritative servers when required records are not cached; clients usually ask that resolver rather than walk the hierarchy themselves. Cached records age from the time obtained. TTL changes do not retroactively shorten existing cache entries, and negative answers may also be cached. Resolver stale-serving policies and application caches can extend observed behavior.
 Diagram (Mermaid):
 flowchart LR
 A[Client cache] --> B[Recursive resolver]
 B --> C[Authoritative chain]
 C --> B
 B --> A
-Worked Example: Record cutover appears partial because some resolvers still hold old cached value.
+Worked Example: A record cached at t=0 with TTL 60 remains valid at t=30 even if authority changed at t=20. It has 30 seconds remaining. With ordinary expiry and successful refresh at t=60, the new value becomes visible; lowering TTL at t=20 does not retroactively shorten the cached entry.
 Common Mistakes: Debugging HTTP before validating name resolution.
 Recap:
 - DNS is distributed and cache-heavy
 - TTL controls propagation timing
 - Resolver behavior affects incident scope
 Practice:
-- Build a rollback checklist for incorrect DNS change`
+- Trace a cached record at t=0, authoritative change at t=20 and queries at t=30 and t=60. Expected: old value at t=30; new value at t=60 only under explicit expiry/refresh assumptions. Record resolver and observation time before diagnosing higher layers.`
             },
             {
                 title: "Lesson 2: TLS Handshake and Certificate Trust",
@@ -1014,3 +1015,304 @@ Practice:
         ]
     }
 ];
+
+(() => {
+    const groups = [
+        ["osFundamentals", [
+            {
+                prerequisites: "Bytes, functions, and the distinction between a process and the kernel. A handle identifies an open resource in a process; it is not a physical disk address.",
+                setup: "Paper or a plain console with an in-memory handle table. No native syscall invocation, installation, administrator privileges or filesystem changes. The trace is portable; real handle/error conventions are OS-specific.",
+                workedExample: {
+                    problem: "Simulate reads from handle 3 containing bytes ABC at offset 0, with a valid writable destination buffer.",
+                    steps: [
+                        "Application requests 2 bytes. A runtime wrapper enters the kernel when I/O is needed. Kernel validates handle and buffer, copies AB, advances offset to 2 and returns count 2.",
+                        "The next request asks for 2 bytes but only C remains. Return count 1 and advance offset to 3; another read at EOF returns count 0 in this regular-file model.",
+                        "Request on invalid handle 9 returns a modeled invalid-handle error and changes no offsets. Returning from a syscall is a privilege transition; a context switch to another process is not required unless scheduling/blocking calls for it."
+                    ],
+                    expected: "Counts [2,1,0], data ['AB','C',''], offset 3. Invalid handle has an error with no state change. No real kernel guarantees are inferred from this mock."
+                },
+                practice: {
+                    task: "Implement a bounded read simulator for regular files; reject negative or noninteger byte counts and unknown handles.",
+                    cases: [
+                        { input: "Fresh ABC at offset 0; read handle 3, count 1, then count 5", expected: "Return A/count 1 then BC/count 2; final offset 3." },
+                        { input: "Fresh ABC at offset 0; read handle 9, count 2", expected: "Invalid-handle result; handle 3 offset remains 0." },
+                        { input: "Fresh ABC; count=-1", expected: "Validation error; no offset change." }
+                    ],
+                    hint: "bytesReturned=min(requested,remaining). Preserve offset on errors rather than treating every error as EOF.",
+                    solution: "Validate count and handle first, slice data from offset to offset+count, then increase offset only by the returned length. Keep EOF distinct from an error. Pipes, sockets, nonblocking calls and asynchronous Windows APIs have additional semantics excluded from this regular-file model."
+                },
+                interview: {
+                    question: "Is a library read always a syscall, and is a syscall always a context switch?",
+                    answer: "Neither. A library can serve buffered data in user space. A syscall enters privileged code but can return to the same thread; a scheduler context switch saves one task and resumes another. Blocking I/O may involve both transitions."
+                },
+                readiness: ["Trace all three successful counts without reading beyond EOF.", "Show unchanged state on an invalid handle or negative count.", "Distinguish library buffering, privilege change and task switching."]
+            },
+            {
+                prerequisites: "Process ready/running/blocked states and arithmetic over time intervals. Waiting time excludes execution and, in this simplified exercise, there is no I/O.",
+                setup: "Use a paper Gantt chart or console simulation, not host scheduler settings. One CPU, all jobs arrive at time 0, zero switch cost; cap simulations at 20 CPU units.",
+                workedExample: {
+                    problem: "Schedule A with burst 5 and B with burst 3 using Round Robin quantum 2, initially queued A then B.",
+                    steps: [
+                        "Run A[0,2), B[2,4), A[4,6). Remaining work is A=1 and B=1. Requeue unfinished jobs at the tail.",
+                        "Run B[6,7), A[7,8). Completion times are B=7, A=8; turnaround equals completion since arrivals are zero.",
+                        "Waiting times are A=8-5=3 and B=7-3=4, average 3.5. First response times are A=0 and B=2, average 1. With FCFS, B first runs at 5; fairness and mean waiting are different goals."
+                    ],
+                    expected: "Timeline ends at 8 with no idle time, five slices, A wait 3/B wait 4 and responses 0/2. Results apply only to the stated zero-overhead model."
+                },
+                practice: {
+                    task: "Calculate completion, waiting and response for another quantum; reject zero quantum to prevent an infinite simulator loop.",
+                    cases: [
+                        { input: "A burst=3, B burst=1, RR quantum=1, both arrive 0", expected: "A[0,1), B[1,2), A[2,3), A[3,4); completions A=4/B=2; waits 1/1; responses 0/1." },
+                        { input: "A burst=5, B burst=3, FCFS order A,B", expected: "Completions 5/8, waits 0/5, responses 0/5; mean wait 2.5." },
+                        { input: "RR quantum=0", expected: "Reject before scheduling; do not loop." }
+                    ],
+                    hint: "Response is firstStart-arrival, not completion-burst. Verify total executed time equals total burst.",
+                    solution: "Keep remaining burst and firstStart per job; consume min(quantum,remaining), advance the clock, then requeue if unfinished. Derive wait=completion-arrival-burst for these no-I/O cases. Smaller quanta can improve initial responsiveness but add overhead in real systems; this model cannot predict an actual OS's performance."
+                },
+                interview: {
+                    question: "Why might a blocked job have high latency but low CPU use?",
+                    answer: "It is waiting for I/O, a lock or another event rather than executing. Increasing CPU priority cannot remove the underlying wait. Examine state and wait cause before changing concurrency or scheduling policy."
+                },
+                readiness: ["Draw the five-slice worked trace and recover all waiting/response times.", "Show why RR improves B's first response but not mean waiting in this example.", "Explain the missing multicore, arrival-time, I/O and switch-cost effects."]
+            },
+            {
+                prerequisites: "Integer division/remainder, process-local address spaces and read/write permissions. A virtual page maps to a frame; a TLB caches translations.",
+                setup: "Paper page table or small in-memory array only. Page size is an artificial 1024 bytes. Never allocate memory to induce swapping, change page files, or inspect another process.",
+                workedExample: {
+                    problem: "Translate virtual address 2500 for process A, with virtual page 2 mapped to physical frame 7 and read-only permission.",
+                    steps: [
+                        "Compute page=floor(2500/1024)=2 and offset=2500 mod 1024=452. Check the process-specific mapping and requested access permission.",
+                        "A read is allowed and translates to 7*1024+452=7620. A TLB miss with this valid resident mapping needs a translation refill, not a storage read.",
+                        "A write to the same read-only page raises a protection fault in this model. If process B maps page 2 to frame 3, its read at virtual address 2500 translates to 3524 instead. A not-present valid page needs fault handling; an invalid page must not be fabricated."
+                    ],
+                    expected: "A read=7620, A write=protection fault, B read=3524. Equal virtual addresses do not imply shared physical storage."
+                },
+                practice: {
+                    task: "Implement checked translation and trace a two-frame FIFO page cache without touching real memory pressure.",
+                    cases: [
+                        { input: "Page size=1024; virtual address=2048; page 2 -> frame 7, read permitted", expected: "Page 2, offset 0, physical address 7168." },
+                        { input: "Page 2 read-only; write at 2500", expected: "Protection fault; no physical write." },
+                        { input: "Two initially empty frames; FIFO references [0,1,0,2,1]", expected: "Miss,miss,hit,miss,hit: 3 misses, 2 hits; page 0 evicted on reference 2." }
+                    ],
+                    hint: "A FIFO hit does not change eviction order. Translation-cache misses and resident-page misses are different counters.",
+                    solution: "Validate a nonnegative integer address, compute page and offset, check mapping/presence/permissions, then frame*1024+offset. FIFO keeps insertion order: [0], [0,1], [0,1], [1,2], [1,2]. This cache simulation does not reproduce an OS replacement policy or measure actual page faults."
+                },
+                interview: {
+                    question: "Does a TLB miss mean the process must read from disk?",
+                    answer: "No. The page may already be resident with a valid permitted mapping, so a page-table walk can refill the translation cache. A recoverable page fault may allocate a zero page or map cached data; only some faults require backing-store I/O."
+                },
+                readiness: ["Compute 7620 and 3524 with explicit quotient/remainder.", "Reject writes on read-only pages before using the frame.", "Reproduce FIFO's three misses and distinguish them from TLB misses and protection faults."]
+            }
+        ]],
+        ["osProcessesMemory", [
+            {
+                prerequisites: "Threads share memory but each has its own execution state. A read-modify-write sequence is not indivisible unless synchronization makes it so.",
+                setup: "Use paper interleavings or scripted steps in a console. Do not run intentionally racy native code or deadlock host threads; the exercise is a finite state model independent of platform memory models.",
+                workedExample: {
+                    problem: "Explain a lost increment and prevent a two-lock circular wait.",
+                    steps: [
+                        "Start counter=0. Interleave A.read=0, B.read=0, A.write=1, B.write=1. Final counter=1 although two increments were requested.",
+                        "Protect each whole increment with mutex M: A reads/writes then unlocks; B then reads 1 and writes 2. Making only individual reads/writes atomic would not protect the compound increment.",
+                        "For locks L1 and L2, A holding L1 while waiting for L2 and B holding L2 while waiting for L1 forms a cycle. Require every path to acquire L1 before L2; B cannot hold L2 while waiting for L1 under that rule."
+                    ],
+                    expected: "Unprotected abstract trace ends at 1; mutex trace ends at 2; universal L1-before-L2 order eliminates this two-lock cycle, not every possible liveness failure."
+                },
+                practice: {
+                    task: "Trace a one-slot producer-consumer queue and write the conditions guarded by its mutex; handle a spurious wakeup correctly.",
+                    cases: [
+                        { input: "Queue empty; consumer wakes spuriously", expected: "Recheck while queue is empty under the mutex and wait again; no item consumed." },
+                        { input: "Queue=[7]; producer wants to add 8; consumer removes 7", expected: "Producer waits while full; consumer removes 7 and signals space; producer rechecks and enqueues 8; size never exceeds 1." },
+                        { input: "A requests L1 then L2; B requests L2 then L1", expected: "Reject B's acquisition order in the model before executing the second path." }
+                    ],
+                    hint: "A notification is not an item or a stored permit. Waiting must atomically release the mutex and reacquire it before checking the predicate.",
+                    solution: "Consumer: lock M; while empty wait(notEmpty,M); pop; signal notFull; unlock. Producer: lock M; while size===1 wait(notFull,M); push; signal notEmpty; unlock. Use the same mutex for state checks/updates. Require a single global lock order; timeouts without safe rollback do not repair partially applied operations."
+                },
+                interview: {
+                    question: "How do deadlock, starvation and priority inversion differ?",
+                    answer: "Deadlock prevents a set of tasks progressing through mutual waits. Starvation indefinitely delays one task while others progress. Priority inversion delays a high-priority task behind a lower-priority lock holder, potentially worsened by medium-priority work; priority inheritance may bound that interference but does not fix arbitrary deadlocks."
+                },
+                readiness: ["Enumerate the four lost-update steps and the synchronized result.", "Recheck queue predicates after every wake while holding the mutex.", "Identify a wait cycle and explain the scope and limits of lock ordering."]
+            },
+            {
+                prerequisites: "File descriptors/handles, cached writes versus persistence, and application record boundaries. Names and open file identity are separate concepts in POSIX-like filesystems.",
+                setup: "Use a paper crash-recovery table with byte strings; no real writes, renames, forced crashes or disk benchmarks. POSIX fsync/directory semantics below are conceptual, not portable commands; Windows and network filesystems differ.",
+                workedExample: {
+                    problem: "Recover an append log record with length=3, payload ABC, checksum=sum of payload byte values modulo 256.",
+                    steps: [
+                        "ABC has byte values 65,66,67, so checksum=(65+66+67) mod 256=198. A record is accepted only when its declared payload and checksum byte are present and match.",
+                        "Crash snapshot S1 has length=3 and payload AB only: ignore the incomplete trailing record. S2 has length=3,payload ABC,checksum=198: accept ABC. Checksum 197 fails even though the record is complete.",
+                        "A successful application write is not proof that S2 reached durable media. For a critical append, check write completion/short writes, request the platform's durability barrier and check its result before acknowledging durability; journal replay alone does not validate the app record."
+                    ],
+                    expected: "S1 recovers no record; S2 recovers ABC; corrupted checksum rejects the record. The toy checksum detects this corruption but is weak and is not a cryptographic integrity check."
+                },
+                practice: {
+                    task: "Write a bounded parser that accepts only complete valid records, and explain a crash-safe replacement protocol under explicit POSIX-like assumptions.",
+                    cases: [
+                        { input: "length=2,payload XY,checksum=177 (88+89)", expected: "Accept XY." },
+                        { input: "length=3,payload ABC,checksum=197", expected: "Reject corruption; do not expose ABC as committed." },
+                        { input: "Replacement file content synced; rename completed; containing directory not synced", expected: "Do not promise durable name replacement after crash; platform/filesystem guarantees must be checked." }
+                    ],
+                    hint: "Reject oversized declared lengths before allocating. File-content durability and directory-entry durability are separate concerns.",
+                    solution: "Limit length to 1024 bytes for this parser, check available bytes, recompute checksum and stop at the first bad trailing record. Conceptually write a new file in the same directory, sync/check it, atomically rename where supported, then sync/check the directory before acknowledging replacement. Test failure checkpoints on paper; actual crash guarantees require filesystem-specific verification."
+                },
+                interview: {
+                    question: "Why does journaling not make every application write a transaction?",
+                    answer: "A filesystem journal may recover metadata structure without preserving complete application records or ordering multiple files as one transaction. Applications still need framing, validation, durability barriers and recovery rules; an API success or rename alone may not guarantee persistence."
+                },
+                readiness: ["Calculate checksums 198 and 177 and reject an incomplete record.", "Explain why a valid cached record can still be lost on crash.", "Separate file data, directory name persistence and application transaction semantics without destructive tests."]
+            }
+        ]],
+        ["networkingFundamentals", [
+            {
+                prerequisites: "IPv4 addresses, a local Ethernet link, destination prefixes and encapsulation. MAC addresses identify link endpoints; IP addresses identify routed destinations.",
+                setup: "Draw packets on paper. Use documentation-only 192.0.2.0/24 and 198.51.100.0/24 addresses; send no traffic, perform no packet capture and change no routes or MTU settings.",
+                workedExample: {
+                    problem: "Host 192.0.2.10/24 sends TCP to 198.51.100.20 via gateway 192.0.2.1. Initial TTL=64 and the path has two forwarding routers, with no NAT.",
+                    steps: [
+                        "Host's routing table selects the gateway because destination is off-link. If no cached neighbor mapping exists, ARP resolves 192.0.2.1 to gateway MAC G, not the remote host to its MAC.",
+                        "First frame has source MAC H and destination G, wrapping IP source 192.0.2.10 and destination 198.51.100.20. Each router replaces link framing for its next link and decrements IPv4 TTL; destination receives TTL=62.",
+                        "For a 1500-byte IP MTU and minimum 20-byte IPv4 plus 20-byte TCP headers, maximum TCP payload is 1460. A 1501-byte IPv4 packet with DF set cannot cross that link; model a drop plus fragmentation-needed feedback rather than changing live settings."
+                    ],
+                    expected: "First Ethernet destination is G, routed IP endpoints stay unchanged, final TTL=62, and payload bound is 1460 bytes under the stated no-options assumption."
+                },
+                practice: {
+                    task: "Choose the longest-prefix route, next-hop MAC target and payload limit for fixed packet fixtures.",
+                    cases: [
+                        { input: "Routes 0.0.0.0/0 via G1 and 198.51.100.0/24 via G2; destination 198.51.100.20", expected: "Choose /24 via G2; resolve G2's local-link address, not the remote destination." },
+                        { input: "IPv4 path MTU=1400; minimum IP/TCP headers 20+20 bytes", expected: "TCP payload bound=1360; options/tunnels can reduce the bound." },
+                        { input: "TTL=1 at a forwarding router", expected: "Drop instead of forwarding with TTL 0; an ICMP time-exceeded response may be generated." }
+                    ],
+                    hint: "Choose a route before resolving the next-hop link address. Do not subtract Ethernet header bytes from an IP MTU.",
+                    solution: "Match destination prefixes, choose the most specific route, then use route policy/metric for equal specificity. For these no-NAT fixtures retain IP endpoints, replace MAC framing per hop and subtract one TTL per forwarding router. IPv6 uses Neighbor Discovery rather than ARP, and routers do not fragment IPv6 packets."
+                },
+                interview: {
+                    question: "Why does a host not ARP for every internet server it contacts?",
+                    answer: "ARP broadcasts stay on a local IPv4 link. For an off-link route the host needs the local next-hop router's MAC; routers independently choose later hops. A more specific route can override the default gateway."
+                },
+                readiness: ["Draw the first frame with correct MAC and IP destinations.", "Choose G2 over the default route and calculate both payload bounds.", "Distinguish IPv4 DF/fragmentation feedback from IPv6 Packet Too Big behavior."]
+            },
+            {
+                prerequisites: "Binary prefix lengths, address ranges and the off-link packet trace. NAT rewrites endpoint fields and requires matching return-path state; it is not authentication.",
+                setup: "Paper address and NAT tables only; no router configuration, scanning or external requests. Use 10.0.0.0/24 internally and documentation addresses 198.51.100.9 and 203.0.113.20 for the imagined edge.",
+                workedExample: {
+                    problem: "Split 10.0.0.0/24 into four equal conventional IPv4 broadcast subnets and trace one translated connection.",
+                    steps: [
+                        "Borrow 2 host bits to get /26; block size=64. Networks are .0,.64,.128,.192 and broadcasts .63,.127,.191,.255.",
+                        "Each block has 64 raw addresses, normally 62 usable under the stated network/broadcast convention. First usable ranges are .1-.62 and .65-.126; provider reservations can reduce them further.",
+                        "Map TCP 10.0.0.10:51000 -> 203.0.113.20:443 to 198.51.100.9:40001 -> 203.0.113.20:443. A reply to public port 40001 matches this active mapping and is translated back to 10.0.0.10:51000."
+                    ],
+                    expected: "Four nonoverlapping /26 ranges cover the /24; 248 conventional usable addresses total. Return mapping restores the internal destination port/address, not a generic permission to access the host."
+                },
+                practice: {
+                    task: "Calculate subnet boundaries and reverse NAT lookup; contrast IPv4 broadcast rules with IPv6 allocation.",
+                    cases: [
+                        { input: "Split 10.0.0.0/24 into eight equal conventional broadcast subnets", expected: "/27, 32 raw/30 usable each; network offsets 0,32,64,96,128,160,192,224." },
+                        { input: "Reply to 198.51.100.9:40002 when only the shown 40001 mapping exists", expected: "No matching mapping; this model drops the reply rather than inventing an internal recipient." },
+                        { input: "IPv6 subnet 2001:db8:1::/64", expected: "64 host/interface bits; do not subtract IPv4 network and broadcast addresses, and use Neighbor Discovery rather than ARP." }
+                    ],
+                    hint: "Address block size is 2^(32-prefix) for IPv4. State keys include protocol and relevant remote endpoints, depending on NAT behavior.",
+                    solution: "Eight blocks need 3 borrowed bits: /27. Enumerate block starts in increments of 32 and use start+31 as broadcast. Reverse only known unexpired mappings in the mock. /31 point-to-point and /32 host routes are exceptions to the usual minus-two rule. Keep firewall policy separate; dual-stack services need equivalent access controls for both families."
+                },
+                interview: {
+                    question: "Does a private address or NAT make a service secure?",
+                    answer: "No. It changes reachability/translation, not caller authorization. Forwarded ports, internal attackers or policy mistakes can expose private services. Enforce explicit network and application access controls; IPv6 also needs policy even when NAT is absent."
+                },
+                readiness: ["Enumerate all four /26 and all eight /27 boundaries without overlaps.", "Reverse a known NAT mapping and reject an unknown one.", "State the IPv4 capacity exceptions and why IPv6 does not use IPv4 broadcast subtraction."]
+            }
+        ]],
+        ["networkingProtocols", [
+            {
+                prerequisites: "Byte positions, TCP versus UDP and a connection's two independent sequence spaces. A TCP ACK identifies the next expected byte, not the number of packets received.",
+                setup: "Paper transport trace or a bounded array simulation; no sockets or live loss injection. Ignore sequence wrap, SACK and implementation-specific timers; buffer at most three mock segments.",
+                workedExample: {
+                    problem: "Receiver expects byte 100. Segments are seq100:'ABC', seq106:'GHI', then seq103:'DEF'. Trace cumulative ACKs and ordered delivery.",
+                    steps: [
+                        "Accept ABC at sequence numbers 100-102, deliver ABC and ACK 103, the first missing byte.",
+                        "GHI arrives at 106-108 while 103-105 is missing. Buffer GHI within the assumed receive window; ACK remains 103 and deliver no new bytes.",
+                        "DEF fills 103-105. Deliver DEFGHI in order, advance ACK to 109. A duplicate ABC changes neither ACK 109 nor the application stream. TCP preserves byte order, not the sender's segment boundaries."
+                    ],
+                    expected: "ACKs [103,103,109]; total delivered stream ABCDEFGHI exactly once. The trace illustrates ordering, not a measured loss-recovery delay."
+                },
+                practice: {
+                    task: "Trace sequence/ACK arithmetic and a simplified throughput bound; contrast UDP recovery responsibilities.",
+                    cases: [
+                        { input: "Receiver expects 500; receives 4 contiguous bytes at seq500 then the same segment again", expected: "ACK 504 both times; deliver four bytes total, not eight." },
+                        { input: "Receive window=8000 bytes, congestion window=12000 bytes, RTT=0.1 seconds; ignore headers and other limits", expected: "Window bound=min(8000,12000)/0.1=80000 bytes/second; this is an idealized bound, not measured throughput." },
+                        { input: "UDP datagrams IDs [1,3,3] with application requiring unique ordered IDs", expected: "Application must detect missing 2 and duplicate 3 and define bounded recovery; UDP alone does neither." }
+                    ],
+                    hint: "Cumulative ACK cannot skip a gap. Flow control protects receiver buffers; congestion control protects the path.",
+                    solution: "Maintain nextExpected and a bounded reorder buffer, append contiguous bytes only, ignore already-delivered duplicates, and ACK nextExpected. Rate is bounded by usable in-flight bytes divided by RTT plus other bottlenecks. UDP applications must supply needed deduplication/recovery and congestion control; QUIC supplies these over UDP but does not remove all stream stalls."
+                },
+                interview: {
+                    question: "Does a TCP ACK prove the application processed or durably saved a request?",
+                    answer: "No. It confirms transport receipt of bytes at the peer's TCP stack, not application success or durable commit. A retry after a lost application response may duplicate a side effect unless the application uses its own idempotency/transaction protocol."
+                },
+                readiness: ["Produce ACKs 103,103,109 and explain the buffered gap.", "Calculate the 80000-byte/second bound without calling it a benchmark.", "Separate TCP receipt, application commit and UDP/QUIC reliability responsibilities."]
+            },
+            {
+                prerequisites: "DNS records/TTL, TCP connection setup, TLS hostname validation and HTTP status codes. Resolution, transport, authentication and application response are separate failure stages.",
+                setup: "Use a fixed paper timeline and response fixtures; no external endpoints, privileged captures or certificate bypass. example.test and the supplied IP addresses are labels, not probe targets.",
+                workedExample: {
+                    problem: "A resolver caches example.test -> 192.0.2.10 at t=0 with TTL 60 seconds. Authority changes to 192.0.2.20 at t=20. Diagnose an HTTPS failure at t=30.",
+                    steps: [
+                        "At t=30 the cached answer can still be .10 with 30 seconds of TTL remaining. Lowering the authoritative TTL at t=20 would not retroactively change this entry.",
+                        "Fixture TCP connection to .10 succeeds, but its certificate covers other.test, not example.test. Stop at hostname validation; do not disable certificate checks or describe it as an HTTP 500.",
+                        "At t=60 assume normal expiry, no stale serving and a successful resolver refresh: answer becomes .20. Its certificate matches and HTTP returns 503, so now the evidence points to service readiness/backend behavior rather than DNS or TLS."
+                    ],
+                    expected: "At t=30: old cached IP and TLS hostname failure. At t=60 under the explicit refresh assumptions: new IP, TLS success, HTTP 503. The two failures require different explanations."
+                },
+                practice: {
+                    task: "Classify response-stage failures and model conditional HTTP caching without disabling security checks.",
+                    cases: [
+                        { input: "Cached body has ETag v1; conditional GET If-None-Match:v1; origin still v1", expected: "304 Not Modified with no new representation body; client reuses its stored body under applicable cache rules." },
+                        { input: "DNS 50 ms, TCP 40 ms, TLS 40 ms, server plus transfer 30 ms; serial cold path", expected: "Total 160 ms in this no-overlap/no-reuse model." },
+                        { input: "TCP succeeds; certificate expired before any HTTP response", expected: "TLS-stage failure; do not infer an HTTP status and do not bypass validation." }
+                    ],
+                    hint: "Build an evidence table with stage, observation, next check and safe stop condition. A warm connection would omit some cold-path work.",
+                    solution: "At each stage record the result before moving on: resolve, connect, validate TLS, inspect HTTP status/headers, then inspect application readiness. A 304 depends on a stored representation; do not serve another user's private cached response. Separate readiness from liveness, and avoid restarting healthy processes merely because a downstream dependency is unavailable."
+                },
+                interview: {
+                    question: "Why can DNS cutover and rollback appear partial even after changing the authoritative record?",
+                    answer: "Resolvers and applications may retain answers until their existing TTLs expire, and policies such as stale serving can add complexity. A changed TTL does not rewrite remote caches. Record observation time, resolver/cache layer and endpoint certificate before attributing failure to HTTP."
+                },
+                readiness: ["Calculate the old record's remaining TTL at t=30 and explain the t=60 assumptions.", "Differentiate hostname failure from a later HTTP 503 without unsafe bypasses.", "Compute the 160 ms cold-path budget and explain 304 body reuse and private-cache isolation."]
+            }
+        ]]
+    ];
+    const guideKeys = ["prerequisites", "setup", "workedExample", "practice", "interview", "readiness"];
+    const sameKeys = (value, keys) => value && typeof value === "object" && !Array.isArray(value)
+        && Object.keys(value).length === keys.length && keys.every(key => Object.hasOwn(value, key));
+    const text = value => typeof value === "string" && value.trim().length > 0;
+    const texts = value => Array.isArray(value) && value.length >= 2 && value.every(text);
+    const expectedNumbers = {
+        osFundamentals: ["OS - Module 1", "OS - Module 2", "OS - Module 3"],
+        osProcessesMemory: ["OS - Module 4", "OS - Module 5"],
+        networkingFundamentals: ["Networking - Module 1", "Networking - Module 2"],
+        networkingProtocols: ["Networking - Module 3", "Networking - Module 4"]
+    };
+    for (const [key, guides] of groups) {
+        const modules = courseData[key];
+        if (!Array.isArray(modules) || modules.length !== guides.length) {
+            throw new Error(`OS/network learningGuide collection mismatch: ${key}; expected ${guides.length} modules`);
+        }
+        guides.forEach((guide, index) => {
+            const label = `${key}[${index}]`;
+            if (!modules[index] || !sameKeys(guide, guideKeys)
+                || !text(guide.prerequisites) || !text(guide.setup)
+                || !sameKeys(guide.workedExample, ["problem", "steps", "expected"])
+                || !text(guide.workedExample.problem) || !texts(guide.workedExample.steps) || !text(guide.workedExample.expected)
+                || !sameKeys(guide.practice, ["task", "cases", "hint", "solution"])
+                || !text(guide.practice.task) || !text(guide.practice.hint) || !text(guide.practice.solution)
+                || !Array.isArray(guide.practice.cases) || guide.practice.cases.length < 2
+                || !guide.practice.cases.every(test => sameKeys(test, ["input", "expected"]) && text(test.input) && text(test.expected))
+                || !sameKeys(guide.interview, ["question", "answer"])
+                || !text(guide.interview.question) || !text(guide.interview.answer) || !texts(guide.readiness)) {
+                throw new Error(`Invalid OS/network learningGuide schema at ${label}`);
+            }
+            if (modules[index].number !== expectedNumbers[key][index]) {
+                throw new Error(`OS/network learningGuide index mismatch at ${label}: expected ${expectedNumbers[key][index]}`);
+            }
+            modules[index].learningGuide = guide;
+        });
+    }
+})();
